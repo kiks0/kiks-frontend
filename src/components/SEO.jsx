@@ -5,15 +5,16 @@ const SEO = ({ title, description, keywords, image }) => {
     const location = useLocation();
 
     useEffect(() => {
+        
         // 1. Update Title
-        const baseTitle = "KIKS Ultra Luxury";
+       const baseTitle = "Kiksultraluxury"; // Change this to your brand name
         document.title = title ? `${title} | ${baseTitle}` : baseTitle;
 
         // 2. Update Description
         const metaDescription = document.querySelector('meta[name="description"]');
         const ogDescription = document.querySelector('meta[property="og:description"]');
         const desc = description || "Experience the essence of elegance with our exclusive collection of premium fragrances.";
-        
+
         if (metaDescription) metaDescription.setAttribute('content', desc);
         if (ogDescription) ogDescription.setAttribute('content', desc);
 
