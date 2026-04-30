@@ -126,12 +126,12 @@ const Home = () => {
       sections.forEach((section, index) => {
         const headline = section.querySelector('.showcaseReveal');
         const img = photos[index].querySelector('img');
-        
+
         // Image Reveal Timeline (Stable - No Zoom)
         const animation = gsap.timeline()
-          .to(photos[index], { 
-            clipPath: 'inset(0% 0% 0% 0%)', 
-            autoAlpha: 1, 
+          .to(photos[index], {
+            clipPath: 'inset(0% 0% 0% 0%)',
+            autoAlpha: 1,
             duration: 2,
             ease: "none"
           });
@@ -181,14 +181,14 @@ const Home = () => {
   return (
     <div className="bg-dark-900 min-h-screen text-white">
       <SEO
-        title="KiksUltraLuxury"
+        title="The Essence of Elegance"
         description="KIKS Ultra Luxury: A symphony of rare notes and artisanal craftsmanship. Explore our exclusive collection of Extrait de Parfum."
         keywords="Luxury Perfume, Extrait de Parfum, KIKS, Premium Fragrance, Elite Collection"
       />
       {/* Hero Section */}
-      <section className="relative h-screen flex flex-col overflow-hidden">
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
 
-        <div className="absolute inset-x-6 bottom-6 top-[140px] md:inset-x-10 md:bottom-10 md:top-[180px] border border-white/10 z-30 pointer-events-none" />
+        <div className="absolute inset-x-4 bottom-4 top-[100px] sm:inset-x-6 sm:bottom-6 sm:top-[120px] md:inset-x-10 md:bottom-10 md:top-[180px] border border-white/10 z-30 pointer-events-none" />
 
         {/* Video Background */}
         <div className="absolute inset-0 z-0">
@@ -199,6 +199,7 @@ const Home = () => {
             loop
             muted
             playsInline
+            preload="metadata"
             className="w-full h-full object-cover object-center scale-105 filter brightness-75 contrast-125"
           >
             <source src="/hero-video.webm" type="video/webm" />
@@ -218,22 +219,13 @@ const Home = () => {
         </div>
 
         {/* Main Center Content */}
-        <Link to="/essence" className="relative z-20 text-center px-6 w-full max-w-5xl mx-auto flex-1 flex flex-col items-center justify-center pt-16 md:pt-40 pb-8 cursor-pointer group/hero">
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.4, delay: 0.3 }}
-            className="font-serif font-light text-6xl md:text-[9rem] tracking-[0.25em] md:tracking-[0.35em] text-white leading-none mb-6 md:mb-8 uppercase"
-          >
-            KIKS
-          </motion.h1>
+        <Link to="/essence" className="relative z-20 text-center px-6 w-full max-w-5xl mx-auto flex flex-col items-center justify-center h-full pt-[25vh] md:pt-[20vh] cursor-pointer group/hero">
 
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.2, delay: 0.8 }}
-            className="text-[10px] md:text-[13px] font-light text-white/50 max-w-sm mx-auto mb-8 md:mb-10 tracking-[0.45em] leading-relaxed group-hover/hero:text-gold-400 transition-colors uppercase"
+            className="text-[9px] md:text-sm font-light text-gray-300 max-w-sm mx-auto mb-8 md:mb-10 tracking-[0.4em] md:tracking-widest leading-relaxed group-hover/hero:text-gold-400 transition-colors"
           >
             {t('home.hero_subtitle')}
           </motion.p>
@@ -252,11 +244,27 @@ const Home = () => {
           </motion.div>
         </Link>
 
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1.5 }}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30 flex flex-col items-center"
+        >
+          <span className="text-[8px] uppercase tracking-[0.5em] text-white/50 mb-3 block font-light">{t('common.scroll')}</span>
+          <div className="w-[1px] h-12 bg-white/10 relative overflow-hidden">
+            <motion.div
+              initial={{ y: '-100%' }}
+              animate={{ y: '100%' }}
+              transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+              className="w-full h-full bg-gold-500 absolute top-0"
+            />
+          </div>
+        </motion.div>
       </section>
 
       {/* Product 1: ELITE */}
-      <section className="pt-16 pb-8 md:py-32 container mx-auto px-6 md:px-12 lg:px-20 max-w-[1400px]">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-12 lg:gap-24">
+      <section className="py-12 md:py-32 container mx-auto px-6 md:px-12 lg:px-20 max-w-[1400px]">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-10 lg:gap-24">
 
           {/* Left: Image */}
           <motion.div
@@ -266,6 +274,8 @@ const Home = () => {
               <img
                 src="/elite1.webp"
                 alt="Elite Collection Front"
+                loading="lazy"
+                decoding="async"
                 className="w-full h-auto object-contain shadow-2xl shadow-black/50 transition-transform duration-700 group-hover:scale-105 rounded-xl"
               />
             </Link>
@@ -273,24 +283,24 @@ const Home = () => {
 
           {/* Right: Text Content */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: "easeOut", delay: 0.1 }}
             viewport={{ once: true }}
-            className="w-full md:w-[55%] flex flex-col items-center md:items-start justify-center text-center md:text-left mt-8 md:mt-0 font-sans"
+            className="w-full md:w-[55%] flex flex-col items-center md:items-start justify-center text-center md:text-left font-sans"
           >
-            <h2 className="text-3xl md:text-[2.6rem] font-serif font-light tracking-[0.08em] mb-5 md:mb-7 leading-[1.2] text-white/90">
+            <h2 className="text-2xl md:text-[2.2rem] font-serif font-light tracking-[0.05em] mb-4 md:mb-6 leading-[1.4] text-white">
               Elite
             </h2>
 
-            <p className="text-[11px] md:text-[12px] text-white/45 mb-10 leading-[2.2] font-light tracking-[0.1em] max-w-lg">
+            <p className="text-[10px] md:text-xs text-gray-300 mb-10 leading-relaxed font-semibold tracking-[0.08em] max-w-lg">
               {t('home.elite_desc')}
             </p>
 
             <div className="flex space-x-4">
               <Link
                 to="/product/elite"
-                className="inline-flex items-center justify-center px-10 py-4 border border-white/20 text-[10px] tracking-[0.4em] uppercase text-white/80 hover:border-white hover:text-white hover:bg-white/[0.03] transition-all duration-500 font-normal"
+                className="inline-flex items-center justify-center px-10 py-3.5 bg-[#2a2a2a] rounded-full text-[11px] tracking-[0.3em] uppercase text-white hover:bg-white hover:text-dark-900 transition-all duration-300 font-medium"
               >
                 {t('home.discover_btn')}
               </Link>
@@ -303,69 +313,98 @@ const Home = () => {
       {/* SECTION 3: THE LUXURY SHOWCASE (GSAP STICKY REVEAL) */}
       <section ref={showcaseContainerRef} className="relative bg-[#050505] border-t border-white/5 overflow-hidden">
         <div className="flex flex-col md:flex-row">
-          {/* Left - Scrolling Content */}
-          <div className="showcaseContent w-full md:w-1/2">
+          {/* Mobile/Tablet View (Visible on < md) */}
+          <div className="md:hidden flex flex-col w-full">
             {[
-              { 
-                name: 'Elite', 
-                tagline: 'The Apex of Sophistication',
-                desc: 'A powerful blend of rare woods and midnight spices, designed for the individual who commands presence without speaking a word.'
+              {
+                id: 'elite',
+                name: 'Elite',
+                desc: 'A powerful blend of rare woods and midnight spices, designed for the individual who commands presence without speaking a word.',
+                image: '/elite1.webp'
               },
-              { 
-                name: 'La Reina', 
-                tagline: 'The Sovereign Scent',
-                desc: 'An opulent symphony of velvet roses and golden amber. La Reina is the essence of timeless femininity and unyielding grace.'
+              {
+                id: 'la-reina',
+                name: 'La Reina',
+                desc: 'An opulent symphony of velvet roses and golden amber. La Reina is the essence of timeless femininity and unyielding grace.',
+                image: '/la-reina.jpeg'
               },
-              { 
-                name: 'El Rey', 
-                tagline: 'The Monarchial Elixir',
-                desc: 'Bold leather notes intertwined with aged tobacco and citrus undertones. El Rey is a fragrance of conquest and enduring legacy.'
+              {
+                id: 'el-rey',
+                name: 'El Rey',
+                desc: 'Bold leather notes intertwined with aged tobacco and citrus undertones. El Rey is a fragrance of conquest and enduring legacy.',
+                image: '/el-rey.jpeg'
               }
-            ].map((content, index) => (
-              <div
-                key={index}
-                className="showcaseContentSection h-screen flex items-center justify-center p-12 md:p-24"
-              >
-                <div className="showcaseReveal max-w-lg text-center md:text-left">
-                  <span className="eyebrow mb-7 block">Legacy No. {index + 1}</span>
-                  <h2 className="text-4xl md:text-5xl font-serif text-white/90 font-light tracking-[0.06em] mb-7 leading-[1.1] uppercase">
-                    {content.name}
-                  </h2>
-                  <p className="text-[11px] md:text-[12px] text-white/35 mb-12 leading-[2.3] tracking-[0.12em] font-light">
-                    {content.desc}
-                  </p>
-                  <Link
-                    to={`/product/${content.name.toLowerCase().replace(' ', '-')}`}
-                    className="inline-flex items-center px-10 py-4 bg-white text-dark-900 text-[10px] font-normal tracking-[0.4em] uppercase hover:bg-gold-500 hover:text-white transition-all duration-500"
-                  >
-                    Experience Essence
-                  </Link>
+            ].map((product, index) => (
+              <div key={product.id} className="flex flex-col items-center justify-center px-6 py-8 border-b border-white/5">
+                <div className="w-full max-w-[280px] aspect-[3/4] bg-[#0d0d0d] border border-white/10 mb-6 overflow-hidden">
+                  <img src={product.image} alt={product.name} loading="lazy" decoding="async" className="w-full h-full object-contain p-8" />
+                </div>
+                <div className="text-center">
+
+                  <h2 className="text-3xl font-serif text-white tracking-[0.05em] mb-4 uppercase">{product.name}</h2>
+                  <p className="text-[11px] text-gray-400 leading-relaxed tracking-widest font-medium px-4">{product.desc}</p>
+
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Right - Fixed Images (Sticky) */}
-          <div className="showcaseRight w-full md:w-1/2 h-screen sticky top-0 flex items-center justify-center overflow-hidden border-l border-white/5">
+          {/* Desktop View (Visible on >= md) */}
+          <div className="hidden md:block showcaseContent w-1/2">
+            {[
+              {
+                name: 'Elite',
+                desc: 'A powerful blend of rare woods and midnight spices, designed for the individual who commands presence without speaking a word.'
+              },
+              {
+                name: 'La Reina',
+                desc: 'An opulent symphony of velvet roses and golden amber. La Reina is the essence of timeless femininity and unyielding grace.'
+              },
+              {
+                name: 'El Rey',
+                desc: 'Bold leather notes intertwined with aged tobacco and citrus undertones. El Rey is a fragrance of conquest and enduring legacy.'
+              }
+            ].map((content, index) => (
+              <div
+                key={index}
+                className="showcaseContentSection h-screen flex items-center justify-center p-24"
+              >
+                <div className="showcaseReveal max-w-lg">
+
+                  <h2 className="text-5xl font-serif text-white tracking-[0.05em] mb-6 leading-tight uppercase">
+                    {content.name}
+                  </h2>
+                  <p className="text-sm text-gray-400 leading-[2] tracking-widest font-medium">
+                    {content.desc}
+                  </p>
+
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="hidden md:flex showcaseRight w-1/2 h-screen sticky top-0 items-center justify-center overflow-hidden border-l border-white/5">
             <div className="relative w-full h-full">
               {[
-                { id: 'elite', name: 'Elite', image: '/elite1.webp', category: 'Signature' },
-                { id: 'la-reina', name: 'La Reina', image: '/la-reina.jpeg', category: 'Exclusif' },
-                { id: 'el-rey', name: 'El Rey', image: '/el-rey.jpeg', category: 'Royal' }
+                { id: 'elite', name: 'Elite', image: '/elite1.webp' },
+                { id: 'la-reina', name: 'La Reina', image: '/la-reina.jpeg' },
+                { id: 'el-rey', name: 'El Rey', image: '/el-rey.jpeg' }
               ].map((product, index) => (
                 <div
                   key={product.id}
-                  className="showcasePhoto absolute inset-0 flex items-center justify-center p-8 md:p-16 lg:p-24"
+                  className="showcasePhoto absolute inset-0 flex items-center justify-center p-16 lg:p-24"
                   style={{ opacity: index === 0 ? 1 : 0 }}
                 >
-                  <Link 
+                  <Link
                     to={`/product/${product.id}`}
                     className="relative w-full max-w-lg aspect-[3/4] bg-[#0d0d0d] border border-white/10 overflow-hidden group cursor-pointer"
                   >
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="w-full h-full object-contain p-16 scale-100 transform-none transition-none"
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-contain p-16"
                     />
                   </Link>
                 </div>
@@ -389,20 +428,20 @@ const Home = () => {
 
         <div className="relative z-20 h-full flex flex-col items-center justify-center px-6">
           <div className="text-center max-w-4xl mx-auto flex flex-col items-center">
-            <p className="eyebrow mb-9">
+            <p className="text-gold-500 text-[10px] md:text-xs font-semibold tracking-[0.2em] mb-8 font-sans uppercase">
               {t('home.art_creation')}
             </p>
 
-            <div className="overflow-hidden mb-9">
+            <div className="overflow-hidden mb-8">
               <h2
                 ref={storyTextRef}
-                className="text-3xl md:text-6xl lg:text-7xl font-serif text-white/85 tracking-[0.06em] leading-[1.2] uppercase font-light text-center"
+                className="text-3xl md:text-6xl lg:text-7xl font-serif text-white tracking-[0.1em] leading-[1.3] md:leading-[1.2] uppercase font-light text-center"
               >
                 {t('home.symphony_notes')}
               </h2>
             </div>
 
-            <p className="text-[11px] md:text-[12px] text-white/35 max-w-lg mx-auto leading-[2.4] tracking-[0.14em] font-light">
+            <p className="text-[10px] md:text-xs text-gray-400 max-w-lg mx-auto leading-[2.5] tracking-[0.15em] font-semibold">
               {t('home.creation_desc')}
             </p>
           </div>
@@ -411,7 +450,9 @@ const Home = () => {
           <div className="floating-muse absolute right-[10%] top-[20%] w-32 md:w-48 aspect-[3/4] z-30 hidden md:block border border-white/10 shadow-2xl overflow-hidden">
             <img
               src="/alchemy.webp"
-              className="w-full h-full object-cover grayscale brightness-75 hover:grayscale-0 transition-all duration-1000"
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover md:grayscale brightness-75 hover:grayscale-0 transition-all duration-1000"
               alt="Muse"
             />
           </div>
@@ -452,7 +493,7 @@ const Home = () => {
             >
               <img
                 src="/la-reina-story.webp"
-                className="w-full h-full object-cover grayscale brightness-75 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-[2000ms]"
+                className="w-full h-full object-cover md:grayscale brightness-75 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-[2000ms]"
                 alt="Editorial Muse"
               />
               <div className="absolute inset-0 border border-gold-500/20 m-4 pointer-events-none" />
@@ -473,10 +514,10 @@ const Home = () => {
               transition={{ duration: 1, delay: 0.3 }}
               className="space-y-6"
             >
-              <h3 className="text-white/85 text-4xl md:text-5xl font-serif font-light tracking-[0.03em] leading-[1.15] text-center lg:text-left">
+              <h3 className="text-white text-4xl md:text-5xl font-serif font-light tracking-tight leading-tight text-center lg:text-left">
                 Beyond the <br /> <span className="text-gold-500 italic">Invisible Senses</span>
               </h3>
-              <div className="section-divider mx-auto lg:mx-0" />
+              <div className="w-20 h-[1px] bg-gold-500/40 mx-auto lg:mx-0" />
             </motion.div>
 
             <motion.div
@@ -486,14 +527,14 @@ const Home = () => {
               className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12 border-t border-white/5 pt-12"
             >
               <div className="space-y-4 text-center sm:text-left">
-                <span className="eyebrow">The Sourcing</span>
-                <p className="text-white/30 text-[11px] leading-[2.3] tracking-[0.12em] font-light italic mt-3">
+                <span className="text-gold-500 text-[10px] tracking-[0.3em] uppercase font-bold">The Sourcing</span>
+                <p className="text-white/40 text-[11px] md:text-xs leading-relaxed tracking-wider font-light italic">
                   Extracted from hand-selected blossoms in Grasse, aged for eighteen months in charred oak.
                 </p>
               </div>
               <div className="space-y-4 text-center sm:text-left">
-                <span className="eyebrow">The Alchemy</span>
-                <p className="text-white/30 text-[11px] leading-[2.3] tracking-[0.12em] font-light italic mt-3">
+                <span className="text-gold-500 text-[10px] tracking-[0.3em] uppercase font-bold">The Alchemy</span>
+                <p className="text-white/40 text-[11px] md:text-xs leading-relaxed tracking-wider font-light italic">
                   A high-concentration extrait that evolves with your unique body chemistry.
                 </p>
               </div>
@@ -526,12 +567,12 @@ const Home = () => {
           <div className="container mx-auto px-6">
             <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 md:mb-16 space-y-8 md:space-y-0 text-center md:text-left">
               <div className="max-w-xl">
-                <span className="eyebrow block mb-5">The Collective</span>
-                <h2 className="text-4xl md:text-5xl font-serif text-white/85 font-light tracking-[0.04em] uppercase italic leading-[1.1]">
-                  Seen in <br /> <span className="text-white not-italic font-sans font-normal tracking-[0.3em] text-3xl md:text-4xl">KIKS</span>
+                <span className="text-gold-500 text-[8px] md:text-[9px] tracking-[0.4em] md:tracking-[0.5em] uppercase font-black block mb-4">The Collective</span>
+                <h2 className="text-4xl md:text-5xl font-serif text-white tracking-tight uppercase italic leading-tight">
+                  Seen in <br /> <span className="text-white not-italic font-sans font-black tracking-widest">KIKS</span>
                 </h2>
               </div>
-              <p className="text-[10px] text-white/25 tracking-[0.25em] uppercase max-w-[240px] md:text-right leading-[2.2] font-light">
+              <p className="text-[9px] md:text-xs text-white/30 tracking-[0.2em] uppercase max-w-[250px] md:text-right leading-relaxed">
                 Our creations in the hands of the global elite.
               </p>
             </div>
@@ -544,9 +585,9 @@ const Home = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
-                  className={`bg-zinc-900 overflow-hidden group ${idx === 1 ? 'aspect-[3/4] md:row-span-2' : idx === 5 ? 'aspect-square md:col-span-2' : 'aspect-square'}`}
+                  className={`bg-zinc-900 overflow-hidden group aspect-square ${idx === 1 ? 'md:aspect-[3/4] md:row-span-2' : idx === 5 ? 'md:col-span-2' : ''}`}
                 >
-                  <img src={getFullImageUrl(img.image_url)} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" alt={`Lifestyle ${idx + 1}`} />
+                  <img src={getFullImageUrl(img.image_url)} loading="lazy" decoding="async" className="w-full h-full object-cover md:grayscale hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" alt={`Lifestyle ${idx + 1}`} />
                 </motion.div>
               )) : (
                 // Fallback if gallery is empty
@@ -559,7 +600,7 @@ const Home = () => {
         </section>
 
         {/* Vertical Decorative Text */}
-        <div className="absolute right-12 top-1/2 -translate-y-1/2 hidden xl:block">
+        <div className="absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden xl:block">
           <p className="text-[9px] tracking-[2em] text-white/10 uppercase vertical-text">Signature Essence 2026</p>
         </div>
       </section>
