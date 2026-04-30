@@ -101,7 +101,7 @@ const Contact = () => {
                                     </div>
                                     <div>
                                         <p className="text-[9px] md:text-[10px] tracking-widest text-white/40 uppercase mb-1 font-bold">Call Support</p>
-                                        <p className="text-[12px] md:text-xl font-light tracking-widest whitespace-nowrap">+91 999 888 7766</p>
+                                        <p className="text-[12px] md:text-xl font-light tracking-widest whitespace-nowrap">+91 8401020339</p>
                                     </div>
                                 </motion.div>
 
