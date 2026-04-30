@@ -112,10 +112,6 @@ const Contact = () => {
                                     <div className="w-12 h-12 md:w-16 md:h-16 flex-shrink-0 bg-white/5 border border-white/10 rounded-2xl md:rounded-3xl flex items-center justify-center text-gold-500">
                                         <MapPin size={20} strokeWidth={1} className="md:w-6 md:h-6" />
                                     </div>
-                                    <div>
-                                        <p className="text-[9px] md:text-[10px] tracking-widest text-white/40 uppercase mb-1 font-bold">Visit Studio</p>
-                                        <p className="text-[12px] md:text-xl font-light tracking-widest">Gujarat, India</p>
-                                    </div>
                                 </motion.div>
                             </div>
                         </section>
