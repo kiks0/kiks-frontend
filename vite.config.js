@@ -12,14 +12,6 @@ export default defineConfig({
     }
   },
   build: {
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom', 'framer-motion', 'lucide-react'],
-          ui: ['@headlessui/react', 'clsx', 'tailwind-merge']
-        }
-      }
-    },
     chunkSizeWarningLimit: 1000
   }
 })
