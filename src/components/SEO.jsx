@@ -2,50 +2,45 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const SEO = ({ title, description, keywords, image }) => {
-    const location = useLocation();
+  const location = useLocation();
 
-    useEffect(() => {
-        
-        // 1. Update Title
-       const baseTitle = "Kiksultraluxury"; // Change this to your brand name
-        document.title = title ? `${title} | ${baseTitle}` : baseTitle;
+  useEffect(() => {
+    const baseTitle = "KiksUltraLuxury";
 
-        // 2. Update Description
-        const metaDescription = document.querySelector('meta[name="description"]');
-        const ogDescription = document.querySelector('meta[property="og:description"]');
-        const desc = description || "Experience the essence of elegance with our exclusive collection of premium fragrances.";
+    // Only one browser tab title
+    document.title = baseTitle;
 
-        if (metaDescription) metaDescription.setAttribute('content', desc);
-        if (ogDescription) ogDescription.setAttribute('content', desc);
+    const metaDescription = document.querySelector('meta[name="description"]');
+    const ogDescription = document.querySelector('meta[property="og:description"]');
+    const desc = description || "Experience the essence of elegance with our exclusive collection of premium fragrances.";
 
-        // 3. Update Keywords
-        const metaKeywords = document.querySelector('meta[name="keywords"]');
-        if (metaKeywords && keywords) {
-            metaKeywords.setAttribute('content', keywords);
-        }
+    if (metaDescription) metaDescription.setAttribute('content', desc);
+    if (ogDescription) ogDescription.setAttribute('content', desc);
 
-        // 4. Update OG Title
-        const ogTitle = document.querySelector('meta[property="og:title"]');
-        if (ogTitle) ogTitle.setAttribute('content', title || baseTitle);
+    const metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (metaKeywords && keywords) {
+      metaKeywords.setAttribute('content', keywords);
+    }
 
-        // 5. Update OG Image
-        const ogImage = document.querySelector('meta[property="og:image"]');
-        if (ogImage && image) {
-            ogImage.setAttribute('content', image);
-        }
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', baseTitle);
 
-        // 6. Canonical Link
-        let canonical = document.querySelector('link[rel="canonical"]');
-        if (!canonical) {
-            canonical = document.createElement('link');
-            canonical.setAttribute('rel', 'canonical');
-            document.head.appendChild(canonical);
-        }
-        canonical.setAttribute('href', window.location.href);
+    const ogImage = document.querySelector('meta[property="og:image"]');
+    if (ogImage && image) {
+      ogImage.setAttribute('content', image);
+    }
 
-    }, [title, description, keywords, image, location]);
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
 
-    return null; // This component doesn't render anything
+    canonical.setAttribute('href', window.location.href);
+  }, [title, description, keywords, image, location]);
+
+  return null;
 };
 
 export default SEO;
