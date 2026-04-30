@@ -181,7 +181,7 @@ const Home = () => {
   return (
     <div className="bg-dark-900 min-h-screen text-white">
       <SEO
-        title="Kiksultraluxury"
+        title="The Essence of Elegance"
         description="KIKS Ultra Luxury: A symphony of rare notes and artisanal craftsmanship. Explore our exclusive collection of Extrait de Parfum."
         keywords="Luxury Perfume, Extrait de Parfum, KIKS, Premium Fragrance, Elite Collection"
       />
