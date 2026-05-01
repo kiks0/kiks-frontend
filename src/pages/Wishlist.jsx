@@ -24,7 +24,7 @@ const Wishlist = () => {
         
         {/* Page Header */}
         <header className="mb-16 md:mb-24 flex flex-col items-center text-center">
-          <p className="text-[10px] md:text-[11px] tracking-[0.4em] font-medium uppercase mb-4 opacity-50">Your Curated Collection</p>
+          <p className="text-[10px] md:text-[11px] tracking-[0.4em] font-medium uppercase mb-4 opacity-50">Private Selection</p>
           <h1 className="text-3xl md:text-5xl font-serif tracking-[0.15em] uppercase text-white mb-6">Wishlist</h1>
           <div className="w-16 h-[1px] bg-gold-500/50"></div>
         </header>
