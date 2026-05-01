@@ -271,7 +271,7 @@ const Account = () => {
                   </div>
                 </a>
 
-                <a href="https://wa.me/919998887766" target="_blank" rel="noopener noreferrer" className="flex items-center p-4 sm:p-6 bg-white/[0.02] border border-white/5 hover:border-gold-500/30 transition-all group">
+                <a href="https://wa.me/918401020339" target="_blank" rel="noopener noreferrer" className="flex items-center p-4 sm:p-6 bg-white/[0.02] border border-white/5 hover:border-gold-500/30 transition-all group">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/5 flex items-center justify-center mr-4 sm:mr-6 text-gold-500 group-hover:bg-gold-500 group-hover:text-black transition-all">
                     <MessageSquare size={18} strokeWidth={1.5} />
                   </div>
