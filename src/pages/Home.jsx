@@ -335,10 +335,11 @@ const Home = () => {
 
                 <div className="absolute inset-0 bg-gradient-to-t from-dark-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
               </div>
+            </motion.div>
 
-              {/* Right: Rich Content Section */}
-              <motion.div
-                initial={{ opacity: 0, x: 50 }}
+            {/* Right: Rich Content Section */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
                 viewport={{ once: true }}
