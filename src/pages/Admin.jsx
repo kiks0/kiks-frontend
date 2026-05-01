@@ -485,7 +485,9 @@ const Admin = () => {
 
             const data = await res.json();
             showSuccessToast('Visual Architecture Manifested.');
-            if (targetField) {
+            if (targetField === 'popup') {
+                setPopupSettings(prev => ({ ...prev, image_url: data.url }));
+            } else if (targetField) {
                 setProdFormData(prev => ({ ...prev, [targetField]: data.url }));
             } else if (activeTab === 'collections') {
                 setColFormData(prev => ({ ...prev, banner_url: data.url }));
