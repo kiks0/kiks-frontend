@@ -230,11 +230,10 @@ const Home = () => {
   });
   const xTranslate = useTransform(carouselProgress, [0, 1], ["0%", "-66.666%"]);
 
-  // Hero Text Scroll Animations (Faster & More Dramatic)
+  // Hero Text Scroll Animations (Vanishing in Center)
   const { scrollY } = useScroll();
-  const heroScale = useTransform(scrollY, [0, 300], [1, 2.5]);
-  const heroY = useTransform(scrollY, [0, 300], [0, -150]);
-  const heroOpacity = useTransform(scrollY, [0, 250], [1, 0]);
+  const heroScale = useTransform(scrollY, [0, 350], [1, 3]);
+  const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
     <div className="bg-dark-900 min-h-screen text-white">
@@ -284,7 +283,6 @@ const Home = () => {
             transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
             style={{ 
               scale: heroScale,
-              y: heroY,
               opacity: heroOpacity
             }}
           >
