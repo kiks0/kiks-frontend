@@ -153,7 +153,7 @@ const Addresses = () => {
         <div className="bg-black min-h-screen text-white pt-24 md:pt-32 pb-16 md:pb-32">
             <div className="kiks-chanel-container">
                 
-                <div className="mb-12 text-center">
+                <div className="mb-6 md:mb-12 text-center">
                     <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
                         <Link to="/account" className="inline-flex items-center text-[9px] tracking-[0.4em] text-white/30 hover:text-white transition-colors uppercase mb-8 group">
                             <ArrowLeft size={14} className="mr-2 group-hover:-translate-x-1 transition-transform" /> Back to Account
@@ -170,7 +170,7 @@ const Addresses = () => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
                         >
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                                 {/* Combine all address slots into one list */}
                                 {[
                                     addresses.billing ? { ...addresses.billing, slot: 'billing' } : null,
@@ -179,7 +179,7 @@ const Addresses = () => {
                                 ]
                                 .filter(addr => addr && (addr.first_name || addr.house_no)) // Ensure it's a valid address object
                                 .map((addr, idx) => (
-                                    <div key={idx} className="kiks-addr-col bg-white/[0.02] border border-white/5 p-8 relative group hover:border-gold-500/30 transition-all">
+                                    <div key={idx} className="kiks-addr-col bg-white/[0.02] border border-white/5 p-5 md:p-8 relative group hover:border-gold-500/30 transition-all">
                                         <div className="flex justify-between items-start mb-4">
                                             <span className="text-[7px] tracking-[0.3em] uppercase text-gold-500 font-black border border-gold-500/20 px-2 py-0.5">
                                                 {addr.slot === 'billing' ? 'Billing Address' : addr.slot === 'shipping' ? 'Shipping Address' : `Address Blueprint ${idx + 1}`}
@@ -194,7 +194,7 @@ const Addresses = () => {
                                         {addr.landmark && <p className="text-[10px] tracking-widest text-white/40 italic mb-1">Near {addr.landmark}</p>}
                                         <p className="text-[10px] tracking-widest text-white/60 mb-1">{addr.city}, {addr.state} - {addr.pincode}</p>
                                         <p className="text-[10px] tracking-widest text-white/60 uppercase">{addr.country}</p>
-                                        <div className="mt-6 pt-4 border-t border-white/5 flex items-center text-[9px] tracking-[0.2em] text-white/30 truncate">
+                                        <div className="mt-4 md:mt-6 pt-4 border-t border-white/5 flex items-center text-[9px] tracking-[0.2em] text-white/30 truncate">
                                             <Phone size={10} className="mr-2" /> {addr.phone}
                                         </div>
                                     </div>
@@ -203,7 +203,7 @@ const Addresses = () => {
                                 {/* Add New Address Button */}
                                 <button 
                                     onClick={() => startAction('add_additional')}
-                                    className="bg-transparent border-2 border-dashed border-white/5 p-8 flex flex-col items-center justify-center space-y-4 hover:border-white/20 hover:bg-white/[0.01] transition-all group min-h-[220px]"
+                                    className="bg-transparent border-2 border-dashed border-white/5 p-5 md:p-8 flex flex-col items-center justify-center space-y-4 hover:border-white/20 hover:bg-white/[0.01] transition-all group min-h-[160px] md:min-h-[220px]"
                                 >
                                     <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-gold-500 transition-all">
                                         <Plus size={20} className="text-white/20 group-hover:text-gold-500" />

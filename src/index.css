@@ -426,4 +426,23 @@ input:-internal-autofill-selected {
     .kiks-btn-black {
         width: 100%;
     }
+
+    .kiks-chanel-container {
+        margin: 10px auto !important;
+        padding: 10px 15px !important;
+    }
+
+    .kiks-main-title {
+        margin-bottom: 25px !important;
+        font-size: 18px !important;
+    }
+
+    .kiks-addr-col {
+        padding: 20px !important;
+    }
+
+    .kiks-section-line {
+        margin-bottom: 20px !important;
+        font-size: 13px !important;
+    }
 }
