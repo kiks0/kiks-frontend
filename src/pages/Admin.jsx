@@ -982,7 +982,7 @@ const Admin = () => {
         );
     }
 
-    const inputClasses = "w-full bg-white/5 border border-white/10 p-4 text-xs text-white focus:outline-none focus:border-gold-500 transition-all font-light tracking-[0.2em] mb-4";
+    const inputClasses = "w-full bg-white/5 border border-white/10 p-3 md:p-4 text-[10px] md:text-xs text-white focus:outline-none focus:border-gold-500 transition-all font-light tracking-[0.1em] md:tracking-[0.2em] mb-4";
     const labelClasses = "text-[9px] tracking-[0.3em] font-bold text-white/30 uppercase block mb-1 mt-2";
 
     return (
@@ -2308,9 +2308,9 @@ const Admin = () => {
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: 1, height: 'auto' }}
                                     exit={{ opacity: 0, height: 0 }}
-                                    className="bg-zinc-900/50 backdrop-blur-xl border border-white/5 p-6 md:p-12 mb-10 md:mb-20 overflow-hidden"
+                                    className="bg-zinc-900/50 backdrop-blur-xl border border-white/5 p-4 sm:p-6 md:p-12 mb-10 md:mb-20 overflow-hidden"
                                 >
-                                    <form onSubmit={activeTab === 'collections' ? handleAddCollection : activeTab === 'products' ? handleAddProduct : activeTab === 'blogs' ? handleAddBlog : handleAddPromoCode} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+                                    <form onSubmit={activeTab === 'collections' ? handleAddCollection : activeTab === 'products' ? handleAddProduct : activeTab === 'blogs' ? handleAddBlog : handleAddPromoCode} className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 md:gap-10">
 
                                         <div className="md:col-span-2 text-center pb-4 md:pb-6 border-b border-white/10 mb-2 md:mb-4">
                                             <h3 className="text-base md:text-lg tracking-[0.3em] md:tracking-[0.4em] text-gold-500 font-serif uppercase italic">
@@ -2323,7 +2323,7 @@ const Admin = () => {
                                                 <label className={labelClasses}>Visual Essence (Image)</label>
                                                 <div
                                                     onClick={() => fileInputRef.current.click()}
-                                                    className="relative w-full h-56 md:h-72 bg-white/5 border border-dashed border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-gold-500 hover:bg-white/[0.03] transition-all group overflow-hidden"
+                                                    className="relative w-full h-40 sm:h-56 md:h-72 bg-white/5 border border-dashed border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-gold-500 hover:bg-white/[0.03] transition-all group overflow-hidden"
                                                 >
                                                     <input
                                                         type="file"
@@ -2344,7 +2344,7 @@ const Admin = () => {
                                                                 />
                                                             )}
                                                             <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                <span className="text-[10px] tracking-[0.4em] font-black uppercase text-white bg-black/80 px-6 py-3 border border-white/10">Replace Content</span>
+                                                                <span className="text-[8px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.4em] font-black uppercase text-white bg-black/80 px-4 sm:px-6 py-2 sm:py-3 border border-white/10 text-center mx-2">Replace Content</span>
                                                             </div>
                                                         </div>
                                                     ) : (
