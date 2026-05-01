@@ -360,7 +360,7 @@ Marketing Consent: Granted
                                     {isRegister ? 'User Registry' : 'User Login'}
                                 </h1>
                                 <p className="text-[10px] tracking-[0.5em] text-white/40 uppercase mt-4">
-                                    {isRegister ? 'Join the legacy of elite perfumery' : 'Access your curated selections'}
+                                    {isRegister ? 'Join the legacy of elite perfumery' : ''}
                                 </p>
                                 
                                 {errorMessage && (
