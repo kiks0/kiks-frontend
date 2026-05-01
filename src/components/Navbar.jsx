@@ -6,7 +6,7 @@ import { toggleWishlistAndSync } from '../store/wishlistSlice';
 import { openAuthModal } from '../store/uiSlice';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import SearchOverlay from './SearchOverlay';
 import CartDrawer from './CartDrawer';
 
@@ -17,6 +17,8 @@ const Navbar = () => {
   const location = useLocation();
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const wishlistCount = wishlistItems.length;
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const navigate = useNavigate();
 
   const isAccountPage = location.pathname.startsWith('/account') || location.pathname === '/addresses' || location.pathname === '/orders' || location.pathname === '/wishlist';
   const [isScrolled, setIsScrolled] = useState(false);
