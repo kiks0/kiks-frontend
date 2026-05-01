@@ -45,11 +45,12 @@ const Home = () => {
   const yTextFast = useTransform(scrollYProgress, [0, 1], [200, -200]);
   const yTextSlow = useTransform(scrollYProgress, [0, 1], [100, -100]);
 
+  const showcaseContainerRef = useRef(null);
   const carouselRef = useRef(null);
   const storyRef = useRef(null);
-  const storyTextRef = useRef(null);
   const storyImgRef = useRef(null);
-  const showcaseContainerRef = useRef(null);
+  const storyTextRef = useRef(null);
+  const heroRef = useRef(null);
 
   useEffect(() => {
     if (!storyRef.current || !storyTextRef.current) return;
@@ -230,11 +231,15 @@ const Home = () => {
   });
   const xTranslate = useTransform(carouselProgress, [0, 1], ["0%", "-66.666%"]);
 
-  // Hero Text Scroll Animations (Faster & More Dramatic)
-  const { scrollY } = useScroll();
-  const heroScale = useTransform(scrollY, [0, 300], [1, 2.5]);
-  const heroY = useTransform(scrollY, [0, 300], [0, -150]);
-  const heroOpacity = useTransform(scrollY, [0, 250], [1, 0]);
+  // Hero Text Scroll Animations (Perfected to Viewport Height)
+  const { scrollYProgress: heroScrollProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"]
+  });
+  
+  const heroScale = useTransform(heroScrollProgress, [0, 1], [1, 8]);
+  const heroOpacity = useTransform(heroScrollProgress, [0, 0.7, 1], [1, 1, 0]);
+  const heroBlur = useTransform(heroScrollProgress, [0, 0.8, 1], [0, 0, 10]);
 
   return (
     <div className="bg-dark-900 min-h-screen text-white">
@@ -244,7 +249,7 @@ const Home = () => {
         keywords="Luxury Perfume, Extrait de Parfum, KIKS, Premium Fragrance, Elite Collection"
       />
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden">
 
         <div className="absolute inset-x-4 bottom-4 top-[100px] sm:inset-x-6 sm:bottom-6 sm:top-[120px] md:inset-x-10 md:bottom-10 md:top-[180px] border border-white/10 z-30 pointer-events-none" />
 
@@ -277,15 +282,15 @@ const Home = () => {
         </div>
 
         {/* Main Center Content */}
-        <div className="relative z-20 text-center px-6 w-full max-w-5xl mx-auto flex flex-col items-center justify-center h-full pt-[10vh] pointer-events-none">
+        <div className="fixed inset-0 z-20 flex flex-col items-center justify-center pointer-events-none">
           <motion.div
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
             style={{ 
               scale: heroScale,
-              y: heroY,
-              opacity: heroOpacity
+              opacity: heroOpacity,
+              filter: `blur(${heroBlur}px)`
             }}
           >
             <h1 className="text-6xl md:text-[140px] font-serif text-white tracking-[0.25em] uppercase leading-none will-change-transform">
