@@ -41,7 +41,7 @@ const Blog = () => {
     }
 
     return (
-        <div className="bg-black min-h-screen text-white pt-40 md:pt-56 pb-20 md:pb-24 font-sans selection:bg-gold-500/30 selection:text-white">
+        <div className="bg-black min-h-screen text-white pt-32 md:pt-40 pb-20 md:pb-24 font-sans selection:bg-gold-500/30 selection:text-white">
             <SEO 
                 title="The Journal of Essence" 
                 description="Explore the timeless heritage of niche perfumery and the art of olfactory creation. Read our latest stories and insights."
