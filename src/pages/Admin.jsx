@@ -99,6 +99,7 @@ const Admin = () => {
 
     useEffect(() => {
         const isAdmin = user && (
+            user.role === 'admin' ||
             user.email === 'hit.goyani1010@gmail.com' ||
             user.email.endsWith('@kiksultraluxury.com') ||
             user.email === 'admin@kiks.com'

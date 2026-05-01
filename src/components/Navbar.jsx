@@ -31,6 +31,7 @@ const Navbar = () => {
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   const isAdmin = user && (
+    user.role === 'admin' ||
     user.email === 'hit.goyani1010@gmail.com' ||
     user.email.endsWith('@kiksultraluxury.com')
   );
