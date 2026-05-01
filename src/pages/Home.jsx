@@ -609,7 +609,7 @@ const Home = () => {
             <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-16">
               <div className="text-center md:text-left w-full">
                 <span className="text-gold-500 text-[10px] tracking-[0.5em] uppercase font-bold block mb-4">Community</span>
-                <h2 className="text-4xl md:text-6xl font-serif text-white tracking-tight uppercase leading-none">The Collective</h2>
+                <h2 className="text-4xl md:text-6xl font-serif text-white tracking-tight uppercase leading-none">THE HOUSE OF KIKS</h2>
               </div>
               <p className="text-xs text-white/30 tracking-[0.2em] uppercase max-w-[250px] md:text-right leading-relaxed hidden md:block">
                 Our creations in the hands of the global elite.
