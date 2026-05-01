@@ -6,7 +6,7 @@ const SEO = ({ title, description, keywords, image }) => {
 
     useEffect(() => {
         // 1. Update Title
-        const baseTitle = "Kiksultraluxury";
+        const baseTitle = "KIKS Ultra Luxury";
         document.title = title ? `${title} | ${baseTitle}` : baseTitle;
 
         // 2. Update Description
