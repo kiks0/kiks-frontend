@@ -181,50 +181,11 @@ const SearchOverlay = ({ isOpen, onClose }) => {
              <h1 className="text-[40vw] font-serif select-none">KIKS</h1>
           </div>
 
-          <div className="h-full w-full flex flex-col md:flex-row">
-            
-            {/* Left Column: Discover / Suggested (Static but elegant) */}
-            <div className="hidden md:flex md:w-[35%] h-full bg-white/[0.02] border-r border-white/5 p-10 lg:p-16 flex-col justify-between">
-               <motion.div variants={itemVariants}>
-                 <p className="text-gold-500 text-[10px] tracking-[0.5em] font-bold uppercase mb-8">Search curated for you</p>
-                 <div className="space-y-8">
-                    <div>
-                       <h4 className="text-white/40 text-[9px] tracking-[0.3em] uppercase mb-3 font-black">Trending Now</h4>
-                       <ul className="space-y-3">
-                          {['Arambh Extrait', 'Rare Oudh', 'Summer 2026 Collection'].map(t => (
-                            <li key={t} className="flex items-center text-white/70 hover:text-white transition-colors cursor-pointer group">
-                               <TrendingUp size={12} className="mr-3 opacity-30" />
-                               <span onClick={() => setQuery(t)} className="text-sm font-light tracking-widest">{t}</span>
-                            </li>
-                          ))}
-                        </ul>
-                    </div>
-                    <div>
-                       <h4 className="text-white/40 text-[9px] tracking-[0.3em] uppercase mb-3 font-black">Explore Fragrances</h4>
-                       <ul className="space-y-3">
-                          {['Floral Notes', 'Woody Notes', 'Amber Gold'].map(t => (
-                            <li key={t} className="flex items-center text-white/70 hover:text-white transition-colors cursor-pointer group">
-                               <Sparkles size={12} className="mr-3 opacity-30" />
-                               <span onClick={() => setQuery(t)} className="text-sm font-light tracking-widest">{t}</span>
-                            </li>
-                          ))}
-                       </ul>
-                    </div>
-                 </div>
-              </motion.div>
-              
-              <motion.div variants={itemVariants} className="pt-12">
-                 <Link to="/contact" onClick={onClose} className="text-[10px] tracking-[0.4em] text-white/30 hover:text-white transition-all uppercase border-b border-transparent hover:border-white/20 pb-1">
-                    Request a Private Viewing
-                 </Link>
-              </motion.div>
-            </div>
-
-            {/* Right Column: Search Interface */}
-            <div className="flex-grow h-full flex flex-col p-8 md:p-14 lg:p-20 relative">
+          <div className="h-full w-full flex flex-col items-center justify-center p-8 md:p-14 lg:p-20 relative">
+            {/* Background Mark is already there */}
                
                 {/* Close Header */}
-               <div className="flex justify-between items-center mb-10 md:mb-16">
+               <div className="flex justify-between items-center mb-10 md:mb-16 w-full max-w-4xl">
                   <div />
                   <button onClick={onClose} className="group flex items-center space-x-4 text-white/40 hover:text-white transition-all duration-500">
                     <span className="text-[9px] tracking-[0.3em] uppercase opacity-0 group-hover:opacity-100 transition-all">Close</span>
@@ -254,7 +215,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                </motion.div>
 
                {/* Results Container */}
-               <div className="mt-12 flex-grow overflow-y-auto pr-4 custom-scrollbar">
+               <div className="mt-12 flex-grow overflow-y-auto pr-4 custom-scrollbar w-full max-w-4xl">
                   {loading && (
                     <div className="py-10 text-center">
                        <p className="text-gold-500 text-[10px] tracking-[0.4em] uppercase animate-pulse">Searching the vault...</p>
