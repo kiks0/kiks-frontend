@@ -25,6 +25,7 @@ const Account = () => {
   const [showCallbackForm, setShowCallbackForm] = useState(false);
   const [callbackPhone, setCallbackPhone] = useState('');
   const [callbackStatus, setCallbackStatus] = useState('idle'); // idle, loading, success
+  const [callbacksCount, setCallbacksCount] = useState(0);
 
   useEffect(() => {
     if (appUser) {
@@ -41,6 +42,12 @@ const Account = () => {
              })
              .then(data => setOrdersCount(data.length || 0))
              .catch(err => console.error("Error fetching account orders:", err));
+
+             // Fetch callback count
+             fetch(`${API_URL}/api/waitlist/myrequests?email=${appUser?.email}`)
+             .then(res => res.json())
+             .then(data => setCallbacksCount(data.count || 0))
+             .catch(err => console.error("Error fetching callbacks:", err));
         }
     } else {
         const savedUser = localStorage.getItem('currentUser');
@@ -286,8 +293,13 @@ const Account = () => {
                     onClick={() => setShowCallbackForm(true)}
                     className="flex items-center p-4 sm:p-6 bg-white/[0.02] border border-white/5 hover:border-gold-500/30 transition-all group cursor-pointer"
                   >
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/5 flex items-center justify-center mr-4 sm:mr-6 text-gold-500 group-hover:bg-gold-500 group-hover:text-black transition-all">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/5 flex items-center justify-center mr-4 sm:mr-6 text-gold-500 group-hover:bg-gold-500 group-hover:text-black transition-all relative">
                       <Phone size={18} strokeWidth={1.5} />
+                      {callbacksCount > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-gold-500 text-black text-[7px] font-black w-4 h-4 rounded-full flex items-center justify-center animate-fade-in shadow-lg">
+                          {callbacksCount}
+                        </span>
+                      )}
                     </div>
                     <div className="text-left">
                       <p className="text-[9px] tracking-widest text-white/30 uppercase mb-1">Priority Line</p>
@@ -340,6 +352,7 @@ const Account = () => {
                                   })
                                 });
                                 setCallbackStatus('success');
+                                setCallbacksCount(prev => prev + 1);
                               } catch (e) {
                                 setCallbackStatus('idle');
                               }
