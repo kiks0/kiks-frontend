@@ -1802,7 +1802,8 @@ const Admin = () => {
                                             </div>
                                         ))}
                                     </div>
-                                    </>
+                                </div>
+                            </>
                                 ) : (
                                     <div className="space-y-12">
                                         <div className="flex justify-between items-center bg-white/5 border border-white/10 p-8">
