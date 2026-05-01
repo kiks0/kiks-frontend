@@ -246,7 +246,7 @@ const Home = () => {
       </section>
 
       {/* Product 1: ELITE */}
-      <section className="py-12 md:py-32 container mx-auto px-6 md:px-12 lg:px-20 max-w-[1400px]">
+      <section className="py-12 md:py-16 container mx-auto px-6 md:px-12 lg:px-20 max-w-[1400px]">
         <div className="flex flex-col md:flex-row items-center justify-between gap-10 lg:gap-24">
 
           {/* Left: Image */}
