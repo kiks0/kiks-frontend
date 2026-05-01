@@ -177,7 +177,7 @@ const PersonalDetails = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#050505] text-white font-sans pb-16 md:pb-32 pt-20 md:pt-40 relative">
+        <div className="min-h-screen bg-[#050505] text-white font-sans pb-12 md:pb-32 pt-16 md:pt-40 relative">
             
             {/* Phone Edit Modal */}
             {isPhoneModalOpen && (
@@ -272,16 +272,16 @@ const PersonalDetails = () => {
                     </Link>
                 </motion.div>
 
-                <div className="text-center mb-10 md:mb-16">
+                <div className="text-center mb-6 md:mb-16">
                     <h1 className="text-2xl md:text-4xl font-serif tracking-[0.2em] uppercase mb-4 md:mb-8 text-gold-500">Personal Details</h1>
                     <p className="text-[10px] md:text-[11px] text-white/40 tracking-wider">Updates made to your information will be reflected across your KIKS profile.</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-12 md:space-y-16">
+                <form onSubmit={handleSubmit} className="space-y-8 md:space-y-16">
                     
                     {/* PROFILE SECTION */}
                     <section>
-                        <div className="border-b border-white/10 pb-2 mb-10 flex justify-between items-end">
+                        <div className="border-b border-white/10 pb-2 mb-6 md:mb-10 flex justify-between items-end">
                             <h2 className="text-[12px] font-black tracking-[0.2em] uppercase text-white/80">Profile</h2>
                             <div className="w-24 h-[1px] bg-gold-500/30"></div>
                         </div>
@@ -454,7 +454,7 @@ const PersonalDetails = () => {
                     )}
 
                     {/* Action Buttons */}
-                    <div className="flex flex-col space-y-4 pt-10">
+                    <div className="flex flex-col space-y-4 pt-6 md:pt-10">
                         <button 
                             type="submit" 
                             disabled={saving}
