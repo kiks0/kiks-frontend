@@ -2501,10 +2501,10 @@ const Admin = () => {
                                                     {(activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url) ? (
                                                         <div className="relative w-full h-full">
                                                             {isVideo(activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url) ? (
-                                                                <video src={activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url} className="w-full h-full object-cover opacity-60" muted loop autoPlay />
+                                                                <video src={getFullImageUrl(activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url)} className="w-full h-full object-cover opacity-60" muted loop autoPlay />
                                                             ) : (
                                                                 <img
-                                                                    src={activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url}
+                                                                    src={getFullImageUrl(activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url)}
                                                                     className="w-full h-full object-cover opacity-60 transition-all group-hover:opacity-100"
                                                                 />
                                                             )}
@@ -2660,7 +2660,7 @@ const Admin = () => {
                                                                                 className="w-16 h-16 rounded-full bg-black border border-white/10 flex items-center justify-center cursor-pointer hover:border-gold-500 group relative"
                                                                             >
                                                                                 {prodFormData[field] ? (
-                                                                                    <img src={prodFormData[field]} className="w-8 h-8 object-contain" />
+                                                                                    <img src={getFullImageUrl(prodFormData[field])} className="w-8 h-8 object-contain" />
                                                                                 ) : (
                                                                                     <Plus className="text-white/20 group-hover:text-gold-500" size={16} />
                                                                                 )}
@@ -2743,9 +2743,9 @@ const Admin = () => {
                                                         {(prodFormData.gallery_urls || []).map((url, i) => (
                                                             <div key={i} className="relative w-24 h-24 border border-white/10 group bg-zinc-900">
                                                                 {isVideo(url) ? (
-                                                                    <video src={url} className="w-full h-full object-cover opacity-60" muted />
+                                                                    <video src={getFullImageUrl(url)} className="w-full h-full object-cover opacity-60" muted />
                                                                 ) : (
-                                                                    <img src={url} className="w-full h-full object-cover opacity-60" />
+                                                                    <img src={getFullImageUrl(url)} className="w-full h-full object-cover opacity-60" />
                                                                 )}
                                                                 <button
                                                                     type="button"
