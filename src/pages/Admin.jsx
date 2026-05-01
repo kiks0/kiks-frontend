@@ -1079,9 +1079,14 @@ const Admin = () => {
                             onChange={(e) => { setActiveTab(e.target.value); setIsAdding(false); setEditingId(null); }}
                             className="w-full bg-zinc-900 border border-white/20 p-4 text-[10px] tracking-[0.3em] uppercase text-gold-400 focus:outline-none appearance-none"
                         >
-                            {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing'].map(tab => (
-                                <option key={tab} value={tab}>{tab}</option>
-                            ))}
+                            {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing'].map(tab => {
+                                const callbackCount = tab === 'waitlist' ? waitlist.filter(e => e.request_type === 'callback').length : 0;
+                                return (
+                                    <option key={tab} value={tab}>
+                                        {tab.toUpperCase()} {callbackCount > 0 ? `(${callbackCount})` : ''}
+                                    </option>
+                                );
+                            })}
                         </select>
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                             <ChevronDown size={14} className="text-gold-500" />
@@ -1090,18 +1095,26 @@ const Admin = () => {
 
                     {/* Desktop Tab Links */}
                     <div className="hidden md:flex space-x-8 overflow-x-auto scrollbar-hide">
-                        {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing'].map(tab => (
-                            <button
-                                key={tab}
-                                onClick={() => { setActiveTab(tab); setIsAdding(false); setEditingId(null); }}
-                                className={`text-[10px] tracking-[0.3em] uppercase pb-2 transition-all whitespace-nowrap relative ${activeTab === tab ? 'text-gold-400' : 'text-white/20 hover:text-white/50'}`}
-                            >
-                                {tab}
-                                {activeTab === tab && (
-                                    <motion.div layoutId="activeTabIndicator" className="absolute bottom-[-17px] left-0 right-0 h-[2px] bg-gold-400" />
-                                )}
-                            </button>
-                        ))}
+                            {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing'].map(tab => {
+                                const callbackCount = tab === 'waitlist' ? waitlist.filter(e => e.request_type === 'callback').length : 0;
+                                return (
+                                    <button
+                                        key={tab}
+                                        onClick={() => { setActiveTab(tab); setIsAdding(false); setEditingId(null); }}
+                                        className={`text-[10px] tracking-[0.3em] uppercase pb-2 transition-all whitespace-nowrap relative flex items-center ${activeTab === tab ? 'text-gold-400' : 'text-white/20 hover:text-white/50'}`}
+                                    >
+                                        {tab}
+                                        {callbackCount > 0 && (
+                                            <span className="ml-2 bg-gold-500 text-black px-1.5 py-0.5 rounded-full text-[8px] font-black animate-pulse">
+                                                {callbackCount}
+                                            </span>
+                                        )}
+                                        {activeTab === tab && (
+                                            <motion.div layoutId="activeTabIndicator" className="absolute bottom-[-17px] left-0 right-0 h-[2px] bg-gold-400" />
+                                        )}
+                                    </button>
+                                );
+                            })}
                     </div>
                 </div>
 
