@@ -225,7 +225,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                
                 {/* Close Header */}
                <div className="flex justify-between items-center mb-10 md:mb-16">
-                  <span className="text-gold-500/50 text-[10px] tracking-[0.6em] font-bold uppercase animate-pulse">KIKS Digital Boutique</span>
+                  <div />
                   <button onClick={onClose} className="group flex items-center space-x-4 text-white/40 hover:text-white transition-all duration-500">
                     <span className="text-[9px] tracking-[0.3em] uppercase opacity-0 group-hover:opacity-100 transition-all">Close</span>
                     <X size={24} strokeWidth={1} />
@@ -239,7 +239,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                       ref={inputRef}
                       type="text"
                       className="w-full bg-transparent border-b border-white/10 py-5 md:py-8 text-2xl md:text-3xl lg:text-4xl font-serif text-white placeholder:text-white/10 focus:outline-none focus:border-gold-500 transition-all duration-700 font-light"
-                      placeholder="Explore KIKS..."
+                      placeholder="FIND YOUR ESSENCE..."
                       value={query}
                       onChange={(e) => setQuery(e.target.value)}
                       onKeyDown={handleKeyDown}
