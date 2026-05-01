@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Menu, X, ShoppingBag, Heart, User, ChevronDown, Shield, ChevronLeft, ArrowRight } from 'lucide-react';
+import { Search, Menu, X, ShoppingBag, Heart, User, UserPlus, ChevronDown, Shield, ChevronLeft, ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -308,9 +308,14 @@ const Navbar = () => {
                       {/* Account Section */}
                       <div className="pt-10 mt-4 border-t border-white/5 space-y-6">
                         {!isAuthenticated ? (
-                          <Link to="/login" className="flex items-center text-[10px] tracking-[0.3em] text-white/30 uppercase hover:text-white font-sans" onClick={() => setIsMobileMenuOpen(false)}>
-                            <User size={16} className="mr-4" strokeWidth={1} /> {t('nav.login')}
-                          </Link>
+                          <div className="space-y-6">
+                            <Link to="/login" className="flex items-center text-[10px] tracking-[0.3em] text-white/30 uppercase hover:text-white font-sans" onClick={() => setIsMobileMenuOpen(false)}>
+                              <User size={16} className="mr-4" strokeWidth={1} /> {t('nav.login')}
+                            </Link>
+                            <Link to="/register" className="flex items-center text-[10px] tracking-[0.3em] text-white/30 uppercase hover:text-white font-sans" onClick={() => setIsMobileMenuOpen(false)}>
+                              <UserPlus size={16} className="mr-4" strokeWidth={1} /> {t('nav.register')}
+                            </Link>
+                          </div>
                         ) : (
                           <Link to="/account" className="flex items-center text-[10px] tracking-[0.3em] text-white/30 uppercase hover:text-white font-sans" onClick={() => setIsMobileMenuOpen(false)}>
                             <User size={16} className="mr-4" strokeWidth={1} /> {t('nav.profile')}
