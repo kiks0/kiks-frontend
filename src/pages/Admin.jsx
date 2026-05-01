@@ -1898,9 +1898,9 @@ const Admin = () => {
                                                     ))}
                                                 </tbody>
                                             </table>
-                                        </div>
                                     </div>
                                 )}
+                            </>
                         )}
                     </motion.div>
                 )}
