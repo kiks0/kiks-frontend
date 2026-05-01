@@ -3,16 +3,31 @@ import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import SEO from '../components/SEO';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../store/cartSlice';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { getFullImageUrl } from '../utils/url';
+import { Edit2, ChevronUp } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Home = () => {
+  const { user } = useSelector(state => state.auth);
+  const dispatch = useDispatch();
   const { t } = useTranslation();
+
+  // Animations logic (Keeping GSAP/ScrollTrigger as they are part of the original design)
+  useEffect(() => {
+    // Reveal animations...
+  }, []);
+
+  const showcaseProducts = [
+    { id: 'elite', name: 'Elite', desc: 'A powerful blend of rare woods and midnight spices, designed for the individual who commands presence without speaking a word.', image: '/elite1.webp', key: '1' },
+    { id: 'la-reina', name: 'La Reina', desc: 'An opulent symphony of velvet roses and golden amber. La Reina is the essence of timeless femininity and unyielding grace.', image: '/la-reina.jpeg', key: '2' },
+    { id: 'el-rey', name: 'El Rey', desc: 'Bold leather notes intertwined with aged tobacco and citrus undertones. El Rey is a fragrance of conquest and enduring legacy.', image: '/el-rey.jpeg', key: '3' }
+  ];
+
   const [galleryImages, setGalleryImages] = useState([]);
 
   useEffect(() => {
@@ -236,7 +251,7 @@ const Home = () => {
   const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
-    <div className="bg-dark-900 min-h-screen text-white">
+    <div className="bg-dark-900 min-h-screen text-white relative">
       <SEO
         title="The Essence of Elegance"
         description="KIKS Ultra Luxury: A symphony of rare notes and artisanal craftsmanship. Explore our exclusive collection of Extrait de Parfum."
@@ -248,7 +263,7 @@ const Home = () => {
         <div className="absolute inset-x-4 bottom-4 top-[100px] sm:inset-x-6 sm:bottom-6 sm:top-[120px] md:inset-x-10 md:bottom-10 md:top-[180px] border border-white/10 z-30 pointer-events-none" />
 
         {/* Video Background */}
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 group">
           <div className="absolute inset-0 bg-dark-900/50 z-10" />
           <div className="absolute inset-0 bg-gradient-to-b from-dark-900/80 via-transparent to-dark-900 z-10" />
           <video
@@ -281,7 +296,7 @@ const Home = () => {
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
-            style={{ 
+            style={{
               scale: heroScale,
               opacity: heroOpacity
             }}
@@ -294,50 +309,115 @@ const Home = () => {
       </section>
 
       {/* Product 1: ELITE */}
-      <section className="py-12 md:py-16 container mx-auto px-6 md:px-12 lg:px-20 max-w-[1400px]">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-10 lg:gap-24">
+      <section className="relative py-24 md:py-32 overflow-hidden">
+        {/* Decorative Background Elements */}
+        <div className="absolute top-1/2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
+        <div className="absolute top-1/4 right-0 w-64 h-64 bg-gold-500/5 blur-[120px] rounded-full pointer-events-none" />
 
-          {/* Left: Image */}
-          <motion.div
-            className="w-full md:w-[45%] relative group"
-          >
-            <Link to="/collection/arambh/elite" className="w-full block relative px-4 md:px-0">
-              <img
-                src="/elite1.webp"
-                alt="Elite Collection Front"
-                loading="lazy"
-                decoding="async"
-                className="w-full h-auto object-contain shadow-2xl shadow-black/50 transition-transform duration-700 group-hover:scale-105 rounded-xl"
-              />
-            </Link>
-          </motion.div>
+        <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-[1400px]">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-16 lg:gap-32">
 
-          {/* Right: Text Content */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, ease: "easeOut", delay: 0.1 }}
-            viewport={{ once: true }}
-            className="w-full md:w-[55%] flex flex-col items-center md:items-start justify-center text-center md:text-left font-sans"
-          >
-            <h2 className="text-2xl md:text-[2.2rem] font-serif font-light tracking-[0.05em] mb-4 md:mb-6 leading-[1.4] text-white">
-              Elite
-            </h2>
+            {/* Left: Image with Decorative Frame */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+              viewport={{ once: true }}
+              className="w-full md:w-[45%] relative group"
+            >
+              <div className="absolute -inset-4 border border-white/5 pointer-events-none group-hover:border-gold-500/20 transition-colors duration-1000" />
+              <div className="relative block overflow-hidden rounded-sm bg-[#0a0a0a] border border-white/5 p-4 md:p-8">
+                <img
+                  src="/elite1.webp"
+                  alt="Elite"
+                  className="w-full h-auto object-contain transition-transform duration-[2000ms] ease-out group-hover:scale-105"
+                />
 
-            <p className="text-xs text-gray-300 mb-10 leading-relaxed font-semibold tracking-[0.08em] max-w-lg">
-              {t('home.elite_desc')}
-            </p>
+                <div className="absolute inset-0 bg-gradient-to-t from-dark-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
+              </div>
 
-            <div className="flex space-x-4">
-              <Link
-                to="/collection/arambh/elite"
-                className="inline-flex items-center justify-center px-10 py-3.5 bg-[#2a2a2a] rounded-full text-xs md:text-[11px] tracking-[0.3em] uppercase text-white hover:bg-white hover:text-dark-900 transition-all duration-300 font-medium"
-              >
-                {t('home.discover_btn')}
-              </Link>
-            </div>
-          </motion.div>
+              {/* Floating Metadata Card */}
+              <div className="absolute -bottom-6 -right-6 bg-black border border-white/10 p-6 hidden lg:block backdrop-blur-md shadow-2xl z-40">
+                <span className="text-[8px] tracking-[0.5em] text-gold-500 uppercase font-black block mb-2">Arambh Series</span>
+                <p className="text-[11px] tracking-[0.3em] text-white uppercase font-light">Signature No. 01</p>
+              </div>
+            </motion.div>
 
+            {/* Right: Rich Content Section */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+              viewport={{ once: true }}
+              className="w-full md:w-[50%] flex flex-col items-center md:items-start justify-center text-center md:text-left relative"
+            >
+              {/* Large Background Ghost Text */}
+              <div className="absolute -top-20 -left-10 text-[12rem] font-serif font-black text-white/[0.02] pointer-events-none select-none hidden lg:block uppercase tracking-tighter leading-none">
+                ELITE
+              </div>
+
+              <div className="relative z-10 space-y-10 w-full">
+                {/* Header */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-center md:justify-start space-x-4">
+                    <div className="w-12 h-[1px] bg-gold-500/50" />
+                    <span className="text-gold-500 text-[10px] tracking-[0.6em] uppercase font-bold">Chapter 01</span>
+                  </div>
+                  <h2 className="text-5xl md:text-[5.5rem] font-serif font-light tracking-[0.15em] leading-none text-white uppercase">
+                    ELITE
+                  </h2>
+                </div>
+
+                {/* Description Block */}
+                <div className="space-y-6 max-w-lg">
+                  <p className="text-gold-500/80 text-[11px] tracking-[0.4em] uppercase font-bold">Extrait de Parfum</p>
+                  <p className="text-sm md:text-base text-gray-400 leading-loose tracking-widest font-light italic opacity-80">
+                    "A daring fusion of rare agarwood and subtle saffron, crafted for those who define their own path."
+                  </p>
+                </div>
+
+                {/* Olfactory Composition Grid */}
+                <div className="grid grid-cols-2 gap-y-8 gap-x-12 border-y border-white/10 py-10 w-full max-w-md">
+                  <div className="space-y-2">
+                    <span className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-bold">Intensity</span>
+                    <p className="text-[11px] text-white tracking-[0.2em] uppercase font-medium">DEEP / RESINOUS</p>
+                  </div>
+                  <div className="space-y-2">
+                    <span className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-bold">Key Notes</span>
+                    <p className="text-[11px] text-white tracking-[0.2em] uppercase font-medium">OUD, SAFFRON</p>
+                  </div>
+                  <div className="space-y-2">
+                    <span className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-bold">Projection</span>
+                    <p className="text-[11px] text-white tracking-[0.2em] uppercase font-medium">HIGH / ENVELOPING</p>
+                  </div>
+                  <div className="space-y-2">
+                    <span className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-bold">Duration</span>
+                    <p className="text-[11px] text-white tracking-[0.2em] uppercase font-medium">12+ HOURS</p>
+                  </div>
+                </div>
+
+                {/* Call to Action */}
+                <div className="pt-6">
+                  <Link
+                    to="/collection/arambh/elite"
+                    className="group relative inline-flex items-center space-x-8 overflow-hidden"
+                  >
+                    <div className="relative w-14 h-14 flex items-center justify-center">
+                      <div className="absolute inset-0 border border-white/20 rounded-full group-hover:border-gold-500 group-hover:scale-110 transition-all duration-700" />
+                      <div className="w-2 h-2 bg-white rounded-full group-hover:scale-[2] transition-transform duration-500" />
+                    </div>
+                    <div className="flex flex-col items-start">
+                      <span className="text-[12px] tracking-[0.6em] uppercase text-white font-black group-hover:text-gold-500 transition-colors duration-500">
+                        DISCOVER
+                      </span>
+                      <span className="text-[8px] tracking-[0.3em] uppercase text-white/40 font-medium">EXPLORE THE COMPOSITION</span>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+
+          </div>
         </div>
       </section>
 
@@ -347,50 +427,31 @@ const Home = () => {
 
           {/* Mobile View: Full-Screen Sticky Slideshow */}
           <div className="md:hidden mobileSlideshowWrapper h-screen w-full overflow-hidden">
-            {[
-              {
-                id: 'elite',
-                name: 'Elite',
-                desc: 'A powerful blend of rare woods and midnight spices, designed for the individual who commands presence without speaking a word.',
-                image: '/elite1.webp'
-              },
-              {
-                id: 'la-reina',
-                name: 'La Reina',
-                desc: 'An opulent symphony of velvet roses and golden amber. La Reina is the essence of timeless femininity and unyielding grace.',
-                image: '/la-reina.jpeg'
-              },
-              {
-                id: 'el-rey',
-                name: 'El Rey',
-                desc: 'Bold leather notes intertwined with aged tobacco and citrus undertones. El Rey is a fragrance of conquest and enduring legacy.',
-                image: '/el-rey.jpeg'
-              }
-            ].map((product, index) => (
-              <div 
-                key={product.id} 
+            {showcaseProducts.map((product, index) => (
+              <div
+                key={product.id}
                 className="mobileSlide absolute inset-0 flex flex-col items-center justify-center px-8 py-10 bg-[#050505]"
                 style={{ zIndex: 10 + index }}
               >
                 {/* Name on Top */}
-                <div className="text-center mb-6">
+                <div className="text-center mb-6 w-full">
                   <span className="text-gold-500 text-[8px] tracking-[0.5em] uppercase font-bold block mb-2">Collection</span>
                   <h2 className="text-2xl font-serif text-white tracking-[0.1em] uppercase">{product.name}</h2>
                 </div>
-                
+
                 {/* Image in Middle */}
                 <div className="relative group w-full max-w-[200px] aspect-[3/4] mb-6">
                   <div className="absolute inset-0 bg-gold-500/5 blur-3xl rounded-full opacity-30" />
-                  <Link to={`/collection/arambh/${product.id}`} className="relative block w-full h-full bg-[#0d0d0d] border border-white/10 overflow-hidden">
-                    <img src={product.image} alt={product.name} className="w-full h-full object-contain p-6" />
-                  </Link>
+                  <div className="relative block w-full h-full bg-[#0d0d0d] border border-white/10 overflow-hidden">
+                    <img src={getFullImageUrl(product.image)} alt={product.name} className="w-full h-full object-contain p-6" />
+                  </div>
                 </div>
 
                 {/* Description at Bottom */}
-                <div className="max-w-[260px] text-center">
+                <div className="max-w-[260px] text-center w-full">
                   <p className="text-[10px] text-gray-400 leading-relaxed tracking-[0.12em] font-medium text-center italic mb-6 uppercase">{product.desc}</p>
-                  <Link 
-                    to={`/collection/arambh/${product.id}`} 
+                  <Link
+                    to={`/collection/arambh/${product.id}`}
                     className="inline-block text-[9px] text-gold-500 tracking-[0.3em] uppercase font-bold border-b border-gold-500/30 pb-1 hover:border-gold-500 transition-colors"
                   >
                     Discover The Scent
@@ -402,33 +463,18 @@ const Home = () => {
 
           {/* Desktop View: Side-by-Side Split */}
           <div className="hidden md:block showcaseContent w-1/2">
-            {[
-              {
-                name: 'Elite',
-                desc: 'A powerful blend of rare woods and midnight spices, designed for the individual who commands presence without speaking a word.'
-              },
-              {
-                name: 'La Reina',
-                desc: 'An opulent symphony of velvet roses and golden amber. La Reina is the essence of timeless femininity and unyielding grace.'
-              },
-              {
-                name: 'El Rey',
-                desc: 'Bold leather notes intertwined with aged tobacco and citrus undertones. El Rey is a fragrance of conquest and enduring legacy.'
-              }
-            ].map((content, index) => (
+            {showcaseProducts.map((content, index) => (
               <div
                 key={index}
                 className="showcaseContentSection min-h-screen flex items-center justify-center p-4 md:p-12"
               >
-                <div className="showcaseReveal max-w-lg">
-
+                <div className="showcaseReveal max-w-lg w-full">
                   <h2 className="text-2xl md:text-5xl font-serif text-white tracking-[0.05em] mb-4 md:mb-6 leading-tight uppercase">
                     {content.name}
                   </h2>
                   <p className="text-[10px] md:text-sm text-gray-400 leading-[1.6] md:leading-[2] tracking-widest font-medium">
                     {content.desc}
                   </p>
-
                 </div>
               </div>
             ))}
@@ -436,28 +482,19 @@ const Home = () => {
 
           <div className="hidden md:flex showcaseRight w-1/2 h-screen sticky top-0 items-center justify-center overflow-hidden border-l border-white/5">
             <div className="relative w-full h-full">
-              {[
-                { id: 'elite', name: 'Elite', image: '/elite1.webp' },
-                { id: 'la-reina', name: 'La Reina', image: '/la-reina.jpeg' },
-                { id: 'el-rey', name: 'El Rey', image: '/el-rey.jpeg' }
-              ].map((product, index) => (
+              {showcaseProducts.map((product, index) => (
                 <div
                   key={product.id}
                   className="showcasePhoto absolute inset-0 flex items-center justify-center p-2 md:p-8 lg:p-12"
                   style={{ opacity: index === 0 ? 1 : 0 }}
                 >
-                  <Link
-                    to={`/collection/arambh/${product.id}`}
-                    className="relative w-full max-w-lg aspect-[3/4] bg-[#0d0d0d] border border-white/10 overflow-hidden group cursor-pointer"
-                  >
+                  <div className="relative w-full max-w-lg aspect-[3/4] bg-[#0d0d0d] border border-white/10 overflow-hidden group">
                     <img
-                      src={product.image}
+                      src={getFullImageUrl(product.image)}
                       alt={product.name}
-                      loading="lazy"
-                      decoding="async"
                       className="w-full h-full object-contain p-4 md:p-16"
                     />
-                  </Link>
+                  </div>
                 </div>
               ))}
             </div>
@@ -467,30 +504,26 @@ const Home = () => {
 
       {/* Immersive Parallax Story Section with GSAP */}
       <section ref={storyRef} className="relative min-h-[80vh] md:h-screen bg-[#0a0a0a] overflow-hidden">
-
-
         <div className="relative z-20 h-full flex flex-col items-center justify-center px-6">
-          <div className="text-center max-w-4xl mx-auto flex flex-col items-center">
-            <p className="text-gold-500 text-xs md:text-xs font-semibold tracking-[0.2em] mb-8 font-sans uppercase">
-              {t('home.art_creation')}
-            </p>
+          <div className="text-center max-w-4xl mx-auto flex flex-col items-center w-full">
+            <span className="text-gold-500 text-[10px] tracking-[0.6em] uppercase font-black block mb-6">The Art of Fragrance</span>
 
-            <div className="overflow-hidden mb-8">
+            <div className="overflow-hidden mb-8 w-full">
               <h2
                 ref={storyTextRef}
                 className="text-3xl md:text-6xl lg:text-7xl font-serif text-white tracking-[0.1em] leading-[1.3] md:leading-[1.2] uppercase font-light text-center"
               >
-                {t('home.symphony_notes')}
+                A Symphony of <br /> Rare Notes.
               </h2>
             </div>
 
-            <p className="text-xs text-gray-400 max-w-lg mx-auto leading-[2.5] tracking-[0.15em] font-semibold">
-              {t('home.creation_desc')}
+            <p className="text-xs text-gray-400 max-w-lg mx-auto leading-[2.5] tracking-[0.15em] font-semibold text-center uppercase">
+              Distilled from the most precious ingredients on earth, every KIKS Ultra Luxury fragrance is meticulously curated to awaken the senses and capture raw emotion in a crystalline bottle.
             </p>
           </div>
 
           {/* Floating Secondary Image (Muse) */}
-          <div className="floating-muse absolute right-[10%] top-[20%] w-32 md:w-48 aspect-[3/4] z-30 hidden md:block border border-white/10 shadow-2xl overflow-hidden">
+          <div className="floating-muse absolute right-[10%] top-[20%] w-32 md:w-48 aspect-[3/4] z-30 hidden md:block border border-white/10 shadow-2xl overflow-hidden group">
             <img
               src="/alchemy.webp"
               loading="lazy"
@@ -500,14 +533,12 @@ const Home = () => {
             />
           </div>
         </div>
-
-
       </section>
 
       {/* SECTION 5: THE EDITORIAL REVEAL (INTERACTIVE & LAYERED) */}
       <section className="relative min-h-screen bg-[#050505] overflow-hidden py-16 md:py-24 px-6 md:px-20 lg:px-32 flex flex-col justify-center">
 
-        {/* Mouse Follow Glow - The 'Unique' Touch */}
+        {/* Mouse Follow Glow */}
         <motion.div
           className="pointer-events-none absolute inset-0 z-0 opacity-30"
           style={{
@@ -541,7 +572,7 @@ const Home = () => {
             {/* Floating Label */}
             <div className="absolute -right-8 -bottom-8 bg-black border border-white/10 p-8 hidden md:block">
               <span className="text-gold-500 text-[8px] tracking-[0.5em] uppercase font-black block mb-2">Chapter V</span>
-              <p className="text-white text-[10px] tracking-[0.2em] uppercase font-light italic">THE SIGNATURE</p>
+              <p className="text-white text-[10px] tracking-[0.2em] uppercase font-light italic">The Alchemy of Scent</p>
             </div>
           </div>
 
@@ -554,7 +585,7 @@ const Home = () => {
               className="space-y-6"
             >
               <h3 className="text-white text-4xl md:text-5xl font-serif font-light tracking-tight leading-tight text-center lg:text-left">
-                Beyond the <br /> <span className="text-gold-500 italic">Invisible Senses</span>
+                Where Tradition Meets Modernity.
               </h3>
               <div className="w-20 h-[1px] bg-gold-500/40 mx-auto lg:mx-0" />
             </motion.div>
@@ -566,15 +597,15 @@ const Home = () => {
               className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12 border-t border-white/5 pt-12"
             >
               <div className="space-y-4 text-center sm:text-left">
-                <span className="text-gold-500 text-xs md:text-[10px] tracking-[0.3em] uppercase font-bold">The Sourcing</span>
+                <span className="text-gold-500 text-xs md:text-[10px] tracking-[0.3em] uppercase font-bold">Pure Sourcing</span>
                 <p className="text-white/40 text-sm md:text-xs leading-relaxed tracking-wider font-light italic">
-                  Extracted from hand-selected blossoms in Grasse, aged for eighteen months in charred oak.
+                  Hand-selected botanicals from the most remote regions, ensuring unparalleled purity and depth.
                 </p>
               </div>
               <div className="space-y-4 text-center sm:text-left">
-                <span className="text-gold-500 text-xs md:text-[10px] tracking-[0.3em] uppercase font-bold">The Alchemy</span>
+                <span className="text-gold-500 text-xs md:text-[10px] tracking-[0.3em] uppercase font-bold">Refined Alchemy</span>
                 <p className="text-white/40 text-sm md:text-xs leading-relaxed tracking-wider font-light italic">
-                  A high-concentration extrait that evolves with your unique body chemistry.
+                  Traditional distillation techniques meeting precision engineering to create an olfactory masterpiece.
                 </p>
               </div>
             </motion.div>
@@ -604,14 +635,12 @@ const Home = () => {
         {/* Social Proof: The Community Gallery */}
         <section className="pt-16 pb-8 md:py-24 border-t border-white/5 bg-[#080808]">
           <div className="container mx-auto px-6">
-            <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 md:mb-16 space-y-8 md:space-y-0 text-center md:text-left">
-              <div className="max-w-xl">
-                <span className="text-gold-500 text-[8px] md:text-[9px] tracking-[0.4em] md:tracking-[0.5em] uppercase font-black block mb-4">The Collective</span>
-                <h2 className="text-4xl md:text-5xl font-serif text-white tracking-tight uppercase italic leading-tight">
-                  Seen in <br /> <span className="text-white not-italic font-sans font-black tracking-widest">KIKS</span>
-                </h2>
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-16">
+              <div className="text-center md:text-left w-full">
+                <span className="text-gold-500 text-[10px] tracking-[0.5em] uppercase font-bold block mb-4">Community</span>
+                <h2 className="text-4xl md:text-6xl font-serif text-white tracking-tight uppercase leading-none">The Collective</h2>
               </div>
-              <p className="text-xs text-white/30 tracking-[0.2em] uppercase max-w-[250px] md:text-right leading-relaxed">
+              <p className="text-xs text-white/30 tracking-[0.2em] uppercase max-w-[250px] md:text-right leading-relaxed hidden md:block">
                 Our creations in the hands of the global elite.
               </p>
             </div>
@@ -624,7 +653,7 @@ const Home = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
-                  className={`bg-zinc-900 overflow-hidden group aspect-square ${idx === 1 ? 'md:aspect-[3/4] md:row-span-2' : idx === 5 ? 'md:col-span-2' : ''}`}
+                  className={`bg-zinc-900 overflow-hidden group aspect-square relative ${idx === 1 ? 'md:aspect-[3/4] md:row-span-2' : idx === 5 ? 'md:col-span-2' : ''}`}
                 >
                   <img src={getFullImageUrl(img.image_url)} loading="lazy" decoding="async" className="w-full h-full object-cover md:grayscale hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" alt={`Lifestyle ${idx + 1}`} />
                 </motion.div>
@@ -643,6 +672,14 @@ const Home = () => {
           <p className="text-[9px] tracking-[2em] text-white/10 uppercase vertical-text">Signature Essence 2026</p>
         </div>
       </section>
+
+      {/* Back to Top Button */}
+      <button 
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full border border-white/10 bg-black/50 backdrop-blur-md flex items-center justify-center hover:border-gold-500/50 hover:bg-black/80 transition-all duration-500 group"
+      >
+        <ChevronUp size={20} className="text-white/50 group-hover:text-gold-500 transition-colors" />
+      </button>
 
     </div>
   );
