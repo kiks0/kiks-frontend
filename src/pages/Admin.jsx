@@ -41,6 +41,8 @@ const Admin = () => {
     const [reviews, setReviews] = useState([]);
     const [blogs, setBlogs] = useState([]);
     const [users, setUsers] = useState([]);
+    const [admins, setAdmins] = useState([]);
+    const [userSubTab, setUserSubTab] = useState('patrons'); // patrons, admins
     const [waitlist, setWaitlist] = useState([]);
     const [promoCodes, setPromoCodes] = useState([]);
     const [analytics, setAnalytics] = useState({ totalOrders: 0, totalRevenue: '₹0', bestSeller: 'N/A' });
@@ -63,7 +65,8 @@ const Admin = () => {
         users: false,
         waitlist: false,
         'promo-codes': false,
-        marketing: false
+        marketing: false,
+        admins: false
     });
 
     // Form states
@@ -85,6 +88,7 @@ const Admin = () => {
         code: '', discount_type: 'percentage', discount_value: '',
         min_order_amount: '', max_discount: '', expiry_date: '', usage_limit: ''
     });
+    const [adminFormData, setAdminFormData] = useState({ email: '', password: '', firstName: '', lastName: '' });
     const [userSearch, setUserSearch] = useState('');
 
     const fileInputRef = useRef(null);
@@ -410,12 +414,41 @@ const Admin = () => {
         }
     };
 
+    const fetchAdminsData = async () => {
+        setTabLoading('admins', true);
+        try {
+            const res = await fetch(`${API_URL}/api/users/admins`, { headers: getAdminHeaders() });
+            if (res.ok) setAdmins(await res.json());
+        } catch (e) { console.error("Admins fetch failed", e); }
+        finally { setTabLoading('admins', false); }
+    };
+
+    const handleAddAdmin = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await fetch(`${API_URL}/api/users/admins`, {
+                method: 'POST',
+                headers: getAdminHeaders(),
+                body: JSON.stringify(adminFormData)
+            });
+            if (res.ok) {
+                showSuccessToast('New Administrator Registered Successfully.');
+                setAdminFormData({ email: '', password: '', firstName: '', lastName: '' });
+                setIsAdding(false);
+                fetchAdminsData();
+            } else {
+                const data = await res.json();
+                showErrorToast(data.msg || 'Failed to register administrator.');
+            }
+        } catch (e) { showErrorToast('Server communication fault.'); }
+    };
+
     // Keep legacy fetchData for backward compatibility in actions if needed, or point them to specific ones
     const fetchData = () => {
         const tab = activeTab;
         if (tab === 'dashboard') fetchDashboardData();
         else if (tab === 'orders') fetchOrdersData();
-        else if (tab === 'users') fetchUsersData();
+        else if (tab === 'users') { fetchUsersData(); fetchAdminsData(); }
         else if (tab === 'collections') fetchCollectionsData();
         else if (tab === 'products') fetchProductsData();
         else if (tab === 'blogs') fetchBlogsData();
@@ -1638,17 +1671,34 @@ const Admin = () => {
                             </div>
                         ) : (
                             <>
-                                <div className="mb-8 flex items-center bg-white/[0.03] border border-white/10 px-5 md:px-8 py-4 md:py-6 group focus-within:border-gold-500/50 transition-all">
-                                    <Search size={18} className="text-white/20 group-focus-within:text-gold-500 transition-colors mr-6" />
-                                    <input
-                                        type="text"
-                                        placeholder="Search by name, email or client ID..."
-                                        value={userSearch}
-                                        onChange={(e) => setUserSearch(e.target.value)}
-                                        className="bg-transparent border-none text-[10px] md:text-[11px] tracking-[0.2em] uppercase text-white placeholder:text-white/10 focus:outline-none w-full"
-                                    />
+                                <div className="flex space-x-8 mb-12 border-b border-white/5 pb-2">
+                                    <button
+                                        onClick={() => setUserSubTab('patrons')}
+                                        className={`pb-4 px-2 uppercase tracking-[0.3em] text-[10px] transition-all border-b-2 ${userSubTab === 'patrons' ? 'border-gold-500 text-gold-500 font-bold' : 'border-transparent text-white/30'}`}
+                                    >
+                                        Patrons
+                                    </button>
+                                    <button
+                                        onClick={() => setUserSubTab('admins')}
+                                        className={`pb-4 px-2 uppercase tracking-[0.3em] text-[10px] transition-all border-b-2 ${userSubTab === 'admins' ? 'border-gold-500 text-gold-500 font-bold' : 'border-transparent text-white/30'}`}
+                                    >
+                                        Admins
+                                    </button>
                                 </div>
-                                <div className="space-y-6">
+
+                                {userSubTab === 'patrons' ? (
+                                    <>
+                                        <div className="mb-8 flex items-center bg-white/[0.03] border border-white/10 px-5 md:px-8 py-4 md:py-6 group focus-within:border-gold-500/50 transition-all">
+                                            <Search size={18} className="text-white/20 group-focus-within:text-gold-500 transition-colors mr-6" />
+                                            <input
+                                                type="text"
+                                                placeholder="Search patrons..."
+                                                value={userSearch}
+                                                onChange={(e) => setUserSearch(e.target.value)}
+                                                className="bg-transparent border-none text-[10px] md:text-[11px] tracking-[0.2em] uppercase text-white placeholder:text-white/10 focus:outline-none w-full"
+                                            />
+                                        </div>
+                                        <div className="space-y-6">
                                     {/* Desktop Table View */}
                                     <div className="hidden md:block bg-white/5 border border-white/10 overflow-x-auto scrollbar-hide">
                                         <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80 min-w-[900px]">
@@ -1752,8 +1802,105 @@ const Admin = () => {
                                             </div>
                                         ))}
                                     </div>
-                                </div>
-                            </>
+                                    </>
+                                ) : (
+                                    <div className="space-y-12">
+                                        <div className="flex justify-between items-center bg-white/5 border border-white/10 p-8">
+                                            <div>
+                                                <h2 className="text-xl font-serif tracking-widest uppercase italic text-gold-500">Administration Team</h2>
+                                                <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase mt-2">Managing platform access controls</p>
+                                            </div>
+                                            <button
+                                                onClick={() => setIsAdding(!isAdding)}
+                                                className="bg-white text-black px-8 py-4 text-[10px] font-black uppercase tracking-widest hover:bg-gold-500 transition-all flex items-center gap-3"
+                                            >
+                                                {isAdding ? <X size={16} /> : <Plus size={16} />}
+                                                {isAdding ? 'Discard Draft' : 'Appoint New Admin'}
+                                            </button>
+                                        </div>
+
+                                        <AnimatePresence>
+                                            {isAdding && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, height: 0 }}
+                                                    animate={{ opacity: 1, height: 'auto' }}
+                                                    exit={{ opacity: 0, height: 0 }}
+                                                    className="bg-zinc-900/80 border border-gold-500/20 p-8 md:p-12 mb-10"
+                                                >
+                                                    <form onSubmit={handleAddAdmin} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                                        <div className="md:col-span-2 border-b border-white/10 pb-4 mb-4">
+                                                            <h3 className="text-gold-500 font-serif tracking-widest uppercase">Admin Identity & Credentials</h3>
+                                                        </div>
+                                                        <div>
+                                                            <label className={labelClasses}>First Name</label>
+                                                            <input required className={inputClasses} value={adminFormData.firstName} onChange={e => setAdminFormData({ ...adminFormData, firstName: e.target.value })} />
+                                                        </div>
+                                                        <div>
+                                                            <label className={labelClasses}>Last Name</label>
+                                                            <input required className={inputClasses} value={adminFormData.lastName} onChange={e => setAdminFormData({ ...adminFormData, lastName: e.target.value })} />
+                                                        </div>
+                                                        <div>
+                                                            <label className={labelClasses}>Email Address</label>
+                                                            <input required type="email" className={inputClasses} value={adminFormData.email} onChange={e => setAdminFormData({ ...adminFormData, email: e.target.value })} />
+                                                        </div>
+                                                        <div>
+                                                            <label className={labelClasses}>Access Password</label>
+                                                            <input required type="password" className={inputClasses} value={adminFormData.password} onChange={e => setAdminFormData({ ...adminFormData, password: e.target.value })} />
+                                                        </div>
+                                                        <div className="md:col-span-2 pt-4">
+                                                            <button type="submit" className="w-full bg-gold-500 text-black py-5 text-[11px] font-black tracking-[0.5em] uppercase hover:bg-white transition-all">
+                                                                Confirm Appointment
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+
+                                        <div className="bg-white/5 border border-white/10 overflow-hidden">
+                                            <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80">
+                                                <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/50 border-b border-white/10">
+                                                    <tr>
+                                                        <th className="p-6">Admin Identity</th>
+                                                        <th className="p-6">Permissions</th>
+                                                        <th className="p-6">Joined Date</th>
+                                                        <th className="p-6 text-right">Management</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {admins.map(adm => (
+                                                        <tr key={adm.id} className="border-b border-white/5 hover:bg-white/[0.02]">
+                                                            <td className="p-6">
+                                                                <div className="flex items-center space-x-4">
+                                                                    <div className="w-10 h-10 bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-500 font-serif text-lg">
+                                                                        {adm.first_name?.[0] || 'A'}
+                                                                    </div>
+                                                                    <div>
+                                                                        <p className="font-bold text-white uppercase tracking-widest">{adm.first_name} {adm.last_name}</p>
+                                                                        <p className="text-[9px] text-white/40 lowercase">{adm.email}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td className="p-6">
+                                                                <span className="px-3 py-1 bg-gold-500/5 border border-gold-500/30 text-gold-500 text-[8px] font-black uppercase tracking-widest">Administrator</span>
+                                                            </td>
+                                                            <td className="p-6 text-white/30 uppercase">
+                                                                {new Date(adm.created_at).toLocaleDateString()}
+                                                            </td>
+                                                            <td className="p-6 text-right">
+                                                                {adm.id !== 1 && (
+                                                                    <button onClick={() => handleDeleteUser(adm.id)} className="text-red-500/30 hover:text-red-500 transition-colors p-2">
+                                                                        <Trash2 size={16} />
+                                                                    </button>
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                )}
                         )}
                     </motion.div>
                 )}
