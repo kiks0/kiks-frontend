@@ -253,7 +253,7 @@ const Home = () => {
           <motion.div
             className="w-full md:w-[45%] relative group"
           >
-            <Link to="/product/elite" className="w-full block relative px-4 md:px-0">
+            <Link to="/collection/arambh/elite" className="w-full block relative px-4 md:px-0">
               <img
                 src="/elite1.webp"
                 alt="Elite Collection Front"
@@ -282,7 +282,7 @@ const Home = () => {
 
             <div className="flex space-x-4">
               <Link
-                to="/product/elite"
+                to="/collection/arambh/elite"
                 className="inline-flex items-center justify-center px-10 py-3.5 bg-[#2a2a2a] rounded-full text-[11px] tracking-[0.3em] uppercase text-white hover:bg-white hover:text-dark-900 transition-all duration-300 font-medium"
               >
                 {t('home.discover_btn')}
@@ -379,7 +379,7 @@ const Home = () => {
                   style={{ opacity: index === 0 ? 1 : 0 }}
                 >
                   <Link
-                    to={`/product/${product.id}`}
+                    to={`/collection/arambh/${product.id}`}
                     className="relative w-full max-w-lg aspect-[3/4] bg-[#0d0d0d] border border-white/10 overflow-hidden group cursor-pointer"
                   >
                     <img
