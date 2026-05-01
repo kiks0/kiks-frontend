@@ -263,7 +263,6 @@ const Account = () => {
               </button>
 
               <div className="text-center mb-6 sm:mb-10">
-                <h2 className="text-gold-500 text-[10px] tracking-[0.5em] uppercase font-bold mb-4">Elite Service</h2>
                 <h3 className="text-xl md:text-2xl font-serif text-white uppercase tracking-wider font-light">Client Services</h3>
               </div>
 
