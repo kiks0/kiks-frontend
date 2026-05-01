@@ -94,48 +94,38 @@ const Navbar = () => {
         <div className="container mx-auto px-5 lg:px-12 flex flex-col items-center">
 
           {/* ======================================= */}
-          {/* MOBILE NAVBAR (Visible only on Mobile) */}
+          {/* MOBILE NAVBAR (Visisble only on Mobile) */}
           {/* ======================================= */}
-          <div className="flex md:hidden items-center justify-between w-full relative z-50 h-[60px] text-white px-5">
-            
-            {/* Left Icons */}
-            <div className="flex items-center space-x-1 flex-1 justify-start">
-              <button 
-                className="hover:text-gold-400 transition-colors p-2 -ml-2 flex items-center justify-center" 
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              >
+          <div className="flex md:hidden flex-row items-center justify-between w-full relative z-50 h-[64px] text-white">
+
+            {/* Left: Mobile Menu & Search */}
+            <div className="flex items-center space-x-3.5 px-1">
+              <button className="hover:text-gold-400 transition-colors" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
                 {isMobileMenuOpen ? <X size={20} strokeWidth={1} /> : <Menu size={20} strokeWidth={1} />}
               </button>
-              <button 
-                className="hover:text-gold-400 transition-colors p-2 flex items-center justify-center" 
-                onClick={() => { setIsSearchOpen(true); setIsMobileMenuOpen(false); }}
-              >
+              <button className="hover:text-gold-400 transition-colors" onClick={() => { setIsSearchOpen(true); setIsMobileMenuOpen(false); }}>
                 <Search size={20} strokeWidth={1} />
               </button>
             </div>
 
             {/* Center: Brand Logo */}
-            <div className="flex items-center justify-center flex-1">
+            <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-center pointer-events-none">
               <Link
                 to="/"
                 onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); setIsMobileMenuOpen(false); }}
-                className="flex items-center justify-center transition-opacity hover:opacity-70"
+                className="flex items-center justify-center transform transition hover:opacity-70 pointer-events-auto"
               >
                 <img
                   src="/logo-kiks.webp"
                   alt="Kiks Logo"
-                  className="h-10 w-auto object-contain"
+                  className="h-12 w-auto object-contain transition-all"
                 />
               </Link>
             </div>
 
             {/* Right: Mobile Icons */}
-            <div className="flex items-center space-x-1 flex-1 justify-end">
-              <Link 
-                to="/account" 
-                className="hover:text-gold-400 transition-colors p-2 flex items-center justify-center" 
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
+            <div className="flex items-center space-x-3.5 px-1">
+              <Link to="/account" className="hover:text-gold-400 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
                 <User size={20} strokeWidth={1} />
               </Link>
               <button
@@ -145,11 +135,11 @@ const Navbar = () => {
                   setIsCartOpen(true);
                   setIsMobileMenuOpen(false);
                 }}
-                className="hover:text-gold-400 transition-colors relative flex items-center justify-center p-2 -mr-2"
+                className="hover:text-gold-400 transition-colors relative flex items-center justify-center"
               >
                 <ShoppingBag size={20} strokeWidth={1} />
                 {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-black text-white border border-white/20 text-[7px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-lg">
+                  <span className="absolute -top-2 -right-2 bg-black text-white border border-white/20 text-[7px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-fade-in shadow-lg">
                     {cartCount}
                   </span>
                 )}
@@ -387,7 +377,7 @@ const Navbar = () => {
       {/* Back to Top Button */}
       <button 
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className={`fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[60] w-14 h-14 bg-black border border-gold-500/30 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 group ${isScrolled ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'}`}
+        className={`fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[60] w-12 h-12 md:w-14 md:h-14 bg-black border border-gold-500/30 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 group ${isScrolled ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'}`}
       >
         <div className="absolute inset-0 rounded-full bg-gold-500/5 group-hover:bg-gold-500/10 transition-colors" />
         <ChevronDown size={20} className="text-gold-500 rotate-180 group-hover:-translate-y-1 transition-transform" strokeWidth={1.5} />
