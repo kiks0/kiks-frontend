@@ -1427,7 +1427,7 @@ const Admin = () => {
                                                                 {order.payment_method?.toLowerCase().includes('partial') && (
                                                                     <div className="mt-3 pt-2 border-t border-white/5 space-y-1">
                                                                         <div className="flex justify-between text-[8px] tracking-[0.1em] uppercase">
-                                                                            <span className="text-white/40 italic">Paid (30%)</span>
+                                                                            <span className="text-white/40 italic">Partial Paid (30%)</span>
                                                                             <span className="text-green-500 font-bold">
                                                                                 {formatCurrency(order.amount_paid, activeCurrency, rates, symbols)}
                                                                             </span>

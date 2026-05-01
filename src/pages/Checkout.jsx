@@ -672,7 +672,7 @@ const Checkout = () => {
                                 {isPartialSelected && (
                                     <>
                                         <div className="flex justify-between text-gold-500 font-black">
-                                            <span>Booking Deposit (30%)</span>
+                                            <span>Partial Amount (30%)</span>
                                             <span>{formatCurrency(amountOnline, activeCurrency, rates, symbols)}</span>
                                         </div>
                                         <div className="flex justify-between text-white/60">
@@ -732,7 +732,7 @@ const Checkout = () => {
                             <div className="space-y-4 mb-10">
                                 <p className="text-[10px] tracking-[0.3em] uppercase text-gold-500 font-black">Partial COD Selection</p>
                                 <p className="text-xs md:text-sm text-white/60 leading-relaxed tracking-widest font-light italic opacity-80">
-                                    Please be advised that the <span className="text-white font-bold">30% advance payment</span> required for Partial COD orders is <span className="text-gold-500 font-bold">strictly non-refundable</span> once the order has been processed.
+                                    Please be advised that the <span className="text-white font-bold">Partial Amount (30%)</span> required for Partial COD orders is <span className="text-gold-500 font-bold">strictly non-refundable</span> once the order has been processed.
                                 </p>
                             </div>
 
