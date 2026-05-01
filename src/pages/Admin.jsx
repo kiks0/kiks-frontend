@@ -112,6 +112,7 @@ const Admin = () => {
 
         // Initial Data needed for baseline
         fetchBaseData();
+        fetchWaitlistData();
     }, [isAuthenticated, user]);
 
     useEffect(() => {
@@ -1058,7 +1059,14 @@ const Admin = () => {
                 <div className="flex flex-col md:flex-row justify-between items-center mb-16">
                     <div>
                         <h1 className="text-3xl md:text-4xl font-serif tracking-[0.3em] uppercase mb-2 text-white">Registry Control</h1>
-                        <p className="text-white/40 text-[10px] uppercase tracking-[0.5em] mb-12">Administrative Management Panel</p>
+                        <p className="text-white/40 text-[10px] uppercase tracking-[0.5em] mb-12">
+                            Administrative Management Panel
+                            {waitlist.filter(e => e.request_type === 'callback').length > 0 && (
+                                <span className="text-gold-500 animate-pulse ml-4 border-l border-white/10 pl-4 font-black">
+                                    {waitlist.filter(e => e.request_type === 'callback').length} Callbacks Manifested
+                                </span>
+                            )}
+                        </p>
                     </div>
                 </div>
 
@@ -2038,10 +2046,17 @@ const Admin = () => {
                                 <div className="flex justify-between items-center mb-8 bg-white/5 border border-white/10 p-8">
                                     <div>
                                         <h2 className="text-xl font-serif tracking-[0.2em] uppercase italic">Waitlist Manifest</h2>
-                                        <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase mt-2">Managing prospective acquisitions</p>
+                                        <div className="flex items-center gap-4 mt-2">
+                                            <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase">Managing prospective acquisitions</p>
+                                            {waitlist.filter(e => e.request_type === 'callback').length > 0 && (
+                                                <span className="bg-gold-500 text-black px-2 py-0.5 text-[8px] font-black uppercase tracking-widest animate-pulse">
+                                                    {waitlist.filter(e => e.request_type === 'callback').length} Priority Callbacks
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-[10px] text-white/40 uppercase tracking-widest">Total Prospects</p>
+                                        <p className="text-[10px] text-white/40 uppercase tracking-widest">Total Manifest Entries</p>
                                         <p className="text-2xl font-serif text-gold-500">{waitlist.length}</p>
                                     </div>
                                 </div>

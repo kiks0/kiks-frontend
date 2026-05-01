@@ -294,11 +294,6 @@ const Account = () => {
                   >
                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/5 flex items-center justify-center mr-4 sm:mr-6 text-gold-500 group-hover:bg-gold-500 group-hover:text-black transition-all relative">
                       <Phone size={18} strokeWidth={1.5} />
-                      {callbacksCount > 0 && (
-                        <span className="absolute -top-1 -right-1 bg-gold-500 text-black text-[7px] font-black w-4 h-4 rounded-full flex items-center justify-center animate-fade-in shadow-lg">
-                          {callbacksCount}
-                        </span>
-                      )}
                     </div>
                     <div className="text-left">
                       <p className="text-[9px] tracking-widest text-white/30 uppercase mb-1">Priority Line</p>
