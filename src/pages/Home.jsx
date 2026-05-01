@@ -309,20 +309,20 @@ const Home = () => {
       </section>
 
       {/* Product 1: ELITE */}
-      <section className="relative py-16 md:py-32 overflow-hidden">
+      <section className="relative py-10 md:py-32 overflow-hidden">
         {/* Decorative Background Elements */}
         <div className="absolute top-1/2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
         <div className="absolute top-1/4 right-0 w-64 h-64 bg-gold-500/5 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-[1400px]">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-16 lg:gap-32">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16 lg:gap-32">
 
             {/* Mobile Header: Name on Top */}
             <div className="md:hidden text-center">
               <h2 className="text-6xl font-serif font-light tracking-[0.15em] leading-none text-white uppercase">
                 ELITE
               </h2>
-              <p className="text-gold-500/80 text-[11px] tracking-[0.4em] uppercase font-bold mt-4">Extrait de Parfum</p>
+              <p className="text-gold-500/80 text-[11px] tracking-[0.4em] uppercase font-bold mt-2">Extrait de Parfum</p>
             </div>
 
             {/* Left: Image with Decorative Frame */}
