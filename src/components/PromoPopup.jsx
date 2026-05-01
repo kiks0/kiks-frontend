@@ -167,15 +167,21 @@ const PromoPopup = () => {
                                         animate={{ opacity: 1, scale: 1 }}
                                         className="py-12"
                                     >
-                                        <div className="w-16 h-16 rounded-full border border-gold-500 flex items-center justify-center mb-6 mx-auto">
+                                        <div className="w-16 h-16 rounded-full border border-gold-500/30 flex items-center justify-center mb-8 mx-auto">
                                             <motion.div
                                                 initial={{ scale: 0 }}
                                                 animate={{ scale: 1 }}
                                                 className="w-2 h-2 bg-gold-500 rounded-full"
                                             />
                                         </div>
-                                        <h3 className="text-white text-lg tracking-[0.3em] uppercase font-serif italic mb-4">Welcome to KIKS</h3>
-                                        <p className="text-gold-500 text-[9px] tracking-[0.4em] uppercase font-black">You are now part of the circle.</p>
+                                        <h3 className="text-white text-lg tracking-[0.3em] uppercase font-serif italic mb-2">Welcome to KIKS</h3>
+                                        <p className="text-gold-500 text-[9px] tracking-[0.4em] uppercase font-black mb-8">You are now part of the circle.</p>
+                                        
+                                        <div className="bg-white/5 border border-white/10 p-6 space-y-3">
+                                            <p className="text-[8px] tracking-[0.4em] text-white/40 uppercase">Your Private Invitation Code</p>
+                                            <p className="text-2xl text-white tracking-[0.5em] font-light uppercase">KIKS10</p>
+                                        </div>
+                                        <p className="mt-6 text-[9px] text-white/30 tracking-widest uppercase">Use at checkout for your 10% privilege</p>
                                     </motion.div>
                                 )}
                             </div>
