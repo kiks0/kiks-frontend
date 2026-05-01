@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, UserPlus, LogIn, ShieldCheck } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { closeAuthModal } from '../store/uiSlice';
@@ -8,6 +9,8 @@ const AuthModal = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isOpen = useSelector((state) => state.ui.isAuthModalOpen);
+  const [hoverSign, setHoverSign] = useState(false);
+  const [hoverCreate, setHoverCreate] = useState(false);
 
   const handleAction = (path) => {
     dispatch(closeAuthModal());
@@ -22,32 +25,77 @@ const AuthModal = () => {
           animate={{ y: 0 }}
           exit={{ y: '100%' }}
           transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-          className="fixed bottom-0 left-0 right-0 bg-[#0a0a0a] border-t border-white/10 z-[2000] p-4 md:p-6 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl"
+          style={{
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: '#0a0a0a',
+            borderTop: '1px solid rgba(255,255,255,0.1)',
+            zIndex: 2000,
+            padding: '16px 24px',
+            boxShadow: '0 -20px 50px rgba(0,0,0,0.5)',
+          }}
         >
-          <div className="container mx-auto max-w-7xl flex items-center justify-between gap-6">
-            <div className="flex-1 text-center md:text-left">
-              <p className="text-[10px] md:text-[11px] tracking-[0.2em] text-white/50 uppercase font-light leading-relaxed">
-                <button 
-                  onClick={() => handleAction('/login')} 
-                  className="text-white font-bold underline underline-offset-4 hover:text-gold-500 transition-all"
-                >
-                  Sign in
-                </button>
-                <span className="mx-2">or</span>
-                <button 
-                  onClick={() => handleAction('/register')} 
-                  className="text-white font-bold underline underline-offset-4 hover:text-gold-500 transition-all"
-                >
-                  create an account
-                </button>
-                <span className="ml-2 hidden sm:inline">to access your wishlist and experience the world of KIKS from anywhere.</span>
-                <span className="ml-2 sm:hidden">to access your wishlist.</span>
-              </p>
-            </div>
-            
+          <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '24px' }}>
+            <p style={{ fontSize: '11px', letterSpacing: '0.2em', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', fontWeight: 300 }}>
+              <button
+                onClick={() => handleAction('/login')}
+                onMouseEnter={() => setHoverSign(true)}
+                onMouseLeave={() => setHoverSign(false)}
+                style={{
+                  color: hoverSign ? '#D4AF37' : '#ffffff',
+                  fontWeight: 700,
+                  textDecoration: 'underline',
+                  textUnderlineOffset: '4px',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: 'inherit',
+                  letterSpacing: 'inherit',
+                  textTransform: 'inherit',
+                  transition: 'color 0.2s',
+                }}
+              >
+                Sign in
+              </button>
+              <span style={{ margin: '0 8px' }}>or</span>
+              <button
+                onClick={() => handleAction('/register')}
+                onMouseEnter={() => setHoverCreate(true)}
+                onMouseLeave={() => setHoverCreate(false)}
+                style={{
+                  color: hoverCreate ? '#D4AF37' : '#ffffff',
+                  fontWeight: 700,
+                  textDecoration: 'underline',
+                  textUnderlineOffset: '4px',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: 'inherit',
+                  letterSpacing: 'inherit',
+                  textTransform: 'inherit',
+                  transition: 'color 0.2s',
+                }}
+              >
+                create an account
+              </button>
+              <span style={{ marginLeft: '8px' }}>to access your wishlist and experience the world of KIKS from anywhere.</span>
+            </p>
+
             <button
               onClick={() => dispatch(closeAuthModal())}
-              className="text-white/30 hover:text-white transition-colors p-2"
+              style={{
+                color: 'rgba(255,255,255,0.3)',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '8px',
+                flexShrink: 0,
+                transition: 'color 0.2s',
+              }}
+              onMouseEnter={e => e.currentTarget.style.color = '#ffffff'}
+              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.3)'}
             >
               <X size={16} strokeWidth={1} />
             </button>
