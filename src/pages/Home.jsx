@@ -243,23 +243,6 @@ const Home = () => {
             </div>
           </motion.div>
         </Link>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30 flex flex-col items-center"
-        >
-          <span className="text-[8px] uppercase tracking-[0.5em] text-white/50 mb-3 block font-light">{t('common.scroll')}</span>
-          <div className="w-[1px] h-12 bg-white/10 relative overflow-hidden">
-            <motion.div
-              initial={{ y: '-100%' }}
-              animate={{ y: '100%' }}
-              transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-              className="w-full h-full bg-gold-500 absolute top-0"
-            />
-          </div>
-        </motion.div>
       </section>
 
       {/* Product 1: ELITE */}
@@ -458,11 +441,7 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center">
-          <div className="w-[1px] h-16 bg-white/20 relative overflow-hidden">
-            <div className="w-full h-full bg-gold-500 absolute top-0 animate-scroll-line" />
-          </div>
-        </div>
+
       </section>
 
       {/* SECTION 5: THE EDITORIAL REVEAL (INTERACTIVE & LAYERED) */}
