@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { toggleWishlistAndSync } from '../store/wishlistSlice';
 import { addToCart } from '../store/cartSlice';
+import { openAuthModal } from '../store/uiSlice';
 import { ShoppingBag, X, Heart, Check, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
@@ -17,9 +18,9 @@ const Wishlist = () => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate('/login');
+      dispatch(openAuthModal());
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, dispatch]);
 
   const [addedId, setAddedId] = useState(null);
 

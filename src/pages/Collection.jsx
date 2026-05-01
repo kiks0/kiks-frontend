@@ -205,10 +205,6 @@ const Collection = () => {
                                             <button 
                                                 onClick={(e) => { 
                                                     e.preventDefault(); 
-                                                    if (!isAuthenticated) {
-                                                        dispatch(openAuthModal());
-                                                        return;
-                                                    }
                                                     dispatch(toggleWishlistAndSync(product)); 
                                                 }}
                                                 className={`p-1.5 md:p-3 rounded-full backdrop-blur-md border border-white/10 hover:bg-white hover:text-black transition-all ${wishlistItems.some(i => i.id === product.id) ? 'bg-gold-500 text-black' : 'bg-black/40 text-white'}`}

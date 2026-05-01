@@ -401,10 +401,6 @@ const ProductDetail = () => {
                                 <span className="bg-white px-2 py-0.5 text-black text-[9px] font-black tracking-[0.1em] uppercase">New</span>
                                 <button
                                     onClick={() => {
-                                        if (!isAuthenticated) {
-                                            dispatch(openAuthModal());
-                                            return;
-                                        }
                                         dispatch(toggleWishlistAndSync(product));
                                     }}
                                     className={`transition-all duration-300 ${isProductInWishlist ? 'text-gold-500' : 'text-white/30 hover:text-white'}`}
