@@ -340,23 +340,23 @@ const Home = () => {
             {/* Right: Rich Content Section */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-                viewport={{ once: true }}
-                className="w-full md:w-[50%] flex flex-col items-center md:items-start justify-center text-center md:text-left relative"
-              >
-                {/* Large Background Ghost Text */}
-                <div className="absolute -top-20 -left-10 text-[12rem] font-serif font-black text-white/[0.02] pointer-events-none select-none hidden lg:block uppercase tracking-tighter leading-none">
-                  ELITE
-                </div>
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+              viewport={{ once: true }}
+              className="w-full md:w-[50%] flex flex-col items-center md:items-start justify-center text-center md:text-left relative"
+            >
+              {/* Large Background Ghost Text */}
+              <div className="absolute -top-20 -left-10 text-[12rem] font-serif font-black text-white/[0.02] pointer-events-none select-none hidden lg:block uppercase tracking-tighter leading-none">
+                ELITE
+              </div>
 
-                <div className="relative z-10 space-y-10 w-full">
-                  {/* Header */}
-                  <div className="space-y-4">
-                    <h2 className="text-5xl md:text-[5.5rem] font-serif font-light tracking-[0.15em] leading-none text-white uppercase">
-                      ELITE
-                    </h2>
-                  </div>
+              <div className="relative z-10 space-y-10 w-full">
+                {/* Header */}
+                <div className="space-y-4">
+                  <h2 className="text-5xl md:text-[5.5rem] font-serif font-light tracking-[0.15em] leading-none text-white uppercase">
+                    ELITE
+                  </h2>
+                </div>
 
                 {/* Description Block */}
                 <div className="space-y-6 max-w-lg">
@@ -384,8 +384,6 @@ const Home = () => {
                     <span className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-bold">Duration</span>
                     <p className="text-[11px] text-white tracking-[0.2em] uppercase font-medium">12+ HOURS</p>
                   </div>
-                </div>
-
                 </div>
               </div>
             </motion.div>
