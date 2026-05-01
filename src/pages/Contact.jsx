@@ -36,7 +36,7 @@ const Contact = () => {
     };
 
     return (
-        <div className="bg-dark-900 min-h-screen text-white pt-24 md:pt-48 pb-16 md:pb-24 font-sans selection:bg-gold-500/30 selection:text-white overflow-hidden relative">
+        <div className="bg-dark-900 min-h-screen text-white pt-32 md:pt-48 pb-16 md:pb-24 font-sans selection:bg-gold-500/30 selection:text-white overflow-hidden relative">
 
             {/* Background Accents */}
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gold-500/5 blur-[120px] rounded-full pointer-events-none" />

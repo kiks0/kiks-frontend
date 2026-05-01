@@ -11,7 +11,7 @@ export const formatCurrency = (rawPrice, targetCurrency, rates, symbols) => {
     // 1. Extract raw number
     const numericValue = typeof rawPrice === 'number' 
         ? rawPrice 
-        : parseInt(rawPrice.toString().replace(/[^0-9]/g, '')) || 0;
+        : parseFloat(rawPrice.toString().replace(/[^0-9.]/g, '')) || 0;
     
     // 2. Convert to Target (Base is INR)
     const rate = rates[targetCurrency] || 1;
@@ -22,7 +22,10 @@ export const formatCurrency = (rawPrice, targetCurrency, rates, symbols) => {
     
     // Handle specific formatting for certain currencies
     if (targetCurrency === 'INR') {
-        return symbol + ' ' + Math.round(convertedAmount).toLocaleString('en-IN');
+        return symbol + ' ' + Math.round(convertedAmount).toLocaleString('en-IN', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        });
     }
     
     return symbol + ' ' + convertedAmount.toLocaleString('en-US', {

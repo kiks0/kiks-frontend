@@ -25,6 +25,7 @@ const Account = () => {
   const [showCallbackForm, setShowCallbackForm] = useState(false);
   const [callbackPhone, setCallbackPhone] = useState('');
   const [callbackStatus, setCallbackStatus] = useState('idle'); // idle, loading, success
+  const [callbacksCount, setCallbacksCount] = useState(0);
 
   useEffect(() => {
     if (appUser) {
@@ -41,6 +42,12 @@ const Account = () => {
              })
              .then(data => setOrdersCount(data.length || 0))
              .catch(err => console.error("Error fetching account orders:", err));
+
+             // Fetch callback count
+             fetch(`${API_URL}/api/waitlist/myrequests?email=${appUser?.email}`)
+             .then(res => res.json())
+             .then(data => setCallbacksCount(data.count || 0))
+             .catch(err => console.error("Error fetching callbacks:", err));
         }
     } else {
         const savedUser = localStorage.getItem('currentUser');
@@ -114,7 +121,7 @@ const Account = () => {
     <div className="min-h-screen font-sans">
       
       {/* SECTION 1: WHITE WELCOME */}
-      <section className="bg-white pt-[140px] md:pt-[160px] pb-12 flex flex-col items-center justify-center animate-fade-in text-center px-6">
+      <section className="bg-white pt-[90px] md:pt-[160px] pb-12 flex flex-col items-center justify-center animate-fade-in text-center px-6">
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -126,11 +133,11 @@ const Account = () => {
       </section>
 
       {/* SECTION 2: BLACK DASHBOARD - Min height to cover background */}
-      <section className="bg-[#0A0A0A] text-white py-20 min-h-[70vh]">
+      <section className="bg-[#0A0A0A] text-white py-10 md:py-20 min-h-[70vh]">
         <div className="container mx-auto px-6 md:px-12 lg:px-24 max-w-[1400px]">
           
           {/* Header 3-Column Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-y-16 md:gap-x-12 mb-24">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-y-10 md:gap-x-12 mb-10 md:mb-24">
             
             {/* YOUR PRODUCTS */}
             <div className="flex flex-col">
@@ -192,7 +199,7 @@ const Account = () => {
           </div>
 
           {/* ACCOUNT DETAILS */}
-          <div className="flex flex-col mt-20">
+          <div className="flex flex-col mt-12 md:mt-20">
             <h3 className="text-[12px] md:text-[13px] font-bold tracking-[0.2em] uppercase mb-4 text-white">Account Details</h3>
             <div className="w-full h-[1px] bg-white/10 mb-0"></div>
             
@@ -256,7 +263,6 @@ const Account = () => {
               </button>
 
               <div className="text-center mb-6 sm:mb-10">
-                <h2 className="text-gold-500 text-[10px] tracking-[0.5em] uppercase font-bold mb-4">Elite Service</h2>
                 <h3 className="text-xl md:text-2xl font-serif text-white uppercase tracking-wider font-light">Client Services</h3>
               </div>
 
@@ -271,7 +277,7 @@ const Account = () => {
                   </div>
                 </a>
 
-                <a href="https://wa.me/919998887766" target="_blank" rel="noopener noreferrer" className="flex items-center p-4 sm:p-6 bg-white/[0.02] border border-white/5 hover:border-gold-500/30 transition-all group">
+                <a href="https://wa.me/918401020339" target="_blank" rel="noopener noreferrer" className="flex items-center p-4 sm:p-6 bg-white/[0.02] border border-white/5 hover:border-gold-500/30 transition-all group">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/5 flex items-center justify-center mr-4 sm:mr-6 text-gold-500 group-hover:bg-gold-500 group-hover:text-black transition-all">
                     <MessageSquare size={18} strokeWidth={1.5} />
                   </div>
@@ -286,7 +292,7 @@ const Account = () => {
                     onClick={() => setShowCallbackForm(true)}
                     className="flex items-center p-4 sm:p-6 bg-white/[0.02] border border-white/5 hover:border-gold-500/30 transition-all group cursor-pointer"
                   >
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/5 flex items-center justify-center mr-4 sm:mr-6 text-gold-500 group-hover:bg-gold-500 group-hover:text-black transition-all">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/5 flex items-center justify-center mr-4 sm:mr-6 text-gold-500 group-hover:bg-gold-500 group-hover:text-black transition-all relative">
                       <Phone size={18} strokeWidth={1.5} />
                     </div>
                     <div className="text-left">
@@ -340,6 +346,7 @@ const Account = () => {
                                   })
                                 });
                                 setCallbackStatus('success');
+                                setCallbacksCount(prev => prev + 1);
                               } catch (e) {
                                 setCallbackStatus('idle');
                               }

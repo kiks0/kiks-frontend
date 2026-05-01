@@ -13,11 +13,13 @@ import { useSelector } from 'react-redux';
 import { generateInvoice } from '../utils/generateInvoice';
 import { getFullImageUrl } from '../utils/url';
 import PageLoader from '../components/PageLoader';
+import { formatCurrency } from '../utils/currency';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const Admin = () => {
     const { user, isAuthenticated, token } = useSelector((state) => state.auth);
+    const { activeCurrency, rates, symbols } = useSelector(state => state.currency);
     const navigate = useNavigate();
 
     // Standardized Auth Headers for the Palace Vault
@@ -45,7 +47,7 @@ const Admin = () => {
     const [userSubTab, setUserSubTab] = useState('users'); // users, admins
     const [waitlist, setWaitlist] = useState([]);
     const [promoCodes, setPromoCodes] = useState([]);
-    const [analytics, setAnalytics] = useState({ totalOrders: 0, totalRevenue: '₹0', bestSeller: 'N/A' });
+    const [analytics, setAnalytics] = useState({ totalOrders: 0, totalRevenue: 0, bestSeller: 'N/A' });
     const [selectedWaitlistIds, setSelectedWaitlistIds] = useState([]);
     const [downloadedHistory, setDownloadedHistory] = useState({ invoices: [], labels: [] });
 
@@ -99,6 +101,7 @@ const Admin = () => {
 
     useEffect(() => {
         const isAdmin = user && (
+            user.role === 'admin' ||
             user.email === 'hit.goyani1010@gmail.com' ||
             user.email.endsWith('@kiksultraluxury.com') ||
             user.email === 'admin@kiks.com'
@@ -111,6 +114,7 @@ const Admin = () => {
 
         // Initial Data needed for baseline
         fetchBaseData();
+        fetchWaitlistData();
     }, [isAuthenticated, user]);
 
     useEffect(() => {
@@ -485,7 +489,9 @@ const Admin = () => {
 
             const data = await res.json();
             showSuccessToast('Visual Architecture Manifested.');
-            if (targetField) {
+            if (targetField === 'popup') {
+                setPopupSettings(prev => ({ ...prev, image_url: data.url }));
+            } else if (targetField) {
                 setProdFormData(prev => ({ ...prev, [targetField]: data.url }));
             } else if (activeTab === 'collections') {
                 setColFormData(prev => ({ ...prev, banner_url: data.url }));
@@ -1052,10 +1058,17 @@ const Admin = () => {
             </div>
 
             <div className="container mx-auto px-4 md:px-6 max-w-7xl relative z-10" ref={formRef}>
-                <div className="flex flex-col md:flex-row justify-between items-center mb-16">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 md:mb-16 gap-6">
                     <div>
-                        <h1 className="text-3xl md:text-4xl font-serif tracking-[0.3em] uppercase mb-2 text-white">Registry Control</h1>
-                        <p className="text-white/40 text-[10px] uppercase tracking-[0.5em] mb-12">Administrative Management Panel</p>
+                        <h1 className="text-2xl md:text-4xl font-serif tracking-[0.2em] md:tracking-[0.3em] uppercase mb-2 text-white">Registry Control</h1>
+                        <p className="text-white/40 text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.5em] mb-4 md:mb-12 flex flex-wrap items-center gap-2 md:gap-4">
+                            <span>Administrative Management Panel</span>
+                            {waitlist.filter(e => e.request_type === 'callback').length > 0 && (
+                                <span className="text-gold-500 animate-pulse border-l border-white/10 pl-2 md:pl-4 font-black">
+                                    {waitlist.filter(e => e.request_type === 'callback').length} Callbacks Manifested
+                                </span>
+                            )}
+                        </p>
                     </div>
                 </div>
 
@@ -1068,9 +1081,14 @@ const Admin = () => {
                             onChange={(e) => { setActiveTab(e.target.value); setIsAdding(false); setEditingId(null); }}
                             className="w-full bg-zinc-900 border border-white/20 p-4 text-[10px] tracking-[0.3em] uppercase text-gold-400 focus:outline-none appearance-none"
                         >
-                            {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing'].map(tab => (
-                                <option key={tab} value={tab}>{tab}</option>
-                            ))}
+                            {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing'].map(tab => {
+                                const callbackCount = tab === 'waitlist' ? waitlist.filter(e => e.request_type === 'callback').length : 0;
+                                return (
+                                    <option key={tab} value={tab}>
+                                        {tab.toUpperCase()} {callbackCount > 0 ? `(${callbackCount})` : ''}
+                                    </option>
+                                );
+                            })}
                         </select>
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                             <ChevronDown size={14} className="text-gold-500" />
@@ -1079,18 +1097,26 @@ const Admin = () => {
 
                     {/* Desktop Tab Links */}
                     <div className="hidden md:flex space-x-8 overflow-x-auto scrollbar-hide">
-                        {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing'].map(tab => (
-                            <button
-                                key={tab}
-                                onClick={() => { setActiveTab(tab); setIsAdding(false); setEditingId(null); }}
-                                className={`text-[10px] tracking-[0.3em] uppercase pb-2 transition-all whitespace-nowrap relative ${activeTab === tab ? 'text-gold-400' : 'text-white/20 hover:text-white/50'}`}
-                            >
-                                {tab}
-                                {activeTab === tab && (
-                                    <motion.div layoutId="activeTabIndicator" className="absolute bottom-[-17px] left-0 right-0 h-[2px] bg-gold-400" />
-                                )}
-                            </button>
-                        ))}
+                        {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing'].map(tab => {
+                            const callbackCount = tab === 'waitlist' ? waitlist.filter(e => e.request_type === 'callback').length : 0;
+                            return (
+                                <button
+                                    key={tab}
+                                    onClick={() => { setActiveTab(tab); setIsAdding(false); setEditingId(null); }}
+                                    className={`text-[10px] tracking-[0.3em] uppercase pb-2 transition-all whitespace-nowrap relative flex items-center ${activeTab === tab ? 'text-gold-400' : 'text-white/20 hover:text-white/50'}`}
+                                >
+                                    {tab}
+                                    {callbackCount > 0 && (
+                                        <span className="ml-2 bg-gold-500 text-black px-1.5 py-0.5 rounded-full text-[8px] font-black animate-pulse">
+                                            {callbackCount}
+                                        </span>
+                                    )}
+                                    {activeTab === tab && (
+                                        <motion.div layoutId="activeTabIndicator" className="absolute bottom-[-17px] left-0 right-0 h-[2px] bg-gold-400" />
+                                    )}
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
 
@@ -1110,7 +1136,9 @@ const Admin = () => {
                                             <h3 className="text-[10px] tracking-[0.3em] uppercase text-white/50">Total Revenue</h3>
                                             <DollarSign className="text-gold-500" size={18} />
                                         </div>
-                                        <p className="text-4xl font-serif tracking-widest text-gold-400">{analytics.totalRevenue}</p>
+                                        <p className="text-4xl font-serif tracking-widest text-gold-400">
+                                            {formatCurrency(analytics.totalRevenue, activeCurrency, rates, symbols)}
+                                        </p>
                                         <p className="text-[9px] tracking-[0.2em] uppercase text-white/30 mt-4">REAL-TIME VAULT TOTAL</p>
                                     </div>
                                     <div className="bg-white/5 border border-white/10 p-8 hover:border-gold-500/50 transition-all">
@@ -1186,7 +1214,7 @@ const Admin = () => {
                                 {/* Registry Intelligence & Reporting */}
                                 <div className="bg-white/[0.02] border border-white/5 p-6 md:p-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 md:gap-10">
                                     <div className="max-w-md">
-                                        <h3 className="text-[11px] md:text-xs tracking-[0.4em] font-black uppercase text-white mb-3">Registry Intelligence</h3>
+                                        <h3 className="text-[11px] md:text-xs tracking-[0.2em] md:tracking-[0.4em] font-black uppercase text-white mb-2 md:mb-3">Registry Intelligence</h3>
                                         <p className="text-[9px] md:text-[10px] tracking-widest text-white/30 uppercase leading-relaxed italic">Generate monthly sales manifests for accounting and inventory audit.</p>
                                     </div>
                                     <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-4 w-full lg:w-auto">
@@ -1389,21 +1417,26 @@ const Admin = () => {
                                                                     <p className="text-[10px] text-white/80 leading-relaxed font-serif italic">"{order.customer_note}"</p>
                                                                 </div>
                                                             )}
-                                                        </td>
-                                                        <td className="p-6">
+                                                        </td>                                                        <td className="p-6">
                                                             <div className="flex flex-col space-y-1">
-                                                                <span className="font-bold text-white uppercase text-xs">{order.total_amount}</span>
+                                                                <span className="font-bold text-white uppercase text-xs">
+                                                                    {formatCurrency(order.total_amount, activeCurrency, rates, symbols)}
+                                                                </span>
                                                                 <span className="text-[8px] tracking-[0.2em] uppercase text-white/30">{order.payment_method}</span>
 
                                                                 {order.payment_method?.toLowerCase().includes('partial') && (
                                                                     <div className="mt-3 pt-2 border-t border-white/5 space-y-1">
                                                                         <div className="flex justify-between text-[8px] tracking-[0.1em] uppercase">
                                                                             <span className="text-white/40 italic">Paid (30%)</span>
-                                                                            <span className="text-green-500 font-bold">{order.amount_paid}</span>
+                                                                            <span className="text-green-500 font-bold">
+                                                                                {formatCurrency(order.amount_paid, activeCurrency, rates, symbols)}
+                                                                            </span>
                                                                         </div>
                                                                         <div className="flex justify-between text-[8px] tracking-[0.1em] uppercase">
                                                                             <span className="text-white/40 italic">Pending (70%)</span>
-                                                                            <span className="text-gold-500 font-bold underline">{order.amount_pending}</span>
+                                                                            <span className="text-gold-500 font-bold underline">
+                                                                                {formatCurrency(order.amount_pending, activeCurrency, rates, symbols)}
+                                                                            </span>
                                                                         </div>
                                                                     </div>
                                                                 )}
@@ -1545,7 +1578,9 @@ const Admin = () => {
                                                 <div className="bg-black/40 p-5 border border-white/5 space-y-4">
                                                     <div className="flex justify-between items-center mb-1">
                                                         <p className="text-[9px] uppercase tracking-[0.3em] text-white/30">Order Summary</p>
-                                                        <span className="text-[11px] font-black text-gold-400">{order.total_amount}</span>
+                                                        <span className="text-[11px] font-black text-gold-400">
+                                                            {formatCurrency(order.total_amount, activeCurrency, rates, symbols)}
+                                                        </span>
                                                     </div>
                                                     <div className="space-y-2">
                                                         {order.items?.map(it => (
@@ -1700,123 +1735,123 @@ const Admin = () => {
                                             />
                                         </div>
                                         <div className="space-y-6">
-                                    {/* Desktop Table View */}
-                                    <div className="hidden md:block bg-white/5 border border-white/10 overflow-x-auto scrollbar-hide">
-                                        <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80 min-w-[900px]">
-                                            <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/50 border-b border-white/10">
-                                                <tr>
-                                                    <th className="p-6">User ID</th>
-                                                    <th className="p-6">User Details</th>
-                                                    <th className="p-6">Contact</th>
-                                                    <th className="p-6">Status / Role</th>
-                                                    <th className="p-6">Joined Date</th>
-                                                    <th className="p-6 text-right">Management</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                            {/* Desktop Table View */}
+                                            <div className="hidden md:block bg-white/5 border border-white/10 overflow-x-auto scrollbar-hide">
+                                                <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80 min-w-[900px]">
+                                                    <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/50 border-b border-white/10">
+                                                        <tr>
+                                                            <th className="p-6">User ID</th>
+                                                            <th className="p-6">User Details</th>
+                                                            <th className="p-6">Contact</th>
+                                                            <th className="p-6">Status / Role</th>
+                                                            <th className="p-6">Joined Date</th>
+                                                            <th className="p-6 text-right">Management</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {users.filter(u =>
+                                                            u.email.toLowerCase().includes(userSearch.toLowerCase()) ||
+                                                            `${u.first_name} ${u.last_name}`.toLowerCase().includes(userSearch.toLowerCase())
+                                                        ).length === 0 ? (
+                                                            <tr><td colSpan="6" className="p-12 text-center text-white/30 uppercase tracking-widest">No matching users found</td></tr>
+                                                        ) : (
+                                                            users.filter(u =>
+                                                                u.email.toLowerCase().includes(userSearch.toLowerCase()) ||
+                                                                `${u.first_name} ${u.last_name}`.toLowerCase().includes(userSearch.toLowerCase())
+                                                            ).map(u => (
+                                                                <tr key={u.id} className="border-b border-white/5 hover:bg-white/[0.02]">
+                                                                    <td className="p-6 font-serif text-gold-400">#{u.id.toString().padStart(4, '0')}</td>
+                                                                    <td className="p-6">
+                                                                        <p className="font-bold uppercase tracking-widest text-white">{u.first_name} {u.last_name}</p>
+                                                                        <p className="text-[9px] text-white/40 mt-1 flex items-center space-x-2 lowercase font-sans">
+                                                                            <span>{u.email}</span>
+                                                                        </p>
+                                                                    </td>
+                                                                    <td className="p-6">
+                                                                        <p className="text-[10px] text-white/70 uppercase tracking-widest flex items-center space-x-2">
+                                                                            <Phone size={10} className="text-gold-500" />
+                                                                            <span>{u.telephone || 'Not Provided'}</span>
+                                                                        </p>
+                                                                    </td>
+                                                                    <td className="p-6">
+                                                                        <span className={`px-3 py-1 text-[8px] font-black uppercase tracking-widest border ${u.role === 'admin' ? 'border-gold-500/50 text-gold-500 bg-gold-400/5' : 'border-white/10 text-white/40'}`}>
+                                                                            {u.role || 'user'}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td className="p-6">
+                                                                        <p className="text-[9px] text-white/30 uppercase tracking-widest">
+                                                                            {new Date(u.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                                        </p>
+                                                                    </td>
+                                                                    <td className="p-6 text-right">
+                                                                        <button onClick={() => handleDeleteUser(u.id)} className="text-red-500/30 hover:text-red-500 transition-colors p-2">
+                                                                            <Trash2 size={16} />
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                            ))
+                                                        )}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            {/* Mobile Card View */}
+                                            <div className="md:hidden space-y-4">
                                                 {users.filter(u =>
                                                     u.email.toLowerCase().includes(userSearch.toLowerCase()) ||
                                                     `${u.first_name} ${u.last_name}`.toLowerCase().includes(userSearch.toLowerCase())
-                                                ).length === 0 ? (
-                                                    <tr><td colSpan="6" className="p-12 text-center text-white/30 uppercase tracking-widest">No matching users found</td></tr>
-                                                ) : (
-                                                    users.filter(u =>
-                                                        u.email.toLowerCase().includes(userSearch.toLowerCase()) ||
-                                                        `${u.first_name} ${u.last_name}`.toLowerCase().includes(userSearch.toLowerCase())
-                                                    ).map(u => (
-                                                        <tr key={u.id} className="border-b border-white/5 hover:bg-white/[0.02]">
-                                                            <td className="p-6 font-serif text-gold-400">#{u.id.toString().padStart(4, '0')}</td>
-                                                            <td className="p-6">
-                                                                <p className="font-bold uppercase tracking-widest text-white">{u.first_name} {u.last_name}</p>
-                                                                <p className="text-[9px] text-white/40 mt-1 flex items-center space-x-2 lowercase font-sans">
-                                                                    <span>{u.email}</span>
-                                                                </p>
-                                                            </td>
-                                                            <td className="p-6">
-                                                                <p className="text-[10px] text-white/70 uppercase tracking-widest flex items-center space-x-2">
-                                                                    <Phone size={10} className="text-gold-500" />
-                                                                    <span>{u.telephone || 'Not Provided'}</span>
-                                                                </p>
-                                                            </td>
-                                                            <td className="p-6">
-                                                                <span className={`px-3 py-1 text-[8px] font-black uppercase tracking-widest border ${u.role === 'admin' ? 'border-gold-500/50 text-gold-500 bg-gold-400/5' : 'border-white/10 text-white/40'}`}>
-                                                                    {u.role || 'user'}
-                                                                </span>
-                                                            </td>
-                                                            <td className="p-6">
-                                                                <p className="text-[9px] text-white/30 uppercase tracking-widest">
-                                                                    {new Date(u.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                                                                </p>
-                                                            </td>
-                                                            <td className="p-6 text-right">
-                                                                <button onClick={() => handleDeleteUser(u.id)} className="text-red-500/30 hover:text-red-500 transition-colors p-2">
-                                                                    <Trash2 size={16} />
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    ))
-                                                )}
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    {/* Mobile Card View */}
-                                    <div className="md:hidden space-y-4">
-                                        {users.filter(u =>
-                                            u.email.toLowerCase().includes(userSearch.toLowerCase()) ||
-                                            `${u.first_name} ${u.last_name}`.toLowerCase().includes(userSearch.toLowerCase())
-                                        ).map(u => (
-                                            <div key={u.id} className="bg-white/[0.03] border border-white/10 p-6 space-y-6 relative group overflow-hidden">
-                                                <div className="flex justify-between items-start border-b border-white/5 pb-5">
-                                                    <div className="flex items-center space-x-5">
-                                                        <div className="w-14 h-14 rounded bg-gold-400/5 border border-gold-500/10 flex items-center justify-center text-gold-500 font-serif text-2xl">
-                                                            {u.first_name[0]}
+                                                ).map(u => (
+                                                    <div key={u.id} className="bg-white/[0.03] border border-white/10 p-6 space-y-6 relative group overflow-hidden">
+                                                        <div className="flex justify-between items-start border-b border-white/5 pb-5">
+                                                            <div className="flex items-center space-x-5">
+                                                                <div className="w-14 h-14 rounded bg-gold-400/5 border border-gold-500/10 flex items-center justify-center text-gold-500 font-serif text-2xl">
+                                                                    {u.first_name[0]}
+                                                                </div>
+                                                                <div>
+                                                                    <p className="font-black uppercase tracking-[0.15em] text-white text-[14px] leading-tight mb-1">{u.first_name} {u.last_name}</p>
+                                                                    <div className="flex items-center gap-3">
+                                                                        <span className="font-serif text-gold-500/50 text-[10px]">#{u.id.toString().padStart(4, '0')}</span>
+                                                                        <span className={`text-[9px] uppercase tracking-widest font-black px-2 py-0.5 border ${u.role === 'admin' ? 'border-gold-500/30 text-gold-500' : 'border-white/10 text-white/20'}`}>
+                                                                            {u.role || 'User'}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <button onClick={() => handleDeleteUser(u.id)} className="text-red-500/40 hover:text-red-500 transition-colors p-2 mt-1">
+                                                                <Trash2 size={20} />
+                                                            </button>
                                                         </div>
-                                                        <div>
-                                                            <p className="font-black uppercase tracking-[0.15em] text-white text-[14px] leading-tight mb-1">{u.first_name} {u.last_name}</p>
-                                                            <div className="flex items-center gap-3">
-                                                                <span className="font-serif text-gold-500/50 text-[10px]">#{u.id.toString().padStart(4, '0')}</span>
-                                                                <span className={`text-[9px] uppercase tracking-widest font-black px-2 py-0.5 border ${u.role === 'admin' ? 'border-gold-500/30 text-gold-500' : 'border-white/10 text-white/20'}`}>
-                                                                    {u.role || 'User'}
-                                                                </span>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                            <div className="bg-black/40 p-4 border border-white/5">
+                                                                <p className="text-[8px] uppercase tracking-[0.3em] text-white/20 mb-2">Communication</p>
+                                                                <p className="text-[10px] lowercase text-white/80 mb-1">{u.email}</p>
+                                                                <p className="text-[10px] text-gold-500/80 font-bold">{u.telephone || 'Contact Restricted'}</p>
+                                                            </div>
+                                                            <div className="bg-black/40 p-4 border border-white/5">
+                                                                <p className="text-[8px] uppercase tracking-[0.3em] text-white/20 mb-2">Acquisition History</p>
+                                                                <div className="flex justify-between items-center">
+                                                                    <span className="text-[9px] uppercase tracking-widest text-white/40">Joined Registry</span>
+                                                                    <span className="text-[10px] text-white font-serif">{new Date(u.created_at).toLocaleDateString()}</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <button onClick={() => handleDeleteUser(u.id)} className="text-red-500/40 hover:text-red-500 transition-colors p-2 mt-1">
-                                                        <Trash2 size={20} />
-                                                    </button>
-                                                </div>
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                    <div className="bg-black/40 p-4 border border-white/5">
-                                                        <p className="text-[8px] uppercase tracking-[0.3em] text-white/20 mb-2">Communication</p>
-                                                        <p className="text-[10px] lowercase text-white/80 mb-1">{u.email}</p>
-                                                        <p className="text-[10px] text-gold-500/80 font-bold">{u.telephone || 'Contact Restricted'}</p>
-                                                    </div>
-                                                    <div className="bg-black/40 p-4 border border-white/5">
-                                                        <p className="text-[8px] uppercase tracking-[0.3em] text-white/20 mb-2">Acquisition History</p>
-                                                        <div className="flex justify-between items-center">
-                                                            <span className="text-[9px] uppercase tracking-widest text-white/40">Joined Registry</span>
-                                                            <span className="text-[10px] text-white font-serif">{new Date(u.created_at).toLocaleDateString()}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                ))}
                                             </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </>
+                                        </div>
+                                    </>
                                 ) : (
-                                    <div className="space-y-12">
-                                        <div className="flex justify-between items-center bg-white/5 border border-white/10 p-8">
+                                    <div className="space-y-8 md:space-y-12">
+                                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white/5 border border-white/10 p-6 md:p-8 gap-6">
                                             <div>
-                                                <h2 className="text-xl font-serif tracking-widest uppercase italic text-gold-500">Administration Team</h2>
-                                                <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase mt-2">Managing platform access controls</p>
+                                                <h2 className="text-lg md:text-xl font-serif tracking-[0.1em] md:tracking-widest uppercase italic text-gold-500">Administration Team</h2>
+                                                <p className="text-[9px] md:text-[10px] tracking-[0.2em] md:tracking-[0.3em] text-white/40 uppercase mt-1 md:mt-2">Managing platform access controls</p>
                                             </div>
                                             <button
                                                 onClick={() => setIsAdding(!isAdding)}
-                                                className="bg-white text-black px-8 py-4 text-[10px] font-black uppercase tracking-widest hover:bg-gold-500 transition-all flex items-center gap-3"
+                                                className="w-full sm:w-auto bg-white text-black px-6 md:px-8 py-3 md:py-4 text-[9px] md:text-[10px] font-black uppercase tracking-widest hover:bg-gold-500 transition-all flex items-center justify-center gap-3"
                                             >
-                                                {isAdding ? <X size={16} /> : <Plus size={16} />}
+                                                {isAdding ? <X size={14} /> : <Plus size={14} />}
                                                 {isAdding ? 'Discard Draft' : 'Appoint New Admin'}
                                             </button>
                                         </div>
@@ -1848,12 +1883,12 @@ const Admin = () => {
                                                         <div>
                                                             <label className={labelClasses}>Access Password</label>
                                                             <div className="relative">
-                                                                <input 
-                                                                    required 
-                                                                    type={showPassword ? "text" : "password"} 
-                                                                    className={`${inputClasses} pr-12`} 
-                                                                    value={adminFormData.password} 
-                                                                    onChange={e => setAdminFormData({ ...adminFormData, password: e.target.value })} 
+                                                                <input
+                                                                    required
+                                                                    type={showPassword ? "text" : "password"}
+                                                                    className={`${inputClasses} pr-12`}
+                                                                    value={adminFormData.password}
+                                                                    onChange={e => setAdminFormData({ ...adminFormData, password: e.target.value })}
                                                                 />
                                                                 <button
                                                                     type="button"
@@ -2031,15 +2066,22 @@ const Admin = () => {
                                 <Loader2 className="animate-spin text-gold-500" size={32} />
                             </div>
                         ) : (
-                            <div className="space-y-8">
-                                <div className="flex justify-between items-center mb-8 bg-white/5 border border-white/10 p-8">
+                            <div className="space-y-6 md:space-y-8">
+                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 md:mb-8 bg-white/5 border border-white/10 p-6 md:p-8 gap-6">
                                     <div>
-                                        <h2 className="text-xl font-serif tracking-[0.2em] uppercase italic">Waitlist Manifest</h2>
-                                        <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase mt-2">Managing prospective acquisitions</p>
+                                        <h2 className="text-lg md:text-xl font-serif tracking-[0.1em] md:tracking-[0.2em] uppercase italic">Waitlist Manifest</h2>
+                                        <div className="flex flex-wrap items-center gap-3 md:gap-4 mt-1 md:mt-2">
+                                            <p className="text-[9px] md:text-[10px] tracking-[0.2em] md:tracking-[0.3em] text-white/40 uppercase">Managing prospective acquisitions</p>
+                                            {waitlist.filter(e => e.request_type === 'callback').length > 0 && (
+                                                <span className="bg-gold-500 text-black px-2 py-0.5 text-[8px] font-black uppercase tracking-widest animate-pulse">
+                                                    {waitlist.filter(e => e.request_type === 'callback').length} Priority Callbacks
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
-                                    <div className="text-right">
-                                        <p className="text-[10px] text-white/40 uppercase tracking-widest">Total Prospects</p>
-                                        <p className="text-2xl font-serif text-gold-500">{waitlist.length}</p>
+                                    <div className="text-left sm:text-right">
+                                        <p className="text-[9px] md:text-[10px] text-white/40 uppercase tracking-widest">Total Manifest Entries</p>
+                                        <p className="text-xl md:text-2xl font-serif text-gold-500">{waitlist.length}</p>
                                     </div>
                                 </div>
 
@@ -2146,7 +2188,7 @@ const Admin = () => {
                                                         <p className="text-[8px] uppercase tracking-widest text-gold-500 mb-1">ID: #{entry.id.toString().padStart(4, '0')}</p>
                                                         <p className="font-black uppercase tracking-widest text-white text-[10px]">{entry.customer_name}</p>
                                                     </div>
-                                                    <button 
+                                                    <button
                                                         onClick={async () => {
                                                             if (!window.confirm('Remove from waitlist?')) return;
                                                             try {
@@ -2501,10 +2543,10 @@ const Admin = () => {
                                                     {(activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url) ? (
                                                         <div className="relative w-full h-full">
                                                             {isVideo(activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url) ? (
-                                                                <video src={activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url} className="w-full h-full object-cover opacity-60" muted loop autoPlay />
+                                                                <video src={getFullImageUrl(activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url)} className="w-full h-full object-cover opacity-60" muted loop autoPlay />
                                                             ) : (
                                                                 <img
-                                                                    src={activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url}
+                                                                    src={getFullImageUrl(activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url)}
                                                                     className="w-full h-full object-cover opacity-60 transition-all group-hover:opacity-100"
                                                                 />
                                                             )}
@@ -2595,18 +2637,18 @@ const Admin = () => {
                                                     <textarea required className={`${inputClasses} h-24 md:h-32 text-xs md:text-sm`} value={prodFormData.description} onChange={e => setProdFormData({ ...prodFormData, description: e.target.value })} />
                                                 </div>
                                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
-                                                    <div><label className={labelClasses}>Olfactory Top</label><input className={inputClasses} value={prodFormData.top_notes} onChange={e => setProdFormData({ ...prodFormData, top_notes: e.target.value })} /></div>
-                                                    <div><label className={labelClasses}>Olfactory Heart</label><input className={inputClasses} value={prodFormData.heart_notes} onChange={e => setProdFormData({ ...prodFormData, heart_notes: e.target.value })} /></div>
-                                                    <div><label className={labelClasses}>Olfactory Base</label><input className={inputClasses} value={prodFormData.base_notes} onChange={e => setProdFormData({ ...prodFormData, base_notes: e.target.value })} /></div>
+                                                    <div><label className={labelClasses}>Top Notes</label><input className={inputClasses} value={prodFormData.top_notes} onChange={e => setProdFormData({ ...prodFormData, top_notes: e.target.value })} /></div>
+                                                    <div><label className={labelClasses}>Heart Notes</label><input className={inputClasses} value={prodFormData.heart_notes} onChange={e => setProdFormData({ ...prodFormData, heart_notes: e.target.value })} /></div>
+                                                    <div><label className={labelClasses}>Base Notes</label><input className={inputClasses} value={prodFormData.base_notes} onChange={e => setProdFormData({ ...prodFormData, base_notes: e.target.value })} /></div>
                                                 </div>
 
                                                 <div className="md:col-span-2 mt-8 border-t border-white/5 pt-8">
-                                                    <h4 className="text-[10px] tracking-[0.3em] font-black uppercase text-gold-500 mb-8 italic">Visual Storytelling & Editorial Assets</h4>
+                                                    <h4 className="text-[10px] tracking-[0.3em] font-black uppercase text-gold-500 mb-8 italic">Product Gallery & Assets</h4>
 
                                                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                                                         <div className="md:col-span-2">
                                                             <ImageUploadZone
-                                                                label="Storytelling Cinematic Banner (Widescreen)"
+                                                                label="Section Banner (Widescreen)"
                                                                 value={prodFormData.story_banner}
                                                                 onUpload={(e) => handleImageUpload(e, 'story_banner')}
                                                                 height="h-40 md:h-56"
@@ -2614,12 +2656,12 @@ const Admin = () => {
                                                         </div>
 
                                                         <div className="md:col-span-2">
-                                                            <label className={labelClasses}>The Muse Narrative (Editorial Flow)</label>
+                                                            <label className={labelClasses}>Product Story</label>
                                                             <textarea className={`${inputClasses} h-32 text-xs`} value={prodFormData.muse_story} onChange={e => setProdFormData({ ...prodFormData, muse_story: e.target.value })} placeholder="Describe the soul of the fragrance..." />
                                                         </div>
 
                                                         <ImageUploadZone
-                                                            label="Muse Portrait Asset (Arched Window)"
+                                                            label="Side Portrait (Arched)"
                                                             value={prodFormData.muse_image}
                                                             onUpload={(e) => handleImageUpload(e, 'muse_image')}
                                                             height="h-[250px] md:h-[400px]"
@@ -2627,7 +2669,7 @@ const Admin = () => {
 
                                                         <div className="flex flex-col space-y-10">
                                                             <div className="bg-white/5 p-6 border border-white/5">
-                                                                <label className={labelClasses}>Olfactory Pyramid Labels</label>
+                                                                <label className={labelClasses}>Detailed Ingredient Labels</label>
                                                                 <div className="grid grid-cols-1 gap-6 mt-4">
                                                                     <div className="flex items-center space-x-4">
                                                                         <span className="text-[8px] text-white/20 w-12 tracking-widest uppercase">Top</span>
@@ -2645,7 +2687,7 @@ const Admin = () => {
                                                             </div>
 
                                                             <div className="bg-white/[0.02] p-8 border border-white/5 flex-grow">
-                                                                <label className={labelClasses + " mb-8"}>Olfactory Icons (PNG/SVG)</label>
+                                                                <label className={labelClasses + " mb-8"}>Note Icons (PNG/SVG)</label>
                                                                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
                                                                     {['top_note_icon', 'heart_note_icon', 'base_note_icon'].map((field) => (
                                                                         <div key={field} className="flex flex-col items-center">
@@ -2660,7 +2702,7 @@ const Admin = () => {
                                                                                 className="w-16 h-16 rounded-full bg-black border border-white/10 flex items-center justify-center cursor-pointer hover:border-gold-500 group relative"
                                                                             >
                                                                                 {prodFormData[field] ? (
-                                                                                    <img src={prodFormData[field]} className="w-8 h-8 object-contain" />
+                                                                                    <img src={getFullImageUrl(prodFormData[field])} className="w-8 h-8 object-contain" />
                                                                                 ) : (
                                                                                     <Plus className="text-white/20 group-hover:text-gold-500" size={16} />
                                                                                 )}
@@ -2743,9 +2785,9 @@ const Admin = () => {
                                                         {(prodFormData.gallery_urls || []).map((url, i) => (
                                                             <div key={i} className="relative w-24 h-24 border border-white/10 group bg-zinc-900">
                                                                 {isVideo(url) ? (
-                                                                    <video src={url} className="w-full h-full object-cover opacity-60" muted />
+                                                                    <video src={getFullImageUrl(url)} className="w-full h-full object-cover opacity-60" muted />
                                                                 ) : (
-                                                                    <img src={url} className="w-full h-full object-cover opacity-60" />
+                                                                    <img src={getFullImageUrl(url)} className="w-full h-full object-cover opacity-60" />
                                                                 )}
                                                                 <button
                                                                     type="button"

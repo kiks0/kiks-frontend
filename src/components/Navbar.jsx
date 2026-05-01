@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Menu, X, ShoppingBag, Heart, User, ChevronDown, Shield, ChevronLeft, ArrowRight } from 'lucide-react';
+import { Search, Menu, X, ShoppingBag, Heart, User, UserPlus, ChevronDown, Shield, ChevronLeft, ArrowRight } from 'lucide-react';
+import { toggleWishlistAndSync } from '../store/wishlistSlice';
+import { openAuthModal } from '../store/uiSlice';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import SearchOverlay from './SearchOverlay';
 import CartDrawer from './CartDrawer';
@@ -31,6 +33,7 @@ const Navbar = () => {
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   const isAdmin = user && (
+    user.role === 'admin' ||
     user.email === 'hit.goyani1010@gmail.com' ||
     user.email.endsWith('@kiksultraluxury.com')
   );
@@ -210,14 +213,23 @@ const Navbar = () => {
                   <Search size={18} strokeWidth={1} />
                 </button>
                 <Link to="/account" className="hover:text-gold-400 transition-colors"><User size={18} strokeWidth={1} /></Link>
-                <Link to="/wishlist" className="hover:text-gold-400 transition-colors relative">
+                <button 
+                  onClick={() => {
+                    if (!isAuthenticated) {
+                      dispatch(openAuthModal());
+                    } else {
+                      navigate('/wishlist');
+                    }
+                  }}
+                  className="hover:text-gold-400 transition-colors relative"
+                >
                   <Heart size={18} strokeWidth={1} />
                   {wishlistCount > 0 && (
                     <span className="absolute -top-1.5 -right-1.5 bg-black text-white border border-white/20 text-[7px] font-bold w-3.5 h-3.5 rounded-full flex items-center justify-center animate-fade-in shadow-lg">
                       {wishlistCount}
                     </span>
                   )}
-                </Link>
+                </button>
                 <button
                   onClick={() => setIsCartOpen(true)}
                   className="hover:text-gold-400 transition-colors relative"
@@ -266,7 +278,7 @@ const Navbar = () => {
                     </button>
                   )}
                   <span className="text-[11px] tracking-[0.4em] uppercase font-medium text-white font-serif italic">
-                    {mobileMenuLevel === 'main' ? 'The Registry' : mobileMenuLevel}
+                    {mobileMenuLevel === 'main' ? 'THE MENU' : mobileMenuLevel}
                   </span>
                 </div>
                 <button onClick={() => { setIsMobileMenuOpen(false); setMobileMenuLevel('main'); }} className="text-white/60 hover:text-white transition-colors">
@@ -285,16 +297,40 @@ const Navbar = () => {
                       exit={{ opacity: 0, x: -20 }}
                       className="p-8 space-y-8 flex flex-col"
                     >
-                      {/* Main Links */}
-                      <div className="space-y-6">
-                        <button 
-                          onClick={() => setMobileMenuLevel('collections')}
-                          className="w-full flex items-center justify-between group text-white hover:text-gold-500 transition-colors py-1"
-                        >
-                          <span className="text-[11px] tracking-[0.25em] uppercase font-medium font-sans">{t('nav.collections')}</span>
-                          <ArrowRight size={14} className="text-white/20 group-hover:text-gold-500 transition-all transform group-hover:translate-x-1" />
-                        </button>
-                        
+                        {/* Prominent Register CTA for Guests - At Top */}
+                        {!isAuthenticated && (
+                          <div className="mb-4">
+                            <Link 
+                              to="/register" 
+                              onClick={() => setIsMobileMenuOpen(false)}
+                              className="block w-full bg-gold-500 text-black text-center py-5 text-[11px] font-black tracking-[0.4em] uppercase hover:bg-gold-400 transition-all shadow-xl"
+                            >
+                              {t('nav.register')} / JOIN THE CLUB
+                            </Link>
+                          </div>
+                        )}
+
+                        {/* Main Links */}
+                        <div className="space-y-6">
+                          <button 
+                            onClick={() => setMobileMenuLevel('collections')}
+                            className="w-full flex items-center justify-between group text-white hover:text-gold-500 transition-colors py-1"
+                          >
+                            <span className="text-[11px] tracking-[0.25em] uppercase font-medium font-sans">{t('nav.collections')}</span>
+                            <ArrowRight size={14} className="text-white/20 group-hover:text-gold-500 transition-all transform group-hover:translate-x-1" />
+                          </button>
+                        </div>
+
+                      <div className="space-y-8">
+                        <Link to="/collection/arambh" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>
+                          {t('nav.collections')}
+                        </Link>
+                        <Link to="/about" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>
+                          {t('nav.about')}
+                        </Link>
+                        <Link to="/essence" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>
+                          {t('nav.story')}
+                        </Link>
                         <Link to="/blog" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>
                           {t('nav.blog')}
                         </Link>
@@ -307,23 +343,36 @@ const Navbar = () => {
                       {/* Account Section */}
                       <div className="pt-10 mt-4 border-t border-white/5 space-y-6">
                         {!isAuthenticated ? (
-                          <Link to="/login" className="flex items-center text-[10px] tracking-[0.3em] text-white/30 uppercase hover:text-white font-sans" onClick={() => setIsMobileMenuOpen(false)}>
-                            <User size={16} className="mr-4" strokeWidth={1} /> {t('nav.login')}
-                          </Link>
+                          <div className="space-y-6">
+                            <Link to="/login" className="flex items-center text-[10px] tracking-[0.3em] text-white/30 uppercase hover:text-white font-sans" onClick={() => setIsMobileMenuOpen(false)}>
+                              <User size={16} className="mr-4" strokeWidth={1} /> {t('nav.login')}
+                            </Link>
+                          </div>
                         ) : (
+
                           <Link to="/account" className="flex items-center text-[10px] tracking-[0.3em] text-white/30 uppercase hover:text-white font-sans" onClick={() => setIsMobileMenuOpen(false)}>
                             <User size={16} className="mr-4" strokeWidth={1} /> {t('nav.profile')}
                           </Link>
                         )}
                         
-                        <Link to="/wishlist" className="flex items-center text-[10px] tracking-[0.3em] text-white/30 uppercase hover:text-white font-sans relative" onClick={() => setIsMobileMenuOpen(false)}>
+                        <button 
+                          onClick={() => {
+                            setIsMobileMenuOpen(false);
+                            if (!isAuthenticated) {
+                              dispatch(openAuthModal());
+                            } else {
+                              navigate('/wishlist');
+                            }
+                          }}
+                          className="flex items-center w-full text-[10px] tracking-[0.3em] text-white/30 uppercase hover:text-white font-sans relative text-left"
+                        >
                           <Heart size={16} className="mr-4" strokeWidth={1} /> {t('nav.wishlist')}
                           {wishlistCount > 0 && (
                             <span className="absolute left-4 top-[-6px] bg-white text-black text-[7px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-lg">
                               {wishlistCount}
                             </span>
                           )}
-                        </Link>
+                        </button>
 
                         {isAuthenticated && isAdmin && (
                           <Link to="/admin" className="flex items-center text-[10px] tracking-[0.3em] text-gold-500 font-bold uppercase font-sans" onClick={() => setIsMobileMenuOpen(false)}>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ChevronLeft, HelpCircle, X, Check } from 'lucide-react';
+import { ArrowLeft, HelpCircle, X, Check } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateProfile } from '../store/authSlice';
 
@@ -176,7 +177,7 @@ const PersonalDetails = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#050505] text-white font-sans pb-16 md:pb-20 pt-24 md:pt-40 relative">
+        <div className="min-h-screen bg-[#050505] text-white font-sans pb-8 md:pb-32 pt-10 md:pt-40 relative">
             
             {/* Phone Edit Modal */}
             {isPhoneModalOpen && (
@@ -265,20 +266,22 @@ const PersonalDetails = () => {
             <div className="max-w-3xl mx-auto px-6">
                 
                 {/* Back Link */}
-                <Link to="/account" className="inline-flex items-center text-[11px] tracking-widest uppercase mb-12 hover:text-gold-500 transition-colors font-bold text-white/60">
-                    <ChevronLeft size={14} className="mr-2" /> My Account
-                </Link>
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+                    <Link to="/account" className="inline-flex items-center text-[9px] tracking-[0.4em] text-white/30 hover:text-white transition-colors uppercase mb-12 group">
+                        <ArrowLeft size={14} className="mr-2 group-hover:-translate-x-1 transition-transform" /> Back to Account
+                    </Link>
+                </motion.div>
 
-                <div className="text-center mb-10 md:mb-16">
+                <div className="text-center mb-6 md:mb-12">
                     <h1 className="text-2xl md:text-4xl font-serif tracking-[0.2em] uppercase mb-4 md:mb-8 text-gold-500">Personal Details</h1>
                     <p className="text-[10px] md:text-[11px] text-white/40 tracking-wider">Updates made to your information will be reflected across your KIKS profile.</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-12 md:space-y-16">
+                <form onSubmit={handleSubmit} className="space-y-6 md:space-y-16">
                     
                     {/* PROFILE SECTION */}
                     <section>
-                        <div className="border-b border-white/10 pb-2 mb-10 flex justify-between items-end">
+                        <div className="border-b border-white/10 pb-2 mb-6 md:mb-10 flex justify-between items-end">
                             <h2 className="text-[12px] font-black tracking-[0.2em] uppercase text-white/80">Profile</h2>
                             <div className="w-24 h-[1px] bg-gold-500/30"></div>
                         </div>
@@ -451,7 +454,7 @@ const PersonalDetails = () => {
                     )}
 
                     {/* Action Buttons */}
-                    <div className="flex flex-col space-y-4 pt-10">
+                    <div className="flex flex-col space-y-4 pt-6 md:pt-10">
                         <button 
                             type="submit" 
                             disabled={saving}

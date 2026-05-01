@@ -3,13 +3,17 @@ import { X, Minus, Plus, Trash2, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { removeFromCart, updateQuantity } from '../store/cartSlice';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getFullImageUrl } from '../utils/url';
+import { formatCurrency } from '../utils/currency';
 
 const CartDrawer = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useSelector(state => state.auth);
   const { items, total } = useSelector(state => state.cart);
+  const { activeCurrency, rates, symbols } = useSelector(state => state.currency);
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
   const parsePrice = (price) => {
@@ -99,7 +103,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                             {item.category} • {item.volume || item.size}
                           </p>
                           <p className="text-[11px] text-gold-500 font-bold tracking-widest">
-                            ₹{(parsePrice(item.price) * item.quantity).toLocaleString()}
+                            {formatCurrency(parsePrice(item.price) * item.quantity, activeCurrency, rates, symbols)}
                           </p>
                         </div>
 
@@ -146,19 +150,25 @@ const CartDrawer = ({ isOpen, onClose }) => {
               <div className="p-8 border-t border-white/5 bg-[#0d0d0d]">
                 <div className="flex items-center justify-between mb-8">
                   <span className="text-[10px] tracking-[0.4em] text-white/40 uppercase">{t('cart.subtotal')}</span>
-                  <span className="text-lg font-bold tracking-widest text-white">₹{(total || 0).toLocaleString()}</span>
+                  <span className="text-lg font-bold tracking-widest text-white">{formatCurrency(total || 0, activeCurrency, rates, symbols)}</span>
                 </div>
                 
                 <div className="space-y-3">
-                  <Link 
-                    to="/checkout" 
-                    onClick={onClose}
-                    className="flex h-14 items-center justify-center bg-white text-black text-[11px] font-black tracking-[0.3em] uppercase hover:bg-gold-500 transition-all duration-500 relative group overflow-hidden"
+                  <button 
+                    onClick={() => {
+                      onClose();
+                      if (!isAuthenticated) {
+                        navigate('/login');
+                      } else {
+                        navigate('/checkout');
+                      }
+                    }}
+                    className="flex h-14 w-full items-center justify-center bg-white text-black text-[11px] font-black tracking-[0.3em] uppercase hover:bg-gold-500 transition-all duration-500 relative group overflow-hidden"
                   >
                     <span className="relative z-10 flex items-center">
                       {t('cart.checkout')} <ArrowRight size={16} className="ml-3 group-hover:translate-x-1 transition-transform" />
                     </span>
-                  </Link>
+                  </button>
                   <button 
                     onClick={onClose}
                     className="w-full h-14 flex items-center justify-center border border-white/10 text-white text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-white/5 transition-all"

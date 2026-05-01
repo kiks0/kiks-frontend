@@ -26,7 +26,7 @@ const currencySlice = createSlice({
       CAD: '$',
       JPY: '¥',
       CNY: '¥',
-      AED: 'AED '
+      AED: 'AED'
     },
     status: 'idle'
   },

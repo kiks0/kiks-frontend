@@ -124,7 +124,7 @@ const Security = () => {
     };
 
     return (
-        <div className="bg-black min-h-screen text-white pt-32 pb-40 px-6 font-sans">
+        <div className="bg-black min-h-screen text-white pt-10 md:pt-32 pb-8 md:pb-32 px-6 font-sans">
             <div className="max-w-2xl mx-auto">
                 
                 {/* Back Button */}
@@ -142,12 +142,12 @@ const Security = () => {
                 <motion.h1 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-2xl md:text-3xl font-serif tracking-[0.2em] uppercase text-center mb-16"
+                    className="text-2xl md:text-3xl font-serif tracking-[0.2em] uppercase text-center mb-10 md:mb-16"
                 >
                     Login & Security
                 </motion.h1>
 
-                <div className="space-y-20">
+                <div className="space-y-12 md:space-y-20">
                     
                     {/* SECTION: LOGIN EMAIL */}
                     <motion.section

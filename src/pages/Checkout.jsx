@@ -21,10 +21,15 @@ import {
     X,
     Smartphone,
     Banknote,
-    QrCode
+    QrCode,
+    ChevronLeft,
+    ArrowRight,
+    Info,
+    AlertCircle
 } from 'lucide-react';
 import { getFullImageUrl } from '../utils/url';
 import { clearCart } from '../store/cartSlice';
+import { formatCurrency } from '../utils/currency';
 
 const Checkout = () => {
     const navigate = useNavigate();
@@ -32,11 +37,13 @@ const Checkout = () => {
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     const { items = [], total = 0 } = useSelector(state => state.cart || {});
     const { user = null, isAuthenticated = false, token = null } = useSelector(state => state.auth || {});
+    const { activeCurrency, rates, symbols } = useSelector(state => state.currency);
 
     const [step, setStep] = useState(1); // 1: Info & Shipping, 2: Payment & Authorization
     const [isLoading, setIsLoading] = useState(false);
     const [orderError, setOrderError] = useState('');
     const [agreedToTerms, setAgreedToTerms] = useState(false);
+    const [showPartialCodPopup, setShowPartialCodPopup] = useState(false);
 
     const [formData, setFormData] = useState({
         firstName: user?.name?.split(' ')[0] || '',
@@ -62,6 +69,12 @@ const Checkout = () => {
     const [discountAmount, setDiscountAmount] = useState(0);
     const [promoError, setPromoError] = useState('');
     const [isApplying, setIsApplying] = useState(false);
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            navigate('/login');
+        }
+    }, [isAuthenticated, navigate]);
 
     useEffect(() => {
         if (isAuthenticated && token) {
@@ -316,7 +329,7 @@ const Checkout = () => {
                 customer_email: formData.email,
                 customer_phone: formData.phone,
                 shipping_address: `${formData.houseNo}, ${formData.area}, Landmark: ${formData.landmark}, ${formData.city}, ${formData.state} - ${formData.pincode}, ${formData.country}`,
-                total_amount: `₹${finalTotal.toLocaleString('en-IN')}`,
+                total_amount: formatCurrency(finalTotal, activeCurrency, rates, symbols),
                 customer_note: formData.customerNote,
                 items: items.map(item => ({
                     product_id: item.id,
@@ -326,8 +339,8 @@ const Checkout = () => {
                     price: item.price
                 })),
                 payment_method: formData.paymentMethod,
-                amount_paid: `₹${amountOnline.toLocaleString('en-IN')}`,
-                amount_pending: `₹${amountCOD.toLocaleString('en-IN')}`,
+                amount_paid: formatCurrency(amountOnline, activeCurrency, rates, symbols),
+                amount_pending: formatCurrency(amountCOD, activeCurrency, rates, symbols),
                 applied_promo_code: appliedCode,
                 discount_amount: discountAmount
             };
@@ -511,7 +524,13 @@ const Checkout = () => {
                                                         <button
                                                             key={method.id}
                                                             type="button"
-                                                            onClick={() => setFormData({ ...formData, paymentMethod: method.id })}
+                                                            onClick={() => {
+                                                                if (method.id === 'Partial COD (30% Prepaid)' && formData.paymentMethod !== method.id) {
+                                                                    setShowPartialCodPopup(true);
+                                                                } else {
+                                                                    setFormData({ ...formData, paymentMethod: method.id });
+                                                                }
+                                                            }}
                                                             className={`w-full flex items-center p-4 border transition-all ${formData.paymentMethod === method.id ? 'border-white/40 bg-white/5' : 'border-white/5 hover:bg-white/[0.02]'}`}
                                                         >
                                                             <div className={`w-4 h-4 rounded-full border flex items-center justify-center mr-4 flex-shrink-0 ${formData.paymentMethod === method.id ? 'border-gold-500' : 'border-white/20'}`}>
@@ -561,7 +580,7 @@ const Checkout = () => {
                                                         ) : (
                                                             <>
                                                                 <span className="mb-1">Complete Purchase</span>
-                                                                <span className="text-[12px] font-serif tracking-[0.1em]">₹{amountOnline.toLocaleString('en-IN')}</span>
+                                                                <span className="text-[12px] font-serif tracking-[0.1em]">{formatCurrency(amountOnline, activeCurrency, rates, symbols)}</span>
                                                             </>
                                                         )}
                                                     </button>
@@ -640,13 +659,13 @@ const Checkout = () => {
                             <div className="space-y-4 pt-10 border-t border-white/5 text-[10px] tracking-[0.3em] uppercase font-medium">
                                 <div className="flex justify-between text-white/40">
                                     <span>Subtotal Value</span>
-                                    <span>₹{subtotal.toLocaleString('en-IN')}</span>
+                                    <span>{formatCurrency(subtotal, activeCurrency, rates, symbols)}</span>
                                 </div>
                                 
                                 {discountAmount > 0 && (
                                     <div className="flex justify-between text-gold-500 font-bold italic">
                                         <span>Promo Discount</span>
-                                        <span>- ₹{discountAmount.toLocaleString('en-IN')}</span>
+                                        <span>- {formatCurrency(discountAmount, activeCurrency, rates, symbols)}</span>
                                     </div>
                                 )}
                                 
@@ -654,11 +673,11 @@ const Checkout = () => {
                                     <>
                                         <div className="flex justify-between text-gold-500 font-black">
                                             <span>Booking Deposit (30%)</span>
-                                            <span>₹{amountOnline.toLocaleString('en-IN')}</span>
+                                            <span>{formatCurrency(amountOnline, activeCurrency, rates, symbols)}</span>
                                         </div>
                                         <div className="flex justify-between text-white/60">
                                             <span>Balance Due On Arrival</span>
-                                            <span>₹{amountCOD.toLocaleString('en-IN')}</span>
+                                            <span>{formatCurrency(amountCOD, activeCurrency, rates, symbols)}</span>
                                         </div>
                                     </>
                                 )}
@@ -674,7 +693,7 @@ const Checkout = () => {
                                     <p className="text-[8px] md:text-[9px] tracking-[0.4em] uppercase text-white/30 mb-2 font-black font-sans">
                                         {isPartialSelected ? 'Total Order Amount' : 'Total Amount Due'}
                                     </p>
-                                    <span className="text-2xl md:text-3xl font-serif tracking-widest text-white">₹{finalTotal.toLocaleString('en-IN')}</span>
+                                    <span className="text-2xl md:text-3xl font-serif tracking-widest text-white">{formatCurrency(finalTotal, activeCurrency, rates, symbols)}</span>
                                 </div>
                             </div>
 
@@ -684,6 +703,67 @@ const Checkout = () => {
 
                 </div>
             </div>
+
+            {/* Partial COD Non-Refundable Popup */}
+            <AnimatePresence>
+                {showPartialCodPopup && (
+                    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setShowPartialCodPopup(false)}
+                            className="absolute inset-0 bg-black/90 backdrop-blur-sm"
+                        />
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative w-full max-w-md bg-[#0a0a0a] border border-white/10 p-8 md:p-12 shadow-2xl text-center"
+                        >
+                            <div className="flex justify-center mb-8">
+                                <div className="w-16 h-16 rounded-full bg-gold-500/10 flex items-center justify-center border border-gold-500/20">
+                                    <AlertCircle size={32} className="text-gold-500" />
+                                </div>
+                            </div>
+
+                            <h3 className="text-xl md:text-2xl font-serif tracking-widest text-white uppercase mb-6">Payment Policy Notice</h3>
+                            
+                            <div className="space-y-4 mb-10">
+                                <p className="text-[10px] tracking-[0.3em] uppercase text-gold-500 font-black">Partial COD Selection</p>
+                                <p className="text-xs md:text-sm text-white/60 leading-relaxed tracking-widest font-light italic opacity-80">
+                                    Please be advised that the <span className="text-white font-bold">30% advance payment</span> required for Partial COD orders is <span className="text-gold-500 font-bold">strictly non-refundable</span> once the order has been processed.
+                                </p>
+                            </div>
+
+                            <div className="space-y-4">
+                                <button
+                                    onClick={() => {
+                                        setFormData({ ...formData, paymentMethod: 'Partial COD (30% Prepaid)' });
+                                        setShowPartialCodPopup(false);
+                                    }}
+                                    className="w-full py-4 bg-white text-black text-[10px] font-black tracking-[0.4em] uppercase hover:bg-gold-500 transition-all shadow-xl"
+                                >
+                                    I UNDERSTAND & AGREE
+                                </button>
+                                <button
+                                    onClick={() => setShowPartialCodPopup(false)}
+                                    className="w-full py-4 bg-transparent text-white/40 text-[10px] font-black tracking-[0.4em] uppercase hover:text-white transition-all"
+                                >
+                                    CANCEL
+                                </button>
+                            </div>
+
+                            <button 
+                                onClick={() => setShowPartialCodPopup(false)}
+                                className="absolute top-6 right-6 text-white/20 hover:text-white transition-colors"
+                            >
+                                <X size={20} strokeWidth={1} />
+                            </button>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

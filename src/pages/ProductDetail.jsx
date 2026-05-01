@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { addToCart } from '../store/cartSlice';
 import { toggleWishlistAndSync } from '../store/wishlistSlice';
+import { openAuthModal } from '../store/uiSlice';
 import { formatCurrency } from '../utils/currency';
 import SEO from '../components/SEO';
 import { getFullImageUrl } from '../utils/url';
@@ -399,7 +400,13 @@ const ProductDetail = () => {
                             <div className="flex items-center space-x-3 md:space-x-5">
                                 <span className="bg-white px-2 py-0.5 text-black text-[9px] font-black tracking-[0.1em] uppercase">New</span>
                                 <button
-                                    onClick={() => dispatch(toggleWishlistAndSync(product))}
+                                    onClick={() => {
+                                        if (!isAuthenticated) {
+                                            dispatch(openAuthModal());
+                                            return;
+                                        }
+                                        dispatch(toggleWishlistAndSync(product));
+                                    }}
                                     className={`transition-all duration-300 ${isProductInWishlist ? 'text-gold-500' : 'text-white/30 hover:text-white'}`}
                                 >
                                     <Heart size={20} fill={isProductInWishlist ? "currentColor" : "none"} strokeWidth={1} />

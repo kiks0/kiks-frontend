@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { addToCart } from '../store/cartSlice';
 import { toggleWishlistAndSync } from '../store/wishlistSlice';
+import { openAuthModal } from '../store/uiSlice';
 import { getFullImageUrl } from '../utils/url';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -26,6 +27,7 @@ const Collection = () => {
     const [loading, setLoading] = useState(true);
     
     const dispatch = useDispatch();
+    const { isAuthenticated } = useSelector(state => state.auth);
     const wishlistItems = useSelector(state => state.wishlist.items);
 
     useEffect(() => {
@@ -166,7 +168,7 @@ const Collection = () => {
                                     <ArrowRight size={10} className="mr-3 rotate-180 group-hover:-translate-x-2 transition-transform" /> Back to Collection
                                 </button>
                                 <h2 className="text-3xl sm:text-4xl md:text-6xl font-serif tracking-[0.05em] text-white uppercase italic">
-                                    {collection.name} <span className="not-italic text-white/20 block md:inline-block md:ml-4 font-light text-xl md:text-4xl">Our Selection</span>
+                                    {collection.name}
                                 </h2>
                                 <p className="text-white/40 text-[10px] tracking-[0.4em] md:tracking-[0.6em] uppercase mt-4 md:mt-6 max-w-md leading-relaxed">
                                     Exploring the sensory architecture of {collection.name.toLowerCase()}
@@ -201,7 +203,14 @@ const Collection = () => {
                                         {/* Floating Actions - Scaled down for mobile */}
                                         <div className="absolute top-2 right-2 md:top-6 md:right-6 flex flex-col space-y-2 md:space-y-4 md:opacity-0 md:group-hover:opacity-100 transition-all duration-500 md:translate-x-4 md:group-hover:translate-x-0">
                                             <button 
-                                                onClick={(e) => { e.preventDefault(); dispatch(toggleWishlistAndSync(product)); }}
+                                                onClick={(e) => { 
+                                                    e.preventDefault(); 
+                                                    if (!isAuthenticated) {
+                                                        dispatch(openAuthModal());
+                                                        return;
+                                                    }
+                                                    dispatch(toggleWishlistAndSync(product)); 
+                                                }}
                                                 className={`p-1.5 md:p-3 rounded-full backdrop-blur-md border border-white/10 hover:bg-white hover:text-black transition-all ${wishlistItems.some(i => i.id === product.id) ? 'bg-gold-500 text-black' : 'bg-black/40 text-white'}`}
                                             >
                                                 <Heart size={12} fill={wishlistItems.some(i => i.id === product.id) ? "currentColor" : "none"} />
