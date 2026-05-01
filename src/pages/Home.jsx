@@ -336,37 +336,26 @@ const Home = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-dark-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
               </div>
 
-              {/* Floating Metadata Card */}
-              <div className="absolute -bottom-6 -right-6 bg-black border border-white/10 p-6 hidden lg:block backdrop-blur-md shadow-2xl z-40">
-                <span className="text-[8px] tracking-[0.5em] text-gold-500 uppercase font-black block mb-2">Arambh Series</span>
-                <p className="text-[11px] tracking-[0.3em] text-white uppercase font-light">Signature No. 01</p>
-              </div>
-            </motion.div>
-
-            {/* Right: Rich Content Section */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-              viewport={{ once: true }}
-              className="w-full md:w-[50%] flex flex-col items-center md:items-start justify-center text-center md:text-left relative"
-            >
-              {/* Large Background Ghost Text */}
-              <div className="absolute -top-20 -left-10 text-[12rem] font-serif font-black text-white/[0.02] pointer-events-none select-none hidden lg:block uppercase tracking-tighter leading-none">
-                ELITE
-              </div>
-
-              <div className="relative z-10 space-y-10 w-full">
-                {/* Header */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-center md:justify-start space-x-4">
-                    <div className="w-12 h-[1px] bg-gold-500/50" />
-                    <span className="text-gold-500 text-[10px] tracking-[0.6em] uppercase font-bold">Chapter 01</span>
-                  </div>
-                  <h2 className="text-5xl md:text-[5.5rem] font-serif font-light tracking-[0.15em] leading-none text-white uppercase">
-                    ELITE
-                  </h2>
+              {/* Right: Rich Content Section */}
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+                viewport={{ once: true }}
+                className="w-full md:w-[50%] flex flex-col items-center md:items-start justify-center text-center md:text-left relative"
+              >
+                {/* Large Background Ghost Text */}
+                <div className="absolute -top-20 -left-10 text-[12rem] font-serif font-black text-white/[0.02] pointer-events-none select-none hidden lg:block uppercase tracking-tighter leading-none">
+                  ELITE
                 </div>
+
+                <div className="relative z-10 space-y-10 w-full">
+                  {/* Header */}
+                  <div className="space-y-4">
+                    <h2 className="text-5xl md:text-[5.5rem] font-serif font-light tracking-[0.15em] leading-none text-white uppercase">
+                      ELITE
+                    </h2>
+                  </div>
 
                 {/* Description Block */}
                 <div className="space-y-6 max-w-lg">
@@ -396,23 +385,6 @@ const Home = () => {
                   </div>
                 </div>
 
-                {/* Call to Action */}
-                <div className="pt-6">
-                  <Link
-                    to="/collection/arambh/elite"
-                    className="group relative inline-flex items-center space-x-8 overflow-hidden"
-                  >
-                    <div className="relative w-14 h-14 flex items-center justify-center">
-                      <div className="absolute inset-0 border border-white/20 rounded-full group-hover:border-gold-500 group-hover:scale-110 transition-all duration-700" />
-                      <div className="w-2 h-2 bg-white rounded-full group-hover:scale-[2] transition-transform duration-500" />
-                    </div>
-                    <div className="flex flex-col items-start">
-                      <span className="text-[12px] tracking-[0.6em] uppercase text-white font-black group-hover:text-gold-500 transition-colors duration-500">
-                        DISCOVER
-                      </span>
-                      <span className="text-[8px] tracking-[0.3em] uppercase text-white/40 font-medium">EXPLORE THE COMPOSITION</span>
-                    </div>
-                  </Link>
                 </div>
               </div>
             </motion.div>
