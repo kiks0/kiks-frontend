@@ -177,7 +177,7 @@ const PersonalDetails = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#050505] text-white font-sans pb-16 md:pb-20 pt-24 md:pt-40 relative">
+        <div className="min-h-screen bg-[#050505] text-white font-sans pb-16 md:pb-32 pt-20 md:pt-40 relative">
             
             {/* Phone Edit Modal */}
             {isPhoneModalOpen && (

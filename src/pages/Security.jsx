@@ -124,7 +124,7 @@ const Security = () => {
     };
 
     return (
-        <div className="bg-black min-h-screen text-white pt-32 pb-40 px-6 font-sans">
+        <div className="bg-black min-h-screen text-white pt-24 md:pt-32 pb-16 md:pb-32 px-6 font-sans">
             <div className="max-w-2xl mx-auto">
                 
                 {/* Back Button */}

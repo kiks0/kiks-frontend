@@ -150,7 +150,7 @@ const Addresses = () => {
     }
 
     return (
-        <div className="bg-black min-h-screen text-white pt-32 pb-40">
+        <div className="bg-black min-h-screen text-white pt-24 md:pt-32 pb-16 md:pb-32">
             <div className="kiks-chanel-container">
                 
                 <div className="mb-12 text-center">
