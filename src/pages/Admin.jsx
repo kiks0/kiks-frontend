@@ -50,6 +50,7 @@ const Admin = () => {
     const [analytics, setAnalytics] = useState({ totalOrders: 0, totalRevenue: 0, bestSeller: 'N/A' });
     const [selectedWaitlistIds, setSelectedWaitlistIds] = useState([]);
     const [downloadedHistory, setDownloadedHistory] = useState({ invoices: [], labels: [] });
+    const [carts, setCarts] = useState([]);
 
     // Marketing States
     const [popupSettings, setPopupSettings] = useState({ is_active: true, title: '', offer_text: '', image_url: '', delay_seconds: 5, redirect_url: '' });
@@ -68,7 +69,8 @@ const Admin = () => {
         waitlist: false,
         'promo-codes': false,
         marketing: false,
-        admins: false
+        admins: false,
+        carts: false
     });
 
     // Form states
@@ -132,6 +134,7 @@ const Admin = () => {
             case 'waitlist': fetchWaitlistData(); break;
             case 'promo-codes': fetchPromoCodesData(); break;
             case 'marketing': fetchMarketingData(); break;
+            case 'carts': fetchCartsData(); break;
             default: fetchDashboardData();
         }
     }, [activeTab, isAuthenticated]);
@@ -245,6 +248,15 @@ const Admin = () => {
             console.error("User delete failed", e);
             showErrorToast('System error during deletion.');
         }
+    };
+
+    const fetchCartsData = async () => {
+        setTabLoading('carts', true);
+        try {
+            const res = await fetch(`${API_URL}/api/carts/all`, { headers: getAdminHeaders() });
+            if (res.ok) setCarts(await res.json());
+        } catch (e) { console.error("Carts fetch failed", e); }
+        finally { setTabLoading('carts', false); }
     };
 
     const fetchWaitlistData = async () => {
@@ -1081,7 +1093,7 @@ const Admin = () => {
                             onChange={(e) => { setActiveTab(e.target.value); setIsAdding(false); setEditingId(null); }}
                             className="w-full bg-zinc-900 border border-white/20 p-4 text-[10px] tracking-[0.3em] uppercase text-gold-400 focus:outline-none appearance-none"
                         >
-                            {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing'].map(tab => {
+                            {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing', 'carts'].map(tab => {
                                 const callbackCount = tab === 'waitlist' ? waitlist.filter(e => e.request_type === 'callback').length : 0;
                                 return (
                                     <option key={tab} value={tab}>
@@ -1097,7 +1109,7 @@ const Admin = () => {
 
                     {/* Desktop Tab Links */}
                     <div className="hidden md:flex space-x-8 overflow-x-auto scrollbar-hide">
-                        {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing'].map(tab => {
+                        {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing', 'carts'].map(tab => {
                             const callbackCount = tab === 'waitlist' ? waitlist.filter(e => e.request_type === 'callback').length : 0;
                             return (
                                 <button
@@ -2867,6 +2879,94 @@ const Admin = () => {
                                 )
                             )}
                         </div>
+                    </motion.div>
+                )}
+
+                {/* TAB CONTENT: CARTS (VAULT MANIFEST) */}
+                {activeTab === 'carts' && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                        {tabsLoading.carts ? (
+                            <div className="flex items-center justify-center py-20">
+                                <Loader2 className="animate-spin text-gold-500" size={32} />
+                            </div>
+                        ) : (
+                            <div className="space-y-8">
+                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white/5 border border-white/10 p-6 md:p-10 gap-6">
+                                    <div>
+                                        <h2 className="text-xl font-serif tracking-[0.2em] uppercase italic">Vault Manifest</h2>
+                                        <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase mt-2">Monitoring active acquisitions & abandoned intent</p>
+                                    </div>
+                                    <div className="text-left sm:text-right">
+                                        <p className="text-[9px] text-white/40 uppercase tracking-widest mb-1">Active Vaults</p>
+                                        <p className="text-2xl font-serif text-gold-500">{carts.length}</p>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 gap-6">
+                                    {carts.length === 0 ? (
+                                        <div className="p-20 text-center text-white/20 uppercase tracking-[0.3em] border border-white/5">The manifest is currently clear</div>
+                                    ) : (
+                                        carts.map(cart => (
+                                            <div key={cart.id} className="bg-white/5 border border-white/10 p-6 md:p-8 hover:border-gold-500/30 transition-all group">
+                                                <div className="flex flex-col md:flex-row justify-between gap-6">
+                                                    <div className="space-y-4 flex-1">
+                                                        <div className="flex items-center gap-4 border-b border-white/5 pb-4">
+                                                            <div className="w-10 h-10 bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-500 font-serif">
+                                                                {(cart.user_email || cart.email)?.[0]?.toUpperCase() || 'G'}
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-xs font-black uppercase tracking-widest text-white">
+                                                                    {cart.first_name ? `${cart.first_name} ${cart.last_name}` : 'Anonymous Guest'}
+                                                                </p>
+                                                                <p className="text-[9px] text-white/40 uppercase tracking-widest mt-1">
+                                                                    {cart.user_email || cart.email || 'Restricted Identity'}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+                                                            {cart.items?.map((item, i) => (
+                                                                <div key={i} className="flex items-center gap-4 bg-black/40 p-3 border border-white/5 group-hover:border-white/10 transition-colors">
+                                                                    <div className="w-12 h-16 bg-zinc-900 flex-shrink-0">
+                                                                        <img src={item.image_url || item.product_image} alt="" className="w-full h-full object-cover opacity-60" />
+                                                                    </div>
+                                                                    <div className="min-w-0">
+                                                                        <p className="text-[10px] font-bold uppercase truncate text-white/80">{item.name || item.product_name}</p>
+                                                                        <p className="text-[9px] text-gold-500/60 mt-1 uppercase tracking-widest">{item.quantity} Unit(s)</p>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="md:w-64 flex flex-col justify-between items-end text-right border-t md:border-t-0 md:border-l border-white/5 pt-6 md:pt-0 md:pl-8">
+                                                        <div className="space-y-4">
+                                                            <div>
+                                                                <p className="text-[8px] uppercase tracking-[0.3em] text-white/20 mb-1">Status</p>
+                                                                <span className="px-3 py-1 bg-gold-500/5 border border-gold-500/20 text-gold-500 text-[8px] font-black uppercase tracking-widest">Active</span>
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-[8px] uppercase tracking-[0.3em] text-white/20 mb-1">Last Intelligence Sync</p>
+                                                                <p className="text-[10px] text-white/60 font-sans">{new Date(cart.last_sync).toLocaleString()}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="mt-6">
+                                                            <p className="text-[8px] uppercase tracking-[0.3em] text-white/20 mb-1">Approx. Value</p>
+                                                            <p className="text-lg font-serif text-white">
+                                                                {formatCurrency(
+                                                                    cart.items?.reduce((acc, item) => acc + (item.price * item.quantity), 0) || 0,
+                                                                    activeCurrency, rates, symbols
+                                                                )}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </div>
+                        )}
                     </motion.div>
                 )}
 
