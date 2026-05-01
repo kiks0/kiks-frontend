@@ -273,14 +273,16 @@ const Home = () => {
         {/* Main Center Content */}
         <Link to="/essence" className="relative z-20 text-center px-6 w-full max-w-5xl mx-auto flex flex-col items-center justify-center h-full pt-[25vh] md:pt-[20vh] cursor-pointer group/hero">
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.2, delay: 0.8 }}
-            className="text-sm md:text-lg font-light text-gray-300 max-w-sm mx-auto mb-8 md:mb-12 tracking-[0.4em] md:tracking-widest leading-relaxed group-hover/hero:text-gold-400 transition-colors"
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.5, ease: "circOut" }}
+            className="mb-8 md:mb-12"
           >
-            {t('home.hero_subtitle')}
-          </motion.p>
+            <h1 className="text-6xl md:text-[120px] font-serif text-white tracking-[0.2em] uppercase leading-none">
+              KIKS
+            </h1>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0 }}
