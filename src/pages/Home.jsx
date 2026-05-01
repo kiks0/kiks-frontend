@@ -317,6 +317,14 @@ const Home = () => {
         <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-[1400px]">
           <div className="flex flex-col md:flex-row items-center justify-between gap-16 lg:gap-32">
 
+            {/* Mobile Header: Name on Top */}
+            <div className="md:hidden text-center">
+              <h2 className="text-6xl font-serif font-light tracking-[0.15em] leading-none text-white uppercase">
+                ELITE
+              </h2>
+              <p className="text-gold-500/80 text-[11px] tracking-[0.4em] uppercase font-bold mt-4">Extrait de Parfum</p>
+            </div>
+
             {/* Left: Image with Decorative Frame */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -351,8 +359,8 @@ const Home = () => {
               </div>
 
               <div className="relative z-10 space-y-8 w-full">
-                {/* Header */}
-                <div className="space-y-4">
+                {/* Header (Desktop Only) */}
+                <div className="hidden md:block space-y-4">
                   <h2 className="text-5xl md:text-[5.5rem] font-serif font-light tracking-[0.15em] leading-none text-white uppercase">
                     ELITE
                   </h2>
@@ -360,7 +368,7 @@ const Home = () => {
 
                 {/* Description Block */}
                 <div className="space-y-6 max-w-lg">
-                  <p className="text-gold-500/80 text-[11px] tracking-[0.4em] uppercase font-bold">Extrait de Parfum</p>
+                  <p className="hidden md:block text-gold-500/80 text-[11px] tracking-[0.4em] uppercase font-bold">Extrait de Parfum</p>
                   <p className="text-sm md:text-base text-gray-400 leading-loose tracking-widest font-light italic opacity-80">
                     "A daring fusion of rare agarwood and subtle saffron, crafted for those who define their own path."
                   </p>
