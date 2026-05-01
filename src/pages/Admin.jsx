@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     LayoutDashboard, ShoppingBag, Layers, FileText, Settings, LogOut, Search,
-    Plus, Trash2, Edit3, Save, X, Eye, CheckCircle, Package, Truck, AlertCircle,
+    Plus, Trash2, Edit3, Save, X, Eye, EyeOff, CheckCircle, Package, Truck, AlertCircle,
     User, Mail, Phone, MapPin, Calendar, Clock, ArrowRight, Download, Filter, Star, Loader2, Users, Smartphone,
     FileSpreadsheet, ClipboardCheck, Layout, ArrowLeft, Sparkles, CheckCircle2, Upload, ImageIcon,
     TrendingUp, DollarSign, ClipboardList, PackageCheck, ReceiptText, Ticket, ChevronDown
@@ -90,6 +90,7 @@ const Admin = () => {
     });
     const [adminFormData, setAdminFormData] = useState({ email: '', password: '', firstName: '', lastName: '' });
     const [userSearch, setUserSearch] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const fileInputRef = useRef(null);
     const galleryInputRef = useRef(null);
@@ -1846,7 +1847,22 @@ const Admin = () => {
                                                         </div>
                                                         <div>
                                                             <label className={labelClasses}>Access Password</label>
-                                                            <input required type="password" className={inputClasses} value={adminFormData.password} onChange={e => setAdminFormData({ ...adminFormData, password: e.target.value })} />
+                                                            <div className="relative">
+                                                                <input 
+                                                                    required 
+                                                                    type={showPassword ? "text" : "password"} 
+                                                                    className={`${inputClasses} pr-12`} 
+                                                                    value={adminFormData.password} 
+                                                                    onChange={e => setAdminFormData({ ...adminFormData, password: e.target.value })} 
+                                                                />
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => setShowPassword(!showPassword)}
+                                                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-gold-500 transition-colors"
+                                                                >
+                                                                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                         <div className="md:col-span-2 pt-4">
                                                             <button type="submit" className="w-full bg-gold-500 text-black py-5 text-[11px] font-black tracking-[0.5em] uppercase hover:bg-white transition-all">
