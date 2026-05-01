@@ -277,7 +277,7 @@ const Home = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.2, delay: 0.8 }}
-            className="text-xs md:text-sm font-light text-gray-300 max-w-sm mx-auto mb-8 md:mb-10 tracking-[0.4em] md:tracking-widest leading-relaxed group-hover/hero:text-gold-400 transition-colors"
+            className="text-sm md:text-lg font-light text-gray-300 max-w-sm mx-auto mb-8 md:mb-12 tracking-[0.4em] md:tracking-widest leading-relaxed group-hover/hero:text-gold-400 transition-colors"
           >
             {t('home.hero_subtitle')}
           </motion.p>
@@ -287,10 +287,10 @@ const Home = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1 }}
           >
-            <div className="group relative inline-flex items-center justify-center px-10 py-4 text-xs md:text-[10px] tracking-[0.3em] font-medium uppercase text-white hover:text-dark-900 overflow-hidden transition-colors duration-500">
+            <div className="group relative inline-flex items-center justify-center px-14 py-6 text-sm md:text-xs tracking-[0.3em] font-medium uppercase text-white hover:text-dark-900 overflow-hidden transition-colors duration-500">
               <span className="absolute inset-0 w-full h-full -mt-1 rounded-sm opacity-30 bg-gradient-to-b from-transparent via-transparent to-black pointer-events-none" />
               <span className="absolute inset-0 w-full h-full transition-all duration-500 ease-out transform translate-y-full bg-white group-hover:translate-y-0" />
-              <span className="relative z-10 pt-[2px]">{t('home.discover')}</span>
+              <span className="relative z-10 pt-[2px]">{t('home.discover')} KIKS</span>
               <span className="absolute bottom-0 left-0 w-full h-[1px] bg-white/50 transform origin-left transition-transform duration-500 ease-out group-hover:scale-x-0" />
             </div>
           </motion.div>
@@ -471,15 +471,7 @@ const Home = () => {
 
       {/* Immersive Parallax Story Section with GSAP */}
       <section ref={storyRef} className="relative min-h-[80vh] md:h-screen bg-[#0a0a0a] overflow-hidden">
-        <div className="absolute inset-0 z-0 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-[#0a0a0a] z-10" />
-          <img
-            ref={storyImgRef}
-            src="/story-hero.webp"
-            alt="Perfumery Art"
-            className="w-full h-full object-cover hidden md:block"
-          />
-        </div>
+
 
         <div className="relative z-20 h-full flex flex-col items-center justify-center px-6">
           <div className="text-center max-w-4xl mx-auto flex flex-col items-center">
