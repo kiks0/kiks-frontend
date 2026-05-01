@@ -130,27 +130,27 @@ const Footer = () => {
       )}
 
       {/* Top Centered Brand Logo */}
-      <div className="flex flex-col items-center mb-16 md:mb-20 font-serif">
+      <div className="flex flex-col items-center mb-8 md:mb-20 font-serif">
         <Link to="/">
           <img src="/logo-kiks.webp" alt="Kiks Logo" className="h-24 md:h-32 w-auto object-contain" />
         </Link>
       </div>
 
       {/* Main 4-Column Architectural Grid */}
-      <div className="container mx-auto px-6 md:px-12 lg:px-24 grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-8 mb-20">
-        <div>
+      <div className="container mx-auto px-6 md:px-12 lg:px-24 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 lg:gap-8 mb-10 md:mb-20">
+        <div className="text-center md:text-left">
           <h4 className="text-white text-[10px] md:text-[11px] font-bold uppercase tracking-wider mb-4">{t('footer.explore')}</h4>
           <ul className="space-y-[10px]">
             <li><Link to={`/collection/${latestCollectionSlug}`} className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">{t('footer.links.new')}</Link></li>
           </ul>
-          <div className="mt-12 flex items-center space-x-3">
+          <div className="mt-12 flex items-center justify-center md:justify-start space-x-3">
             <span className="text-[12px] md:text-[13px] text-[#A0A0A0]">{t('footer.high_contrast')}</span>
             <button onClick={() => setIsHighContrast(!isHighContrast)} className={`w-9 h-4 rounded-full relative focus:outline-none flex items-center transition-colors duration-300 ${isHighContrast ? 'bg-white' : 'bg-[#333]'}`}>
               <div className={`w-3.5 h-3.5 rounded-full absolute top-[1px] transition-all duration-300 ${isHighContrast ? 'bg-black left-[19px]' : 'bg-gray-400 left-[1px]'}`}></div>
             </button>
           </div>
         </div>
-        <div>
+        <div className="text-center md:text-left">
           <h4 className="text-white text-[10px] md:text-[11px] font-bold uppercase tracking-wider mb-4">{t('footer.services')}</h4>
           <ul className="space-y-[10px]">
 
@@ -162,7 +162,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        <div>
+        <div className="text-center md:text-left">
           <h4 className="text-white text-[10px] md:text-[11px] font-bold uppercase tracking-wider mb-4">{t('footer.house')}</h4>
           <ul className="space-y-[10px] mb-12">
             <li><Link to="/terms-conditions" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Terms & Conditions</Link></li>
@@ -204,7 +204,7 @@ const Footer = () => {
                   value={newsletterEmail}
                   onChange={(e) => setNewsletterEmail(e.target.value)}
                   placeholder="Your address"
-                  className="w-full bg-transparent text-[13px] text-white outline-none placeholder:text-white/10"
+                  className="w-full bg-transparent text-[13px] text-white outline-none placeholder:text-white/10 text-center md:text-left"
                 />
                 <button type="submit" className="text-white hover:text-gold-500 transition-colors ml-4">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
@@ -237,7 +237,7 @@ const Footer = () => {
 
       {/* Bottom Footer Section */}
       <div className="container mx-auto px-6 md:px-12 lg:px-24">
-        <div className="border-b border-white/10 pb-6 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center">
+        <div className="border-b border-white/10 pb-6 mb-6 flex flex-col md:flex-row justify-between items-center md:items-center">
           <div className="flex items-center space-x-2 text-[#A0A0A0] text-[12px]">
             <span>{t('footer.detect')}</span>
             <button onClick={() => setIsLocationModalOpen(true)} className="text-white flex items-center font-medium ml-1">
@@ -245,15 +245,15 @@ const Footer = () => {
               <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
           </div>
-          <div className="flex space-x-6 mt-6 md:mt-0 text-[#A0A0A0]">
+          <div className="flex justify-center space-x-6 mt-6 md:mt-0 text-[#A0A0A0]">
             <a href="https://instagram.com/kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconInsta /></a>
             <a href="https://facebook.com/kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconFb /></a>
             <a href="https://youtube.com/@kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconYt /></a>
             <a href="https://linkedin.com/company/kiks-ultra-luxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconIn /></a>
           </div>
         </div>
-        <div>
-          <p className="text-[#666666] text-[10px] md:text-[11px] leading-relaxed max-w-4xl tracking-widest">
+        <div className="text-center md:text-left">
+          <p className="text-[#666666] text-[10px] md:text-[11px] leading-relaxed max-w-4xl tracking-widest mx-auto md:mx-0">
             Kiksultraluxury ({selectedLocation})
           </p>
         </div>
