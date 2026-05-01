@@ -104,7 +104,7 @@ const PromoPopup = () => {
                             {popupData?.redirect_url ? (
                                 <a href={popupData.redirect_url} onClick={() => sessionStorage.setItem('kiks_promo_seen', 'true')}>
                                     <img
-                                        src={popupData?.image_url || "/alchemy.webp"}
+                                        src={popupData?.image_url ? (popupData.image_url.startsWith('http') ? popupData.image_url : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${popupData.image_url}`) : "/alchemy.webp"}
                                         className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-[2000ms] brightness-90 contrast-110"
                                         alt="Promo"
                                     />
@@ -116,7 +116,7 @@ const PromoPopup = () => {
                                 </a>
                             ) : (
                                 <img
-                                    src={popupData?.image_url || "/alchemy.webp"}
+                                    src={popupData?.image_url ? (popupData.image_url.startsWith('http') ? popupData.image_url : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${popupData.image_url}`) : "/alchemy.webp"}
                                     className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-[2000ms] brightness-90 contrast-110"
                                     alt="Promo"
                                 />
