@@ -121,7 +121,7 @@ const Account = () => {
     <div className="min-h-screen font-sans">
       
       {/* SECTION 1: WHITE WELCOME */}
-      <section className="bg-white pt-[140px] md:pt-[160px] pb-12 flex flex-col items-center justify-center animate-fade-in text-center px-6">
+      <section className="bg-white pt-[120px] md:pt-[160px] pb-12 flex flex-col items-center justify-center animate-fade-in text-center px-6">
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -137,7 +137,7 @@ const Account = () => {
         <div className="container mx-auto px-6 md:px-12 lg:px-24 max-w-[1400px]">
           
           {/* Header 3-Column Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-y-16 md:gap-x-12 mb-24">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-y-10 md:gap-x-12 mb-16 md:mb-24">
             
             {/* YOUR PRODUCTS */}
             <div className="flex flex-col">

@@ -62,11 +62,11 @@ const Orders = () => {
     }
 
     return (
-        <div className="bg-[#050505] min-h-screen text-white pt-24 md:pt-48 pb-40 px-4 md:px-8">
+        <div className="bg-[#050505] min-h-screen text-white pt-20 md:pt-48 pb-40 px-4 md:px-8">
             <div className="max-w-6xl mx-auto">
 
                 {/* Header */}
-                <div className="mb-16 md:mb-24 text-center">
+                <div className="mb-10 md:mb-24 text-center">
                     <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
                         <Link to="/account" className="inline-flex items-center text-[9px] tracking-[0.4em] text-white/30 hover:text-white transition-colors uppercase mb-8 group">
                             <ArrowLeft size={14} className="mr-2 group-hover:-translate-x-1 transition-transform" /> Back to Account
@@ -100,7 +100,7 @@ const Orders = () => {
                             >
                                 {/* Order Summary Header */}
                                 <div
-                                    className="p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 cursor-pointer select-none"
+                                    className="p-5 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 cursor-pointer select-none"
                                     onClick={() => setExpandedOrder(expandedOrder === order.id ? null : order.id)}
                                 >
                                     <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-12">
@@ -140,14 +140,14 @@ const Orders = () => {
                                             exit={{ height: 0 }}
                                             className="border-t border-white/5 bg-white/[0.01] overflow-hidden"
                                         >
-                                            <div className="p-6 md:p-12 space-y-12">
+                                            <div className="p-5 md:p-12 space-y-8 md:space-y-12">
                                                 {/* Pieces Grid */}
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-8 md:gap-y-12">
                                                     <div>
-                                                        <h3 className="text-[10px] tracking-[0.5em] font-black text-white/30 uppercase mb-8 flex items-center gap-2">
+                                                        <h3 className="text-[10px] tracking-[0.5em] font-black text-white/30 uppercase mb-6 md:mb-8 flex items-center gap-2">
                                                             <ShoppingBag size={12} /> Items Ordered
                                                         </h3>
-                                                        <div className="space-y-8">
+                                                        <div className="space-y-6 md:space-y-8">
                                                             {order.items?.map((item, idx) => (
                                                                 <div key={idx} className="flex gap-6 items-center group/item">
                                                                     <div className="w-16 h-20 bg-zinc-900 border border-white/5 overflow-hidden flex-shrink-0 relative">
@@ -170,10 +170,10 @@ const Orders = () => {
                                                     <div className="space-y-12">
                                                         {/* Delivery Info */}
                                                         <div>
-                                                            <h3 className="text-[10px] tracking-[0.5em] font-black text-white/30 uppercase mb-8 flex items-center gap-2">
+                                                            <h3 className="text-[10px] tracking-[0.5em] font-black text-white/30 uppercase mb-6 md:mb-8 flex items-center gap-2">
                                                                 <MapPin size={12} /> Delivery Address
                                                             </h3>
-                                                            <div className="p-8 border border-white/5 bg-black/40 space-y-4">
+                                                            <div className="p-6 md:p-8 border border-white/5 bg-black/40 space-y-4">
                                                                 <p className="text-[11px] font-bold tracking-widest uppercase">{order.customer_name}</p>
                                                                 <p className="text-[11px] tracking-[0.1em] text-white/50 leading-loose uppercase italic">
                                                                     {order.shipping_address}
@@ -183,7 +183,7 @@ const Orders = () => {
 
                                                         {/* Tracking Progress Bar */}
                                                         <div>
-                                                            <h3 className="text-[10px] tracking-[0.5em] font-black text-white/30 uppercase mb-8 flex items-center gap-2">
+                                                            <h3 className="text-[10px] tracking-[0.5em] font-black text-white/30 uppercase mb-6 md:mb-8 flex items-center gap-2">
                                                                 <Truck size={12} /> Delivery Status
                                                             </h3>
                                                             <div className="relative pt-4 pb-8">
