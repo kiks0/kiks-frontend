@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ChevronLeft, HelpCircle, X, Check } from 'lucide-react';
+import { ArrowLeft, HelpCircle, X, Check } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateProfile } from '../store/authSlice';
 
@@ -265,9 +266,11 @@ const PersonalDetails = () => {
             <div className="max-w-3xl mx-auto px-6">
                 
                 {/* Back Link */}
-                <Link to="/account" className="inline-flex items-center text-[11px] tracking-widest uppercase mb-12 hover:text-gold-500 transition-colors font-bold text-white/60">
-                    <ChevronLeft size={14} className="mr-2" /> My Account
-                </Link>
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+                    <Link to="/account" className="inline-flex items-center text-[9px] tracking-[0.4em] text-white/30 hover:text-white transition-colors uppercase mb-12 group">
+                        <ArrowLeft size={14} className="mr-2 group-hover:-translate-x-1 transition-transform" /> Back to Account
+                    </Link>
+                </motion.div>
 
                 <div className="text-center mb-10 md:mb-16">
                     <h1 className="text-2xl md:text-4xl font-serif tracking-[0.2em] uppercase mb-4 md:mb-8 text-gold-500">Personal Details</h1>

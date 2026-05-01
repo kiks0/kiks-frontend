@@ -154,9 +154,11 @@ const Addresses = () => {
             <div className="kiks-chanel-container">
                 
                 <div className="mb-12 text-center">
-                    <Link to="/account" className="inline-flex items-center text-[9px] tracking-[0.4em] text-white/30 hover:text-white transition-colors uppercase mb-8">
-                        <ArrowLeft size={14} className="mr-2" /> Back to Account
-                    </Link>
+                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+                        <Link to="/account" className="inline-flex items-center text-[9px] tracking-[0.4em] text-white/30 hover:text-white transition-colors uppercase mb-8 group">
+                            <ArrowLeft size={14} className="mr-2 group-hover:-translate-x-1 transition-transform" /> Back to Account
+                        </Link>
+                    </motion.div>
                     <h1 className="kiks-main-title">Addresses</h1>
                 </div>
 

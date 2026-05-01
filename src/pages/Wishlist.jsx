@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toggleWishlistAndSync } from '../store/wishlistSlice';
 import { addToCart } from '../store/cartSlice';
-import { ShoppingBag, X, Heart, Check } from 'lucide-react';
+import { ShoppingBag, X, Heart, Check, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { getFullImageUrl } from '../utils/url';
@@ -24,6 +24,11 @@ const Wishlist = () => {
         
         {/* Page Header */}
         <header className="mb-16 md:mb-24 flex flex-col items-center text-center">
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+            <Link to="/account" className="inline-flex items-center text-[9px] tracking-[0.4em] text-white/30 hover:text-white transition-colors uppercase mb-8 group">
+              <ArrowLeft size={14} className="mr-2 group-hover:-translate-x-1 transition-transform" /> Back to Account
+            </Link>
+          </motion.div>
           <p className="text-[10px] md:text-[11px] tracking-[0.4em] font-medium uppercase mb-4 opacity-50">Private Selection</p>
           <h1 className="text-3xl md:text-5xl font-serif tracking-[0.15em] uppercase text-white mb-6">Wishlist</h1>
           <div className="w-16 h-[1px] bg-gold-500/50"></div>
