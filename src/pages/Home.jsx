@@ -230,6 +230,12 @@ const Home = () => {
   });
   const xTranslate = useTransform(carouselProgress, [0, 1], ["0%", "-66.666%"]);
 
+  // Hero Text Scroll Animations
+  const { scrollY } = useScroll();
+  const heroScale = useTransform(scrollY, [0, 500], [1, 1.8]);
+  const heroY = useTransform(scrollY, [0, 500], [0, -100]);
+  const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
+
   return (
     <div className="bg-dark-900 min-h-screen text-white">
       <SEO
@@ -271,32 +277,22 @@ const Home = () => {
         </div>
 
         {/* Main Center Content */}
-        <Link to="/essence" className="relative z-20 text-center px-6 w-full max-w-5xl mx-auto flex flex-col items-center justify-center h-full pt-[25vh] md:pt-[20vh] cursor-pointer group/hero">
-
+        <div className="relative z-20 text-center px-6 w-full max-w-5xl mx-auto flex flex-col items-center justify-center h-full pt-[10vh] pointer-events-none">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.5, ease: "circOut" }}
-            className="mb-8 md:mb-12"
+            transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
+            style={{ 
+              scale: heroScale,
+              y: heroY,
+              opacity: heroOpacity
+            }}
           >
-            <h1 className="text-6xl md:text-[120px] font-serif text-white tracking-[0.2em] uppercase leading-none">
+            <h1 className="text-6xl md:text-[140px] font-serif text-white tracking-[0.25em] uppercase leading-none will-change-transform">
               KIKS
             </h1>
           </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1 }}
-          >
-            <div className="group relative inline-flex items-center justify-center px-14 py-6 text-sm md:text-xs tracking-[0.3em] font-medium uppercase text-white hover:text-dark-900 overflow-hidden transition-colors duration-500">
-              <span className="absolute inset-0 w-full h-full -mt-1 rounded-sm opacity-30 bg-gradient-to-b from-transparent via-transparent to-black pointer-events-none" />
-              <span className="absolute inset-0 w-full h-full transition-all duration-500 ease-out transform translate-y-full bg-white group-hover:translate-y-0" />
-              <span className="relative z-10 pt-[2px]">{t('home.discover')} KIKS</span>
-              <span className="absolute bottom-0 left-0 w-full h-[1px] bg-white/50 transform origin-left transition-transform duration-500 ease-out group-hover:scale-x-0" />
-            </div>
-          </motion.div>
-        </Link>
+        </div>
       </section>
 
       {/* Product 1: ELITE */}
