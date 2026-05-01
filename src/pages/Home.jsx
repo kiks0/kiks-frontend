@@ -406,7 +406,6 @@ const Home = () => {
               >
                 {/* Name on Top */}
                 <div className="text-center mb-6 w-full">
-                  <span className="text-gold-500 text-[8px] tracking-[0.5em] uppercase font-bold block mb-2">Collection</span>
                   <h2 className="text-2xl font-serif text-white tracking-[0.1em] uppercase">{product.name}</h2>
                 </div>
 
