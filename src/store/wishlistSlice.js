@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { BASE_API_URL } from '../utils/url';
 
 const getInitialWishlist = () => {
     try {
@@ -10,7 +11,7 @@ const getInitialWishlist = () => {
 export const fetchWishlist = createAsyncThunk('wishlist/fetchWishlist', async (_, { getState }) => {
     const token = getState().auth.token || localStorage.getItem('kiks_token');
     if (!token) throw new Error("No token");
-    const res = await fetch('http://localhost:5000/api/auth/wishlist', {
+    const res = await fetch(`${BASE_API_URL}/api/auth/wishlist`, {
         headers: { 'Authorization': `Bearer ${token}` }
     });
     if (!res.ok) throw new Error("Fetch failed");
@@ -20,7 +21,7 @@ export const fetchWishlist = createAsyncThunk('wishlist/fetchWishlist', async (_
 export const updateWishlistInDB = createAsyncThunk('wishlist/updateWishlistInDB', async (wishlist, { getState }) => {
     const token = getState().auth.token || localStorage.getItem('kiks_token');
     if (!token) return wishlist;
-    await fetch('http://localhost:5000/api/auth/wishlist', {
+    await fetch(`${BASE_API_URL}/api/auth/wishlist`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ wishlist })

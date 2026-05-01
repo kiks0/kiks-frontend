@@ -18,7 +18,10 @@ import {
     Package,
     Gift,
     Ticket,
-    X
+    X,
+    Smartphone,
+    Banknote,
+    QrCode
 } from 'lucide-react';
 import { getFullImageUrl } from '../utils/url';
 import { clearCart } from '../store/cartSlice';
@@ -33,6 +36,7 @@ const Checkout = () => {
     const [step, setStep] = useState(1); // 1: Info & Shipping, 2: Payment & Authorization
     const [isLoading, setIsLoading] = useState(false);
     const [orderError, setOrderError] = useState('');
+    const [agreedToTerms, setAgreedToTerms] = useState(false);
 
     const [formData, setFormData] = useState({
         firstName: user?.name?.split(' ')[0] || '',
@@ -350,8 +354,8 @@ const Checkout = () => {
         }
     };
 
-    const inputClasses = "w-full bg-transparent border-b border-white/20 py-3 md:py-4 text-[13px] tracking-widest text-white focus:border-white outline-none transition-all placeholder:text-white/10";
-    const labelClasses = "text-[9px] tracking-[0.4em] font-bold text-white/50 uppercase mb-1 block";
+    const inputClasses = "w-full bg-transparent border-b border-white/20 py-3 md:py-4 text-sm tracking-[0.15em] text-white focus:border-white outline-none transition-all placeholder:text-white/10 rounded-none";
+    const labelClasses = "text-[9px] tracking-[0.3em] font-bold text-white/50 uppercase mb-1 block";
 
     if (items.length === 0 && !isLoading) {
         return (
@@ -369,7 +373,7 @@ const Checkout = () => {
     }
 
     return (
-        <div className="bg-[#050505] min-h-screen text-white pt-24 md:pt-48 pb-40 px-4 md:px-20 font-sans">
+        <div className="bg-[#050505] min-h-screen text-white pt-24 md:pt-40 pb-24 px-6 md:px-10 lg:px-20 font-sans">
             <div className="container mx-auto max-w-7xl">
 
                 <div className="mb-12 md:mb-24 text-center">
@@ -383,14 +387,14 @@ const Checkout = () => {
                     </div>
                 </div>
 
-                <div className="flex flex-col lg:grid lg:grid-cols-[1fr_450px] gap-12 lg:gap-24 items-start">
+                <div className="flex flex-col lg:grid lg:grid-cols-[1fr_400px] gap-12 lg:gap-20 items-start">
 
                     {/* Main Form Area (Order 2 on mobile, 1 on desktop) */}
                     <div className="space-y-12 md:space-y-24 w-full order-2 lg:order-1">
                         <AnimatePresence mode="wait">
                             {step === 1 ? (
                                 <motion.div key="step1" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-                                    <h2 className="text-[10px] md:text-[11px] tracking-[0.6em] uppercase font-black mb-8 md:mb-16 border-b border-white/5 pb-6">Shipping Details</h2>
+                                    <h2 className="text-[10px] md:text-[11px] tracking-[0.5em] uppercase font-black mb-10 border-b border-white/5 pb-6">Shipping Details</h2>
 
                                     {/* Saved Address Selector */}
                                     {isAuthenticated && savedAddresses && (
@@ -494,76 +498,90 @@ const Checkout = () => {
                             ) : (
                                 <motion.div key="step2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
                                     <h2 className="text-[10px] md:text-[11px] tracking-[0.6em] uppercase font-black mb-8 md:mb-16 border-b border-white/5 pb-6">Secure Payment</h2>
-                                    <div className="space-y-12">
-                                        <div className="grid grid-cols-1 gap-4">
-                                            {['Credit/Debit Card (Prepaid)', 'UPI / Razorpay (Prepaid)', 'Partial COD (30% Prepaid)'].map((method) => (
-                                                <button
-                                                    key={method}
-                                                    onClick={() => setFormData({ ...formData, paymentMethod: method })}
-                                                    className={`flex items-center justify-between p-8 border transition-all ${formData.paymentMethod === method ? 'border-white bg-white/5' : 'border-white/10 hover:border-white/30'}`}
-                                                >
-                                                    <div className="flex items-center space-x-6">
-                                                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${formData.paymentMethod === method ? 'border-white' : 'border-white/20'}`}>
-                                                            {formData.paymentMethod === method && <div className="w-2 h-2 rounded-full bg-white" />}
-                                                        </div>
-                                                        <span className="text-[11px] tracking-[0.4em] font-black uppercase">{method}</span>
-                                                    </div>
-                                                    {method.includes('Card') && <CreditCard size={18} className="opacity-40" />}
-                                                </button>
-                                            ))}
-                                        </div>
-
-                                        <div className="p-6 md:p-10 bg-white/[0.02] border border-white/5 space-y-8 md:space-y-12">
-                                            <div className="flex items-start justify-between">
-                                                <div className="space-y-2">
-                                                    <p className="text-[9px] tracking-[0.4em] font-black uppercase text-white/40">Delivery summary</p>
-                                                    <p className="text-[11px] tracking-widest text-white leading-relaxed">
-                                                        {formData.firstName} {formData.lastName}<br />
-                                                        {formData.houseNo}, {formData.area}<br />
-                                                        {formData.landmark && <span>Near {formData.landmark}<br /></span>}
-                                                        {formData.city}, {formData.pincode}
-                                                    </p>
+                                        <div className="bg-white/[0.02] border border-white/5 overflow-hidden">
+                                            {/* Payment Options Header */}
+                                            <div className="p-6 md:p-8 border-b border-white/5">
+                                                <p className="text-[9px] tracking-[0.4em] font-black uppercase text-gold-500 mb-4">Select Payment Method</p>
+                                                <div className="space-y-3">
+                                                    {[
+                                                        { id: 'Credit/Debit Card (Prepaid)', label: 'CREDIT / DEBIT CARD' },
+                                                        { id: 'UPI / Razorpay (Prepaid)', label: 'UPI / WALLETS / QR' },
+                                                        { id: 'Partial COD (30% Prepaid)', label: 'PARTIAL COD (30% NOW / 70% ON DELIVERY)' }
+                                                    ].map((method) => (
+                                                        <button
+                                                            key={method.id}
+                                                            type="button"
+                                                            onClick={() => setFormData({ ...formData, paymentMethod: method.id })}
+                                                            className={`w-full flex items-center p-4 border transition-all ${formData.paymentMethod === method.id ? 'border-white/40 bg-white/5' : 'border-white/5 hover:bg-white/[0.02]'}`}
+                                                        >
+                                                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center mr-4 flex-shrink-0 ${formData.paymentMethod === method.id ? 'border-gold-500' : 'border-white/20'}`}>
+                                                                {formData.paymentMethod === method.id && <div className="w-2 h-2 rounded-full bg-gold-500" />}
+                                                            </div>
+                                                            <span className={`text-[10px] md:text-[11px] tracking-[0.2em] font-bold uppercase text-left ${formData.paymentMethod === method.id ? 'text-white' : 'text-white/40'}`}>
+                                                                {method.label}
+                                                            </span>
+                                                        </button>
+                                                    ))}
                                                 </div>
-                                                <button onClick={() => setStep(1)} className="text-[9px] tracking-[0.2em] uppercase text-gold-500 border-b border-gold-400 font-bold">Edit</button>
                                             </div>
 
-                                            <div className="pt-6 border-t border-white/5">
-                                                {orderError && <p className="text-red-400 text-[10px] tracking-widest mb-6 uppercase text-center">{orderError}</p>}
-                                                <button
-                                                    disabled={isLoading}
-                                                    onClick={handleSubmitOrder}
-                                                    className="w-full h-16 md:h-20 bg-white text-black text-[11px] font-black tracking-[0.7em] uppercase hover:bg-gold-500 transition-all flex flex-col items-center justify-center disabled:opacity-50 font-sans"
-                                                >
-                                                    {isLoading ? (
-                                                        <Loader className="animate-spin" />
-                                                    ) : (
-                                                        <>
-                                                            <span className="mb-0.5 md:mb-1">Complete Payment</span>
-                                                            <span className="text-[12px] md:text-[14px] tracking-[0.2em] font-serif">₹{amountOnline.toLocaleString('en-IN')}</span>
-                                                        </>
-                                                    )}
-                                                </button>
-                                            </div>
-                                        </div>
+                                            {/* Summary & Action Area */}
+                                            <div className="p-6 md:p-8 space-y-8 bg-white/[0.01]">
+                                                <div className="flex items-start justify-between">
+                                                    <div className="space-y-2">
+                                                        <p className="text-[9px] tracking-[0.4em] font-black uppercase text-white/20">Delivery summary</p>
+                                                        <p className="text-[11px] tracking-widest text-white/70 leading-relaxed font-sans">
+                                                            <span className="text-white font-bold">{formData.firstName} {formData.lastName}</span><br />
+                                                            {formData.houseNo}, {formData.area}<br />
+                                                            {formData.city}, {formData.pincode}
+                                                        </p>
+                                                    </div>
+                                                    <button onClick={() => setStep(1)} className="text-[9px] tracking-[0.2em] uppercase text-gold-500 border-b border-gold-500/30 font-bold hover:text-white transition-colors">Edit</button>
+                                                </div>
 
-                                        <div className="flex flex-col items-center space-y-6 opacity-30">
-                                            <div className="flex items-center space-x-6">
-                                                <Lock size={12} />
-                                                <span className="text-[8px] tracking-[0.3em] uppercase">256-Bit SSL Secure Payment</span>
+                                                <div className="pt-8 border-t border-white/5">
+                                                    <div className="flex items-start space-x-3 mb-6 cursor-pointer group" onClick={() => setAgreedToTerms(!agreedToTerms)}>
+                                                        <div className={`mt-0.5 w-4 h-4 border transition-all flex items-center justify-center flex-shrink-0 ${agreedToTerms ? 'border-gold-500 bg-gold-500' : 'border-white/20 group-hover:border-white/40'}`}>
+                                                            {agreedToTerms && <CheckCircle size={10} className="text-black" />}
+                                                        </div>
+                                                        <span className="text-[9px] tracking-[0.1em] uppercase text-white/40 group-hover:text-white/60 transition-colors leading-relaxed">
+                                                            I agree to the <Link to="/terms" className="text-white border-b border-white/20">Terms</Link> & <Link to="/privacy" className="text-white border-b border-white/20">Privacy Policy</Link>
+                                                        </span>
+                                                    </div>
+
+                                                    {orderError && <p className="text-red-400 text-[10px] tracking-widest mb-6 uppercase text-center">{orderError}</p>}
+                                                    
+                                                    <button
+                                                        disabled={isLoading || !agreedToTerms}
+                                                        onClick={handleSubmitOrder}
+                                                        className="w-full h-16 bg-white text-black text-[11px] font-black tracking-[0.5em] uppercase hover:bg-gold-500 transition-all flex flex-col items-center justify-center disabled:opacity-20 disabled:cursor-not-allowed"
+                                                    >
+                                                        {isLoading ? (
+                                                            <Loader className="animate-spin" />
+                                                        ) : (
+                                                            <>
+                                                                <span className="mb-1">Complete Purchase</span>
+                                                                <span className="text-[12px] font-serif tracking-[0.1em]">₹{amountOnline.toLocaleString('en-IN')}</span>
+                                                            </>
+                                                        )}
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <p className="text-[8px] tracking-[0.2em] text-center max-w-xs uppercase leading-loose">
-                                                By clicking complete payment, you agree to our terms of service and privacy policy.
-                                            </p>
                                         </div>
-                                    </div>
-                                </motion.div>
-                            )}
+                                            <div className="flex flex-col items-center space-y-6 opacity-30 mt-8">
+                                                <div className="flex items-center space-x-6">
+                                                    <Lock size={12} />
+                                                    <span className="text-[8px] tracking-[0.3em] uppercase">256-Bit SSL Secure Payment</span>
+                                                </div>
+                                            </div>
+                                    </motion.div>
+                                )}
                         </AnimatePresence>
                     </div>
 
                     {/* Order Summary Sidebar (Order 1 on mobile, 2 on desktop) */}
                     <div className="lg:sticky lg:top-40 w-full order-1 lg:order-2">
-                        <div className="bg-black border border-white/5 p-6 md:p-10 space-y-10 md:space-y-12 relative overflow-hidden">
+                        <div className="bg-black border border-white/5 p-6 md:p-8 lg:p-10 space-y-8 md:space-y-10 relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-gold-500/5 blur-[80px] -mr-16 -mt-16 pointer-events-none" />
 
                             <h3 className="text-[11px] tracking-[0.5em] font-black uppercase border-b border-white/10 pb-6">Your Boutique Selection</h3>
@@ -653,28 +671,14 @@ const Checkout = () => {
 
                             <div className="pt-8 border-t border-white/10 flex justify-between items-end">
                                 <div>
-                                    <p className="text-[9px] tracking-[0.4em] uppercase text-white/30 mb-2 font-black font-sans">
+                                    <p className="text-[8px] md:text-[9px] tracking-[0.4em] uppercase text-white/30 mb-2 font-black font-sans">
                                         {isPartialSelected ? 'Total Order Amount' : 'Total Amount Due'}
                                     </p>
-                                    <span className="text-3xl font-serif tracking-widest text-white">₹{finalTotal.toLocaleString('en-IN')}</span>
+                                    <span className="text-2xl md:text-3xl font-serif tracking-widest text-white">₹{finalTotal.toLocaleString('en-IN')}</span>
                                 </div>
                             </div>
 
-                            {/* Complimentary Perks */}
-                            <div className="pt-10 space-y-6">
-                                <div className="flex items-center space-x-4">
-                                    <Package size={14} className="text-gold-500" strokeWidth={1.5} />
-                                    <span className="text-[9px] tracking-[0.4em] uppercase font-black">Premium Gift Wrap</span>
-                                </div>
-                                <div className="flex items-center space-x-4">
-                                    <Gift size={14} className="text-gold-500" strokeWidth={1.5} />
-                                    <span className="text-[9px] tracking-[0.4em] uppercase font-black">Free Sample Bottle</span>
-                                </div>
-                                <div className="flex items-center space-x-4">
-                                    <ShieldCheck size={14} className="text-gold-500" strokeWidth={1.5} />
-                                    <span className="text-[9px] tracking-[0.4em] uppercase font-black">100% Original Product</span>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
 

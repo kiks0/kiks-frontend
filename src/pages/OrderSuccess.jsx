@@ -115,12 +115,12 @@ const OrderSuccess = () => {
 
                     <div className="pt-16 pb-12 flex flex-col items-center">
                         <div className="flex space-x-12 mb-8 text-white/40">
-                             <a href="#" className="hover:text-white transition-colors flex items-center space-x-3 text-[9px] uppercase tracking-[0.4em] font-black">
+                             <a href="https://instagram.com/kiksultraluxury" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors flex items-center space-x-3 text-[9px] uppercase tracking-[0.4em] font-black">
                                 <Globe size={14} strokeWidth={1.5} /> <span>Social</span>
                              </a>
-                             <a href="#" className="hover:text-white transition-colors flex items-center space-x-3 text-[9px] uppercase tracking-[0.4em] font-black">
+                             <Link to="/blog" className="hover:text-white transition-colors flex items-center space-x-3 text-[9px] uppercase tracking-[0.4em] font-black">
                                 <Mail size={14} strokeWidth={1.5} /> <span>Journal</span>
-                             </a>
+                             </Link>
                         </div>
                         <div className="w-px h-12 bg-white/10 mb-8" />
                         <p className="text-[10px] tracking-[0.8em] text-white/5 uppercase font-black">Experience the Essence Eternal</p>

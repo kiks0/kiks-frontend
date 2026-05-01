@@ -9,7 +9,7 @@ import { getFullImageUrl } from '../utils/url';
 const CartDrawer = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { items, total } = useSelector((state) => state.cart);
+  const { items, total } = useSelector(state => state.cart);
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
   const parsePrice = (price) => {
@@ -20,7 +20,9 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
   const handleUpdateQuantity = (id, size, currentQty, delta) => {
     const newQty = currentQty + delta;
-    if (newQty > 0) dispatch(updateQuantity({ id, size, quantity: newQty }));
+    if (newQty > 0) {
+      dispatch(updateQuantity({ id, size, quantity: newQty }));
+    }
   };
 
   return (
@@ -33,7 +35,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100]"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
           />
 
           {/* Drawer */}
@@ -41,95 +43,81 @@ const CartDrawer = ({ isOpen, onClose }) => {
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 28, stiffness: 200 }}
-            className="fixed right-0 top-0 h-full w-full max-w-[440px] bg-dark-900 z-[101] shadow-2xl shadow-black/80 flex flex-col font-sans border-l border-white/[0.05]"
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="fixed right-0 top-0 h-full w-full max-w-[450px] bg-[#0a0a0a] z-[101] shadow-2xl flex flex-col font-sans"
           >
             {/* Header */}
-            <div className="px-8 py-7 border-b border-white/[0.06] flex items-center justify-between">
-              <div className="flex items-center space-x-5">
-                <h2 className="text-[13px] font-normal tracking-[0.35em] text-white/90 uppercase">
-                  {t('cart.your_bag')}
-                </h2>
-                {cartCount > 0 && (
-                  <span className="text-[9px] text-gold-500 tracking-[0.2em] font-normal">
-                    {cartCount}
-                  </span>
-                )}
+            <div className="p-6 md:p-8 border-b border-white/5 flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <h2 className="text-xl font-light tracking-[0.2em] text-white uppercase">{t('cart.your_bag')}</h2>
+                <span className="text-[10px] bg-white/10 px-2.5 py-1 rounded-full text-white/60 font-medium tracking-widest">{cartCount}</span>
               </div>
-              <button
+              <button 
                 onClick={onClose}
-                className="text-white/30 hover:text-white transition-colors duration-300"
+                className="p-2 hover:bg-white/5 rounded-full transition-colors text-white/40 hover:text-white"
               >
-                <X size={20} strokeWidth={1} />
+                <X size={24} strokeWidth={1} />
               </button>
             </div>
 
-            {/* Items */}
-            <div className="flex-grow overflow-y-auto px-8 py-6 custom-scrollbar">
+            {/* Cart Items */}
+            <div className="flex-grow overflow-y-auto px-6 md:px-8 py-4 custom-scrollbar">
               {items.length > 0 ? (
-                <div className="space-y-9 py-2">
+                <div className="space-y-8 py-4">
                   {items.map((item) => (
-                    <motion.div
+                    <motion.div 
                       layout
-                      initial={{ opacity: 0, y: 16 }}
+                      initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      key={`${item.id}-${item.size}`}
-                      className="flex gap-5 group"
+                      key={`${item.id}-${item.size}`} 
+                      className="flex gap-6 group"
                     >
-                      {/* Image */}
-                      <div className="w-20 h-28 bg-dark-800 overflow-hidden flex-shrink-0 border border-white/[0.06]">
-                        <img
-                          src={getFullImageUrl(item.image_url || item.image || item.banner_url)}
-                          alt={item.name}
+                      {/* Product Image */}
+                      <div className="w-24 h-32 bg-[#151515] overflow-hidden flex-shrink-0 border border-white/5">
+                        <img 
+                          src={getFullImageUrl(item.image_url || item.image || item.banner_url)} 
+                          alt={item.name} 
                           className="w-full h-full object-contain p-2"
                         />
                       </div>
 
-                      {/* Info */}
-                      <div className="flex-grow flex flex-col justify-between py-0.5">
+                      {/* Product Info */}
+                      <div className="flex-grow flex flex-col justify-between py-1">
                         <div>
-                          <div className="flex justify-between items-start mb-2">
-                            <h3 className="text-[11px] font-normal tracking-[0.18em] text-white/85 uppercase leading-relaxed pr-3">
+                          <div className="flex justify-between items-start mb-1">
+                            <h3 className="text-xs font-bold tracking-[0.15em] text-white uppercase leading-relaxed pr-4">
                               {item.name}
                             </h3>
-                            <button
-                              onClick={() =>
-                                dispatch(removeFromCart({ id: item.id, size: item.size }))
-                              }
-                              className="text-white/15 hover:text-white/60 transition-colors mt-0.5"
+                            <button 
+                              onClick={() => dispatch(removeFromCart({ id: item.id, size: item.size }))}
+                              className="text-white/20 hover:text-red-400 transition-colors"
                             >
-                              <Trash2 size={14} strokeWidth={1} />
+                              <Trash2 size={16} strokeWidth={1.5} />
                             </button>
                           </div>
-                          <p className="text-[9px] text-white/30 tracking-[0.15em] uppercase mb-2">
-                            {item.category} · {item.volume || item.size}
+                          <p className="text-[9px] text-white/40 tracking-[0.1em] uppercase mb-1">
+                            {item.category} • {item.volume || item.size}
                           </p>
-                          <p className="text-[12px] text-gold-500 font-normal tracking-[0.1em]">
+                          <p className="text-[11px] text-gold-500 font-bold tracking-widest">
                             ₹{(parsePrice(item.price) * item.quantity).toLocaleString()}
                           </p>
                         </div>
 
-                        {/* Quantity — sharp square controls */}
-                        <div className="flex items-center space-x-3 mt-3">
-                          <div className="flex items-center border border-white/[0.1] h-8">
-                            <button
-                              onClick={() =>
-                                handleUpdateQuantity(item.id, item.size, item.quantity, -1)
-                              }
-                              className="w-8 h-full flex items-center justify-center text-white/40 hover:text-white transition-colors border-r border-white/[0.1]"
+                        {/* Quantity Selector */}
+                        <div className="flex items-center space-x-4">
+                          <div className="flex items-center border border-white/10 rounded-full h-8 px-1">
+                            <button 
+                              onClick={() => handleUpdateQuantity(item.id, item.size, item.quantity, -1)}
+                              className="p-1 hover:text-gold-500 transition-colors"
                             >
-                              <Minus size={11} strokeWidth={1.5} />
+                              <Minus size={14} />
                             </button>
-                            <span className="w-8 text-center text-[11px] font-normal text-white/80">
-                              {item.quantity}
-                            </span>
-                            <button
-                              onClick={() =>
-                                handleUpdateQuantity(item.id, item.size, item.quantity, 1)
-                              }
-                              className="w-8 h-full flex items-center justify-center text-white/40 hover:text-white transition-colors border-l border-white/[0.1]"
+                            <span className="w-8 text-center text-[11px] font-bold text-white">{item.quantity}</span>
+                            <button 
+                              onClick={() => handleUpdateQuantity(item.id, item.size, item.quantity, 1)}
+                              className="p-1 hover:text-gold-500 transition-colors"
                             >
-                              <Plus size={11} strokeWidth={1.5} />
+                              <Plus size={14} />
                             </button>
                           </div>
                         </div>
@@ -138,14 +126,14 @@ const CartDrawer = ({ isOpen, onClose }) => {
                   ))}
                 </div>
               ) : (
-                <div className="h-full flex flex-col items-center justify-center text-center opacity-30">
-                  <ShoppingBag size={28} strokeWidth={0.75} className="mb-7 text-white/40" />
-                  <p className="text-[11px] font-normal tracking-[0.35em] uppercase mb-8">
-                    {t('cart.empty')}
-                  </p>
-                  <button
+                <div className="h-full flex flex-col items-center justify-center text-center opacity-40">
+                  <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-6">
+                    <ShoppingBag size={32} strokeWidth={1} />
+                  </div>
+                  <p className="text-sm font-light tracking-[0.2em] uppercase mb-8">{t('cart.empty')}</p>
+                  <button 
                     onClick={onClose}
-                    className="text-[9px] tracking-[0.4em] font-normal text-white uppercase border-b border-white/20 pb-0.5 hover:border-white transition-all"
+                    className="text-[10px] tracking-[0.3em] font-bold text-white uppercase border-b border-white/20 pb-1 hover:border-white transition-all"
                   >
                     {t('cart.start')}
                   </button>
@@ -153,42 +141,32 @@ const CartDrawer = ({ isOpen, onClose }) => {
               )}
             </div>
 
-            {/* Footer */}
+            {/* Footer / Summary */}
             {items.length > 0 && (
-              <div className="px-8 py-8 border-t border-white/[0.06] bg-dark-800/60">
-                <div className="flex items-end justify-between mb-7">
-                  <span className="text-[9px] tracking-[0.45em] text-white/30 uppercase">
-                    {t('cart.subtotal')}
-                  </span>
-                  <span className="text-[18px] font-light tracking-[0.05em] text-white">
-                    ₹{(total || 0).toLocaleString()}
-                  </span>
+              <div className="p-8 border-t border-white/5 bg-[#0d0d0d]">
+                <div className="flex items-center justify-between mb-8">
+                  <span className="text-[10px] tracking-[0.4em] text-white/40 uppercase">{t('cart.subtotal')}</span>
+                  <span className="text-lg font-bold tracking-widest text-white">₹{(total || 0).toLocaleString()}</span>
                 </div>
-
+                
                 <div className="space-y-3">
-                  <Link
-                    to="/checkout"
+                  <Link 
+                    to="/checkout" 
                     onClick={onClose}
-                    className="flex h-13 items-center justify-center bg-white text-dark-900 text-[10px] font-normal tracking-[0.4em] uppercase hover:bg-gold-500 hover:text-white transition-all duration-500 relative group overflow-hidden h-[52px]"
+                    className="flex h-14 items-center justify-center bg-white text-black text-[11px] font-black tracking-[0.3em] uppercase hover:bg-gold-500 transition-all duration-500 relative group overflow-hidden"
                   >
                     <span className="relative z-10 flex items-center">
-                      {t('cart.checkout')}
-                      <ArrowRight
-                        size={14}
-                        strokeWidth={1}
-                        className="ml-3 group-hover:translate-x-1 transition-transform"
-                      />
+                      {t('cart.checkout')} <ArrowRight size={16} className="ml-3 group-hover:translate-x-1 transition-transform" />
                     </span>
                   </Link>
-                  <button
+                  <button 
                     onClick={onClose}
-                    className="w-full h-[44px] flex items-center justify-center border border-white/10 text-white text-[9px] font-normal tracking-[0.4em] uppercase hover:border-white/30 hover:bg-white/[0.02] transition-all"
+                    className="w-full h-14 flex items-center justify-center border border-white/10 text-white text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-white/5 transition-all"
                   >
                     {t('cart.continue')}
                   </button>
                 </div>
-
-                <p className="text-[8px] text-white/20 text-center mt-6 tracking-[0.18em] uppercase">
+                <p className="text-[9px] text-white/20 text-center mt-6 tracking-[0.1em] uppercase">
                   {t('cart.free_shipping')}
                 </p>
               </div>

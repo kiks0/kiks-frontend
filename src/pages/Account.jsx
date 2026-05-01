@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { ShoppingBag, Star, Smartphone, ChevronRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { ShoppingBag, Star, Smartphone, ChevronRight, X, Mail, MessageSquare, Phone } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { logout } from '../store/authSlice';
 import { clearWishlist } from '../store/wishlistSlice';
 import { clearCart } from '../store/cartSlice';
@@ -21,6 +21,10 @@ const Account = () => {
   const wishlistCount = wishlistItems.length;
   const navigate = useNavigate();
   const [ordersCount, setOrdersCount] = useState(0);
+  const [isConciergeOpen, setIsConciergeOpen] = useState(false);
+  const [showCallbackForm, setShowCallbackForm] = useState(false);
+  const [callbackPhone, setCallbackPhone] = useState('');
+  const [callbackStatus, setCallbackStatus] = useState('idle'); // idle, loading, success
 
   useEffect(() => {
     if (appUser) {
@@ -50,7 +54,7 @@ const Account = () => {
             // Fetch order count for savedUser locally if token exists
             const token = localStorage.getItem('kiks_token') || null;
             if (token) {
-                 fetch('http://localhost:5000/api/orders/myorders', {
+                 fetch(`${API_URL}/api/orders/myorders`, {
                      headers: { 'Authorization': `Bearer ${token}` }
                  })
                  .then(res => {
@@ -164,19 +168,22 @@ const Account = () => {
               </Link>
             </div>
 
-            {/* SERVICES */}
+             {/* SERVICES */}
             <div className="flex flex-col">
               <h3 className="text-[12px] md:text-[13px] font-bold tracking-[0.2em] uppercase mb-4 text-white">Services</h3>
               <div className="w-full h-[1px] bg-white/10 mb-8"></div>
               
-              <div className="flex items-start space-x-5 group cursor-pointer">
-                <div className="mt-1 text-white/80 group-hover:text-white transition-colors">
+              <div 
+                onClick={() => setIsConciergeOpen(true)}
+                className="flex items-start space-x-5 group cursor-pointer"
+              >
+                <div className="mt-1 text-white/80 group-hover:text-gold-500 transition-all transform group-hover:scale-110">
                   <Smartphone size={20} strokeWidth={1} />
                 </div>
                 <div>
-                  <h4 className="text-[12px] font-bold tracking-wide mb-2 text-white group-hover:text-neutral-400 transition-colors">Care & Services</h4>
+                  <h4 className="text-[12px] font-bold tracking-wide mb-2 text-white group-hover:text-gold-400 transition-colors">Client Services</h4>
                   <p className="text-[11px] text-neutral-500 font-medium leading-relaxed max-w-[280px]">
-                    KIKS offers specialized repair and maintenance services. Your piece will be entrusted to expert artisans at our workshop.
+                    Access your dedicated KIKS advisor for priority assistance, bespoke requests, and expert guidance.
                   </p>
                 </div>
               </div>
@@ -206,10 +213,6 @@ const Account = () => {
                 <ChevronRight size={14} className="text-white/20 group-hover:text-gold-400 group-hover:translate-x-1 transition-all" />
               </Link>
 
-              <Link to="/account" className="flex items-center justify-between py-8 md:pr-12 group border-b border-white/5 hover:border-white/20 transition-all">
-                <h4 className="text-[12px] font-bold tracking-wide text-white group-hover:text-gold-400 transition-colors">Preferences</h4>
-                <ChevronRight size={14} className="text-white/20 group-hover:text-gold-400 group-hover:translate-x-1 transition-all" />
-              </Link>
 
               <div className="flex items-center py-8 md:px-12 border-b border-white/5">
                 <button 
@@ -227,6 +230,146 @@ const Account = () => {
         </div>
       </section>
 
+      {/* CONCIERGE MODAL */}
+      <AnimatePresence>
+        {isConciergeOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 md:p-10">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsConciergeOpen(false)}
+              className="absolute inset-0 bg-black/90 backdrop-blur-sm"
+            />
+            
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-lg bg-[#0F0F0F] border border-white/10 p-6 sm:p-10 md:p-12 overflow-y-auto max-h-[90vh] custom-scrollbar"
+            >
+              <button 
+                onClick={() => setIsConciergeOpen(false)}
+                className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors"
+              >
+                <X size={20} strokeWidth={1} />
+              </button>
+
+              <div className="text-center mb-6 sm:mb-10">
+                <h2 className="text-gold-500 text-[10px] tracking-[0.5em] uppercase font-bold mb-4">Elite Service</h2>
+                <h3 className="text-xl md:text-2xl font-serif text-white uppercase tracking-wider font-light">Client Services</h3>
+              </div>
+
+              <div className="space-y-6">
+                <a href="mailto:kiksultraluxury@gmail.com" className="flex items-center p-4 sm:p-6 bg-white/[0.02] border border-white/5 hover:border-gold-500/30 transition-all group">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/5 flex items-center justify-center mr-4 sm:mr-6 text-gold-500 group-hover:bg-gold-500 group-hover:text-black transition-all">
+                    <Mail size={18} strokeWidth={1.5} />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[9px] tracking-widest text-white/30 uppercase mb-1">Electronic Mail</p>
+                    <p className="text-xs md:text-sm text-white tracking-wide">kiksultraluxury@gmail.com</p>
+                  </div>
+                </a>
+
+                <a href="https://wa.me/919998887766" target="_blank" rel="noopener noreferrer" className="flex items-center p-4 sm:p-6 bg-white/[0.02] border border-white/5 hover:border-gold-500/30 transition-all group">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/5 flex items-center justify-center mr-4 sm:mr-6 text-gold-500 group-hover:bg-gold-500 group-hover:text-black transition-all">
+                    <MessageSquare size={18} strokeWidth={1.5} />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[9px] tracking-widest text-white/30 uppercase mb-1">Instant Concierge</p>
+                    <p className="text-xs md:text-sm text-white tracking-wide">WhatsApp Messaging</p>
+                  </div>
+                </a>
+
+                {!showCallbackForm ? (
+                  <div 
+                    onClick={() => setShowCallbackForm(true)}
+                    className="flex items-center p-4 sm:p-6 bg-white/[0.02] border border-white/5 hover:border-gold-500/30 transition-all group cursor-pointer"
+                  >
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/5 flex items-center justify-center mr-4 sm:mr-6 text-gold-500 group-hover:bg-gold-500 group-hover:text-black transition-all">
+                      <Phone size={18} strokeWidth={1.5} />
+                    </div>
+                    <div className="text-left">
+                      <p className="text-[9px] tracking-widest text-white/30 uppercase mb-1">Priority Line</p>
+                      <p className="text-xs md:text-sm text-white tracking-wide">Request a Call Back</p>
+                    </div>
+                  </div>
+                ) : (
+                  <motion.div 
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="p-8 bg-gold-500/5 border border-gold-500/20"
+                  >
+                    {callbackStatus === 'success' ? (
+                      <div className="text-center py-4">
+                         <p className="text-gold-500 text-xs tracking-widest uppercase font-bold mb-2">Request Received</p>
+                         <p className="text-white/60 text-[10px] tracking-wide">An advisor will contact you shortly.</p>
+                         <button 
+                          onClick={() => { setShowCallbackForm(false); setCallbackStatus('idle'); }}
+                          className="mt-6 text-[9px] text-white/40 uppercase tracking-[0.3em] hover:text-white"
+                         >
+                          Back to menu
+                         </button>
+                      </div>
+                    ) : (
+                      <>
+                        <p className="text-white/40 text-[9px] tracking-widest uppercase mb-6">Enter your telephone number</p>
+                        <div className="flex flex-col space-y-4">
+                          <input 
+                            type="tel"
+                            placeholder="+91 00000 00000"
+                            value={callbackPhone}
+                            onChange={(e) => setCallbackPhone(e.target.value)}
+                            className="w-full bg-black/40 border border-white/10 px-4 py-3 text-white text-sm focus:outline-none focus:border-gold-500 transition-all font-light"
+                          />
+                          <button 
+                            disabled={callbackStatus === 'loading' || !callbackPhone}
+                            onClick={async () => {
+                              setCallbackStatus('loading');
+                              try {
+                                await fetch(`${API_URL}/api/waitlist/callback`, {
+                                  method: 'POST',
+                                  headers: { 
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${localStorage.getItem('kiks_token')}`
+                                  },
+                                  body: JSON.stringify({ 
+                                    phone: callbackPhone,
+                                    name: userName,
+                                    email: appUser?.email
+                                  })
+                                });
+                                setCallbackStatus('success');
+                              } catch (e) {
+                                setCallbackStatus('idle');
+                              }
+                            }}
+                            className="w-full bg-gold-500 text-black py-3 text-[10px] tracking-[0.3em] uppercase font-bold hover:bg-white transition-all disabled:opacity-50"
+                          >
+                            {callbackStatus === 'loading' ? 'Processing...' : 'Confirm Request'}
+                          </button>
+                          <button 
+                            onClick={() => setShowCallbackForm(false)}
+                            className="text-[9px] text-white/20 uppercase tracking-[0.3em] pt-2 hover:text-white"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </motion.div>
+                )}
+              </div>
+
+              <div className="mt-8 sm:mt-12 text-center">
+                <p className="text-[9px] tracking-[0.2em] text-neutral-600 uppercase leading-loose">
+                  Our advisors are available 24/7 to ensure your experience with KIKS remains absolute.
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

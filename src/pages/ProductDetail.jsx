@@ -25,7 +25,7 @@ const ProductAccordion = ({ title, isOpen: externalIsOpen, onToggle, defaultOpen
                 onClick={toggle}
                 className="w-full flex justify-between items-center py-5 group"
             >
-                <span className="text-[10px] font-normal tracking-[0.3em] uppercase text-white/60 font-sans group-hover:text-white transition-colors">
+                <span className="text-[11px] font-bold tracking-[0.1em] uppercase text-white font-sans group-hover:text-gold-400 transition-colors">
                     {title}
                 </span>
                 <div className="flex items-center space-x-6">
@@ -59,7 +59,7 @@ const ProductDetail = () => {
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
     const [reviews, setReviews] = useState([]);
-    const [reviewForm, setReviewForm] = useState({ rating: 5, title: '', comment: '' });
+    const [reviewForm, setReviewForm] = useState({ rating: 0, title: '', comment: '' });
     const [selectedImages, setSelectedImages] = useState([]);
     const [uploadingImages, setUploadingImages] = useState(false);
     const [submittingReview, setSubmittingReview] = useState(false);
@@ -144,6 +144,12 @@ const ProductDetail = () => {
         setSubmittingReview(true);
         setReviewMsg({ type: '', text: '' });
 
+        if (reviewForm.rating === 0) {
+            setReviewMsg({ type: 'error', text: 'Please select a rating for your critique.' });
+            setSubmittingReview(false);
+            return;
+        }
+
         try {
             // 1. Upload Images if any
             let imageUrls = [];
@@ -154,7 +160,7 @@ const ProductDetail = () => {
                     formData.append('image', file);
                     const uploadRes = await fetch(`${API_URL}/api/upload`, {
                         method: 'POST',
-                        headers: { 'x-auth-token': localStorage.getItem('kiks_token') },
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('kiks_token')}` },
                         body: formData
                     });
                     if (uploadRes.ok) {
@@ -170,14 +176,14 @@ const ProductDetail = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-auth-token': localStorage.getItem('kiks_token')
+                    'Authorization': `Bearer ${localStorage.getItem('kiks_token')}`
                 },
                 body: JSON.stringify({ product_id: product.id, ...reviewForm, image_urls: imageUrls })
             });
             const data = await res.json();
             if (res.ok) {
                 setReviewMsg({ type: 'success', text: 'Review submitted successfully.' });
-                setReviewForm({ rating: 5, title: '', comment: '' });
+                setReviewForm({ rating: 0, title: '', comment: '' });
                 setSelectedImages([]);
                 // Re-fetch reviews
                 const revRes = await fetch(`${API_URL}/api/reviews/product/${product.id}`);
@@ -199,7 +205,7 @@ const ProductDetail = () => {
         try {
             const res = await fetch(`${API_URL}/api/reviews/${id}`, {
                 method: 'DELETE',
-                headers: { 'x-auth-token': localStorage.getItem('kiks_token') }
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('kiks_token')}` }
             });
 
             if (res.ok) {
@@ -281,8 +287,8 @@ const ProductDetail = () => {
 
     return (
         <div className="bg-black min-h-screen text-white pt-32 md:pt-40 pb-32 px-6 lg:px-20 font-sans selection:bg-gold-500/30 selection:text-white">
-            <SEO 
-                title={product.name} 
+            <SEO
+                title={product.name}
                 description={product.description?.substring(0, 160)}
                 keywords={`${product.name}, ${product.collection_name || ''}, Luxury Perfume, Extrait de Parfum`}
                 image={product.image_url}
@@ -366,32 +372,32 @@ const ProductDetail = () => {
                         transition={{ duration: 0.8 }}
                     >
                         <div className="flex flex-col mb-6">
-                            <div className="relative mb-3">
-                                <h1 className="text-2xl md:text-[2rem] font-serif font-light tracking-[0.12em] uppercase leading-[1.15] pb-3 text-white/90">
+                            <div className="relative mb-2">
+                                <h1 className="text-2xl md:text-3xl font-black tracking-[0.2em] uppercase leading-tight pb-2">
                                     {product.name}
                                 </h1>
-                                <div className="w-full h-px bg-white/15" />
+                                <div className="w-full h-[2px] bg-white" />
                             </div>
 
-                            <p className="text-[9px] tracking-[0.35em] uppercase text-white/30 font-normal mb-5">EXTRAIT DE PARFUM SPRAY</p>
+                            <p className="text-[9px] tracking-[0.2em] uppercase text-white/50 font-black mb-4">{product.product_type || 'EXTRAIT DE PARFUM SPRAY'}</p>
 
                             <button
                                 onClick={handleMoreDetails}
-                                className="text-[9px] tracking-[0.2em] uppercase text-white/30 bg-white/0 border-b border-white/[0.08] hover:text-white hover:border-white/40 transition-all mb-2 pb-0.5 w-fit"
+                                className="text-[9px] tracking-[0.1em] uppercase text-white/40 bg-white/0 border-b border-white/10 hover:text-white hover:border-white transition-all mb-2 pb-0.5 w-fit"
                             >
                                 More details
                             </button>
 
-                            <p className="text-[9px] tracking-[0.15em] text-white/15 uppercase font-sans font-light mt-3">Ref. {product.slug?.substring(0, 8).toUpperCase() || '105680'}</p>
+
                         </div>
 
                         {/* Price & Wishlist Row */}
-                        <div className="flex items-center justify-between mb-5 md:mb-9">
-                            <p className="text-[22px] font-light text-white/90 tracking-[0.06em]">
-                                {formatCurrency(product.price, activeCurrency, rates, symbols)}
+                        <div className="flex items-center justify-between mb-4 md:mb-8">
+                            <p className="text-xl font-bold text-white tracking-[0.1em]">
+                                {formatCurrency(product.price, activeCurrency, rates, symbols)}*
                             </p>
                             <div className="flex items-center space-x-3 md:space-x-5">
-                                <span className="bg-white px-2.5 py-1 text-dark-900 text-[8px] font-normal tracking-[0.25em] uppercase">New</span>
+                                <span className="bg-white px-2 py-0.5 text-black text-[9px] font-black tracking-[0.1em] uppercase">New</span>
                                 <button
                                     onClick={() => dispatch(toggleWishlistAndSync(product))}
                                     className={`transition-all duration-300 ${isProductInWishlist ? 'text-gold-500' : 'text-white/30 hover:text-white'}`}
@@ -406,7 +412,7 @@ const ProductDetail = () => {
                         {/* Size Display */}
                         <div className="mb-4 md:mb-8 space-y-2 md:space-y-4">
                             <div className="flex flex-col space-y-2 md:space-y-4">
-                                <p className="text-[9px] tracking-[0.35em] uppercase text-white/35 font-normal">Size</p>
+                                <p className="text-[10px] md:text-[11px] tracking-[0.2em] text-white/80 font-black uppercase">Size</p>
                                 <div className="w-full bg-transparent border border-white/10 p-3 md:p-4 text-[10px] md:text-[11px] tracking-[0.2em] uppercase text-white">
                                     100 ML
                                 </div>
@@ -424,20 +430,19 @@ const ProductDetail = () => {
                         >
                             <button
                                 onClick={handleAddToCart}
-                                className="w-full h-[52px] md:h-[56px] bg-white text-dark-900 border border-white text-[10px] font-normal tracking-[0.5em] uppercase hover:bg-gold-500 hover:border-gold-500 hover:text-white transition-all duration-500 active:scale-[0.99]"
+                                className="w-full h-12 md:h-14 bg-black text-white border border-white text-[11px] font-black tracking-[0.4em] uppercase hover:bg-white hover:text-black transition-all duration-500 active:scale-[0.98]"
                             >
                                 ADD TO BAG
                             </button>
- 
+
                             <div className="flex flex-col space-y-4 md:space-y-8 pt-1">
-                                <p className="text-[9px] text-white/20 tracking-[0.15em] leading-[2] font-light">
-                                    MRP inclusive of all taxes.{' '}
-                                    <button className="underline underline-offset-4 hover:text-white/40 transition-colors">More information</button>
+                                <p className="text-[9px] md:text-[10px] text-white/30 tracking-widest leading-loose">
+                                    *MRP (inclusive of all taxes).
                                 </p>
 
                                 <button
                                     onClick={handleClientReviewsLink}
-                                    className="text-[9px] md:text-[10px] tracking-[0.35em] uppercase text-white/50 font-normal underline underline-offset-[8px] decoration-white/15 hover:text-gold-400 hover:decoration-gold-500/40 transition-all w-fit"
+                                    className="text-[10px] md:text-[11px] tracking-[0.3em] uppercase text-white font-black underline underline-offset-[8px] hover:text-gold-400 transition-all w-fit"
                                 >
                                     Client reviews
                                 </button>
@@ -451,7 +456,7 @@ const ProductDetail = () => {
                             className="w-full space-y-6"
                         >
                             <div className="bg-white/5 border border-white/5 p-10">
-                                <span className="eyebrow block mb-6">Coming Soon</span>
+                                <span className="text-[11px] tracking-[0.4em] font-black text-gold-500 uppercase block mb-6">Coming Soon</span>
                                 <p className="text-[11px] text-white/40 tracking-widest leading-loose mb-10 italic">This fragrance is currently being prepared. Join the waitlist to be notified when it's available.</p>
                                 <form onSubmit={handleWaitlistSubmit} className="space-y-5">
                                     {!isAuthenticated && (
@@ -485,24 +490,23 @@ const ProductDetail = () => {
                                     <button
                                         type="submit"
                                         disabled={notifyStatus.type === 'loading'}
-                                        className="w-full h-14 border border-white text-white text-[10px] font-normal tracking-[0.5em] uppercase hover:bg-white hover:text-dark-900 hover:border-white transition-all duration-500"
+                                        className="w-full h-14 border border-white text-white text-[11px] font-black tracking-[0.5em] uppercase hover:bg-white hover:text-black transition-all"
                                     >
                                         {notifyStatus.type === 'loading' ? 'SENDING...' : 'NOTIFY ME'}
                                     </button>
-                                    
+
                                     <AnimatePresence>
                                         {notifyStatus.msg && (
-                                            <motion.div 
+                                            <motion.div
                                                 initial={{ opacity: 0, height: 0 }}
                                                 animate={{ opacity: 1, height: 'auto' }}
                                                 exit={{ opacity: 0, height: 0 }}
-                                                className={`mt-4 p-4 text-[10px] tracking-widest uppercase text-center border ${
-                                                    notifyStatus.type === 'success' 
-                                                    ? 'border-gold-500/30 bg-gold-500/5 text-gold-500' 
+                                                className={`mt-4 p-4 text-[10px] tracking-widest uppercase text-center border ${notifyStatus.type === 'success'
+                                                    ? 'border-gold-500/30 bg-gold-500/5 text-gold-500'
                                                     : notifyStatus.type === 'error'
-                                                    ? 'border-red-500/30 bg-red-500/5 text-red-400'
-                                                    : 'border-white/10 bg-white/5 text-white/60'
-                                                }`}
+                                                        ? 'border-red-500/30 bg-red-500/5 text-red-400'
+                                                        : 'border-white/10 bg-white/5 text-white/60'
+                                                    }`}
                                             >
                                                 {notifyStatus.msg}
                                             </motion.div>
@@ -517,7 +521,7 @@ const ProductDetail = () => {
 
             {/* Accordion Sections - Adjusted Spacing */}
             <div className="container mx-auto mt-10 md:mt-20 max-w-4xl px-6 mb-20">
-                <h2 className="text-center text-[13px] md:text-[15px] font-normal tracking-[0.5em] md:tracking-[0.65em] uppercase mb-10 md:mb-16 text-white/50">ADDITIONAL INFORMATION</h2>
+                <h2 className="text-center text-[16px] md:text-2xl font-black tracking-[0.4em] md:tracking-[0.6em] uppercase mb-8 md:mb-16 text-white">ADDITIONAL INFORMATION</h2>
 
                 <div ref={descriptionRef}>
                     <ProductAccordion
@@ -534,27 +538,27 @@ const ProductDetail = () => {
                     isOpen={isAdditionalOpen}
                     onToggle={setIsAdditionalOpen}
                 >
-                    <p className="mb-5 text-[10px] tracking-[0.2em] text-white/35 font-light"><span className="uppercase font-normal text-white/20 mr-3">{t('product.concentration')}:</span><span className="font-normal text-white/65">PARFUM (EXTRAIT)</span></p>
-                    <p className="mb-14 text-[10px] tracking-[0.2em] text-white/35 font-light"><span className="uppercase font-normal text-white/20 mr-3">{t('product.volume')}:</span><span className="font-normal text-white/65">100ML / 3.4 OZ</span></p>
+                    <p className="mb-6 text-[10px] tracking-[0.2em] text-white/60"><span className="uppercase font-black text-white/40 mr-2">{t('product.concentration')}:</span> <span className="font-bold text-white">PARFUM (EXTRAIT)</span></p>
+                    <p className="mb-14 text-[10px] tracking-[0.2em] text-white/60"><span className="uppercase font-black text-white/40 mr-2">{t('product.volume')}:</span> <span className="font-bold text-white">100ML / 3.4 OZ</span></p>
 
                     {/* Consolidated Olfactory Pyramid */}
                     <div className="mt-14 space-y-10 border-t border-white/5 pt-10">
-                        <h4 className="text-[10px] tracking-[0.5em] uppercase text-white/40 mb-8 font-normal">Fragrance Notes</h4>
+                        <h4 className="text-[10px] tracking-[0.4em] uppercase text-white mb-8 font-black">Fragrance Notes</h4>
                         <div className="grid grid-cols-1 gap-8">
                             <div>
-                                <span className="text-[9px] tracking-[0.3em] uppercase eyebrow block mb-3">Top Notes</span>
+                                <span className="text-[9px] tracking-[0.3em] uppercase text-gold-500 font-black block mb-3">Top Notes</span>
                                 <p className="text-[11px] leading-relaxed text-white/70 italic font-serif">
                                     {(product.top_note_label && product.top_note_label !== product.top_notes) ? `${product.top_note_label}: ${product.top_notes}` : product.top_notes}
                                 </p>
                             </div>
                             <div>
-                                <span className="text-[9px] tracking-[0.3em] uppercase eyebrow block mb-3">Heart Notes</span>
+                                <span className="text-[9px] tracking-[0.3em] uppercase text-gold-500 font-black block mb-3">Heart Notes</span>
                                 <p className="text-[11px] leading-relaxed text-white/70 italic font-serif">
                                     {(product.heart_note_label && product.heart_note_label !== product.heart_notes) ? `${product.heart_note_label}: ${product.heart_notes}` : product.heart_notes}
                                 </p>
                             </div>
                             <div>
-                                <span className="text-[9px] tracking-[0.3em] uppercase eyebrow block mb-3">Base Notes</span>
+                                <span className="text-[9px] tracking-[0.3em] uppercase text-gold-500 font-black block mb-3">Base Notes</span>
                                 <p className="text-[11px] leading-relaxed text-white/70 italic font-serif">
                                     {(product.base_note_label && product.base_note_label !== product.base_notes) ? `${product.base_note_label}: ${product.base_notes}` : product.base_notes}
                                 </p>
@@ -569,9 +573,9 @@ const ProductDetail = () => {
                         isOpen={isReviewsOpen}
                         onToggle={setIsReviewsOpen}
                         extra={
-                            <div className="flex items-center space-x-2 text-gold-500">
-                                <Star size={12} fill="currentColor" />
-                                <span className="text-[13px] text-white/85 font-light tracking-[0.05em]">
+                            <div className="flex items-center space-x-2 text-white">
+                                <Star size={12} fill="white" stroke="white" />
+                                <span className="text-[12px] text-white font-black">
                                     {reviews.length > 0 ? (reviews.reduce((acc, curr) => acc + curr.rating, 0) / reviews.length).toFixed(1) : '5.0'}
                                 </span>
                                 <span className="text-[10px] text-white/30 ml-2 tracking-[0.1em] font-sans uppercase">
@@ -584,7 +588,7 @@ const ProductDetail = () => {
                             {/* REVIEW SUBMISSION FORM */}
                             {isAuthenticated ? (
                                 <div className="mb-20 bg-white/[0.02] p-5 md:p-10 border border-white/5">
-                                    <h4 className="eyebrow mb-8 md:mb-10">{t('product.share_critique')}</h4>
+                                    <h4 className="text-[10px] md:text-[11px] tracking-[0.2em] md:tracking-[0.4em] font-black uppercase text-white mb-8 md:mb-10">{t('product.share_critique')}</h4>
                                     <form onSubmit={handleAddReview} className="space-y-6 md:space-y-8">
                                         <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 mb-6">
                                             <p className="text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/40">{t('product.rating')}</p>
@@ -594,9 +598,14 @@ const ProductDetail = () => {
                                                         key={star}
                                                         type="button"
                                                         onClick={() => setReviewForm({ ...reviewForm, rating: star })}
-                                                        className={`transition-all duration-300 ${star <= reviewForm.rating ? 'text-gold-500' : 'text-white/10 hover:text-white/30'}`}
+                                                        className={`transition-all duration-300 ${star <= reviewForm.rating ? 'text-white' : 'text-white/20 hover:text-white/40'}`}
                                                     >
-                                                        <Star className="w-4 h-4 md:w-5 md:h-5" fill={star <= reviewForm.rating ? "currentColor" : "none"} strokeWidth={1} />
+                                                        <Star
+                                                            className="w-4 h-4 md:w-5 md:h-5"
+                                                            fill={star <= reviewForm.rating ? "white" : "none"}
+                                                            stroke="currentColor"
+                                                            strokeWidth={1.5}
+                                                        />
                                                     </button>
                                                 ))}
                                             </div>
@@ -646,15 +655,30 @@ const ProductDetail = () => {
 
                                         <button
                                             disabled={submittingReview || uploadingImages}
-                                            className="w-full h-14 bg-white text-dark-900 text-[10px] font-normal tracking-[0.5em] uppercase hover:bg-gold-500 hover:text-white transition-all duration-500"
+                                            className="w-full h-14 bg-white text-black text-[11px] font-black tracking-[0.5em] uppercase hover:bg-gray-200 transition-all"
                                         >
                                             {submittingReview ? 'SENDING...' : uploadingImages ? 'UPLOADING...' : t('product.log_critique')}
                                         </button>
+                                        <AnimatePresence>
+                                            {reviewMsg.text && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, height: 0 }}
+                                                    animate={{ opacity: 1, height: 'auto' }}
+                                                    exit={{ opacity: 0, height: 0 }}
+                                                    className={`mt-6 p-4 text-[10px] tracking-[0.2em] uppercase text-center border ${reviewMsg.type === 'success'
+                                                            ? 'border-gold-500/30 bg-gold-500/5 text-gold-500'
+                                                            : 'border-red-500/30 bg-red-500/5 text-red-400'
+                                                        }`}
+                                                >
+                                                    {reviewMsg.text}
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
                                     </form>
                                 </div>
                             ) : (
                                 <div className="mb-20 p-10 text-center border border-white/5 italic">
-                                    <p className="text-[11px] tracking-[0.2em] font-light text-white/25">{t('product.restricted')} <Link to="/auth" className="text-white/60 font-normal underline underline-offset-8 decoration-gold-500/40 hover:text-gold-400 transition-colors">Authenticate</Link></p>
+                                    <p className="text-[11px] tracking-[0.3em] text-white/30">{t('product.restricted')} <Link to="/auth" className="text-white font-black underline underline-offset-8 decoration-gold-500">Authenticate</Link></p>
                                 </div>
                             )}
 
@@ -666,9 +690,16 @@ const ProductDetail = () => {
                                     reviews.map((rev, i) => (
                                         <div key={rev.id} className={`${i > 0 ? 'border-t border-white/5 pt-20' : ''} relative group`}>
                                             <div className="flex items-center justify-between mb-8">
-                                                <div className="flex items-center space-x-1.5 text-gold-500/80">
+                                                <div className="flex items-center space-x-1.5 text-white">
                                                     {[...Array(5)].map((_, i) => (
-                                                        <Star key={i} size={14} fill={i < rev.rating ? "currentColor" : "none"} strokeWidth={1} />
+                                                        <Star
+                                                            key={i}
+                                                            size={14}
+                                                            fill={i < rev.rating ? "white" : "none"}
+                                                            stroke="white"
+                                                            strokeWidth={1}
+                                                            className={i < rev.rating ? "opacity-100" : "opacity-20"}
+                                                        />
                                                     ))}
                                                 </div>
                                                 {(user && (Number(user.id) === Number(rev.user_id) || user.role === 'admin' || user.email === 'hit.goyani1010@gmail.com')) && (
@@ -680,7 +711,7 @@ const ProductDetail = () => {
                                                     </button>
                                                 )}
                                             </div>
-                                            <p className="text-white/85 font-normal text-[13px] tracking-[0.12em] mb-5 uppercase">{rev.title}</p>
+                                            <p className="text-white font-black text-sm tracking-[0.1em] mb-6 uppercase">{rev.title}</p>
                                             <p className="text-white/60 leading-relaxed text-sm max-w-2xl">{rev.comment}</p>
 
                                             {rev.image_urls && rev.image_urls.length > 0 && (
@@ -741,12 +772,12 @@ const ProductDetail = () => {
                     )}
 
                     <div className="mb-16 md:mb-24 border-y border-white/5 py-12 md:py-16">
-                        <h3 className="text-[12px] tracking-[0.55em] text-white/40 font-normal uppercase text-center mb-10 md:mb-12">Notes Story</h3>
+                        <h3 className="text-[14px] tracking-[0.5em] text-white font-black uppercase text-center mb-10 md:mb-12 italic">Notes Story</h3>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-20 md:gap-0 relative">
+                        <div className="flex flex-col md:flex-row justify-center items-center gap-16 md:gap-0 relative">
                             {/* Top Notes */}
                             <div className="flex flex-col items-center text-center px-4 md:px-8">
-                                <h4 className="text-[11px] eyebrow mb-10 md:mb-14">Top Notes</h4>
+                                <h4 className="text-[11px] tracking-[0.4em] uppercase text-white/40 mb-10 md:mb-14 font-black">Top Notes</h4>
                                 <div className="flex flex-wrap justify-center gap-8 mb-8">
                                     <div className="flex flex-col items-center space-y-6 group">
                                         <div className="w-20 h-20 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center group-hover:border-white/40 group-hover:bg-white/5 transition-all duration-700">
@@ -771,7 +802,7 @@ const ProductDetail = () => {
 
                             {/* Heart Notes */}
                             <div className="flex flex-col items-center text-center px-4 md:px-8">
-                                <h4 className="text-[11px] eyebrow mb-10 md:mb-14">Heart Notes</h4>
+                                <h4 className="text-[11px] tracking-[0.4em] uppercase text-white/40 mb-10 md:mb-14 font-black">Heart Notes</h4>
                                 <div className="flex flex-wrap justify-center gap-8 mb-8">
                                     <div className="flex flex-col items-center space-y-6 group">
                                         <div className="w-20 h-20 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center group-hover:border-white/40 group-hover:bg-white/5 transition-all duration-700">
@@ -796,7 +827,7 @@ const ProductDetail = () => {
 
                             {/* Base Notes */}
                             <div className="flex flex-col items-center text-center px-4 md:px-8">
-                                <h4 className="text-[11px] eyebrow mb-10 md:mb-14">Base Notes</h4>
+                                <h4 className="text-[11px] tracking-[0.4em] uppercase text-white/40 mb-10 md:mb-14 font-black">Base Notes</h4>
                                 <div className="flex flex-wrap justify-center gap-8 mb-8">
                                     <div className="flex flex-col items-center space-y-6 group">
                                         <div className="w-20 h-20 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center group-hover:border-white/40 group-hover:bg-white/5 transition-all duration-700">
@@ -830,7 +861,7 @@ const ProductDetail = () => {
                             </p>
                         </div>
                         <div className="order-1 md:order-2 flex justify-center md:justify-end">
-                            <motion.div 
+                            <motion.div
                                 initial={{ filter: "grayscale(100%)", scale: 1.05 }}
                                 whileInView={{ filter: "grayscale(0%)", scale: 1 }}
                                 viewport={{ once: true, amount: 0.3 }}
@@ -867,7 +898,7 @@ const ProductDetail = () => {
                             />
                         </div>
                         <div className="lg:px-8 text-center lg:text-left">
-                            <h3 className="text-[12px] tracking-[0.5em] font-normal uppercase text-white/45 mb-6 md:mb-8">About KIKS</h3>
+                            <h3 className="text-[14px] tracking-[0.4em] font-black uppercase text-white mb-6 md:mb-8">About KIKS</h3>
                             <p className="text-[12px] text-white/40 leading-loose tracking-widest font-medium">
                                 Each fragrance is a crafted balance of strength and subtlety, tradition and individuality.
                                 Made for those who seek depth in every note — and meaning in every moment.

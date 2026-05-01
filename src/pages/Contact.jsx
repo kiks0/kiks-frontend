@@ -36,7 +36,7 @@ const Contact = () => {
     };
 
     return (
-        <div className="bg-dark-900 min-h-screen text-white pt-48 pb-24 font-sans selection:bg-gold-500/30 selection:text-white overflow-hidden relative">
+        <div className="bg-dark-900 min-h-screen text-white pt-24 md:pt-48 pb-16 md:pb-24 font-sans selection:bg-gold-500/30 selection:text-white overflow-hidden relative">
 
             {/* Background Accents */}
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gold-500/5 blur-[120px] rounded-full pointer-events-none" />
@@ -45,7 +45,7 @@ const Contact = () => {
             <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-[1300px] relative z-10">
 
                 {/* Header Section */}
-                <div className="max-w-3xl mb-16">
+                <div className="max-w-3xl mb-10 md:mb-16">
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -72,13 +72,13 @@ const Contact = () => {
                     </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
 
                     {/* Left Side: Contact Information */}
-                    <div className="space-y-16">
-                        <section className="space-y-10">
-                            <h2 className="text-[11px] tracking-[0.5em] font-black text-white/30 uppercase">Reach out directly</h2>
-                            <div className="space-y-8">
+                    <div className="space-y-12 md:space-y-16">
+                        <section className="space-y-6 md:space-y-10">
+                            <h2 className="text-[10px] md:text-[11px] tracking-[0.4em] md:tracking-[0.5em] font-black text-white/30 uppercase">Reach out directly</h2>
+                            <div className="space-y-6 md:space-y-8">
                                 <motion.div
                                     whileHover={{ x: 10 }}
                                     className="flex items-center space-x-4 md:space-x-8"
@@ -101,7 +101,7 @@ const Contact = () => {
                                     </div>
                                     <div>
                                         <p className="text-[9px] md:text-[10px] tracking-widest text-white/40 uppercase mb-1 font-bold">Call Support</p>
-                                        <p className="text-[12px] md:text-xl font-light tracking-widest whitespace-nowrap">+91 8401020339</p>
+                                        <p className="text-[12px] md:text-xl font-light tracking-widest whitespace-nowrap">+91 999 888 7766</p>
                                     </div>
                                 </motion.div>
 
@@ -111,6 +111,10 @@ const Contact = () => {
                                 >
                                     <div className="w-12 h-12 md:w-16 md:h-16 flex-shrink-0 bg-white/5 border border-white/10 rounded-2xl md:rounded-3xl flex items-center justify-center text-gold-500">
                                         <MapPin size={20} strokeWidth={1} className="md:w-6 md:h-6" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[9px] md:text-[10px] tracking-widest text-white/40 uppercase mb-1 font-bold">Visit Studio</p>
+                                        <p className="text-[12px] md:text-xl font-light tracking-widest">Gujarat, India</p>
                                     </div>
                                 </motion.div>
                             </div>
@@ -137,24 +141,49 @@ const Contact = () => {
                                 {status === 'success' ? (
                                     <motion.div
                                         key="success"
-                                        initial={{ opacity: 0, scale: 0.9 }}
-                                        animate={{ opacity: 1, scale: 1 }}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0 }}
-                                        className="py-20 text-center flex flex-col items-center"
+                                        className="py-12 md:py-20 text-center flex flex-col items-center relative overflow-hidden"
                                     >
-                                        <div className="w-24 h-24 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mb-8">
-                                            <CheckCircle2 size={48} />
+                                        {/* Decorative Success Glow */}
+                                        <div className="absolute inset-0 bg-gold-500/5 blur-[80px] rounded-full animate-pulse pointer-events-none" />
+
+                                        <motion.div 
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: 1 }}
+                                            transition={{ type: "spring", damping: 12, stiffness: 100, delay: 0.2 }}
+                                            className="w-20 h-20 md:w-28 md:h-28 bg-gold-500/10 text-gold-500 rounded-full flex items-center justify-center mb-10 relative z-10"
+                                        >
+                                            <div className="absolute inset-0 rounded-full border-2 border-gold-500/20 animate-[ping_3s_infinite]" />
+                                            <CheckCircle2 size={40} className="md:w-14 md:h-14" strokeWidth={1} />
+                                        </motion.div>
+
+                                        <div className="relative z-10">
+                                            <h3 className="text-3xl md:text-4xl font-serif text-white uppercase tracking-[0.1em] mb-6 leading-tight">
+                                                Inquiry <br className="md:hidden" /> Received
+                                            </h3>
+                                            <p className="text-gray-400 text-[10px] md:text-xs tracking-[0.3em] leading-loose uppercase max-w-sm mx-auto mb-12 px-4">
+                                                Your message has been safely delivered to our curators. We will reach out to you through our concierge within 24 hours.
+                                            </p>
+                                            
+                                            <motion.button
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                                onClick={() => (window.location.href = '/')}
+                                                className="inline-flex items-center px-10 py-4 bg-white text-black text-[10px] font-black tracking-[0.3em] uppercase hover:bg-gold-500 transition-all duration-500"
+                                            >
+                                                Return Home
+                                            </motion.button>
                                         </div>
-                                        <h3 className="text-3xl font-serif text-white uppercase tracking-widest mb-4">Message Sent</h3>
-                                        <p className="text-gray-400 text-sm tracking-widest leading-relaxed uppercase">Our team has received your message. <br />We will get back to you within 24 hours.</p>
                                     </motion.div>
                                 ) : (
                                     <motion.form
                                         key="form"
                                         onSubmit={handleSubmit}
-                                        className="space-y-10"
+                                        className="space-y-8 md:space-y-10"
                                     >
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
                                             <div className="space-y-4">
                                                 <label className="text-[9px] tracking-[0.4em] font-bold text-white/30 uppercase">Your Name</label>
                                                 <input
@@ -179,7 +208,7 @@ const Contact = () => {
                                             </div>
                                         </div>
 
-                                        <div className="space-y-4">
+                                        <div className="space-y-3 md:space-y-4">
                                             <label className="text-[9px] tracking-[0.4em] font-bold text-white/30 uppercase">Subject</label>
                                             <input
                                                 type="text"

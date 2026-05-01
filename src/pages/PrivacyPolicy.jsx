@@ -3,11 +3,11 @@ import { Shield, Lock, Eye, FileText, Globe, Mail, MapPin } from 'lucide-react';
 
 const PrivacyPolicy = () => {
   return (
-    <div className="bg-[#050505] min-h-screen text-white pt-40 md:pt-56 pb-40 px-6 font-sans selection:bg-gold-500/30">
+    <div className="bg-[#050505] min-h-screen text-white pt-32 md:pt-48 pb-32 px-6 font-sans selection:bg-gold-500/30">
       <div className="container mx-auto max-w-4xl">
         
         {/* Header Section */}
-        <header className="text-center mb-24">
+        <header className="text-center mb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -24,7 +24,7 @@ const PrivacyPolicy = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 1 }}
-          className="prose prose-invert prose-gold max-w-none space-y-16"
+          className="prose prose-invert prose-gold max-w-none space-y-12"
         >
           {/* Section 1: Introduction */}
           <section className="relative group">
@@ -119,7 +119,7 @@ const PrivacyPolicy = () => {
             </div>
           </section>
 
-          <footer className="pt-24 text-center border-t border-white/5">
+          <footer className="pt-20 text-center border-t border-white/5">
             <p className="text-[9px] tracking-[0.5em] text-white/20 uppercase font-black">
               © 2026 Kiks Ultra Luxury - All Rights Confidential
             </p>

@@ -3,33 +3,33 @@ import { RefreshCcw, AlertTriangle, CheckCircle2, Package, Clock, ShieldAlert } 
 
 const Returns = () => {
     return (
-        <div className="bg-[#050505] min-h-screen text-white pt-40 md:pt-56 pb-40 px-6 font-sans selection:bg-gold-500/30">
+        <div className="bg-[#050505] min-h-screen text-white pt-20 md:pt-32 pb-16 px-6 font-sans selection:bg-gold-500/30">
             <div className="container mx-auto max-w-4xl">
                 
-                <header className="text-center mb-32">
+                <header className="text-center mb-10 md:mb-16">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 1.2 }}
                     >
-                        <p className="text-[10px] tracking-[0.6em] text-gold-500 uppercase font-black mb-6">Concierge Assistance</p>
-                        <h1 className="text-4xl md:text-7xl font-serif tracking-[0.1em] text-white uppercase mb-8">Return Policy</h1>
-                        <div className="w-20 h-px bg-white/10 mx-auto mb-12"></div>
+                        <p className="text-[10px] tracking-[0.6em] text-gold-500 uppercase font-black mb-4">Concierge Assistance</p>
+                        <h1 className="text-3xl sm:text-5xl md:text-7xl font-serif tracking-[0.1em] text-white uppercase mb-6">Return Policy</h1>
+                        <div className="w-20 h-px bg-white/10 mx-auto mb-8"></div>
                         
-                        <div className="bg-white/[0.02] border border-white/5 inline-block p-8 md:p-12 mb-12 text-center relative overflow-hidden group">
+                        <div className="bg-white/[0.02] border border-white/5 block mx-auto max-w-xl p-6 sm:p-8 md:p-10 mb-8 text-center relative overflow-hidden group">
                            <div className="absolute inset-0 bg-gold-500/5 translate-y-full group-hover:translate-y-0 transition-transform duration-1000" />
-                           <p className="text-[11px] md:text-xs tracking-[0.4em] font-black uppercase text-gold-500 mb-4 inline-flex items-center gap-4">
-                              <Clock size={16} /> 7-Day Professional Window
+                           <p className="text-[10px] md:text-xs tracking-[0.4em] font-black uppercase text-gold-500 mb-4 inline-flex items-center gap-4">
+                              <Clock size={14} /> 7-Day Professional Window
                            </p>
-                           <p className="text-white/40 text-[10px] tracking-widest uppercase leading-loose relative z-10">
-                              Our Return Policy is valid for <span className="text-white">7 days</span> from the date of delivery. <br className="hidden md:block" />
+                           <p className="text-white/40 text-[9px] md:text-[10px] tracking-widest uppercase leading-relaxed relative z-10">
+                              Our Return Policy is valid for <span className="text-white">7 days</span> from the date of delivery. <br className="hidden sm:block" />
                               Note: Due to hygiene reasons, <span className="text-white">opened or used perfumes</span> are non-returnable.
                            </p>
                         </div>
                     </motion.div>
                 </header>
 
-                <div className="space-y-32">
+                <div className="space-y-12 md:space-y-20">
                     {/* Eligibility Section */}
                     <section>
                         <h2 className="text-2xl md:text-3xl font-serif tracking-[0.2em] uppercase text-white mb-12 flex items-center gap-6">
@@ -48,16 +48,16 @@ const Returns = () => {
                                 </div>
                             ))}
                         </div>
-                        <div className="mt-12 p-8 border border-red-500/20 bg-red-500/[0.02] flex items-center gap-6">
-                            <ShieldAlert className="text-red-500 hidden md:block" size={40} strokeWidth={1} />
-                            <p className="text-[10px] md:text-[11px] tracking-[0.2em] text-red-400 font-black uppercase italic">
+                        <div className="mt-8 md:mt-12 p-6 md:p-10 border border-red-500/10 bg-red-500/[0.01] flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
+                            <ShieldAlert className="text-red-500/40" size={32} strokeWidth={1} />
+                            <p className="text-[10px] md:text-[11px] tracking-[0.2em] text-red-500/60 font-black uppercase italic leading-relaxed">
                                 Due to the hygienic and personal nature of perfumes, we do NOT accept returns for products that have been opened, sprayed, or tampered with.
                             </p>
                         </div>
                     </section>
 
                     {/* Non-Returnable Items */}
-                    <section className="bg-white/[0.03] p-12 md:p-20 relative overflow-hidden">
+                    <section className="bg-white/[0.03] p-8 md:p-20 relative overflow-hidden">
                         <div className="absolute top-0 left-0 w-2 h-full bg-gold-500" />
                         <h2 className="text-2xl font-serif tracking-[0.2em] uppercase text-white mb-12">Non-Returnable Items</h2>
                         <ul className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
@@ -82,11 +82,13 @@ const Returns = () => {
                             <p className="text-white/40 text-[13px] leading-[2.2] tracking-[0.1em] mb-12">
                                 If you receive a perfume that is damaged, leaked, broken, or incorrect, please contact us within <span className="text-gold-500 font-bold">48 hours</span> of delivery with clear photos or videos of the product and packaging.
                             </p>
-                            <a href="mailto:kiksultraluxury@gmail.com" className="px-12 py-5 bg-white text-black text-[10px] font-black tracking-[0.4em] uppercase hover:bg-gold-500 transition-all shadow-xl">
-                                Report Issue
-                            </a>
+                            <div className="flex">
+                                <a href="mailto:kiksultraluxury@gmail.com" className="inline-flex items-center justify-center px-8 py-4 bg-white text-black text-[10px] font-black tracking-[0.4em] uppercase hover:bg-gold-500 transition-all shadow-xl w-full sm:w-auto">
+                                    Report Issue
+                                </a>
+                            </div>
                         </div>
-                        <div className="w-full md:w-1/2 p-12 bg-zinc-900/50 border border-white/5 flex flex-col items-center justify-center text-center">
+                        <div className="w-full md:w-1/2 p-8 md:p-12 bg-zinc-900/50 border border-white/5 flex flex-col items-center justify-center text-center">
                             <RefreshCcw size={48} className="text-gold-500 mb-8 opacity-20" />
                             <h3 className="text-lg font-serif tracking-widest uppercase mb-4">Exchanges</h3>
                             <p className="text-[10px] tracking-widest text-white/30 uppercase leading-loose">
@@ -97,7 +99,7 @@ const Returns = () => {
                     </section>
                 </div>
 
-                <footer className="mt-40 pt-24 border-t border-white/5 pb-20">
+                <footer className="mt-20 md:mt-32 pt-16 border-t border-white/5 pb-16">
                      <div className="flex flex-col items-center">
                         <Package size={24} className="text-white/10 mb-8" strokeWidth={1} />
                         <p className="text-[9px] tracking-[0.6em] text-white/20 uppercase font-black">All returns subject to artisan inspection</p>

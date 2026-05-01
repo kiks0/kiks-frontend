@@ -81,7 +81,7 @@ const resources = {
         "collection": {
         "not_found": "Collection Not Found",
         "mastery": "Quality in every note",
-        "open_vault": "View Products",
+        "open_vault": "Explore Collection",
         "anthology": "Collection List",
         "view_composition": "View Details"
       },

@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     LayoutDashboard, ShoppingBag, Layers, FileText, Settings, LogOut, Search,
     Plus, Trash2, Edit3, Save, X, Eye, CheckCircle, Package, Truck, AlertCircle,
-    User, Mail, Phone, MapPin, Calendar, Clock, ArrowRight, Download, Filter, Star, Loader2, Users,
+    User, Mail, Phone, MapPin, Calendar, Clock, ArrowRight, Download, Filter, Star, Loader2, Users, Smartphone,
     FileSpreadsheet, ClipboardCheck, Layout, ArrowLeft, Sparkles, CheckCircle2, Upload, ImageIcon,
-    TrendingUp, DollarSign, ClipboardList, PackageCheck, ReceiptText, Ticket
+    TrendingUp, DollarSign, ClipboardList, PackageCheck, ReceiptText, Ticket, ChevronDown
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { Link, useNavigate } from 'react-router-dom';
@@ -77,7 +77,8 @@ const Admin = () => {
         size: '100ml', variants: [],
         muse_story: '', muse_image: '', story_banner: '',
         top_note_icon: '', heart_note_icon: '', base_note_icon: '',
-        top_note_label: '', heart_note_label: '', base_note_label: ''
+        top_note_label: '', heart_note_label: '', base_note_label: '',
+        product_type: 'EXTRAIT DE PARFUM SPRAY'
     });
     const [blogFormData, setBlogFormData] = useState({ title: '', slug: '', content: '', image_url: '', keywords: '', author: 'Kiks Artisan' });
     const [promoFormData, setPromoFormData] = useState({
@@ -607,7 +608,8 @@ const Admin = () => {
                     size: '100ml', variants: [],
                     muse_story: '', muse_image: '', story_banner: '',
                     top_note_icon: '', heart_note_icon: '', base_note_icon: '',
-                    top_note_label: '', heart_note_label: '', base_note_label: ''
+                    top_note_label: '', heart_note_label: '', base_note_label: '',
+                    product_type: 'EXTRAIT DE PARFUM SPRAY'
                 });
                 fetchData();
             } else {
@@ -905,7 +907,8 @@ const Admin = () => {
                 base_note_icon: item.base_note_icon || '',
                 top_note_label: item.top_note_label || '',
                 heart_note_label: item.heart_note_label || '',
-                base_note_label: item.base_note_label || ''
+                base_note_label: item.base_note_label || '',
+                product_type: item.product_type || 'EXTRAIT DE PARFUM SPRAY'
             });
         } else if (type === 'blogs') {
             setBlogFormData({
@@ -1014,7 +1017,7 @@ const Admin = () => {
                 </AnimatePresence>
             </div>
 
-            <div className="container mx-auto max-w-7xl relative z-10" ref={formRef}>
+            <div className="container mx-auto px-4 md:px-6 max-w-7xl relative z-10" ref={formRef}>
                 <div className="flex flex-col md:flex-row justify-between items-center mb-16">
                     <div>
                         <h1 className="text-3xl md:text-4xl font-serif tracking-[0.3em] uppercase mb-2 text-white">Registry Control</h1>
@@ -1022,19 +1025,39 @@ const Admin = () => {
                     </div>
                 </div>
 
-                <div className="flex space-x-8 mb-16 border-b border-white/10 pb-4 overflow-x-auto">
-                    {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing'].map(tab => (
-                        <button
-                            key={tab}
-                            onClick={() => { setActiveTab(tab); setIsAdding(false); setEditingId(null); }}
-                            className={`text-[10px] tracking-[0.3em] uppercase pb-2 transition-all whitespace-nowrap relative ${activeTab === tab ? 'text-gold-400' : 'text-white/20 hover:text-white/50'}`}
+                {/* Responsive Tab Navigation */}
+                <div className="mb-16 border-b border-white/10 pb-4">
+                    {/* Mobile Tab Dropdown */}
+                    <div className="md:hidden relative mb-4">
+                        <select
+                            value={activeTab}
+                            onChange={(e) => { setActiveTab(e.target.value); setIsAdding(false); setEditingId(null); }}
+                            className="w-full bg-zinc-900 border border-white/20 p-4 text-[10px] tracking-[0.3em] uppercase text-gold-400 focus:outline-none appearance-none"
                         >
-                            {tab}
-                            {activeTab === tab && (
-                                <motion.div layoutId="activeTabIndicator" className="absolute bottom-[-17px] left-0 right-0 h-[2px] bg-gold-400" />
-                            )}
-                        </button>
-                    ))}
+                            {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing'].map(tab => (
+                                <option key={tab} value={tab}>{tab}</option>
+                            ))}
+                        </select>
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <ChevronDown size={14} className="text-gold-500" />
+                        </div>
+                    </div>
+
+                    {/* Desktop Tab Links */}
+                    <div className="hidden md:flex space-x-8 overflow-x-auto scrollbar-hide">
+                        {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing'].map(tab => (
+                            <button
+                                key={tab}
+                                onClick={() => { setActiveTab(tab); setIsAdding(false); setEditingId(null); }}
+                                className={`text-[10px] tracking-[0.3em] uppercase pb-2 transition-all whitespace-nowrap relative ${activeTab === tab ? 'text-gold-400' : 'text-white/20 hover:text-white/50'}`}
+                            >
+                                {tab}
+                                {activeTab === tab && (
+                                    <motion.div layoutId="activeTabIndicator" className="absolute bottom-[-17px] left-0 right-0 h-[2px] bg-gold-400" />
+                                )}
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 {/* TAB CONTENT: DASHBOARD */}
@@ -1046,7 +1069,7 @@ const Admin = () => {
                             </div>
                         ) : (
                             <>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                                     {/* Analytics Cards */}
                                     <div className="bg-white/5 border border-white/10 p-8 hover:border-gold-500/50 transition-all">
                                         <div className="flex items-center justify-between mb-4">
@@ -1076,7 +1099,7 @@ const Admin = () => {
 
                                 <h2 className="text-xl font-serif tracking-[0.2em] uppercase mb-8 mt-12 text-gold-500">Fast Inventory Restock</h2>
                                 <p className="text-[10px] uppercase text-white/40 tracking-widest mb-6">Quickly adjust available physical bottles for each fragrance.</p>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                     {products.map(p => (
                                         <div key={p.id} className="bg-white/5 border border-white/10 p-6 flex justify-between items-center group hover:border-gold-500/30 transition-all">
                                             <div className="flex items-center space-x-6">
@@ -1127,52 +1150,54 @@ const Admin = () => {
                         ) : (
                             <div className="space-y-6">
                                 {/* Registry Intelligence & Reporting */}
-                                <div className="bg-white/[0.02] border border-white/5 p-6 flex flex-col md:flex-row items-center justify-between gap-6">
-                                    <div>
-                                        <h3 className="text-xs tracking-[0.4em] font-black uppercase text-white mb-2">Registry Intelligence</h3>
-                                        <p className="text-[10px] tracking-widest text-white/30 uppercase italic">Generate monthly sales manifests for accounting and inventory audit.</p>
+                                <div className="bg-white/[0.02] border border-white/5 p-6 md:p-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 md:gap-10">
+                                    <div className="max-w-md">
+                                        <h3 className="text-[11px] md:text-xs tracking-[0.4em] font-black uppercase text-white mb-3">Registry Intelligence</h3>
+                                        <p className="text-[9px] md:text-[10px] tracking-widest text-white/30 uppercase leading-relaxed italic">Generate monthly sales manifests for accounting and inventory audit.</p>
                                     </div>
-                                    <div className="flex items-center gap-4">
-                                        <select
-                                            value={reportType}
-                                            onChange={(e) => setReportType(e.target.value)}
-                                            className="bg-black border border-white/10 text-[10px] tracking-widest uppercase text-white/70 px-4 py-2 focus:outline-none focus:border-gold-500"
-                                        >
-                                            <option value="selling">Selling Report</option>
-                                            <option value="return">Return Report</option>
-                                        </select>
-                                        <select
-                                            id="reportMonth"
-                                            defaultValue={new Date().getMonth()}
-                                            className="bg-black border border-white/10 text-[10px] tracking-widest uppercase text-white/70 px-4 py-2 focus:outline-none focus:border-gold-500"
-                                        >
-                                            {Array.from({ length: 12 }).map((_, i) => (
-                                                <option key={i} value={i}>{new Date(2024, i).toLocaleString('default', { month: 'long' })}</option>
-                                            ))}
-                                        </select>
-                                        <select
-                                            id="reportYear"
-                                            defaultValue={new Date().getFullYear()}
-                                            className="bg-black border border-white/10 text-[10px] tracking-widest uppercase text-white/70 px-4 py-2 focus:outline-none focus:border-gold-500"
-                                        >
-                                            {[2024, 2025, 2026].map(y => (
-                                                <option key={y} value={y}>{y}</option>
-                                            ))}
-                                        </select>
+                                    <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-4 w-full lg:w-auto">
+                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full lg:w-auto">
+                                            <select
+                                                value={reportType}
+                                                onChange={(e) => setReportType(e.target.value)}
+                                                className="bg-black border border-white/10 text-[9px] md:text-[10px] tracking-widest uppercase text-white px-4 py-3 focus:outline-none focus:border-gold-500 transition-colors"
+                                            >
+                                                <option value="selling">Selling Report</option>
+                                                <option value="return">Return Report</option>
+                                            </select>
+                                            <select
+                                                id="reportMonth"
+                                                defaultValue={new Date().getMonth()}
+                                                className="bg-black border border-white/10 text-[9px] md:text-[10px] tracking-widest uppercase text-white px-4 py-3 focus:outline-none focus:border-gold-500 transition-colors"
+                                            >
+                                                {Array.from({ length: 12 }).map((_, i) => (
+                                                    <option key={i} value={i}>{new Date(2024, i).toLocaleString('default', { month: 'long' })}</option>
+                                                ))}
+                                            </select>
+                                            <select
+                                                id="reportYear"
+                                                defaultValue={new Date().getFullYear()}
+                                                className="bg-black border border-white/10 text-[9px] md:text-[10px] tracking-widest uppercase text-white px-4 py-3 focus:outline-none focus:border-gold-500 transition-colors"
+                                            >
+                                                {[2024, 2025, 2026].map(y => (
+                                                    <option key={y} value={y}>{y}</option>
+                                                ))}
+                                            </select>
+                                        </div>
                                         <button
                                             onClick={() => {
                                                 const m = parseInt(document.getElementById('reportMonth').value);
                                                 const y = parseInt(document.getElementById('reportYear').value);
                                                 handleDownloadMonthlyReport(m, y, reportType);
                                             }}
-                                            className="bg-white text-black px-6 py-2 text-[10px] font-black tracking-widest uppercase hover:bg-gold-500 transition-all flex items-center gap-2"
+                                            className="bg-white text-black px-8 py-3 text-[10px] font-black tracking-widest uppercase hover:bg-gold-500 transition-all flex items-center justify-center gap-3 shadow-xl"
                                         >
-                                            <FileSpreadsheet size={14} /> Export {reportType === 'selling' ? 'Sales' : 'Returns'}
+                                            <FileSpreadsheet size={16} /> Export {reportType === 'selling' ? 'Sales' : 'Returns'}
                                         </button>
                                     </div>
                                 </div>
                                 {/* Order Sub-Tabs */}
-                                <div className="flex space-x-6 mb-8 border-b border-white/5 pb-2">
+                                <div className="flex items-center space-x-6 mb-8 border-b border-white/5 pb-2 overflow-x-auto scrollbar-hide">
                                     {[
                                         { id: 'onhold', label: 'On Hold', count: orders.filter(o => !o.status || o.status === 'On Hold' || o.status === 'Pending').length },
                                         { id: 'processing', label: 'Processing', count: orders.filter(o => o.status === 'Accepted').length },
@@ -1183,12 +1208,15 @@ const Admin = () => {
                                         <button
                                             key={sub.id}
                                             onClick={() => { setOrderSubTab(sub.id); setSelectedOrders([]); }}
-                                            className={`text-[9px] tracking-[0.2em] uppercase pb-2 transition-all relative flex items-center gap-2 ${orderSubTab === sub.id ? 'text-white border-b-2 border-gold-500' : 'text-white/30 hover:text-white/60'}`}
+                                            className={`text-[9px] md:text-[10px] tracking-[0.2em] uppercase pb-3 transition-all relative flex items-center gap-3 whitespace-nowrap ${orderSubTab === sub.id ? 'text-white' : 'text-white/20 hover:text-white/50'}`}
                                         >
                                             {sub.label}
-                                            <span className={`px-1.5 py-0.5 rounded-full text-[7px] ${orderSubTab === sub.id ? 'bg-gold-500 text-black' : 'bg-white/5 text-white/30'}`}>
+                                            <span className={`px-2 py-0.5 rounded-full text-[7px] font-black ${orderSubTab === sub.id ? 'bg-gold-500 text-black' : 'bg-white/5 text-white/20'}`}>
                                                 {sub.count}
                                             </span>
+                                            {orderSubTab === sub.id && (
+                                                <motion.div layoutId="orderSubTabIndicator" className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-gold-500" />
+                                            )}
                                         </button>
                                     ))}
                                 </div>
@@ -1243,8 +1271,8 @@ const Admin = () => {
                                     );
                                 })()}
                                 {/* Desktop Table View */}
-                                <div className="hidden md:block bg-white/5 border border-white/10 overflow-hidden">
-                                    <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80">
+                                <div className="hidden md:block bg-white/5 border border-white/10 overflow-x-auto scrollbar-hide">
+                                    <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80 min-w-[1000px]">
                                         <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/50 border-b border-white/10">
                                             <tr>
                                                 <th className="p-6 w-10">
@@ -1480,25 +1508,28 @@ const Admin = () => {
                                                     <p className="text-[9px] lowercase text-white/40">{order.customer_email}</p>
                                                     <p className="text-[9px] text-gold-500 mt-1 font-bold">{order.customer_phone || 'N/A'}</p>
                                                 </div>
-                                                <div className="bg-black/40 p-4 border border-white/5">
-                                                    <p className="text-[10px] uppercase tracking-widest text-white/40 mb-2">Order Summary</p>
-                                                    {order.items?.map(it => (
-                                                        <p key={it.id} className="text-[10px] flex justify-between">
-                                                            <span className="text-white/70">{it.product_name}</span>
-                                                            <span className="text-gold-500">x{it.quantity}</span>
-                                                        </p>
-                                                    ))}
+                                                <div className="bg-black/40 p-5 border border-white/5 space-y-4">
+                                                    <div className="flex justify-between items-center mb-1">
+                                                        <p className="text-[9px] uppercase tracking-[0.3em] text-white/30">Order Summary</p>
+                                                        <span className="text-[11px] font-black text-gold-400">{order.total_amount}</span>
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        {order.items?.map(it => (
+                                                            <p key={it.id} className="text-[10px] flex justify-between items-center">
+                                                                <span className="text-white/70 font-medium">{it.product_name}</span>
+                                                                <span className="text-white/30 text-[9px]">x{it.quantity}</span>
+                                                            </p>
+                                                        ))}
+                                                    </div>
                                                     {order.customer_note && (
-                                                        <div className="mt-4 pt-2 border-t border-white/10 bg-white/[0.02] p-3 border border-white/5">
-                                                            <p className="text-[8px] text-white/40 uppercase font-black mb-1 italic">Note from Client:</p>
-                                                            <p className="text-[9px] text-white/80 leading-relaxed font-serif italic">"{order.customer_note}"</p>
+                                                        <div className="mt-4 pt-4 border-t border-white/5">
+                                                            <p className="text-[8px] text-white/20 uppercase font-black mb-2 tracking-widest italic">Note from Client</p>
+                                                            <p className="text-[10px] text-white/60 leading-relaxed font-serif italic">"{order.customer_note}"</p>
                                                         </div>
                                                     )}
-                                                    <div className="mt-2 pt-2 border-t border-white/10 flex justify-between items-center font-bold">
-                                                        <span className="text-[10px] uppercase">Total</span>
-                                                        <div className="text-right">
-                                                            <span className="text-gold-400 block">{order.total_amount}</span>
-                                                        </div>
+                                                    <div className="mt-2 pt-3 border-t border-white/5 flex justify-between items-center text-[8px] tracking-[0.2em] uppercase text-white/30">
+                                                        <span>Payment Method</span>
+                                                        <span className="text-white/50">{order.payment_method}</span>
                                                     </div>
                                                 </div>
                                                 <div>
@@ -1607,20 +1638,20 @@ const Admin = () => {
                             </div>
                         ) : (
                             <>
-                                <div className="mb-8 flex items-center bg-white/5 border border-white/10 px-6 py-4">
-                                    <Layout size={16} className="text-gold-500 mr-4" />
+                                <div className="mb-8 flex items-center bg-white/[0.03] border border-white/10 px-5 md:px-8 py-4 md:py-6 group focus-within:border-gold-500/50 transition-all">
+                                    <Search size={18} className="text-white/20 group-focus-within:text-gold-500 transition-colors mr-6" />
                                     <input
                                         type="text"
-                                        placeholder="Find user by name or email..."
+                                        placeholder="Search by name, email or client ID..."
                                         value={userSearch}
                                         onChange={(e) => setUserSearch(e.target.value)}
-                                        className="bg-transparent border-none text-[11px] tracking-widest uppercase text-white focus:outline-none w-full"
+                                        className="bg-transparent border-none text-[10px] md:text-[11px] tracking-[0.2em] uppercase text-white placeholder:text-white/10 focus:outline-none w-full"
                                     />
                                 </div>
                                 <div className="space-y-6">
                                     {/* Desktop Table View */}
-                                    <div className="hidden md:block bg-white/5 border border-white/10 overflow-hidden">
-                                        <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80">
+                                    <div className="hidden md:block bg-white/5 border border-white/10 overflow-x-auto scrollbar-hide">
+                                        <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80 min-w-[900px]">
                                             <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/50 border-b border-white/10">
                                                 <tr>
                                                     <th className="p-6">User ID</th>
@@ -1684,36 +1715,38 @@ const Admin = () => {
                                             u.email.toLowerCase().includes(userSearch.toLowerCase()) ||
                                             `${u.first_name} ${u.last_name}`.toLowerCase().includes(userSearch.toLowerCase())
                                         ).map(u => (
-                                            <div key={u.id} className="bg-white/5 border border-white/10 p-6 space-y-4">
-                                                <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                                                    <span className="font-serif text-gold-400">#{u.id.toString().padStart(4, '0')}</span>
-                                                    <button onClick={() => handleDeleteUser(u.id)} className="text-red-500 bg-red-500/10 p-2 rounded uppercase text-[8px] font-black tracking-widest">
-                                                        Delete User
+                                            <div key={u.id} className="bg-white/[0.03] border border-white/10 p-6 space-y-6 relative group overflow-hidden">
+                                                <div className="flex justify-between items-start border-b border-white/5 pb-5">
+                                                    <div className="flex items-center space-x-5">
+                                                        <div className="w-14 h-14 rounded bg-gold-400/5 border border-gold-500/10 flex items-center justify-center text-gold-500 font-serif text-2xl">
+                                                            {u.first_name[0]}
+                                                        </div>
+                                                        <div>
+                                                            <p className="font-black uppercase tracking-[0.15em] text-white text-[14px] leading-tight mb-1">{u.first_name} {u.last_name}</p>
+                                                            <div className="flex items-center gap-3">
+                                                                <span className="font-serif text-gold-500/50 text-[10px]">#{u.id.toString().padStart(4, '0')}</span>
+                                                                <span className={`text-[9px] uppercase tracking-widest font-black px-2 py-0.5 border ${u.role === 'admin' ? 'border-gold-500/30 text-gold-500' : 'border-white/10 text-white/20'}`}>
+                                                                    {u.role || 'Patron'}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button onClick={() => handleDeleteUser(u.id)} className="text-red-500/40 hover:text-red-500 transition-colors p-2 mt-1">
+                                                        <Trash2 size={20} />
                                                     </button>
                                                 </div>
-                                                <div className="flex items-center space-x-4">
-                                                    <div className="w-10 h-10 rounded-full bg-gold-400/10 border border-gold-500/20 flex items-center justify-center text-gold-500 font-serif text-lg">
-                                                        {u.first_name[0]}
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                    <div className="bg-black/40 p-4 border border-white/5">
+                                                        <p className="text-[8px] uppercase tracking-[0.3em] text-white/20 mb-2">Communication</p>
+                                                        <p className="text-[10px] lowercase text-white/80 mb-1">{u.email}</p>
+                                                        <p className="text-[10px] text-gold-500/80 font-bold">{u.telephone || 'Contact Restricted'}</p>
                                                     </div>
-                                                    <div>
-                                                        <p className="font-black uppercase tracking-[0.2em] text-white text-xs">{u.first_name} {u.last_name}</p>
-                                                        <p className={`text-[8px] uppercase tracking-widest font-bold ${u.role === 'admin' ? 'text-gold-500' : 'text-white/30'}`}>{u.role || 'Patron'}</p>
-                                                    </div>
-                                                </div>
-                                                <div className="grid grid-cols-1 gap-4 pt-2">
-                                                    <div className="bg-black/20 p-3 border border-white/5">
-                                                        <p className="text-[8px] uppercase tracking-widest text-white/20 mb-1">Email</p>
-                                                        <p className="text-[10px] lowercase text-white/70">{u.email}</p>
-                                                    </div>
-                                                    <div className="bg-black/20 p-3 border border-white/5">
-                                                        <p className="text-[8px] uppercase tracking-widest text-white/20 mb-1">Phone</p>
-                                                        <p className="text-[10px] text-white/70">{u.telephone || 'Not Provided'}</p>
-                                                    </div>
-                                                    <div className="bg-black/20 p-3 border border-white/5">
-                                                        <p className="text-[8px] uppercase tracking-widest text-white/20 mb-1">Joined Collective</p>
-                                                        <p className="text-[10px] text-gold-400/80 uppercase tracking-widest">
-                                                            {new Date(u.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-                                                        </p>
+                                                    <div className="bg-black/40 p-4 border border-white/5">
+                                                        <p className="text-[8px] uppercase tracking-[0.3em] text-white/20 mb-2">Acquisition History</p>
+                                                        <div className="flex justify-between items-center">
+                                                            <span className="text-[9px] uppercase tracking-widest text-white/40">Joined Registry</span>
+                                                            <span className="text-[10px] text-white font-serif">{new Date(u.created_at).toLocaleDateString()}</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1735,8 +1768,8 @@ const Admin = () => {
                         ) : (
                             <div className="space-y-6">
                                 {/* Desktop Table View */}
-                                <div className="hidden md:block bg-white/5 border border-white/10 overflow-hidden">
-                                    <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80">
+                                <div className="hidden md:block bg-white/5 border border-white/10 overflow-x-auto scrollbar-hide">
+                                    <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80 min-w-[900px]">
                                         <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/50 border-b border-white/10">
                                             <tr>
                                                 <th className="p-6">User</th>
@@ -1846,15 +1879,15 @@ const Admin = () => {
                                 </div>
 
                                 {/* Desktop Table View */}
-                                <div className="hidden md:block bg-white/5 border border-white/10 overflow-hidden">
-                                    <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80">
+                                <div className="hidden md:block bg-white/5 border border-white/10 overflow-x-auto scrollbar-hide">
+                                    <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80 min-w-[1100px]">
                                         <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/50 border-b border-white/10">
                                             <tr>
+                                                <th className="p-6">Type</th>
                                                 <th className="p-6">Client Identity</th>
                                                 <th className="p-6">Contact Details</th>
-                                                <th className="p-6">Interested Essence</th>
+                                                <th className="p-6">Request Interest</th>
                                                 <th className="p-6">Status</th>
-                                                <th className="p-6">Registration Date</th>
                                                 <th className="p-6 text-right">Management</th>
                                             </tr>
                                         </thead>
@@ -1863,7 +1896,18 @@ const Admin = () => {
                                                 <tr><td colSpan="6" className="p-12 text-center text-white/30 uppercase tracking-widest">The manifest is currently empty</td></tr>
                                             ) : (
                                                 waitlist.map(entry => (
-                                                    <tr key={entry.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+                                                    <tr key={entry.id} className={`border-b border-white/5 transition-colors ${entry.request_type === 'callback' ? 'bg-gold-500/[0.03] border-l-2 border-l-gold-500' : 'hover:bg-white/[0.02]'}`}>
+                                                        <td className="p-6">
+                                                            {entry.request_type === 'callback' ? (
+                                                                <span className="flex items-center gap-2 text-gold-500 text-[8px] font-black tracking-widest uppercase">
+                                                                    <Smartphone size={12} strokeWidth={2} /> Callback
+                                                                </span>
+                                                            ) : (
+                                                                <span className="flex items-center gap-2 text-white/40 text-[8px] font-black tracking-widest uppercase">
+                                                                    <Layers size={12} strokeWidth={2} /> Waitlist
+                                                                </span>
+                                                            )}
+                                                        </td>
                                                         <td className="p-6">
                                                             <p className="font-bold uppercase tracking-widest text-white">{entry.customer_name}</p>
                                                             <p className="text-[9px] text-white/30 uppercase mt-1">ID: #{entry.id.toString().padStart(4, '0')}</p>
@@ -1875,20 +1919,28 @@ const Admin = () => {
                                                             </div>
                                                             <div className="flex items-center gap-2">
                                                                 <Phone size={10} className="text-gold-500/50" />
-                                                                <span>{entry.phone || 'N/A'}</span>
+                                                                <span className="text-white font-bold">{entry.phone || 'N/A'}</span>
                                                             </div>
                                                         </td>
                                                         <td className="p-6">
-                                                            <p className="text-gold-500 font-bold uppercase tracking-widest">{entry.product_name}</p>
-                                                            <p className="text-[9px] text-white/40 italic font-serif">Slug: {entry.product_slug}</p>
+                                                            {entry.request_type === 'callback' ? (
+                                                                <p className="text-white/60 italic text-[10px]">Private Concierge Inquiry</p>
+                                                            ) : (
+                                                                <>
+                                                                    <p className="text-gold-500 font-bold uppercase tracking-widest">{entry.product_name || 'Restock Request'}</p>
+                                                                    <p className="text-[9px] text-white/40 italic font-serif">{entry.product_slug}</p>
+                                                                </>
+                                                            )}
                                                         </td>
                                                         <td className="p-6">
-                                                            <span className="px-3 py-1 border border-gold-500/30 text-gold-500 text-[8px] font-black uppercase tracking-widest bg-gold-500/5">
-                                                                {entry.status || 'Pending'}
-                                                            </span>
-                                                        </td>
-                                                        <td className="p-6 text-white/40">
-                                                            {new Date(entry.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                            <div className="flex flex-col gap-1">
+                                                                <span className="px-3 py-1 border border-gold-500/30 text-gold-500 text-[8px] font-black uppercase tracking-widest bg-gold-500/5 w-fit">
+                                                                    {entry.status || 'Pending'}
+                                                                </span>
+                                                                <span className="text-[8px] text-white/20 uppercase">
+                                                                    {new Date(entry.created_at).toLocaleDateString()}
+                                                                </span>
+                                                            </div>
                                                         </td>
                                                         <td className="p-6 text-right">
                                                             <button
@@ -1916,6 +1968,63 @@ const Admin = () => {
                                         </tbody>
                                     </table>
                                 </div>
+
+                                {/* Mobile Card View */}
+                                <div className="md:hidden space-y-4">
+                                    {waitlist.length === 0 ? (
+                                        <div className="p-12 text-center text-white/30 uppercase tracking-widest bg-white/5 border border-white/10">No Prospects</div>
+                                    ) : (
+                                        waitlist.map(entry => (
+                                            <div key={entry.id} className={`bg-white/5 border border-white/10 p-6 space-y-4 ${entry.request_type === 'callback' ? 'border-l-2 border-l-gold-500' : ''}`}>
+                                                <div className="flex justify-between items-start border-b border-white/10 pb-4">
+                                                    <div>
+                                                        <p className="text-[8px] uppercase tracking-widest text-gold-500 mb-1">ID: #{entry.id.toString().padStart(4, '0')}</p>
+                                                        <p className="font-black uppercase tracking-widest text-white text-[10px]">{entry.customer_name}</p>
+                                                    </div>
+                                                    <button 
+                                                        onClick={async () => {
+                                                            if (!window.confirm('Remove from waitlist?')) return;
+                                                            try {
+                                                                const res = await fetch(`${API_URL}/api/waitlist/${entry.id}`, {
+                                                                    method: 'DELETE',
+                                                                    headers: getAdminHeaders()
+                                                                });
+                                                                if (res.ok) {
+                                                                    showSuccessToast('Prospect removed.');
+                                                                    fetchWaitlistData();
+                                                                }
+                                                            } catch (e) { showErrorToast('Update failed.'); }
+                                                        }}
+                                                        className="text-red-500 bg-red-500/10 p-2 uppercase text-[8px] font-black tracking-widest"
+                                                    >
+                                                        Remove
+                                                    </button>
+                                                </div>
+                                                <div className="grid grid-cols-1 gap-4">
+                                                    <div className="bg-black/20 p-3 border border-white/5">
+                                                        <p className="text-[8px] uppercase tracking-widest text-white/20 mb-1">Contact</p>
+                                                        <p className="text-[10px] lowercase text-white/70">{entry.email}</p>
+                                                        <p className="text-[10px] text-white/70 mt-1 font-bold">{entry.phone || 'N/A'}</p>
+                                                    </div>
+                                                    <div className="bg-black/20 p-3 border border-white/5">
+                                                        <p className="text-[8px] uppercase tracking-widest text-white/20 mb-1">Interest</p>
+                                                        {entry.request_type === 'callback' ? (
+                                                            <p className="text-white/60 italic text-[10px]">Concierge Callback</p>
+                                                        ) : (
+                                                            <p className="text-gold-500 font-bold uppercase tracking-widest text-[10px]">{entry.product_name || 'Restock'}</p>
+                                                        )}
+                                                    </div>
+                                                    <div className="flex justify-between items-center bg-black/20 p-3 border border-white/5">
+                                                        <span className="text-[8px] uppercase tracking-widest text-white/20">Status</span>
+                                                        <span className="px-2 py-0.5 border border-gold-500/30 text-gold-500 text-[8px] font-black uppercase tracking-widest bg-gold-500/5">
+                                                            {entry.status || 'Pending'}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
                             </div>
                         )}
                     </motion.div>
@@ -1931,7 +2040,7 @@ const Admin = () => {
                         ) : (
                             <>
                                 {/* POPUP MANAGEMENT */}
-                                <section className="bg-white/5 border border-white/10 p-12">
+                                <section className="bg-white/5 border border-white/10 p-6 md:p-12">
                                     <div className="flex items-center space-x-4 mb-10">
                                         <Sparkles className="text-gold-500" size={24} />
                                         <h2 className="text-2xl font-serif tracking-widest uppercase italic">"The Inner Circle" Popup</h2>
@@ -1939,7 +2048,7 @@ const Admin = () => {
 
                                     <form onSubmit={handleUpdatePopup} className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                                         <div className="space-y-8">
-                                            <div className="flex items-center justify-between bg-zinc-900/80 p-8 border border-white/10 shadow-2xl">
+                                            <div className="flex items-center justify-between bg-zinc-900/80 p-6 md:p-8 border border-white/10 shadow-2xl">
                                                 <div>
                                                     <p className="text-[11px] tracking-[0.3em] font-black uppercase text-white mb-2">Engagement Status</p>
                                                     <div className="flex items-center space-x-3">
@@ -2096,7 +2205,7 @@ const Admin = () => {
                                 </section>
 
                                 {/* NEWSLETTER REGISTRY */}
-                                <section className="space-y-8 bg-black/40 p-12 border border-white/5">
+                                <section className="space-y-8 bg-black/40 p-6 md:p-12 border border-white/5">
                                     <div className="flex justify-between items-center">
                                         <div>
                                             <h2 className="text-2xl font-serif tracking-widest uppercase italic">The Inner Circle Registry</h2>
@@ -2173,20 +2282,20 @@ const Admin = () => {
                 {(activeTab === 'collections' || activeTab === 'products' || activeTab === 'blogs' || activeTab === 'promo-codes') && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                         {/* ADD NEW SECTION TOGGLE */}
-                        <div className="flex justify-center mb-16">
+                        <div className="flex justify-center mb-8 md:mb-16 px-4">
                             <button
                                 onClick={() => {
                                     setIsAdding(!isAdding);
                                     setEditingId(null);
                                     setColFormData({ name: '', slug: '', banner_url: '', description: '' });
-                                    setProdFormData({ collection_id: '', name: '', slug: '', price: '', image_url: '', gallery_urls: [], description: '', top_notes: '', heart_notes: '', base_notes: '', stock_count: 50, size: '100ml' });
+                                    setProdFormData({ collection_id: '', name: '', slug: '', price: '', image_url: '', gallery_urls: [], description: '', top_notes: '', heart_notes: '', base_notes: '', stock_count: 50, size: '100ml', product_type: 'EXTRAIT DE PARFUM SPRAY' });
                                     setBlogFormData({ title: '', slug: '', content: '', image_url: '', keywords: '', author: 'Kiks Artisan' });
                                     setPromoFormData({ code: '', discount_type: 'percentage', discount_value: '', min_order_amount: '', max_discount: '', expiry_date: '', usage_limit: '' });
                                 }}
-                                className="flex items-center space-x-4 bg-white/5 border border-white/10 px-10 py-5 hover:bg-gold-500 hover:text-black transition-all group"
+                                className="w-full md:w-auto flex items-center justify-center space-x-4 bg-white/5 border border-white/10 px-8 md:px-10 py-4 md:py-5 hover:bg-gold-500 hover:text-black transition-all group"
                             >
                                 {isAdding ? <X size={18} /> : <Plus size={18} />}
-                                <span className="text-[10px] tracking-[0.4em] font-black uppercase">
+                                <span className="text-[9px] md:text-[10px] tracking-[0.3em] md:tracking-[0.4em] font-black uppercase">
                                     {isAdding ? 'Discard Draft' : `Add New ${activeTab === 'collections' ? 'Collection' : activeTab === 'products' ? 'Product' : activeTab === 'blogs' ? 'Blog' : 'Promo Code'}`}
                                 </span>
                             </button>
@@ -2199,12 +2308,12 @@ const Admin = () => {
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: 1, height: 'auto' }}
                                     exit={{ opacity: 0, height: 0 }}
-                                    className="bg-zinc-900/50 backdrop-blur-xl border border-white/5 p-12 mb-20 overflow-hidden"
+                                    className="bg-zinc-900/50 backdrop-blur-xl border border-white/5 p-6 md:p-12 mb-10 md:mb-20 overflow-hidden"
                                 >
-                                    <form onSubmit={activeTab === 'collections' ? handleAddCollection : activeTab === 'products' ? handleAddProduct : activeTab === 'blogs' ? handleAddBlog : handleAddPromoCode} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <form onSubmit={activeTab === 'collections' ? handleAddCollection : activeTab === 'products' ? handleAddProduct : activeTab === 'blogs' ? handleAddBlog : handleAddPromoCode} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
 
-                                        <div className="md:col-span-2 text-center pb-6 border-b border-white/10 mb-4">
-                                            <h3 className="text-lg tracking-[0.4em] text-gold-500 font-serif uppercase">
+                                        <div className="md:col-span-2 text-center pb-4 md:pb-6 border-b border-white/10 mb-2 md:mb-4">
+                                            <h3 className="text-base md:text-lg tracking-[0.3em] md:tracking-[0.4em] text-gold-500 font-serif uppercase italic">
                                                 {editingId ? `Editing ${activeTab === 'collections' ? 'Collection' : activeTab === 'products' ? 'Product' : activeTab === 'blogs' ? 'Blog' : 'Promo Code'}` : `New ${activeTab === 'collections' ? 'Collection' : activeTab === 'products' ? 'Product' : activeTab === 'blogs' ? 'Blog' : 'Promo Code'}`}
                                             </h3>
                                         </div>
@@ -2214,7 +2323,7 @@ const Admin = () => {
                                                 <label className={labelClasses}>Visual Essence (Image)</label>
                                                 <div
                                                     onClick={() => fileInputRef.current.click()}
-                                                    className="relative w-full h-64 bg-white/5 border-2 border-dashed border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-gold-500 hover:bg-white/[0.03] transition-all group overflow-hidden"
+                                                    className="relative w-full h-56 md:h-72 bg-white/5 border border-dashed border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-gold-500 hover:bg-white/[0.03] transition-all group overflow-hidden"
                                                 >
                                                     <input
                                                         type="file"
@@ -2227,25 +2336,25 @@ const Admin = () => {
                                                     {(activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url) ? (
                                                         <div className="relative w-full h-full">
                                                             {isVideo(activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url) ? (
-                                                                <video src={activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url} className="w-full h-full object-cover opacity-50" muted loop autoPlay />
+                                                                <video src={activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url} className="w-full h-full object-cover opacity-60" muted loop autoPlay />
                                                             ) : (
                                                                 <img
                                                                     src={activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url}
-                                                                    className="w-full h-full object-cover opacity-50 transition-all group-hover:opacity-80"
+                                                                    className="w-full h-full object-cover opacity-60 transition-all group-hover:opacity-100"
                                                                 />
                                                             )}
-                                                            <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                <span className="text-[9px] tracking-[0.4em] font-black uppercase text-white bg-black/60 px-4 py-2 border border-white/10">Replace Asset</span>
+                                                            <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                <span className="text-[10px] tracking-[0.4em] font-black uppercase text-white bg-black/80 px-6 py-3 border border-white/10">Replace Content</span>
                                                             </div>
                                                         </div>
                                                     ) : (
-                                                        <div className="flex flex-col items-center">
+                                                        <div className="flex flex-col items-center p-8">
                                                             {uploading ? (
-                                                                <Loader2 className="animate-spin text-gold-500 mb-4" size={24} />
+                                                                <Loader2 className="animate-spin text-gold-500 mb-6" size={32} />
                                                             ) : (
-                                                                <Upload className="text-white/20 group-hover:text-gold-500 mb-4" size={24} />
+                                                                <Upload className="text-white/10 group-hover:text-gold-500 mb-6 transition-colors" size={32} />
                                                             )}
-                                                            <span className="text-[10px] tracking-[0.4em] uppercase text-white/40">{uploading ? 'Processing Architecture...' : 'Upload Visual Blueprint'}</span>
+                                                            <span className="text-[11px] tracking-[0.4em] uppercase text-white/30 text-center">{uploading ? 'Analyzing Structure...' : 'Upload Cinematic Visual'}</span>
                                                         </div>
                                                     )}
                                                 </div>
@@ -2284,36 +2393,58 @@ const Admin = () => {
                                             </>
                                         ) : (
                                             <>
-                                                <div>
-                                                    <label className={labelClasses}>Collection</label>
+
+                                                <div className="md:col-span-1">
+                                                    <label className={labelClasses}>Collection Registry</label>
                                                     <select required className={inputClasses} value={prodFormData.collection_id} onChange={e => setProdFormData({ ...prodFormData, collection_id: e.target.value })}>
-                                                        <option value="">Select Collection</option>
+                                                        <option value="" className="bg-black">Select Collection</option>
                                                         {collections.map(c => <option className="bg-black" key={c.id} value={c.id}>{c.name}</option>)}
                                                     </select>
                                                 </div>
-                                                <div><label className={labelClasses}>Product Name</label><input required className={inputClasses} value={prodFormData.name} onChange={e => {
-                                                    const name = e.target.value;
-                                                    setProdFormData({ ...prodFormData, name, slug: name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') });
-                                                }} /></div>
-                                                <div><label className={labelClasses}>Slug (URL Architecture)</label><input required className={inputClasses} value={prodFormData.slug} onChange={e => setProdFormData({ ...prodFormData, slug: e.target.value })} /></div>
-                                                <div><label className={labelClasses}>Price (e.g. ₹18,500)</label><input required className={inputClasses} value={prodFormData.price} onChange={e => setProdFormData({ ...prodFormData, price: e.target.value })} /></div>
-                                                <div className="md:col-span-2"><label className={labelClasses}>Description</label><textarea required className={`${inputClasses} h-24`} value={prodFormData.description} onChange={e => setProdFormData({ ...prodFormData, description: e.target.value })} /></div>
-                                                <div><label className={labelClasses}>Top Notes</label><input className={inputClasses} value={prodFormData.top_notes} onChange={e => setProdFormData({ ...prodFormData, top_notes: e.target.value })} /></div>
-                                                <div><label className={labelClasses}>Heart Notes</label><input className={inputClasses} value={prodFormData.heart_notes} onChange={e => setProdFormData({ ...prodFormData, heart_notes: e.target.value })} /></div>
-                                                <div><label className={labelClasses}>Base Notes</label><input className={inputClasses} value={prodFormData.base_notes} onChange={e => setProdFormData({ ...prodFormData, base_notes: e.target.value })} /></div>
-                                                <div><label className={labelClasses}>Default Product Size (e.g. 100ml)</label><input className={inputClasses} value={prodFormData.size} placeholder="100ml" onChange={e => setProdFormData({ ...prodFormData, size: e.target.value })} /></div>
-                                                <div><label className={labelClasses}>Default Stock Count (Bottles)</label><input type="number" className={inputClasses} value={prodFormData.stock_count} onChange={e => setProdFormData({ ...prodFormData, stock_count: e.target.value })} /></div>
+                                                <div className="md:col-span-1">
+                                                    <label className={labelClasses}>Essence Name</label>
+                                                    <input required className={inputClasses} value={prodFormData.name} onChange={e => {
+                                                        const name = e.target.value;
+                                                        setProdFormData({ ...prodFormData, name, slug: name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') });
+                                                    }} placeholder="Noble Oud..." />
+                                                </div>
+                                                <div className="md:col-span-1">
+                                                    <label className={labelClasses}>Price (₹)</label>
+                                                    <input required className={inputClasses} value={prodFormData.price} onChange={e => setProdFormData({ ...prodFormData, price: e.target.value })} placeholder="18,500" />
+                                                </div>
+                                                <div className="md:col-span-1">
+                                                    <label className={labelClasses}>Stock Registry</label>
+                                                    <input type="number" className={inputClasses} value={prodFormData.stock_count} onChange={e => setProdFormData({ ...prodFormData, stock_count: e.target.value })} />
+                                                </div>
+                                                <div className="md:col-span-2">
+                                                    <label className={labelClasses}>Concentration Type (e.g. EXTRAIT DE PARFUM SPRAY)</label>
+                                                    <input className={inputClasses} value={prodFormData.product_type} onChange={e => setProdFormData({ ...prodFormData, product_type: e.target.value })} placeholder="EXTRAIT DE PARFUM SPRAY" />
+                                                </div>
+                                                <div className="md:col-span-2">
+                                                    <label className={labelClasses}>Slug (URL Architecture)</label>
+                                                    <input required className={inputClasses} value={prodFormData.slug} onChange={e => setProdFormData({ ...prodFormData, slug: e.target.value })} />
+                                                </div>
+
+                                                <div className="md:col-span-2">
+                                                    <label className={labelClasses}>Narrative Description</label>
+                                                    <textarea required className={`${inputClasses} h-24 md:h-32 text-xs md:text-sm`} value={prodFormData.description} onChange={e => setProdFormData({ ...prodFormData, description: e.target.value })} />
+                                                </div>
+                                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
+                                                    <div><label className={labelClasses}>Olfactory Top</label><input className={inputClasses} value={prodFormData.top_notes} onChange={e => setProdFormData({ ...prodFormData, top_notes: e.target.value })} /></div>
+                                                    <div><label className={labelClasses}>Olfactory Heart</label><input className={inputClasses} value={prodFormData.heart_notes} onChange={e => setProdFormData({ ...prodFormData, heart_notes: e.target.value })} /></div>
+                                                    <div><label className={labelClasses}>Olfactory Base</label><input className={inputClasses} value={prodFormData.base_notes} onChange={e => setProdFormData({ ...prodFormData, base_notes: e.target.value })} /></div>
+                                                </div>
 
                                                 <div className="md:col-span-2 mt-8 border-t border-white/5 pt-8">
                                                     <h4 className="text-[10px] tracking-[0.3em] font-black uppercase text-gold-500 mb-8 italic">Visual Storytelling & Editorial Assets</h4>
 
-                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                                                         <div className="md:col-span-2">
                                                             <ImageUploadZone
                                                                 label="Storytelling Cinematic Banner (Widescreen)"
                                                                 value={prodFormData.story_banner}
                                                                 onUpload={(e) => handleImageUpload(e, 'story_banner')}
-                                                                height="h-56"
+                                                                height="h-40 md:h-56"
                                                             />
                                                         </div>
 
@@ -2326,7 +2457,7 @@ const Admin = () => {
                                                             label="Muse Portrait Asset (Arched Window)"
                                                             value={prodFormData.muse_image}
                                                             onUpload={(e) => handleImageUpload(e, 'muse_image')}
-                                                            height="h-[400px]"
+                                                            height="h-[250px] md:h-[400px]"
                                                         />
 
                                                         <div className="flex flex-col space-y-10">
@@ -2350,7 +2481,7 @@ const Admin = () => {
 
                                                             <div className="bg-white/[0.02] p-8 border border-white/5 flex-grow">
                                                                 <label className={labelClasses + " mb-8"}>Olfactory Icons (PNG/SVG)</label>
-                                                                <div className="grid grid-cols-3 gap-8">
+                                                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
                                                                     {['top_note_icon', 'heart_note_icon', 'base_note_icon'].map((field) => (
                                                                         <div key={field} className="flex flex-col items-center">
                                                                             <div
@@ -2379,25 +2510,25 @@ const Admin = () => {
                                                 </div>
 
                                                 <div className="md:col-span-2 mt-8 border-t border-white/5 pt-8">
-                                                    <div className="flex justify-between items-center mb-6">
-                                                        <h4 className="text-[10px] tracking-[0.3em] font-black uppercase text-gold-500">Product Variants (Optional)</h4>
+                                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                                                        <h4 className="text-[10px] tracking-[0.3em] font-black uppercase text-gold-500 italic">Volume Variations (Optional)</h4>
                                                         <button
                                                             type="button"
                                                             onClick={handleAddVariantField}
-                                                            className="text-[9px] tracking-[0.2em] uppercase font-bold border border-gold-500/30 px-4 py-2 hover:bg-gold-500 hover:text-black transition-all flex items-center gap-2"
+                                                            className="w-full sm:w-auto text-[9px] tracking-[0.2em] uppercase font-bold border border-gold-500/30 px-6 py-3 hover:bg-gold-500 hover:text-black transition-all flex items-center justify-center gap-3"
                                                         >
                                                             <Plus size={14} /> Add Variant
                                                         </button>
                                                     </div>
 
-                                                    <div className="space-y-4">
+                                                    <div className="space-y-6">
                                                         {(prodFormData.variants || []).map((v, idx) => (
-                                                            <div key={idx} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end bg-white/[0.02] p-6 border border-white/5">
+                                                            <div key={idx} className="grid grid-cols-2 md:grid-cols-4 gap-4 items-end bg-white/[0.02] p-5 md:p-6 border border-white/5 relative">
                                                                 <div>
                                                                     <label className={labelClasses}>Size</label>
                                                                     <input
                                                                         placeholder="50ML"
-                                                                        className={inputClasses + " mb-0"}
+                                                                        className={inputClasses + " mb-0 text-[10px]"}
                                                                         value={v.size}
                                                                         onChange={(e) => handleUpdateVariant(idx, 'size', e.target.value)}
                                                                     />
@@ -2405,8 +2536,8 @@ const Admin = () => {
                                                                 <div>
                                                                     <label className={labelClasses}>Price</label>
                                                                     <input
-                                                                        placeholder="₹12,500"
-                                                                        className={inputClasses + " mb-0"}
+                                                                        placeholder="12,500"
+                                                                        className={inputClasses + " mb-0 text-[10px]"}
                                                                         value={v.price}
                                                                         onChange={(e) => handleUpdateVariant(idx, 'price', e.target.value)}
                                                                     />
@@ -2416,16 +2547,16 @@ const Admin = () => {
                                                                     <input
                                                                         type="number"
                                                                         placeholder="20"
-                                                                        className={inputClasses + " mb-0"}
+                                                                        className={inputClasses + " mb-0 text-[10px]"}
                                                                         value={v.stock}
                                                                         onChange={(e) => handleUpdateVariant(idx, 'stock', e.target.value)}
                                                                     />
                                                                 </div>
-                                                                <div>
+                                                                <div className="col-span-2 md:col-span-1">
                                                                     <button
                                                                         type="button"
                                                                         onClick={() => handleRemoveVariant(idx)}
-                                                                        className="w-full bg-red-500/10 border border-red-500/20 text-red-500 py-4 hover:bg-red-500 hover:text-white transition-all text-[10px] font-black uppercase tracking-widest"
+                                                                        className="w-full bg-red-500/5 border border-red-500/10 text-red-500/60 py-3 md:py-4 hover:bg-red-500 hover:text-white transition-all text-[9px] font-black uppercase tracking-widest"
                                                                     >
                                                                         Remove
                                                                     </button>
@@ -2434,8 +2565,8 @@ const Admin = () => {
                                                         ))}
 
                                                         {(!prodFormData.variants || prodFormData.variants.length === 0) && (
-                                                            <div className="py-6 text-center border border-dashed border-white/5 bg-white/[0.01]">
-                                                                <p className="text-[10px] tracking-[0.2em] text-white/20 uppercase font-light">No additional variants defined. Only '100ML' will be shown.</p>
+                                                            <div className="py-10 text-center border border-dashed border-white/10 bg-white/[0.01]">
+                                                                <p className="text-[10px] tracking-[0.3em] text-white/10 uppercase font-light italic">Standard 100ML baseline defined. No additional variants.</p>
                                                             </div>
                                                         )}
                                                     </div>
@@ -2487,7 +2618,7 @@ const Admin = () => {
                         </AnimatePresence>
 
                         {/* LIST SECTION */}
-                        <div className="grid grid-cols-1 gap-6">
+                        <div className="grid grid-cols-1 gap-4 md:gap-6">
                             {tabsLoading[activeTab] ? (
                                 <div className="flex items-center justify-center py-20">
                                     <Loader2 className="animate-spin text-gold-500" size={32} />
@@ -2497,32 +2628,32 @@ const Admin = () => {
                                     <div className="text-center py-20 text-white/20 tracking-widest uppercase text-xs">No records found</div>
                                 ) : (
                                     (activeTab === 'collections' ? collections : activeTab === 'products' ? products : activeTab === 'promo-codes' ? promoCodes : blogs).map(item => (
-                                        <div key={item.id} className="flex items-center justify-between bg-white/5 border border-white/5 p-6 md:px-10 group hover:border-gold-500/30 transition-all">
-                                            <div className="flex items-center space-x-8">
-                                                <div className="w-16 h-16 overflow-hidden rounded bg-zinc-900 flex-shrink-0 border border-white/10 flex items-center justify-center">
+                                        <div key={item.id} className="bg-white/[0.03] border border-white/5 p-5 md:p-8 hover:border-gold-500/30 transition-all">
+                                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                                                <div className="w-20 h-20 md:w-24 md:h-24 overflow-hidden rounded bg-zinc-900 flex-shrink-0 border border-white/10 flex items-center justify-center group relative">
                                                     {activeTab === 'promo-codes' ? (
                                                         <Ticket size={24} className="text-gold-500/50" />
                                                     ) : (
-                                                        <img src={getFullImageUrl(item.banner_url || item.image_url)} alt="" className="w-full h-full object-cover opacity-50" />
+                                                        <img src={getFullImageUrl(item.banner_url || item.image_url)} alt="" className="w-full h-full object-cover opacity-50 group-hover:opacity-80 transition-opacity" />
                                                     )}
                                                 </div>
-                                                <div>
-                                                    <h3 className="text-sm tracking-[0.2em] font-bold text-white group-hover:text-gold-400 transition-colors">{item.name || item.title || item.code}</h3>
-                                                    <p className="text-[9px] tracking-[0.1em] text-white/30 uppercase mt-1 italic">
+                                                <div className="flex-grow space-y-2">
+                                                    <h3 className="text-sm md:text-base tracking-[0.2em] font-bold text-white uppercase line-clamp-1">{item.name || item.title || item.code}</h3>
+                                                    <p className="text-[9px] md:text-[10px] tracking-[0.15em] text-white/40 uppercase italic leading-relaxed">
                                                         {activeTab === 'collections' ? item.slug :
-                                                            activeTab === 'products' ? `${item.collection_name} | ${item.price} | Size: ${item.size || '100ml'} | Stock: ${item.stock_count || 0}` :
-                                                                activeTab === 'promo-codes' ? `${item.discount_type === 'percentage' ? item.discount_value + '%' : '₹' + item.discount_value} OFF${item.min_order_amount ? ` | Min: ₹${item.min_order_amount}` : ''} | Used: ${item.usage_count}/${item.usage_limit || '∞'}` :
+                                                            activeTab === 'products' ? `${item.collection_name} | ${item.price} | Stock: ${item.stock_count || 0}` :
+                                                                activeTab === 'promo-codes' ? `${item.discount_type === 'percentage' ? item.discount_value + '%' : '₹' + item.discount_value} OFF | Used: ${item.usage_count}/${item.usage_limit || '∞'}` :
                                                                     `BY ${item.author} | ${new Date(item.created_at).toLocaleDateString()}`}
                                                     </p>
+                                                    <div className="flex items-center space-x-6 pt-4 border-t border-white/5 sm:border-none sm:pt-0">
+                                                        <button onClick={() => handleEdit(activeTab, item)} className="text-white/30 hover:text-gold-500 transition-all flex items-center gap-2 uppercase text-[9px] font-black tracking-widest group">
+                                                            <Edit3 size={14} className="group-hover:scale-110 transition-transform" /> <span>Edit</span>
+                                                        </button>
+                                                        <button onClick={() => handleDelete(activeTab === 'blogs' ? 'blogs' : activeTab, item.id)} className="text-white/30 hover:text-red-500 transition-all flex items-center gap-2 uppercase text-[9px] font-black tracking-widest group">
+                                                            <Trash2 size={14} className="group-hover:scale-110 transition-transform" /> <span>Remove</span>
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="flex space-x-6">
-                                                <button onClick={() => handleEdit(activeTab, item)} className="text-white/20 hover:text-gold-500 transition-colors">
-                                                    <Edit3 size={18} />
-                                                </button>
-                                                <button onClick={() => handleDelete(activeTab === 'blogs' ? 'blogs' : activeTab, item.id)} className="text-white/20 hover:text-red-500 transition-colors">
-                                                    <Trash2 size={18} />
-                                                </button>
                                             </div>
                                         </div>
                                     ))

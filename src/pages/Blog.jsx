@@ -41,7 +41,7 @@ const Blog = () => {
     }
 
     return (
-        <div className="bg-black min-h-screen text-white pt-32 pb-24 font-sans selection:bg-gold-500/30 selection:text-white">
+        <div className="bg-black min-h-screen text-white pt-24 md:pt-32 pb-20 md:pb-24 font-sans selection:bg-gold-500/30 selection:text-white">
             <SEO 
                 title="The Journal of Essence" 
                 description="Explore the timeless heritage of niche perfumery and the art of olfactory creation. Read our latest stories and insights."
@@ -64,7 +64,7 @@ const Blog = () => {
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1, duration: 0.8 }}
-                            className="text-4xl md:text-5xl lg:text-6xl font-serif text-white tracking-[0.05em] uppercase font-light leading-[1.1] mb-2"
+                            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif text-white tracking-[0.05em] uppercase font-light leading-[1.1] mb-2"
                         >
                             Insights & <br />Essences
                         </motion.h1>
@@ -72,7 +72,7 @@ const Blog = () => {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.4 }}
-                            className="text-gray-500 text-[10px] tracking-[0.3em] font-light max-w-lg mt-6 leading-relaxed uppercase"
+                            className="text-gray-500 text-[9px] md:text-[10px] tracking-[0.2em] md:tracking-[0.3em] font-light max-w-lg mt-4 md:mt-6 leading-relaxed uppercase"
                         >
                             Exploring the timeless heritage of niche perfumery and the art of olfactory creation.
                         </motion.p>
@@ -80,7 +80,7 @@ const Blog = () => {
                 </div>
 
                 {/* Blogs Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-20 gap-y-20">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-12 md:gap-x-20 gap-y-16 md:gap-y-20">
                     {posts.length === 0 ? (
                         <div className="col-span-full py-20 text-center border border-white/5 bg-white/[0.01]">
                             <p className="text-white/20 tracking-[0.5em] uppercase text-[10px]">The archive is currently being curated.</p>
@@ -110,23 +110,23 @@ const Blog = () => {
                                         </span>
                                     </div>
 
-                                    <div className="absolute bottom-6 left-6 z-20 flex items-center translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                                        <span className="flex items-center text-white/60 text-[8px] tracking-[0.3em] font-bold uppercase">
-                                            <Calendar size={10} className="mr-2 text-gold-500" /> {new Date(post.created_at).toLocaleDateString()}
+                                    <div className="absolute bottom-6 left-6 z-20 flex items-center md:translate-y-2 md:opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                                        <span className="flex items-center text-white/80 md:text-white/60 text-[9px] md:text-[8px] tracking-[0.3em] font-bold uppercase">
+                                            <Calendar size={12} className="mr-2 text-gold-500" /> {new Date(post.created_at).toLocaleDateString()}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div className="flex flex-col items-start px-2">
-                                    <h2 className="text-xl md:text-2xl font-serif text-white group-hover:text-gold-500 transition-colors duration-500 tracking-[0.03em] uppercase font-light mb-4 leading-tight">
+                                    <h2 className="text-xl md:text-2xl font-serif text-white group-hover:text-gold-500 transition-colors duration-500 tracking-[0.03em] uppercase font-light mb-3 md:mb-4 leading-tight">
                                         {post.title}
                                     </h2>
-                                    <p className="text-gray-500 text-xs leading-relaxed mb-8 line-clamp-2 uppercase tracking-[0.1em] font-light">
+                                    <p className="text-gray-400 md:text-gray-500 text-[11px] md:text-xs leading-relaxed mb-6 md:mb-8 line-clamp-2 uppercase tracking-[0.1em] font-light">
                                         {post.content.substring(0, 150)}...
                                     </p>
-                                    <div className="flex items-center space-x-3 text-gold-500 text-[9px] tracking-[0.4em] font-black uppercase group/btn">
+                                    <div className="flex items-center space-x-3 text-gold-500 text-[10px] md:text-[9px] tracking-[0.4em] font-black uppercase group/btn">
                                         <span className="relative">Read Narrative</span>
-                                        <ArrowRight size={12} className="transform group-hover/btn:translate-x-2 transition-transform duration-500" />
+                                        <ArrowRight size={14} className="transform group-hover/btn:translate-x-2 transition-transform duration-500" />
                                     </div>
                                 </div>
                             </motion.div>

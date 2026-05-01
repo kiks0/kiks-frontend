@@ -7,20 +7,20 @@ const Loader = () => {
     // Match the user's requested 1.2s timeout before dismissing
     const timer = setTimeout(() => {
       setIsLoaded(true);
-    }, 1200);
+    }, 800);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <div 
-      className={`fixed inset-0 z-[9999999] bg-black flex items-center justify-center transition-all duration-[1200ms] ease-in-out ${
+      className={`fixed inset-0 z-[9999999] bg-black flex items-center justify-center transition-all duration-[800ms] ease-in-out ${
         isLoaded ? 'opacity-0 invisible pointer-events-none' : 'opacity-100 visible'
       }`}
     >
       <img 
         src="/logo-kiks.webp" 
-        alt="Kiks Ultra Luxury" 
+        alt="Kiksultraluxury" 
         className="w-[120px] md:w-[160px] h-auto animate-luxury-fade invert"
       />
     </div>

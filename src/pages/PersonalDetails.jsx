@@ -176,7 +176,7 @@ const PersonalDetails = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#050505] text-white font-sans pb-20 pt-32 md:pt-40 relative">
+        <div className="min-h-screen bg-[#050505] text-white font-sans pb-16 md:pb-20 pt-24 md:pt-40 relative">
             
             {/* Phone Edit Modal */}
             {isPhoneModalOpen && (
@@ -203,7 +203,7 @@ const PersonalDetails = () => {
                                 </select>
                             </div>
 
-                            <div className="grid grid-cols-[120px_1fr] gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-6">
                                 <div className="space-y-2">
                                     <label className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Location code</label>
                                     <select 
@@ -269,12 +269,12 @@ const PersonalDetails = () => {
                     <ChevronLeft size={14} className="mr-2" /> My Account
                 </Link>
 
-                <div className="text-center mb-16">
-                    <h1 className="text-3xl md:text-4xl font-serif tracking-[0.2em] uppercase mb-8 text-gold-500">Personal Details</h1>
-                    <p className="text-[11px] text-white/40 tracking-wider">Updates made to your information will be reflected across your KIKS profile.</p>
+                <div className="text-center mb-10 md:mb-16">
+                    <h1 className="text-2xl md:text-4xl font-serif tracking-[0.2em] uppercase mb-4 md:mb-8 text-gold-500">Personal Details</h1>
+                    <p className="text-[10px] md:text-[11px] text-white/40 tracking-wider">Updates made to your information will be reflected across your KIKS profile.</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-16">
+                <form onSubmit={handleSubmit} className="space-y-12 md:space-y-16">
                     
                     {/* PROFILE SECTION */}
                     <section>
@@ -331,11 +331,11 @@ const PersonalDetails = () => {
                                     <label className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Date of birth (optional)</label>
                                     <HelpCircle size={14} className="ml-2 text-white/10 cursor-help" />
                                 </div>
-                                <div className="grid grid-cols-3 gap-6">
-                                    <div>
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                    <div className="sm:col-span-1">
                                         <label className="text-[9px] text-white/20 uppercase tracking-widest block mb-1">Day</label>
                                         <select 
-                                            className="w-full border-b border-white/10 py-3 text-sm focus:border-gold-500 outline-none transition-colors bg-transparent text-white"
+                                            className="w-full border-b border-white/10 py-3 text-sm focus:border-gold-500 outline-none transition-colors bg-transparent text-white appearance-none"
                                             value={formData.dobDay}
                                             onChange={(e) => setFormData({...formData, dobDay: e.target.value})}
                                         >
@@ -383,7 +383,7 @@ const PersonalDetails = () => {
                                     onChange={(e) => setFormData({...formData, location: e.target.value})}
                                 >
                                     {COUNTRIES.map(c => (
-                                        <option className="bg-black" key={c.name} value={c.name}>{c.name}</option>
+                                        <option className="bg-black text-white" key={c.name} value={c.name}>{c.name}</option>
                                     ))}
                                 </select>
                             </div>
@@ -414,7 +414,7 @@ const PersonalDetails = () => {
                                 </div>
                                 <p className="text-[11px] text-white/40 mb-8 max-w-md">Your default phone number will be pre-filled in the checkout and will be used to receive SMS notifications.</p>
                                 
-                                <div className="grid grid-cols-[120px_1fr] gap-10">
+                                <div className="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-6 md:gap-10">
                                     <div className="space-y-2">
                                         <p className="text-[9px] text-white/20 uppercase tracking-widest font-bold">Location code</p>
                                         <p className="text-xs text-white/80 py-2 border-b border-white/5">{formData.countryCode}</p>

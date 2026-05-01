@@ -3,33 +3,39 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Search as SearchIcon, ArrowRight, TrendingUp, Sparkles } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 const SearchOverlay = ({ isOpen, onClose }) => {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
   const inputRef = useRef(null);
   const navigate = useNavigate();
+  const [dbResults, setDbResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const searchCache = useRef({});
 
-  // Mock Searchable Data
-  const searchItems = [
-    { id: 1, title: 'Home', type: 'Perspective', link: '/', category: 'NAV' },
-    { id: 2, title: 'Collection', type: 'Curation', link: '/collection', category: 'NAV' },
-    { id: 3, title: 'Arambh Collection', type: 'Legacy', link: '/collection?category=arambh', category: 'COLLECTION' },
-    { id: 4, title: 'Blog', type: 'Editorial', link: '/blog', category: 'NAV' },
-    { id: 5, title: 'Contact Us', type: 'Concierge', link: '/contact', category: 'SUPPORT' },
-    { id: 6, title: 'Elite', type: 'Extrait', link: '/collection', category: 'SCENT' },
-    { id: 7, title: 'La Reina', type: 'Extrait', link: '/collection', category: 'SCENT' },
-    { id: 8, title: 'El Rey', type: 'Extrait', link: '/collection', category: 'SCENT' },
-    { id: 9, title: 'Amber', type: 'Rare Note', link: '/collection', category: 'NOTE' },
-    { id: 10, title: 'Oudh', type: 'Rare Note', link: '/collection', category: 'NOTE' },
-    { id: 11, title: 'Sandalwood', type: 'Rare Note', link: '/collection', category: 'NOTE' },
-    { id: 12, title: 'Musk', type: 'Rare Note', link: '/collection', category: 'NOTE' },
-    { id: 13, title: 'Jasmine', type: 'Rare Note', link: '/collection', category: 'NOTE' }
+  // Core Site Pages
+  // Core Site Pages with Keywords for better searchability
+  const sitePages = [
+    { id: 'p1', title: 'Home', type: 'Experience', link: '/', category: 'PAGE', keywords: ['main', 'landing', 'start'] },
+    { id: 'p2', title: 'The Journal', type: 'Stories', link: '/blog', category: 'PAGE', keywords: ['blog', 'news', 'articles', 'updates'] },
+    { id: 'p3', title: 'Concierge', type: 'Support', link: '/contact', category: 'PAGE', keywords: ['contact', 'help', 'email', 'support', 'reach out'] },
+    { id: 'p4', title: 'Personal Details', type: 'Account', link: '/account/personal-details', category: 'ACCOUNT', keywords: ['profile', 'settings', 'user', 'info', 'me'] },
+    { id: 'p5', title: 'My Orders', type: 'History', link: '/orders', category: 'ACCOUNT', keywords: ['purchases', 'tracking', 'list', 'bought'] },
+    { id: 'p6', title: 'The House of KIKS', type: 'About', link: '/essence', category: 'PAGE', keywords: ['story', 'brand', 'history', 'mission', 'about'] },
+    { id: 'p7', title: 'Private Entrance', type: 'Login', link: '/login', category: 'AUTH', keywords: ['signin', 'login', 'access', 'enter'] },
+    { id: 'p8', title: 'Join the Elite', type: 'Register', link: '/register', category: 'AUTH', keywords: ['signup', 'register', 'join', 'create account'] },
+    { id: 'p9', title: 'Privacy Policy', type: 'Legal', link: '/privacy-policy', category: 'POLICY', keywords: ['data', 'security', 'gdpr', 'privacy'] },
+    { id: 'p10', title: 'Terms & Conditions', type: 'Legal', link: '/terms-conditions', category: 'POLICY', keywords: ['agreement', 'rules', 'tos', 'conditions'] },
+    { id: 'p11', title: 'Refund Policy', type: 'Service', link: '/refund-policy', category: 'POLICY', keywords: ['money back', 'refund', 'cancellation'] },
+    { id: 'p12', title: 'Return Policy', type: 'Service', link: '/return-policy', category: 'POLICY', keywords: ['returns', 'shipping', 'delivery', 'exchange'] },
+    { id: 'p13', title: 'Disclaimer', type: 'Legal', link: '/disclaimer', category: 'POLICY', keywords: ['legal', 'notice', 'warning'] },
+    { id: 'p14', title: 'About Us', type: 'Story', link: '/about', category: 'PAGE', keywords: ['brand', 'who we are', 'team', 'company'] }
   ];
 
   useEffect(() => {
     if (isOpen) {
       setQuery('');
-      setResults([]);
+      setDbResults([]);
       setTimeout(() => inputRef.current?.focus(), 400);
       document.body.style.overflow = 'hidden';
     } else {
@@ -38,21 +44,97 @@ const SearchOverlay = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   useEffect(() => {
-    if (query.trim().length > 1) {
-      const filtered = searchItems.filter(item => 
-        item.title.toLowerCase().includes(query.toLowerCase()) ||
-        item.type.toLowerCase().includes(query.toLowerCase()) ||
-        item.category.toLowerCase().includes(query.toLowerCase())
+    const fetchResults = async () => {
+      const trimmedQuery = query.trim().toLowerCase();
+      if (trimmedQuery.length < 2) {
+        setDbResults([]);
+        return;
+      }
+
+      // Check Cache
+      if (searchCache.current[trimmedQuery]) {
+        setDbResults(searchCache.current[trimmedQuery]);
+        return;
+      }
+
+      // 1. Local Search (Pages) - Instant & Reliable
+      const filteredPages = sitePages.filter(p => 
+        p.title.toLowerCase().includes(trimmedQuery) ||
+        p.type.toLowerCase().includes(trimmedQuery) ||
+        p.keywords.some(k => k.toLowerCase().includes(trimmedQuery)) ||
+        (trimmedQuery.startsWith('₹') || !isNaN(trimmedQuery)) // Price hint
       );
-      setResults(filtered);
-    } else {
-      setResults([]);
-    }
+
+      setLoading(true);
+      try {
+        const [prodRes, colRes] = await Promise.all([
+          fetch(`${API_URL}/api/products?search=${encodeURIComponent(query)}`),
+          fetch(`${API_URL}/api/collections`)
+        ]);
+
+        let products = [];
+        if (prodRes.ok) products = await prodRes.json();
+
+        let collections = [];
+        if (colRes.ok) collections = await colRes.json();
+
+        const formattedProducts = products.map(p => ({
+          id: p.id,
+          title: p.name,
+          type: p.product_type || 'Extrait de Parfum',
+          link: `/product/${p.slug}`,
+          category: 'PRODUCT',
+          price: p.price
+        }));
+
+        const formattedCollections = collections
+          .filter(c => c.name.toLowerCase().includes(trimmedQuery))
+          .map(c => ({
+            id: `c-${c.id}`,
+            title: c.name,
+            type: 'Curation',
+            link: `/collection/${c.slug}`,
+            category: 'COLLECTION'
+          }));
+
+        // 2. Price Filtering (Client-side refinement)
+        const priceMatches = !isNaN(trimmedQuery) ? formattedProducts.filter(p => 
+          Math.abs(parseFloat(p.price) - parseFloat(trimmedQuery)) < 500
+        ) : [];
+
+        // 3. Combine & Prioritize
+        const allResults = [...filteredPages, ...formattedCollections, ...formattedProducts, ...priceMatches];
+        
+        // Remove duplicates by ID
+        const uniqueResults = Array.from(new Map(allResults.map(item => [item.id, item])).values())
+          .sort((a, b) => {
+            const aTitle = a.title.toLowerCase();
+            const bTitle = b.title.toLowerCase();
+            const aStarts = aTitle.startsWith(trimmedQuery);
+            const bStarts = bTitle.startsWith(trimmedQuery);
+            if (aStarts && !bStarts) return -1;
+            if (!aStarts && bStarts) return 1;
+            return 0;
+          });
+
+        searchCache.current[trimmedQuery] = uniqueResults;
+        setDbResults(uniqueResults);
+      } catch (err) {
+        console.error("Search error:", err);
+        // Fallback to local results only if network fails
+        setDbResults(filteredPages);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const timer = setTimeout(fetchResults, 200); // Faster debounce
+    return () => clearTimeout(timer);
   }, [query]);
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && results.length > 0) {
-      handleLinkClick(results[0].link);
+    if (e.key === 'Enter' && dbResults.length > 0) {
+      handleLinkClick(dbResults[0].link);
     }
     if (e.key === 'Escape') {
       onClose();
@@ -92,7 +174,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
           animate="visible"
           exit="exit"
           variants={containerVariants}
-          className="fixed inset-0 z-[100] bg-dark-900/98 backdrop-blur-3xl overflow-hidden font-sans"
+          className="fixed inset-0 z-[9999] bg-black/98 backdrop-blur-3xl overflow-hidden font-sans"
         >
           {/* Subtle Background Mark */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.02]">
@@ -162,7 +244,10 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                       onChange={(e) => setQuery(e.target.value)}
                       onKeyDown={handleKeyDown}
                     />
-                    <div className="absolute right-0 bottom-5 md:bottom-8 opacity-20 group-hover:opacity-100 transition-opacity">
+                    <div 
+                      className="absolute right-0 bottom-5 md:bottom-8 opacity-20 group-hover:opacity-100 transition-opacity cursor-pointer"
+                      onClick={() => dbResults.length > 0 && handleLinkClick(dbResults[0].link)}
+                    >
                        <SearchIcon size={24} strokeWidth={1} />
                     </div>
                   </div>
@@ -170,9 +255,15 @@ const SearchOverlay = ({ isOpen, onClose }) => {
 
                {/* Results Container */}
                <div className="mt-12 flex-grow overflow-y-auto pr-4 custom-scrollbar">
-                  {results.length > 0 ? (
+                  {loading && (
+                    <div className="py-10 text-center">
+                       <p className="text-gold-500 text-[10px] tracking-[0.4em] uppercase animate-pulse">Searching the vault...</p>
+                    </div>
+                  )}
+
+                  {!loading && dbResults.length > 0 ? (
                     <div className="space-y-0">
-                      {results.map((item, idx) => (
+                      {dbResults.map((item, idx) => (
                         <motion.div
                           key={item.id}
                            initial={{ opacity: 0, x: -10 }}
@@ -198,7 +289,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                   ) : query.length > 1 ? (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-20 text-center md:text-left">
                        <p className="text-white/20 text-sm tracking-[0.3em] font-light uppercase">No essence matches your search</p>
-                       <p className="text-gold-500/50 text-[10px] tracking-[0.1em] mt-4 uppercase">Try "Collection" or "Amber"</p>
                     </motion.div>
                   ) : (
                     <div className="py-20 flex flex-col items-center md:items-start opacity-20">

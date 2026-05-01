@@ -36,10 +36,10 @@ const Terms = () => {
     ];
 
     return (
-        <div className="bg-[#050505] min-h-screen text-white pt-40 md:pt-56 pb-40 px-6 font-sans selection:bg-gold-500/30">
+        <div className="bg-[#050505] min-h-screen text-white pt-32 md:pt-48 pb-32 px-6 font-sans selection:bg-gold-500/30">
             <div className="container mx-auto max-w-5xl">
                 
-                <header className="text-center mb-32">
+                <header className="text-center mb-20">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -47,7 +47,7 @@ const Terms = () => {
                     >
                         <p className="text-[10px] tracking-[0.6em] text-gold-500 uppercase font-black mb-6">Foundations of Trust</p>
                         <h1 className="text-4xl md:text-7xl font-serif tracking-[0.1em] text-white uppercase mb-8 leading-tight">Terms & Conditions</h1>
-                        <div className="w-20 h-px bg-white/10 mx-auto mb-10"></div>
+                        <div className="w-20 h-px bg-white/10 mx-auto mb-8"></div>
                         <p className="text-white/40 text-[11px] font-medium tracking-[0.4em] uppercase max-w-2xl mx-auto leading-loose">
                             Welcome to Kiks Ultra Luxury. By accessing <span className="text-white">kiksultraluxury.com</span>, you agree to comply with and be bound by the following Terms and Conditions.
                         </p>
@@ -83,7 +83,7 @@ const Terms = () => {
                 <motion.div 
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
-                    className="mt-40 pt-20 border-t border-white/10"
+                    className="mt-32 pt-16 border-t border-white/10"
                 >
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
                         <div className="space-y-4">
@@ -101,7 +101,7 @@ const Terms = () => {
                     </div>
                 </motion.div>
 
-                <footer className="mt-40 text-center">
+                <footer className="mt-32 text-center">
                     <p className="text-[9px] tracking-[0.8em] text-white/10 uppercase font-black">Refining the Essence of Luxury Since 2026</p>
                 </footer>
 

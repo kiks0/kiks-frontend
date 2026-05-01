@@ -25,8 +25,8 @@ const ProductDetail = lazy(() => import('./pages/ProductDetail'));
 const Admin = lazy(() => import('./pages/Admin'));
 const Checkout = lazy(() => import('./pages/Checkout'));
 const OrderSuccess = lazy(() => import('./pages/OrderSuccess'));
-import Addresses from './pages/Addresses';
-import Orders from './pages/Orders';
+const Addresses = lazy(() => import('./pages/Addresses'));
+const Orders = lazy(() => import('./pages/Orders'));
 const Security = lazy(() => import('./pages/Security'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const Terms = lazy(() => import('./pages/Terms'));
@@ -35,7 +35,7 @@ const RefundPolicy = lazy(() => import('./pages/RefundPolicy'));
 const Disclaimer = lazy(() => import('./pages/Disclaimer'));
 const About = lazy(() => import('./pages/About'));
 const Story = lazy(() => import('./pages/Story'));
-import PersonalDetails from './pages/PersonalDetails';
+const PersonalDetails = lazy(() => import('./pages/PersonalDetails'));
 
 import PageLoader from './components/PageLoader';
 
@@ -49,7 +49,6 @@ function App() {
   return (
     <Router>
       <ScrollToTopReset />
-      <ScrollToTop />
       <div className="flex flex-col min-h-screen bg-black overflow-x-hidden">
         <Loader />
         <CookieBanner />
