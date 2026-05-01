@@ -369,20 +369,20 @@ const Home = () => {
                 {/* Olfactory Composition Grid */}
                 <div className="grid grid-cols-2 gap-y-8 gap-x-12 border-y border-white/10 py-8 w-full max-w-md">
                   <div className="space-y-2">
-                    <span className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-bold">Intensity</span>
-                    <p className="text-[11px] text-white tracking-[0.2em] uppercase font-medium">DEEP / RESINOUS</p>
+                    <span className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-bold">Strength</span>
+                    <p className="text-[11px] text-white tracking-[0.2em] uppercase font-medium">Strong & Rich</p>
                   </div>
                   <div className="space-y-2">
-                    <span className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-bold">Key Notes</span>
-                    <p className="text-[11px] text-white tracking-[0.2em] uppercase font-medium">OUD, SAFFRON</p>
+                    <span className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-bold">Main Notes</span>
+                    <p className="text-[11px] text-white tracking-[0.2em] uppercase font-medium">Oud & Saffron</p>
                   </div>
                   <div className="space-y-2">
-                    <span className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-bold">Projection</span>
-                    <p className="text-[11px] text-white tracking-[0.2em] uppercase font-medium">HIGH / ENVELOPING</p>
+                    <span className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-bold">Scent Trail</span>
+                    <p className="text-[11px] text-white tracking-[0.2em] uppercase font-medium">Noticeable</p>
                   </div>
                   <div className="space-y-2">
-                    <span className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-bold">Duration</span>
-                    <p className="text-[11px] text-white tracking-[0.2em] uppercase font-medium">12+ HOURS</p>
+                    <span className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-bold">Lasting Power</span>
+                    <p className="text-[11px] text-white tracking-[0.2em] uppercase font-medium">All Day</p>
                   </div>
                 </div>
               </div>
