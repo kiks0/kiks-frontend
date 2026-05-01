@@ -116,6 +116,7 @@ const Home = () => {
   useEffect(() => {
     const mm = gsap.matchMedia();
 
+    // Desktop: Side-by-Side Split
     mm.add('(min-width: 768px)', () => {
       const photos = gsap.utils.toArray('.showcasePhoto:not(:first-child)');
       const sections = gsap.utils.toArray('.showcaseContentSection:not(:first-child)');
@@ -125,9 +126,8 @@ const Home = () => {
 
       sections.forEach((section, index) => {
         const headline = section.querySelector('.showcaseReveal');
-        const img = photos[index].querySelector('img');
 
-        // Image Reveal Timeline (Stable - No Zoom)
+        // Image Reveal Timeline
         const animation = gsap.timeline()
           .to(photos[index], {
             clipPath: 'inset(0% 0% 0% 0%)',
@@ -144,20 +144,22 @@ const Home = () => {
           scrub: 1.2,
         });
 
-        // Text Stagger Reveal (Faster and cleaner)
-        gsap.from(headline.children, {
-          y: 30,
-          opacity: 0,
-          stagger: 0.1,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 70%",
-            end: "top 40%",
-            scrub: 1
-          }
-        });
+        // Text Stagger Reveal
+        if (headline) {
+          gsap.from(headline.children, {
+            y: 30,
+            opacity: 0,
+            stagger: 0.1,
+            duration: 0.8,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 70%",
+              end: "top 40%",
+              scrub: 1
+            }
+          });
+        }
       });
 
       // Pin the showcase gallery
@@ -165,9 +167,59 @@ const Home = () => {
         trigger: showcaseContainerRef.current,
         start: 'top top',
         end: 'bottom bottom',
-        pin: '.showcaseRight', // Pin the right side now
+        pin: '.showcaseRight',
         pinSpacing: false,
       });
+    });
+
+    mm.add("(max-width: 767px)", () => {
+      const container = showcaseContainerRef.current;
+      const wrapper = container.querySelector(".mobileSlideshowWrapper");
+      const slides = gsap.utils.toArray(container.querySelectorAll(".mobileSlide"));
+
+      if (!container || !wrapper || slides.length === 0) return;
+
+      gsap.set(slides, {
+        opacity: 0,
+        scale: 0.95,
+      });
+
+      gsap.set(slides[0], {
+        opacity: 1,
+        scale: 1,
+      });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: container,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: true,
+          pin: wrapper,
+          pinSpacing: false,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      slides.forEach((slide, index) => {
+        if (index === 0) return;
+
+        tl.to(
+          slide,
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 1,
+            ease: "power2.inOut",
+          },
+          index
+        );
+      });
+
+      return () => {
+        tl.kill();
+      };
     });
 
     return () => mm.revert();
@@ -225,7 +277,7 @@ const Home = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.2, delay: 0.8 }}
-            className="text-[9px] md:text-sm font-light text-gray-300 max-w-sm mx-auto mb-8 md:mb-10 tracking-[0.4em] md:tracking-widest leading-relaxed group-hover/hero:text-gold-400 transition-colors"
+            className="text-xs md:text-sm font-light text-gray-300 max-w-sm mx-auto mb-8 md:mb-10 tracking-[0.4em] md:tracking-widest leading-relaxed group-hover/hero:text-gold-400 transition-colors"
           >
             {t('home.hero_subtitle')}
           </motion.p>
@@ -235,7 +287,7 @@ const Home = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1 }}
           >
-            <div className="group relative inline-flex items-center justify-center px-10 py-4 text-[10px] tracking-[0.3em] font-medium uppercase text-white hover:text-dark-900 overflow-hidden transition-colors duration-500">
+            <div className="group relative inline-flex items-center justify-center px-10 py-4 text-xs md:text-[10px] tracking-[0.3em] font-medium uppercase text-white hover:text-dark-900 overflow-hidden transition-colors duration-500">
               <span className="absolute inset-0 w-full h-full -mt-1 rounded-sm opacity-30 bg-gradient-to-b from-transparent via-transparent to-black pointer-events-none" />
               <span className="absolute inset-0 w-full h-full transition-all duration-500 ease-out transform translate-y-full bg-white group-hover:translate-y-0" />
               <span className="relative z-10 pt-[2px]">{t('home.discover')}</span>
@@ -276,14 +328,14 @@ const Home = () => {
               Elite
             </h2>
 
-            <p className="text-[10px] md:text-xs text-gray-300 mb-10 leading-relaxed font-semibold tracking-[0.08em] max-w-lg">
+            <p className="text-xs text-gray-300 mb-10 leading-relaxed font-semibold tracking-[0.08em] max-w-lg">
               {t('home.elite_desc')}
             </p>
 
             <div className="flex space-x-4">
               <Link
                 to="/collection/arambh/elite"
-                className="inline-flex items-center justify-center px-10 py-3.5 bg-[#2a2a2a] rounded-full text-[11px] tracking-[0.3em] uppercase text-white hover:bg-white hover:text-dark-900 transition-all duration-300 font-medium"
+                className="inline-flex items-center justify-center px-10 py-3.5 bg-[#2a2a2a] rounded-full text-xs md:text-[11px] tracking-[0.3em] uppercase text-white hover:bg-white hover:text-dark-900 transition-all duration-300 font-medium"
               >
                 {t('home.discover_btn')}
               </Link>
@@ -294,10 +346,11 @@ const Home = () => {
       </section>
 
       {/* SECTION 3: THE LUXURY SHOWCASE (GSAP STICKY REVEAL) */}
-      <section ref={showcaseContainerRef} className="relative bg-[#050505] border-t border-white/5 overflow-hidden">
-        <div className="flex flex-col md:flex-row">
-          {/* Mobile/Tablet View (Visible on < md) */}
-          <div className="md:hidden flex flex-col w-full">
+      <section ref={showcaseContainerRef} className="relative bg-[#050505] border-t border-white/5 overflow-hidden h-[300vh] md:h-auto">
+        <div className="flex flex-col md:flex-row h-full">
+
+          {/* Mobile View: Full-Screen Sticky Slideshow */}
+          <div className="md:hidden mobileSlideshowWrapper h-screen w-full overflow-hidden">
             {[
               {
                 id: 'elite',
@@ -318,21 +371,40 @@ const Home = () => {
                 image: '/el-rey.jpeg'
               }
             ].map((product, index) => (
-              <div key={product.id} className="flex flex-col items-center justify-center px-6 py-8 border-b border-white/5">
-                <div className="w-full max-w-[280px] aspect-[3/4] bg-[#0d0d0d] border border-white/10 mb-6 overflow-hidden">
-                  <img src={product.image} alt={product.name} loading="lazy" decoding="async" className="w-full h-full object-contain p-8" />
+              <div 
+                key={product.id} 
+                className="mobileSlide absolute inset-0 flex flex-col items-center justify-center px-8 py-10 bg-[#050505]"
+                style={{ zIndex: 10 + index }}
+              >
+                {/* Name on Top */}
+                <div className="text-center mb-6">
+                  <span className="text-gold-500 text-[8px] tracking-[0.5em] uppercase font-bold block mb-2">Collection</span>
+                  <h2 className="text-2xl font-serif text-white tracking-[0.1em] uppercase">{product.name}</h2>
                 </div>
-                <div className="text-center">
+                
+                {/* Image in Middle */}
+                <div className="relative group w-full max-w-[200px] aspect-[3/4] mb-6">
+                  <div className="absolute inset-0 bg-gold-500/5 blur-3xl rounded-full opacity-30" />
+                  <Link to={`/collection/arambh/${product.id}`} className="relative block w-full h-full bg-[#0d0d0d] border border-white/10 overflow-hidden">
+                    <img src={product.image} alt={product.name} className="w-full h-full object-contain p-6" />
+                  </Link>
+                </div>
 
-                  <h2 className="text-3xl font-serif text-white tracking-[0.05em] mb-4 uppercase">{product.name}</h2>
-                  <p className="text-[11px] text-gray-400 leading-relaxed tracking-widest font-medium px-4">{product.desc}</p>
-
+                {/* Description at Bottom */}
+                <div className="max-w-[260px] text-center">
+                  <p className="text-[10px] text-gray-400 leading-relaxed tracking-[0.12em] font-medium text-center italic mb-6 uppercase">{product.desc}</p>
+                  <Link 
+                    to={`/collection/arambh/${product.id}`} 
+                    className="inline-block text-[9px] text-gold-500 tracking-[0.3em] uppercase font-bold border-b border-gold-500/30 pb-1 hover:border-gold-500 transition-colors"
+                  >
+                    Discover The Scent
+                  </Link>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Desktop View (Visible on >= md) */}
+          {/* Desktop View: Side-by-Side Split */}
           <div className="hidden md:block showcaseContent w-1/2">
             {[
               {
@@ -350,14 +422,14 @@ const Home = () => {
             ].map((content, index) => (
               <div
                 key={index}
-                className="showcaseContentSection h-screen flex items-center justify-center p-24"
+                className="showcaseContentSection min-h-screen flex items-center justify-center p-4 md:p-12"
               >
                 <div className="showcaseReveal max-w-lg">
 
-                  <h2 className="text-5xl font-serif text-white tracking-[0.05em] mb-6 leading-tight uppercase">
+                  <h2 className="text-2xl md:text-5xl font-serif text-white tracking-[0.05em] mb-4 md:mb-6 leading-tight uppercase">
                     {content.name}
                   </h2>
-                  <p className="text-sm text-gray-400 leading-[2] tracking-widest font-medium">
+                  <p className="text-[10px] md:text-sm text-gray-400 leading-[1.6] md:leading-[2] tracking-widest font-medium">
                     {content.desc}
                   </p>
 
@@ -375,7 +447,7 @@ const Home = () => {
               ].map((product, index) => (
                 <div
                   key={product.id}
-                  className="showcasePhoto absolute inset-0 flex items-center justify-center p-16 lg:p-24"
+                  className="showcasePhoto absolute inset-0 flex items-center justify-center p-2 md:p-8 lg:p-12"
                   style={{ opacity: index === 0 ? 1 : 0 }}
                 >
                   <Link
@@ -387,7 +459,7 @@ const Home = () => {
                       alt={product.name}
                       loading="lazy"
                       decoding="async"
-                      className="w-full h-full object-contain p-16"
+                      className="w-full h-full object-contain p-4 md:p-16"
                     />
                   </Link>
                 </div>
@@ -403,15 +475,15 @@ const Home = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-[#0a0a0a] z-10" />
           <img
             ref={storyImgRef}
-            src="https://images.unsplash.com/photo-1616604847470-a3c3fdfded8b?q=80&w=2500&auto=format&fit=crop"
+            src="/story-hero.webp"
             alt="Perfumery Art"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover hidden md:block"
           />
         </div>
 
         <div className="relative z-20 h-full flex flex-col items-center justify-center px-6">
           <div className="text-center max-w-4xl mx-auto flex flex-col items-center">
-            <p className="text-gold-500 text-[10px] md:text-xs font-semibold tracking-[0.2em] mb-8 font-sans uppercase">
+            <p className="text-gold-500 text-xs md:text-xs font-semibold tracking-[0.2em] mb-8 font-sans uppercase">
               {t('home.art_creation')}
             </p>
 
@@ -424,7 +496,7 @@ const Home = () => {
               </h2>
             </div>
 
-            <p className="text-[10px] md:text-xs text-gray-400 max-w-lg mx-auto leading-[2.5] tracking-[0.15em] font-semibold">
+            <p className="text-xs text-gray-400 max-w-lg mx-auto leading-[2.5] tracking-[0.15em] font-semibold">
               {t('home.creation_desc')}
             </p>
           </div>
@@ -506,14 +578,14 @@ const Home = () => {
               className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12 border-t border-white/5 pt-12"
             >
               <div className="space-y-4 text-center sm:text-left">
-                <span className="text-gold-500 text-[10px] tracking-[0.3em] uppercase font-bold">The Sourcing</span>
-                <p className="text-white/40 text-[11px] md:text-xs leading-relaxed tracking-wider font-light italic">
+                <span className="text-gold-500 text-xs md:text-[10px] tracking-[0.3em] uppercase font-bold">The Sourcing</span>
+                <p className="text-white/40 text-sm md:text-xs leading-relaxed tracking-wider font-light italic">
                   Extracted from hand-selected blossoms in Grasse, aged for eighteen months in charred oak.
                 </p>
               </div>
               <div className="space-y-4 text-center sm:text-left">
-                <span className="text-gold-500 text-[10px] tracking-[0.3em] uppercase font-bold">The Alchemy</span>
-                <p className="text-white/40 text-[11px] md:text-xs leading-relaxed tracking-wider font-light italic">
+                <span className="text-gold-500 text-xs md:text-[10px] tracking-[0.3em] uppercase font-bold">The Alchemy</span>
+                <p className="text-white/40 text-sm md:text-xs leading-relaxed tracking-wider font-light italic">
                   A high-concentration extrait that evolves with your unique body chemistry.
                 </p>
               </div>
@@ -532,7 +604,7 @@ const Home = () => {
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:border-gold-500 transition-all duration-700">
                   <div className="w-1.5 h-1.5 bg-gold-500 rounded-full animate-pulse" />
                 </div>
-                <span className="text-[9px] md:text-[10px] text-white font-black tracking-[0.4em] md:tracking-[0.6em] uppercase group-hover:text-gold-400 transition-colors">
+                <span className="text-[11px] md:text-[10px] text-white font-black tracking-[0.4em] md:tracking-[0.6em] uppercase group-hover:text-gold-400 transition-colors">
                   Explore The Collection
                 </span>
               </Link>
@@ -551,7 +623,7 @@ const Home = () => {
                   Seen in <br /> <span className="text-white not-italic font-sans font-black tracking-widest">KIKS</span>
                 </h2>
               </div>
-              <p className="text-[9px] md:text-xs text-white/30 tracking-[0.2em] uppercase max-w-[250px] md:text-right leading-relaxed">
+              <p className="text-xs text-white/30 tracking-[0.2em] uppercase max-w-[250px] md:text-right leading-relaxed">
                 Our creations in the hands of the global elite.
               </p>
             </div>

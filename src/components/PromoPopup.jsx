@@ -94,9 +94,9 @@ const PromoPopup = () => {
                         {/* Close Button */}
                         <button
                             onClick={handleClose}
-                            className="absolute top-4 right-4 z-50 text-white/40 hover:text-white transition-colors bg-black/50 p-2 rounded-full backdrop-blur-sm"
+                            className="absolute top-4 right-4 z-50 text-white/40 hover:text-white transition-colors bg-black/50 p-3 md:p-2 rounded-full backdrop-blur-sm"
                         >
-                            <X size={16} />
+                            <X size={20} className="md:w-4 md:h-4" />
                         </button>
 
                         {/* Image Side / Full Image */}
@@ -156,7 +156,7 @@ const PromoPopup = () => {
 
                                         <button
                                             onClick={handleClose}
-                                            className="mt-6 text-[8px] tracking-[0.4em] text-white/20 hover:text-white transition-colors uppercase"
+                                            className="mt-6 text-[10px] md:text-[8px] p-3 md:p-0 tracking-[0.4em] text-white/20 hover:text-white transition-colors uppercase"
                                         >
                                             Maybe Later
                                         </button>
