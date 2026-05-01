@@ -2595,18 +2595,18 @@ const Admin = () => {
                                                     <textarea required className={`${inputClasses} h-24 md:h-32 text-xs md:text-sm`} value={prodFormData.description} onChange={e => setProdFormData({ ...prodFormData, description: e.target.value })} />
                                                 </div>
                                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
-                                                    <div><label className={labelClasses}>Olfactory Top</label><input className={inputClasses} value={prodFormData.top_notes} onChange={e => setProdFormData({ ...prodFormData, top_notes: e.target.value })} /></div>
-                                                    <div><label className={labelClasses}>Olfactory Heart</label><input className={inputClasses} value={prodFormData.heart_notes} onChange={e => setProdFormData({ ...prodFormData, heart_notes: e.target.value })} /></div>
-                                                    <div><label className={labelClasses}>Olfactory Base</label><input className={inputClasses} value={prodFormData.base_notes} onChange={e => setProdFormData({ ...prodFormData, base_notes: e.target.value })} /></div>
+                                                    <div><label className={labelClasses}>Top Notes</label><input className={inputClasses} value={prodFormData.top_notes} onChange={e => setProdFormData({ ...prodFormData, top_notes: e.target.value })} /></div>
+                                                    <div><label className={labelClasses}>Heart Notes</label><input className={inputClasses} value={prodFormData.heart_notes} onChange={e => setProdFormData({ ...prodFormData, heart_notes: e.target.value })} /></div>
+                                                    <div><label className={labelClasses}>Base Notes</label><input className={inputClasses} value={prodFormData.base_notes} onChange={e => setProdFormData({ ...prodFormData, base_notes: e.target.value })} /></div>
                                                 </div>
 
                                                 <div className="md:col-span-2 mt-8 border-t border-white/5 pt-8">
-                                                    <h4 className="text-[10px] tracking-[0.3em] font-black uppercase text-gold-500 mb-8 italic">Visual Storytelling & Editorial Assets</h4>
+                                                    <h4 className="text-[10px] tracking-[0.3em] font-black uppercase text-gold-500 mb-8 italic">Product Gallery & Assets</h4>
 
                                                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                                                         <div className="md:col-span-2">
                                                             <ImageUploadZone
-                                                                label="Storytelling Cinematic Banner (Widescreen)"
+                                                                label="Section Banner (Widescreen)"
                                                                 value={prodFormData.story_banner}
                                                                 onUpload={(e) => handleImageUpload(e, 'story_banner')}
                                                                 height="h-40 md:h-56"
@@ -2614,12 +2614,12 @@ const Admin = () => {
                                                         </div>
 
                                                         <div className="md:col-span-2">
-                                                            <label className={labelClasses}>The Muse Narrative (Editorial Flow)</label>
+                                                            <label className={labelClasses}>Product Story</label>
                                                             <textarea className={`${inputClasses} h-32 text-xs`} value={prodFormData.muse_story} onChange={e => setProdFormData({ ...prodFormData, muse_story: e.target.value })} placeholder="Describe the soul of the fragrance..." />
                                                         </div>
 
                                                         <ImageUploadZone
-                                                            label="Muse Portrait Asset (Arched Window)"
+                                                            label="Side Portrait (Arched)"
                                                             value={prodFormData.muse_image}
                                                             onUpload={(e) => handleImageUpload(e, 'muse_image')}
                                                             height="h-[250px] md:h-[400px]"
@@ -2627,7 +2627,7 @@ const Admin = () => {
 
                                                         <div className="flex flex-col space-y-10">
                                                             <div className="bg-white/5 p-6 border border-white/5">
-                                                                <label className={labelClasses}>Olfactory Pyramid Labels</label>
+                                                                <label className={labelClasses}>Detailed Ingredient Labels</label>
                                                                 <div className="grid grid-cols-1 gap-6 mt-4">
                                                                     <div className="flex items-center space-x-4">
                                                                         <span className="text-[8px] text-white/20 w-12 tracking-widest uppercase">Top</span>
@@ -2645,7 +2645,7 @@ const Admin = () => {
                                                             </div>
 
                                                             <div className="bg-white/[0.02] p-8 border border-white/5 flex-grow">
-                                                                <label className={labelClasses + " mb-8"}>Olfactory Icons (PNG/SVG)</label>
+                                                                <label className={labelClasses + " mb-8"}>Note Icons (PNG/SVG)</label>
                                                                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
                                                                     {['top_note_icon', 'heart_note_icon', 'base_note_icon'].map((field) => (
                                                                         <div key={field} className="flex flex-col items-center">
