@@ -166,7 +166,7 @@ const Collection = () => {
                                     <ArrowRight size={10} className="mr-3 rotate-180 group-hover:-translate-x-2 transition-transform" /> Back to Collection
                                 </button>
                                 <h2 className="text-3xl sm:text-4xl md:text-6xl font-serif tracking-[0.05em] text-white uppercase italic">
-                                    {collection.name} <span className="not-italic text-white/20 block md:inline-block md:ml-4 font-light text-xl md:text-4xl">Our Selection</span>
+                                    {collection.name}
                                 </h2>
                                 <p className="text-white/40 text-[10px] tracking-[0.4em] md:tracking-[0.6em] uppercase mt-4 md:mt-6 max-w-md leading-relaxed">
                                     Exploring the sensory architecture of {collection.name.toLowerCase()}
