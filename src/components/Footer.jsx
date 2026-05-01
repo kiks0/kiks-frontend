@@ -95,26 +95,26 @@ const Footer = () => {
       {isLocationModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setIsLocationModalOpen(false)}></div>
-          <div className="bg-[#0A0A0A] text-white w-full max-w-[600px] p-10 md:p-16 relative z-10 text-center animate-fade-in shadow-2xl border border-white/10">
+          <div className="bg-[#0A0A0A] text-white w-full max-w-[600px] p-6 sm:p-10 md:p-16 relative z-10 text-center animate-fade-in shadow-2xl border border-white/10 mx-4">
             <button onClick={() => setIsLocationModalOpen(false)} className="absolute top-6 right-6 text-white hover:text-gold-500 transition-all">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M18 6L6 18M6 6l12 12"></path></svg>
             </button>
-            <h2 className="text-[14px] md:text-[18px] font-black tracking-[0.4em] mb-10 leading-relaxed px-4 text-white uppercase font-serif">
+            <h2 className="text-[12px] sm:text-[14px] md:text-[18px] font-black tracking-[0.2em] sm:tracking-[0.4em] mb-6 sm:mb-10 leading-relaxed px-2 sm:px-4 text-white uppercase font-serif">
               {t('footer.modal.title', { location: selectedLocation })}
             </h2>
-            <p className="text-[11px] md:text-[12px] text-white/50 tracking-[0.2em] mb-12 max-w-sm mx-auto leading-relaxed uppercase font-black">
+            <p className="text-[9px] sm:text-[11px] md:text-[12px] text-white/50 tracking-[0.15em] sm:tracking-[0.2em] mb-8 sm:mb-12 max-w-sm mx-auto leading-relaxed uppercase font-black px-2">
               {t('footer.modal.desc')}
             </p>
             <div className="mb-12">
-              <p className="text-[9px] md:text-[10px] font-black tracking-[0.3em] mb-6 text-white/30 uppercase">{t('footer.modal.change')}</p>
+              <p className="text-[8px] sm:text-[9px] md:text-[10px] font-black tracking-[0.3em] mb-6 text-white/30 uppercase">{t('footer.modal.change')}</p>
               <div className="relative border-b border-white/20 pb-4">
                 <select
                   value={selectedLocation}
                   onChange={(e) => setSelectedLocation(e.target.value)}
-                  className="w-full bg-transparent text-[14px] md:text-[16px] text-center focus:outline-none cursor-pointer appearance-none px-8 text-white font-bold tracking-widest uppercase"
+                  className="w-full bg-transparent text-[12px] sm:text-[14px] md:text-[16px] text-center focus:outline-none cursor-pointer appearance-none px-4 sm:px-8 text-white font-bold tracking-[0.1em] sm:tracking-widest uppercase"
                 >
                   {locations.map(loc => (
-                    <option key={loc.name} value={loc.name} className="text-black bg-white">{loc.name}</option>
+                    <option key={loc.name} value={loc.name} className="text-white bg-[#0A0A0A]">{loc.name}</option>
                   ))}
                 </select>
                 <div className="absolute right-0 top-1 pointer-events-none text-white/40">
@@ -122,7 +122,7 @@ const Footer = () => {
                 </div>
               </div>
             </div>
-            <button onClick={handleValidateLocation} className="w-full md:w-auto bg-white text-black px-20 py-5 text-[11px] md:text-[12px] font-black tracking-[0.5em] uppercase hover:bg-gold-500 hover:text-white transition-all duration-500 shadow-xl">
+            <button onClick={handleValidateLocation} className="w-full md:w-auto bg-white text-black px-10 md:px-20 py-4 md:py-5 text-[10px] md:text-[12px] font-black tracking-[0.3em] md:tracking-[0.5em] uppercase hover:bg-gold-500 hover:text-white transition-all duration-500 shadow-xl">
               {t('footer.validate')}
             </button>
           </div>
