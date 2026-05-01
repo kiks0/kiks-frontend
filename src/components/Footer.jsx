@@ -157,6 +157,7 @@ const Footer = () => {
             <li><Link to="/account" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">{t('footer.links.account')}</Link></li>
             <li><Link to="/refund-policy" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Refund Policy</Link></li>
             <li><Link to="/return-policy" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Return Policy</Link></li>
+            <li><Link to="/cancellation-policy" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Cancellation Policy</Link></li>
 
           </ul>
         </div>

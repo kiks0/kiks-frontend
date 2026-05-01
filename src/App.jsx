@@ -34,6 +34,7 @@ const Returns = lazy(() => import('./pages/Returns'));
 const RefundPolicy = lazy(() => import('./pages/RefundPolicy'));
 const Disclaimer = lazy(() => import('./pages/Disclaimer'));
 const About = lazy(() => import('./pages/About'));
+const CancellationPolicy = lazy(() => import('./pages/CancellationPolicy'));
 const Story = lazy(() => import('./pages/Story'));
 const PersonalDetails = lazy(() => import('./pages/PersonalDetails'));
 
@@ -80,6 +81,7 @@ function App() {
               <Route path="/terms-conditions" element={<Terms />} />
               <Route path="/return-policy" element={<Returns />} />
               <Route path="/refund-policy" element={<RefundPolicy />} />
+              <Route path="/cancellation-policy" element={<CancellationPolicy />} />
               <Route path="/disclaimer" element={<Disclaimer />} />
               <Route path="/about" element={<About />} />
               <Route path="/essence" element={<Story />} />
