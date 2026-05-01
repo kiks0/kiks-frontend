@@ -350,7 +350,7 @@ const Home = () => {
                 ELITE
               </div>
 
-              <div className="relative z-10 space-y-10 w-full">
+              <div className="relative z-10 space-y-8 w-full">
                 {/* Header */}
                 <div className="space-y-4">
                   <h2 className="text-5xl md:text-[5.5rem] font-serif font-light tracking-[0.15em] leading-none text-white uppercase">
@@ -367,7 +367,7 @@ const Home = () => {
                 </div>
 
                 {/* Olfactory Composition Grid */}
-                <div className="grid grid-cols-2 gap-y-8 gap-x-12 border-y border-white/10 py-10 w-full max-w-md">
+                <div className="grid grid-cols-2 gap-y-8 gap-x-12 border-y border-white/10 py-8 w-full max-w-md">
                   <div className="space-y-2">
                     <span className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-bold">Intensity</span>
                     <p className="text-[11px] text-white tracking-[0.2em] uppercase font-medium">DEEP / RESINOUS</p>
