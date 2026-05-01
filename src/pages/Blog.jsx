@@ -41,7 +41,7 @@ const Blog = () => {
     }
 
     return (
-        <div className="bg-black min-h-screen text-white pt-32 md:pt-40 pb-20 md:pb-24 font-sans selection:bg-gold-500/30 selection:text-white">
+        <div className="bg-black min-h-screen text-white pt-32 md:pt-48 pb-20 md:pb-24 font-sans selection:bg-gold-500/30 selection:text-white">
             <SEO 
                 title="The Journal of Essence" 
                 description="Explore the timeless heritage of niche perfumery and the art of olfactory creation. Read our latest stories and insights."
@@ -50,7 +50,7 @@ const Blog = () => {
             <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-[1300px]">
 
                 {/* Header Section */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20 border-b border-white/5 pb-12">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-16 border-b border-white/5 pb-12">
                     <div className="max-w-3xl">
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
