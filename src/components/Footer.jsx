@@ -89,7 +89,7 @@ const Footer = () => {
   }, [isHighContrast]);
 
   return (
-    <footer className="bg-black text-white pt-10 md:pt-20 pb-12 font-sans overflow-hidden border-t border-white/10">
+    <footer className="bg-black text-white pt-8 md:pt-20 pb-10 font-sans overflow-hidden border-t border-white/10">
 
       {/* Location Selection Modal (Chanel Style) */}
       {isLocationModalOpen && (
@@ -137,13 +137,13 @@ const Footer = () => {
       </div>
 
       {/* Main 4-Column Architectural Grid */}
-      <div className="container mx-auto px-6 md:px-12 lg:px-24 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 lg:gap-8 mb-10 md:mb-20">
+      <div className="container mx-auto px-6 md:px-12 lg:px-24 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 lg:gap-8 mb-8 md:mb-20">
         <div className="text-center md:text-left">
           <h4 className="text-white text-[10px] md:text-[11px] font-bold uppercase tracking-wider mb-4">{t('footer.explore')}</h4>
           <ul className="space-y-[10px]">
             <li><Link to={`/collection/${latestCollectionSlug}`} className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">{t('footer.links.new')}</Link></li>
           </ul>
-          <div className="mt-12 flex items-center justify-center md:justify-start space-x-3">
+          <div className="mt-8 flex items-center justify-center md:justify-start space-x-3">
             <span className="text-[12px] md:text-[13px] text-[#A0A0A0]">{t('footer.high_contrast')}</span>
             <button onClick={() => setIsHighContrast(!isHighContrast)} className={`w-9 h-4 rounded-full relative focus:outline-none flex items-center transition-colors duration-300 ${isHighContrast ? 'bg-white' : 'bg-[#333]'}`}>
               <div className={`w-3.5 h-3.5 rounded-full absolute top-[1px] transition-all duration-300 ${isHighContrast ? 'bg-black left-[19px]' : 'bg-gray-400 left-[1px]'}`}></div>
@@ -164,14 +164,14 @@ const Footer = () => {
 
         <div className="text-center md:text-left">
           <h4 className="text-white text-[10px] md:text-[11px] font-bold uppercase tracking-wider mb-4">{t('footer.house')}</h4>
-          <ul className="space-y-[10px] mb-12">
+          <ul className="space-y-[10px] mb-8">
             <li><Link to="/terms-conditions" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Terms & Conditions</Link></li>
             <li><Link to="/privacy-policy" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Privacy Policy</Link></li>
             <li><Link to="/disclaimer" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Disclaimer</Link></li>
           </ul>
 
           {/* Compact Newsletter */}
-          <div className="mt-8">
+          <div className="mt-6">
             <h4 className="text-white text-[10px] font-bold uppercase tracking-wider mb-6">Newsletter</h4>
             <form 
               onSubmit={async (e) => {
