@@ -18,6 +18,7 @@ const Navbar = () => {
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const wishlistCount = wishlistItems.length;
   const navigate = useNavigate();
+  const [wishlistBarDismissed, setWishlistBarDismissed] = useState(false);
 
   const isAccountPage = location.pathname.startsWith('/account') || location.pathname === '/addresses' || location.pathname === '/orders' || location.pathname === '/wishlist';
   const [isScrolled, setIsScrolled] = useState(false);
@@ -217,7 +218,13 @@ const Navbar = () => {
                 <button 
                   onClick={() => {
                     if (!isAuthenticated) {
-                      dispatch(openAuthModal());
+                      if (wishlistBarDismissed) {
+                        // Already dismissed the bar once — go straight to login
+                        navigate('/login');
+                      } else {
+                        dispatch(openAuthModal());
+                        setWishlistBarDismissed(true);
+                      }
                     } else {
                       navigate('/wishlist');
                     }
