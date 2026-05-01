@@ -9,12 +9,27 @@ import { useGoogleLogin } from '@react-oauth/google';
 
 const Auth = ({ isRegisterInitial = false }) => {
     const [isRegister, setIsRegister] = useState(isRegisterInitial);
+    const [isForgotPassword, setIsForgotPassword] = useState(false);
+    const [isResetPassword, setIsResetPassword] = useState(false);
+    const [resetToken, setResetToken] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [resetEmail, setResetEmail] = useState('');
+    
     const dispatch = useDispatch();
     const navigate = useNavigate();
     
     // Sync state when navigating between /login and /register
     useEffect(() => {
         setIsRegister(isRegisterInitial);
+        
+        // Check for reset token in URL
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('token');
+        if (token) {
+            setResetToken(token);
+            setIsResetPassword(true);
+        }
     }, [isRegisterInitial]);
     
     const [showPassword, setShowPassword] = useState(false);
@@ -105,6 +120,66 @@ Marketing Consent: Granted
         }
     };
 
+    const handleForgotPassword = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setErrorMessage('');
+        console.log(`[FRONTEND] Requesting password reset for: ${resetEmail}`);
+        try {
+            const res = await fetch(`${API_URL}/api/auth/forgot-password`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: resetEmail })
+            });
+            const data = await res.json();
+            console.log(`[FRONTEND] Forgot password response status: ${res.status}`, data);
+            
+            if (res.ok) {
+                setStatus('reset_sent');
+            } else {
+                setErrorMessage(data.message || 'The vault was unable to process this request. Please verify your details.');
+            }
+        } catch (err) {
+            console.error(`[FRONTEND ERROR] Forgot password:`, err);
+            setErrorMessage('Unable to connect to the KIKS sanctuary. Please check your connection.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleResetPassword = async (e) => {
+        e.preventDefault();
+        if (newPassword !== confirmPassword) {
+            setErrorMessage('Passwords do not match.');
+            return;
+        }
+        setIsLoading(true);
+        setErrorMessage('');
+        try {
+            const res = await fetch(`${API_URL}/api/auth/reset-password`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: resetToken, newPassword })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                setStatus('reset_success');
+                setTimeout(() => {
+                    setIsResetPassword(false);
+                    setIsRegister(false);
+                    setStatus('idle');
+                    navigate('/login');
+                }, 3000);
+            } else {
+                setErrorMessage(data.message || 'Reset failed.');
+            }
+        } catch (err) {
+            setErrorMessage('Connection error.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const handleGoogleLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
             setIsLoading(true);
@@ -149,6 +224,9 @@ Marketing Consent: Granted
     const inputClasses = "w-full bg-transparent border-b border-white/10 py-4 text-sm text-white focus:outline-none focus:border-gold-500 transition-all font-light tracking-widest placeholder:text-white/20 appearance-none";
     const labelClasses = "text-[9px] tracking-[0.3em] font-bold text-white/30 uppercase block mb-1 mt-6";
 
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
     return (
         <div className="bg-dark-900 min-h-screen text-white pt-56 pb-20 font-sans selection:bg-gold-500/30 selection:text-white relative overflow-hidden">
             
@@ -173,6 +251,102 @@ Marketing Consent: Granted
                             <p className="text-gray-400 text-[10px] tracking-[0.4em] uppercase">
                                 {isRegister ? 'Welcome to the world of KIKS' : 'Accessing KIKS Ultra Luxury'}
                             </p>
+                        </motion.div>
+                    ) : status === 'reset_sent' ? (
+                        <motion.div key="reset_sent" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
+                            <h2 className="text-3xl font-serif tracking-widest uppercase mb-4">Instructions Sent</h2>
+                            <p className="text-gray-400 text-[10px] tracking-[0.4em] uppercase mb-8">If the email exists, we have sent reset instructions.</p>
+                            <button onClick={() => { setStatus('idle'); setIsForgotPassword(false); }} className="text-gold-500 text-[10px] tracking-widest uppercase border-b border-gold-500/30 pb-1">Return to Login</button>
+                        </motion.div>
+                    ) : status === 'reset_success' ? (
+                        <motion.div key="reset_success" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
+                            <h2 className="text-3xl font-serif tracking-widest uppercase mb-4">Restoration Complete</h2>
+                            <p className="text-gray-400 text-[10px] tracking-[0.4em] uppercase">Your identity has been restored. Redirecting to login...</p>
+                        </motion.div>
+                    ) : isResetPassword ? (
+                        <motion.div key="reset_password" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
+                            <div className="text-center mb-16">
+                                <h1 className="text-4xl font-serif tracking-[0.1em] uppercase font-light">Restore Identity</h1>
+                                <p className="text-[10px] tracking-[0.5em] text-white/40 uppercase mt-4">Secure your portal with a new password</p>
+                                
+                                {errorMessage && (
+                                    <motion.div 
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: 'auto' }}
+                                        className="mt-6 p-4 bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] tracking-widest uppercase"
+                                    >
+                                        {errorMessage}
+                                    </motion.div>
+                                )}
+                            </div>
+                            <form onSubmit={handleResetPassword} className="space-y-4">
+                                <div className="relative">
+                                    <label className={labelClasses}>New Password</label>
+                                    <input 
+                                        type={showNewPassword ? 'text' : 'password'} 
+                                        required 
+                                        value={newPassword} 
+                                        onChange={(e) => setNewPassword(e.target.value)} 
+                                        className={inputClasses} 
+                                    />
+                                    <button 
+                                        type="button"
+                                        onClick={() => setShowNewPassword(!showNewPassword)}
+                                        className="absolute right-0 bottom-5 text-white/30 hover:text-white transition-colors"
+                                    >
+                                        {showNewPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                    </button>
+                                </div>
+                                <div className="relative">
+                                    <label className={labelClasses}>Confirm New Password</label>
+                                    <input 
+                                        type={showConfirmPassword ? 'text' : 'password'} 
+                                        required 
+                                        value={confirmPassword} 
+                                        onChange={(e) => setConfirmPassword(e.target.value)} 
+                                        className={inputClasses} 
+                                    />
+                                    <button 
+                                        type="button"
+                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                        className="absolute right-0 bottom-5 text-white/30 hover:text-white transition-colors"
+                                    >
+                                        {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                    </button>
+                                </div>
+                                <button disabled={isLoading} className="w-full h-16 bg-white text-black text-[11px] font-black tracking-[0.5em] uppercase hover:bg-gold-500 transition-all duration-700 mt-12">
+                                    {isLoading ? 'Processing' : 'Update Password'}
+                                </button>
+                            </form>
+                        </motion.div>
+                    ) : isForgotPassword ? (
+                        <motion.div key="forgot_password" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
+                            <div className="text-center mb-16">
+                                <h1 className="text-4xl font-serif tracking-[0.1em] uppercase font-light">Identity Restoration</h1>
+                                <p className="text-[10px] tracking-[0.5em] text-white/40 uppercase mt-4">Enter your email to receive recovery link</p>
+                                
+                                {errorMessage && (
+                                    <motion.div 
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: 'auto' }}
+                                        className="mt-6 p-4 bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] tracking-widest uppercase"
+                                    >
+                                        {errorMessage}
+                                    </motion.div>
+                                )}
+                            </div>
+                            <form onSubmit={handleForgotPassword} className="space-y-4">
+                                <div>
+                                    <label className={labelClasses}>Email Address</label>
+                                    <input type="email" required value={resetEmail} onChange={(e) => setResetEmail(e.target.value)} className={inputClasses} />
+                                </div>
+                                <button disabled={isLoading} className="w-full h-16 bg-white text-black text-[11px] font-black tracking-[0.5em] uppercase hover:bg-gold-500 transition-all duration-700 mt-12">
+                                    {isLoading ? 'Sending Link' : 'Send Recovery Link'}
+                                </button>
+                                <div className="text-center mt-10">
+                                    <button type="button" onClick={() => setIsForgotPassword(false)} className="text-[10px] tracking-[0.3em] font-bold text-white/30 hover:text-gold-500 transition-all uppercase">Back to Login</button>
+                                </div>
+                            </form>
                         </motion.div>
                     ) : (
                         <motion.div
@@ -234,7 +408,7 @@ Marketing Consent: Granted
                                         </div>
 
                                         {/* Names Section */}
-                                        <div className="grid grid-cols-2 gap-8 mt-2">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 mt-2">
                                             <div>
                                                 <label className={labelClasses}>First name</label>
                                                 <input 
@@ -258,7 +432,7 @@ Marketing Consent: Granted
                                         </div>
 
                                         {/* Phone Section */}
-                                        <div className="grid grid-cols-[140px_1fr] gap-8 mt-2">
+                                        <div className="grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-x-8 gap-y-4 mt-2">
                                             <div className="relative">
                                                 <label className={labelClasses}>Country code</label>
                                                 <select 
@@ -289,7 +463,7 @@ Marketing Consent: Granted
                                             <div className="flex items-center space-x-2 mt-8 mb-1">
                                                 <label className="text-[9px] tracking-[0.3em] font-bold text-white/30 uppercase">Date of birth (optional)</label>
                                             </div>
-                                            <div className="grid grid-cols-3 gap-6">
+                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-4">
                                                 <div className="relative">
                                                     <select className={inputClasses} value={formData.dobDay} onChange={(e) => setFormData({...formData, dobDay: e.target.value})}>
                                                         <option className="bg-[#0a0a0a]">Day</option>
@@ -318,7 +492,18 @@ Marketing Consent: Granted
 
                                 {/* Password Field */}
                                 <div className="relative">
-                                    <label className={labelClasses}>Password</label>
+                                    <div className="flex justify-between items-end">
+                                        <label className={labelClasses}>Password</label>
+                                        {!isRegister && (
+                                            <button 
+                                                type="button"
+                                                onClick={() => setIsForgotPassword(true)}
+                                                className="text-[8px] tracking-[0.2em] font-bold text-white/20 hover:text-gold-500 transition-all uppercase mb-1"
+                                            >
+                                                Forgot Password?
+                                            </button>
+                                        )}
+                                    </div>
                                     <input 
                                         type={showPassword ? 'text' : 'password'} 
                                         required
