@@ -17,7 +17,6 @@ const Navbar = () => {
   const location = useLocation();
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const wishlistCount = wishlistItems.length;
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const navigate = useNavigate();
 
   const isAccountPage = location.pathname.startsWith('/account') || location.pathname === '/addresses' || location.pathname === '/orders' || location.pathname === '/wishlist';
