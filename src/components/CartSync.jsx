@@ -15,6 +15,25 @@ const CartSync = () => {
     const hasFetchedRef = useRef(false);
     const itemsRef = useRef(items);
 
+    // Track if we should merge guest items (only on first transition to auth)
+    const initialAuthRef = useRef(isAuthenticated);
+    const shouldMergeRef = useRef(!isAuthenticated);
+    const prevAuthRef = useRef(isAuthenticated);
+
+    // Watch for auth state changes to handle logout/login transitions
+    useEffect(() => {
+        if (!prevAuthRef.current && isAuthenticated) {
+            // Guest -> Logged In
+            shouldMergeRef.current = true;
+        }
+        if (prevAuthRef.current && !isAuthenticated) {
+            // Logged In -> Logout
+            shouldMergeRef.current = false;
+            initialAuthRef.current = false; // Reset for next potential login
+        }
+        prevAuthRef.current = isAuthenticated;
+    }, [isAuthenticated]);
+
     useEffect(() => {
         itemsRef.current = items;
     }, [items]);
@@ -80,22 +99,31 @@ const CartSync = () => {
                 const currentLocalItems = itemsRef.current || [];
                 let mergedItems = [...mappedDbItems];
 
-                currentLocalItems.forEach(localItem => {
-                    const dbItemIdx = mergedItems.findIndex(dbItem =>
-                        String(dbItem.id) === String(localItem.id) && String(dbItem.size) === String(localItem.size)
-                    );
+                // ONLY merge local items if we are transitioning from guest to logged in
+                // If it's a refresh (already auth on mount), we trust the DB source
+                if (shouldMergeRef.current) {
+                    console.log('[VAULT] Merging guest items into account...');
+                    currentLocalItems.forEach(localItem => {
+                        const dbItemIdx = mergedItems.findIndex(dbItem =>
+                            String(dbItem.id) === String(localItem.id) && String(dbItem.size) === String(localItem.size)
+                        );
 
-                    if (dbItemIdx > -1) {
-                        // Item exists in both: update quantity to the sum
-                        mergedItems[dbItemIdx] = {
-                            ...mergedItems[dbItemIdx],
-                            quantity: Number(mergedItems[dbItemIdx].quantity || 0) + Number(localItem.quantity || 0)
-                        };
-                    } else {
-                        // Item only in guest cart: add it
-                        mergedItems.push(localItem);
-                    }
-                });
+                        if (dbItemIdx > -1) {
+                            // Item exists in both: use max quantity to prevent doubling bugs
+                            mergedItems[dbItemIdx] = {
+                                ...mergedItems[dbItemIdx],
+                                quantity: Math.max(Number(mergedItems[dbItemIdx].quantity || 0), Number(localItem.quantity || 0))
+                            };
+                        } else {
+                            // Item only in guest cart: add it
+                            mergedItems.push(localItem);
+                        }
+                    });
+                    // Merge complete, don't do it again unless they logout/login
+                    shouldMergeRef.current = false;
+                } else {
+                    console.log('[VAULT] Refresh detected or already merged, using DB as source of truth.');
+                }
 
                 lastSyncRef.current = JSON.stringify(mergedItems);
                 dispatch(setCart({ items: mergedItems }));
