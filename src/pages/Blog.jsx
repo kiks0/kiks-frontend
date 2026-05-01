@@ -41,7 +41,7 @@ const Blog = () => {
     }
 
     return (
-        <div className="bg-black min-h-screen text-white pt-24 md:pt-32 pb-20 md:pb-24 font-sans selection:bg-gold-500/30 selection:text-white">
+        <div className="bg-black min-h-screen text-white pt-40 md:pt-56 pb-20 md:pb-24 font-sans selection:bg-gold-500/30 selection:text-white">
             <SEO 
                 title="The Journal of Essence" 
                 description="Explore the timeless heritage of niche perfumery and the art of olfactory creation. Read our latest stories and insights."
@@ -50,12 +50,12 @@ const Blog = () => {
             <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-[1300px]">
 
                 {/* Header Section */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-12 border-b border-white/5 pb-8">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20 border-b border-white/5 pb-12">
                     <div className="max-w-3xl">
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="flex items-center space-x-4 mb-6"
+                            className="flex items-center space-x-4 mb-10"
                         >
                             <span className="w-12 h-[1px] bg-gold-500" />
                             <p className="text-gold-500 text-[9px] tracking-[0.6em] font-black uppercase">The Journal of Essence</p>
@@ -72,7 +72,7 @@ const Blog = () => {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.4 }}
-                            className="text-gray-500 text-[9px] md:text-[10px] tracking-[0.2em] md:tracking-[0.3em] font-light max-w-lg mt-4 md:mt-6 leading-relaxed uppercase"
+                            className="text-gray-500 text-[9px] md:text-[10px] tracking-[0.2em] md:tracking-[0.3em] font-light max-w-lg mt-8 md:mt-12 leading-relaxed uppercase"
                         >
                             Exploring the timeless heritage of niche perfumery and the art of olfactory creation.
                         </motion.p>
