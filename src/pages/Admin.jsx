@@ -42,7 +42,7 @@ const Admin = () => {
     const [blogs, setBlogs] = useState([]);
     const [users, setUsers] = useState([]);
     const [admins, setAdmins] = useState([]);
-    const [userSubTab, setUserSubTab] = useState('patrons'); // patrons, admins
+    const [userSubTab, setUserSubTab] = useState('users'); // users, admins
     const [waitlist, setWaitlist] = useState([]);
     const [promoCodes, setPromoCodes] = useState([]);
     const [analytics, setAnalytics] = useState({ totalOrders: 0, totalRevenue: '₹0', bestSeller: 'N/A' });
@@ -1673,10 +1673,10 @@ const Admin = () => {
                             <>
                                 <div className="flex space-x-8 mb-12 border-b border-white/5 pb-2">
                                     <button
-                                        onClick={() => setUserSubTab('patrons')}
-                                        className={`pb-4 px-2 uppercase tracking-[0.3em] text-[10px] transition-all border-b-2 ${userSubTab === 'patrons' ? 'border-gold-500 text-gold-500 font-bold' : 'border-transparent text-white/30'}`}
+                                        onClick={() => setUserSubTab('users')}
+                                        className={`pb-4 px-2 uppercase tracking-[0.3em] text-[10px] transition-all border-b-2 ${userSubTab === 'users' ? 'border-gold-500 text-gold-500 font-bold' : 'border-transparent text-white/30'}`}
                                     >
-                                        Patrons
+                                        Users
                                     </button>
                                     <button
                                         onClick={() => setUserSubTab('admins')}
@@ -1686,13 +1686,13 @@ const Admin = () => {
                                     </button>
                                 </div>
 
-                                {userSubTab === 'patrons' ? (
+                                {userSubTab === 'users' ? (
                                     <>
                                         <div className="mb-8 flex items-center bg-white/[0.03] border border-white/10 px-5 md:px-8 py-4 md:py-6 group focus-within:border-gold-500/50 transition-all">
                                             <Search size={18} className="text-white/20 group-focus-within:text-gold-500 transition-colors mr-6" />
                                             <input
                                                 type="text"
-                                                placeholder="Search patrons..."
+                                                placeholder="Search users..."
                                                 value={userSearch}
                                                 onChange={(e) => setUserSearch(e.target.value)}
                                                 className="bg-transparent border-none text-[10px] md:text-[11px] tracking-[0.2em] uppercase text-white placeholder:text-white/10 focus:outline-none w-full"
@@ -1776,7 +1776,7 @@ const Admin = () => {
                                                             <div className="flex items-center gap-3">
                                                                 <span className="font-serif text-gold-500/50 text-[10px]">#{u.id.toString().padStart(4, '0')}</span>
                                                                 <span className={`text-[9px] uppercase tracking-widest font-black px-2 py-0.5 border ${u.role === 'admin' ? 'border-gold-500/30 text-gold-500' : 'border-white/10 text-white/20'}`}>
-                                                                    {u.role || 'Patron'}
+                                                                    {u.role || 'User'}
                                                                 </span>
                                                             </div>
                                                         </div>

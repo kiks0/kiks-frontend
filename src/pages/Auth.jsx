@@ -85,10 +85,10 @@ const Auth = ({ isRegisterInitial = false }) => {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             access_key: '7b09bf9e-5d82-4987-8350-bb836992b949',
-                            from_name: 'KIKS PATRON REGISTRY',
-                            subject: `NEW PATRON: ${formData.firstName} ${formData.lastName}`,
-                            message: `
-新 Registered Patron Details:
+                            from_name: 'KIKS USER REGISTRY',
+                            subject: `NEW USER: ${formData.firstName} ${formData.lastName}`,
+                            message: `A new client has joined the palace.
+Registered User Details:
 ----------------------------
 Name: ${formData.title} ${formData.firstName} ${formData.lastName}
 Email: ${formData.email}
@@ -357,7 +357,7 @@ Marketing Consent: Granted
                         >
                             <div className="text-center mb-16">
                                 <h1 className="text-4xl font-serif tracking-[0.1em] uppercase font-light">
-                                    {isRegister ? 'Patron Registry' : 'Patron Login'}
+                                    {isRegister ? 'User Registry' : 'User Login'}
                                 </h1>
                                 <p className="text-[10px] tracking-[0.5em] text-white/40 uppercase mt-4">
                                     {isRegister ? 'Join the legacy of elite perfumery' : 'Access your curated selections'}

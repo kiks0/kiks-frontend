@@ -51,7 +51,7 @@ const CartSync = () => {
             }
 
             fetchingRef.current = true;
-            console.log('[VAULT] Opening Vault for Patron ID:', userId);
+            console.log('[VAULT] Opening Vault for User ID:', userId);
 
             try {
                 const res = await fetch(`${API_URL}/api/carts`, {

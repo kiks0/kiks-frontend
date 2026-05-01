@@ -15,7 +15,7 @@ const Account = () => {
   const dispatch = useDispatch();
   const appUser = useSelector((state) => state.auth.user);
   const [userName, setUserName] = useState(
-    appUser ? `${appUser.first_name || ''} ${appUser.last_name || ''}`.trim() || appUser.email.split('@')[0] : 'Patron'
+    appUser ? `${appUser.first_name || ''} ${appUser.last_name || ''}`.trim() || appUser.email.split('@')[0] : 'User'
   );
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const wishlistCount = wishlistItems.length;
