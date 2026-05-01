@@ -252,7 +252,10 @@ const Checkout = () => {
             // Create Razorpay Order
             const rzpRes = await fetch(`${API_URL}/api/payment/create-order`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    ...(token && { 'Authorization': `Bearer ${token}` })
+                },
                 body: JSON.stringify({ amount: amountOnline })
             });
 
@@ -283,7 +286,10 @@ const Checkout = () => {
                     try {
                         const verifyRes = await fetch(`${API_URL}/api/payment/verify`, {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                ...(token && { 'Authorization': `Bearer ${token}` })
+                            },
                             body: JSON.stringify(response)
                         });
                         const verifyData = await verifyRes.json();
@@ -347,7 +353,10 @@ const Checkout = () => {
 
             const response = await fetch(`${API_URL}/api/orders`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    ...(token && { 'Authorization': `Bearer ${token}` })
+                },
                 body: JSON.stringify(orderData)
             });
 
