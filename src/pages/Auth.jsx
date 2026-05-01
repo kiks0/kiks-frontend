@@ -556,7 +556,7 @@ Marketing Consent: Granted
                                         onClick={() => setIsRegister(!isRegister)}
                                         className="text-[10px] tracking-[0.3em] font-bold text-white/30 hover:text-gold-500 transition-all uppercase"
                                     >
-                                        {isRegister ? 'I already have a profile' : 'Create an elite profile'}
+                                        {isRegister ? 'I already have a profile' : 'Create account'}
                                     </button>
                                 </div>
                             </form>
