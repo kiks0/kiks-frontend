@@ -187,56 +187,6 @@ const Orders = () => {
                                                             </div>
                                                         </div>
 
-                                                        {/* Tracking Progress Bar */}
-                                                        <div>
-                                                            <h3 className="text-[10px] tracking-[0.5em] font-black text-white/30 uppercase mb-6 md:mb-8 flex items-center gap-2">
-                                                                <Truck size={12} /> Delivery Status
-                                                            </h3>
-                                                            <div className="relative pt-4 pb-8">
-                                                                <div className="absolute left-[15px] top-4 bottom-8 w-px bg-white/10" />
-                                                                <div className="space-y-8 relative">
-                                                                    <div className="flex gap-6 items-start group">
-                                                                        <div className="w-8 h-8 rounded-full bg-gold-500/20 border border-gold-500 flex items-center justify-center flex-shrink-0 z-10 relative">
-                                                                            <CheckCircle size={14} className="text-gold-500" />
-                                                                        </div>
-                                                                        <div>
-                                                                            <p className="text-[11px] font-bold tracking-widest uppercase text-white mb-1">Order Placed</p>
-                                                                            <p className="text-[9px] tracking-[0.2em] text-white/40 uppercase">Waiting for verification</p>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div className="flex gap-6 items-start group">
-                                                                        <div className={`w-8 h-8 rounded-full border flex items-center justify-center flex-shrink-0 z-10 relative ${order.status !== 'Pending' ? 'bg-gold-500/20 border-gold-500' : 'bg-black border-white/20'}`}>
-                                                                            {order.status !== 'Pending' ? <CheckCircle size={14} className="text-gold-500" /> : <div className="w-2 h-2 rounded-full bg-white/20" />}
-                                                                        </div>
-                                                                        <div>
-                                                                            <p className={`text-[11px] font-bold tracking-widest uppercase mb-1 ${order.status !== 'Pending' ? 'text-white' : 'text-white/40'}`}>Order Verified</p>
-                                                                            <p className="text-[9px] tracking-[0.2em] text-white/40 uppercase">Preparing your order</p>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div className="flex gap-6 items-start group">
-                                                                        <div className={`w-8 h-8 rounded-full border flex items-center justify-center flex-shrink-0 z-10 relative ${order.status === 'Dispatched' || order.status === 'Delivered' ? 'bg-gold-500/20 border-gold-500' : 'bg-black border-white/20'}`}>
-                                                                            {(order.status === 'Dispatched' || order.status === 'Delivered') ? <Truck size={14} className="text-gold-500" /> : <div className="w-2 h-2 rounded-full bg-white/20" />}
-                                                                        </div>
-                                                                        <div>
-                                                                            <p className={`text-[11px] font-bold tracking-widest uppercase mb-1 ${order.status === 'Dispatched' || order.status === 'Delivered' ? 'text-white' : 'text-white/40'}`}>Order Shipped</p>
-                                                                            <p className="text-[9px] tracking-[0.2em] text-white/40 uppercase">In transit to your address</p>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div className="flex gap-6 items-start group">
-                                                                        <div className={`w-8 h-8 rounded-full border flex items-center justify-center flex-shrink-0 z-10 relative ${order.status === 'Delivered' ? 'bg-green-500/20 border-green-500' : 'bg-black border-white/20'}`}>
-                                                                            {order.status === 'Delivered' ? <Package size={14} className="text-green-500" /> : <div className="w-2 h-2 rounded-full bg-white/20" />}
-                                                                        </div>
-                                                                        <div>
-                                                                            <p className={`text-[11px] font-bold tracking-widest uppercase mb-1 ${order.status === 'Delivered' ? 'text-white' : 'text-white/40'}`}>Delivered</p>
-                                                                            <p className="text-[9px] tracking-[0.2em] text-white/40 uppercase">Enjoy your new fragrance</p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
 
                                                         {/* Optional Gifting Details */}
                                                         {order.is_gift && (
