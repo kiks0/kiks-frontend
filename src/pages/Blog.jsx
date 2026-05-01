@@ -41,7 +41,7 @@ const Blog = () => {
     }
 
     return (
-        <div className="bg-black min-h-screen text-white pt-32 md:pt-48 pb-20 md:pb-24 font-sans selection:bg-gold-500/30 selection:text-white">
+        <div className="bg-black min-h-screen text-white pt-24 md:pt-48 pb-12 md:pb-24 font-sans selection:bg-gold-500/30 selection:text-white">
             <SEO 
                 title="The Journal of Essence" 
                 description="Explore the timeless heritage of niche perfumery and the art of olfactory creation. Read our latest stories and insights."
@@ -50,7 +50,7 @@ const Blog = () => {
             <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-[1300px]">
 
                 {/* Header Section */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-16 border-b border-white/5 pb-12">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-8 md:mb-16 border-b border-white/5 pb-8 md:pb-12">
                     <div className="max-w-3xl">
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
@@ -80,7 +80,7 @@ const Blog = () => {
                 </div>
 
                 {/* Blogs Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-12 md:gap-x-20 gap-y-16 md:gap-y-20">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-12 md:gap-x-20 gap-y-10 md:gap-y-20">
                     {posts.length === 0 ? (
                         <div className="col-span-full py-20 text-center border border-white/5 bg-white/[0.01]">
                             <p className="text-white/20 tracking-[0.5em] uppercase text-[10px]">The archive is currently being curated.</p>
@@ -121,7 +121,7 @@ const Blog = () => {
                                     <h2 className="text-xl md:text-2xl font-serif text-white group-hover:text-gold-500 transition-colors duration-500 tracking-[0.03em] uppercase font-light mb-3 md:mb-4 leading-tight">
                                         {post.title}
                                     </h2>
-                                    <p className="text-gray-400 md:text-gray-500 text-[11px] md:text-xs leading-relaxed mb-6 md:mb-8 line-clamp-2 uppercase tracking-[0.1em] font-light">
+                                    <p className="text-gray-400 md:text-gray-500 text-[11px] md:text-xs leading-relaxed mb-4 md:mb-8 line-clamp-2 uppercase tracking-[0.1em] font-light">
                                         {post.content.substring(0, 150)}...
                                     </p>
                                     <div className="flex items-center space-x-3 text-gold-500 text-[10px] md:text-[9px] tracking-[0.4em] font-black uppercase group/btn">

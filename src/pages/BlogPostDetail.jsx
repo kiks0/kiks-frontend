@@ -52,7 +52,7 @@ const BlogPostDetail = () => {
     }
 
     return (
-        <div className="bg-black min-h-screen text-white pt-24 md:pt-32 pb-20 md:pb-24 font-sans selection:bg-gold-500/30 selection:text-white">
+        <div className="bg-black min-h-screen text-white pt-20 md:pt-32 pb-12 md:pb-24 font-sans selection:bg-gold-500/30 selection:text-white">
             <SEO
                 title={post.title}
                 description={post.content.substring(0, 160)}
@@ -65,7 +65,7 @@ const BlogPostDetail = () => {
                 <motion.div
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="mb-12"
+                    className="mb-8"
                 >
                     <Link to="/blog" className="group flex items-center space-x-3 text-white/40 hover:text-white transition-all text-[10px] tracking-[0.3em] uppercase font-bold">
                         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
@@ -74,7 +74,7 @@ const BlogPostDetail = () => {
                 </motion.div>
 
                 {/* Article Header */}
-                <header className="mb-8 md:mb-16">
+                <header className="mb-6 md:mb-16">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -112,7 +112,7 @@ const BlogPostDetail = () => {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1.2 }}
-                    className="w-full h-[40vh] md:h-[70vh] mb-12 md:mb-20 overflow-hidden relative group rounded-2xl border border-white/5"
+                    className="w-full h-[40vh] md:h-[70vh] mb-8 md:mb-20 overflow-hidden relative group rounded-2xl border border-white/5"
                 >
                     <img
                         src={getFullImageUrl(post.image_url)}

@@ -309,7 +309,7 @@ const Home = () => {
       </section>
 
       {/* Product 1: ELITE */}
-      <section className="relative py-24 md:py-32 overflow-hidden">
+      <section className="relative py-16 md:py-32 overflow-hidden">
         {/* Decorative Background Elements */}
         <div className="absolute top-1/2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
         <div className="absolute top-1/4 right-0 w-64 h-64 bg-gold-500/5 blur-[120px] rounded-full pointer-events-none" />
@@ -506,7 +506,7 @@ const Home = () => {
       </section>
 
       {/* SECTION 5: THE EDITORIAL REVEAL (INTERACTIVE & LAYERED) */}
-      <section className="relative min-h-screen bg-[#050505] overflow-hidden py-16 md:py-24 px-6 md:px-20 lg:px-32 flex flex-col justify-center">
+      <section className="relative min-h-screen bg-[#050505] overflow-hidden py-12 md:py-24 px-6 md:px-20 lg:px-32 flex flex-col justify-center">
 
         {/* Mouse Follow Glow */}
         <motion.div
@@ -603,9 +603,9 @@ const Home = () => {
         </div>
 
         {/* Social Proof: The Community Gallery */}
-        <section className="pt-16 pb-8 md:py-24 border-t border-white/5 bg-[#080808]">
+        <section className="pt-12 pb-6 md:py-24 border-t border-white/5 bg-[#080808]">
           <div className="container mx-auto px-6">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-16">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8 md:mb-16">
               <div className="text-center md:text-left w-full">
                 <span className="text-gold-500 text-[10px] tracking-[0.5em] uppercase font-bold block mb-4">Community</span>
                 <h2 className="text-4xl md:text-6xl font-serif text-white tracking-tight uppercase leading-none">THE HOUSE OF KIKS</h2>
