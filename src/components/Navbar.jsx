@@ -188,7 +188,7 @@ const Navbar = () => {
                       {navCollections.length > 0 ? navCollections.map(col => (
                         <Link key={col.id} to={`/collection/${col.slug}`} className="text-[11px] tracking-[0.1em] text-neutral-400 hover:text-white transition-colors uppercase">{col.name}</Link>
                       )) : (
-                        <span className="text-[11px] tracking-[0.1em] text-neutral-600">{t('nav.vault_empty')}</span>
+                        <span className="text-[11px] tracking-[0.1em] text-neutral-600">THE VAULT IS EMPTY</span>
                       )}
                     </div>
                   </div>
