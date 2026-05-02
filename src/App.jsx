@@ -12,6 +12,7 @@ import ScrollToTop from './components/ScrollToTop';
 import ScrollToTopReset from './components/ScrollToTopReset';
 import CartSync from './components/CartSync';
 import AuthModal from './components/AuthModal';
+import WishlistAuthPopup from './components/WishlistAuthPopup';
 
 // Lazy Loaded Pages for Performance
 const Home = lazy(() => import('./pages/Home'));
@@ -56,6 +57,7 @@ function App() {
         <PromoPopup />
         <CartSync />
         <AuthModal />
+        <WishlistAuthPopup />
         <Navbar />
         <main className="flex-grow">
           <Suspense fallback={<PageLoader />}>

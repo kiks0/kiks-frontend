@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Menu, X, ShoppingBag, Heart, User, UserPlus, ChevronDown, Shield, ChevronLeft, ArrowRight } from 'lucide-react';
 import { toggleWishlistAndSync } from '../store/wishlistSlice';
-import { openAuthModal } from '../store/uiSlice';
+import { openAuthModal, openWishlistAuthPopup } from '../store/uiSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SearchOverlay from './SearchOverlay';
@@ -215,7 +215,7 @@ const Navbar = () => {
                 <button 
                   onClick={() => {
                     if (!isAuthenticated) {
-                      dispatch(openAuthModal());
+                      dispatch(openWishlistAuthPopup());
                     } else {
                       navigate('/wishlist');
                     }
@@ -358,7 +358,7 @@ const Navbar = () => {
                           onClick={() => {
                             setIsMobileMenuOpen(false);
                             if (!isAuthenticated) {
-                              dispatch(openAuthModal());
+                              dispatch(openWishlistAuthPopup());
                             } else {
                               navigate('/wishlist');
                             }

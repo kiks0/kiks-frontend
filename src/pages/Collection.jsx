@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { addToCart } from '../store/cartSlice';
 import { toggleWishlistAndSync } from '../store/wishlistSlice';
-import { openAuthModal } from '../store/uiSlice';
+import { openAuthModal, openWishlistAuthPopup } from '../store/uiSlice';
 import { getFullImageUrl } from '../utils/url';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -205,7 +205,11 @@ const Collection = () => {
                                             <button 
                                                 onClick={(e) => { 
                                                     e.preventDefault(); 
-                                                    dispatch(toggleWishlistAndSync(product)); 
+                                                    if (!isAuthenticated) {
+                                                        dispatch(openWishlistAuthPopup());
+                                                    } else {
+                                                        dispatch(toggleWishlistAndSync(product)); 
+                                                    }
                                                 }}
                                                 className={`p-1.5 md:p-3 rounded-full backdrop-blur-md border border-white/10 hover:bg-white hover:text-black transition-all ${wishlistItems.some(i => i.id === product.id) ? 'bg-gold-500 text-black' : 'bg-black/40 text-white'}`}
                                             >
