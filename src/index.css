@@ -52,8 +52,13 @@
 }
 
 @keyframes scrollLine {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100%); }
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(100%);
+  }
 }
 
 .animate-scroll-line {
@@ -111,18 +116,45 @@
     background-color: var(--accent-color) !important;
   }
 
+  .high-contrast select {
+    background-color: black !important;
+    color: white !important;
+    border: 1px solid white !important;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
   body {
     background-color: var(--bg-color) !important;
     color: var(--text-color);
     font-family: var(--font-sans);
+    font-size: 14px;
     font-weight: 300;
     letter-spacing: 0.02em;
+    line-height: 1.7;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
     margin: 0;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
+  /* All paragraphs — Outfit, consistent size & spacing */
+  p {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    line-height: 1.8;
+  }
+
+  /* All headings — Cinzel serif, tracked uppercase */
   h1,
   h2,
   h3,
@@ -131,8 +163,31 @@
   h6 {
     font-family: var(--font-serif);
     color: var(--heading-color);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
     font-weight: 500;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: clamp(1.8rem, 4vw, 3.5rem);
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+  }
+
+  h4 {
+    font-size: 1rem;
+  }
+
+  h5,
+  h6 {
+    font-size: 0.85rem;
   }
 
   ::selection {
@@ -147,6 +202,50 @@
 }
 
 @layer components {
+  /* ── KIKS Global Typography Utilities ─────────────────────────────── */
+
+  /* Big section headings — Cinzel serif */
+  .kiks-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.4rem, 3vw, 2.5rem);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: white;
+    line-height: 1.2;
+  }
+
+  /* Small label above a title — e.g. "ELITE PROFILE" */
+  .kiks-label {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* Body / paragraph text — Outfit */
+  .kiks-body {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    line-height: 1.85;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* Tiny caption / metadata — e.g. "STRENGTH · OUD & SAFFRON" */
+  .kiks-caption {
+    font-family: var(--font-sans);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  /* ── Existing components ──────────────────────────────────────────── */
   .btn-primary {
     @apply px-8 py-3 bg-white text-dark-900 font-medium tracking-wide transition-all duration-300 hover:bg-gold-400 hover:text-dark-900;
   }
@@ -230,223 +329,229 @@ input:-internal-autofill-selected {
 /* ============================================================ */
 
 .kiks-chanel-container {
-    max-width: 1100px;
-    margin: 80px auto;
-    padding: 40px 20px;
-    background: transparent;
-    color: #fff;
+  max-width: 1100px;
+  margin: 80px auto;
+  padding: 40px 20px;
+  background: transparent;
+  color: #fff;
 }
 
 .kiks-main-title {
-    text-align: center;
-    font-size: 25px;
-    letter-spacing: 4px;
-    margin-bottom: 50px;
-    font-weight: 400;
-    color: #fff;
-    font-family: var(--font-serif);
-    text-transform: uppercase;
+  text-align: center;
+  font-size: 25px;
+  letter-spacing: 4px;
+  margin-bottom: 50px;
+  font-weight: 400;
+  color: #fff;
+  font-family: var(--font-serif);
+  text-transform: uppercase;
 }
 
 .kiks-dual-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
 }
 
 .kiks-addr-col {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 30px;
-    background: rgba(255, 255, 255, 0.02);
-    transition: border-color 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.02);
+  transition: border-color 0.3s ease;
 }
 
 .kiks-addr-col:hover {
-    border-color: var(--color-gold-500);
+  border-color: var(--color-gold-500);
 }
 
 .kiks-addr-col h3 {
-    font-size: 11px;
-    letter-spacing: 3px;
-    font-weight: 900;
-    margin-bottom: 25px;
-    text-transform: uppercase;
-    color: var(--color-gold-500);
+  font-size: 11px;
+  letter-spacing: 3px;
+  font-weight: 900;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  color: var(--color-gold-500);
 }
 
 .kiks-section-line {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 15px;
-    margin-bottom: 40px;
-    text-transform: uppercase;
-    color: #fff;
-    text-align: center;
-    font-size: 16px;
-    letter-spacing: 5px;
-    font-weight: 400;
-    font-family: var(--font-serif);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 15px;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  color: #fff;
+  text-align: center;
+  font-size: 16px;
+  letter-spacing: 5px;
+  font-weight: 400;
+  font-family: var(--font-serif);
 }
 
 .kiks-addr-col p {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    line-height: 2;
-    margin-bottom: 4px;
-    text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  line-height: 2;
+  margin-bottom: 4px;
+  text-transform: uppercase;
 }
 
 .kiks-addr-col strong {
-    color: #fff;
-    font-size: 13px;
-    display: block;
-    margin-bottom: 8px;
+  color: #fff;
+  font-size: 13px;
+  display: block;
+  margin-bottom: 8px;
 }
 
 .kiks-addr-links {
-    margin-top: 25px;
-    display: flex;
-    gap: 15px;
+  margin-top: 25px;
+  display: flex;
+  gap: 15px;
 }
 
-.kiks-addr-links a, .kiks-addr-links button {
-    font-size: 9px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.4);
-    text-decoration: underline;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    font-weight: 900;
+.kiks-addr-links a,
+.kiks-addr-links button {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: underline;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 900;
 }
 
-.kiks-addr-links a:hover, .kiks-addr-links button:hover {
-    color: var(--color-gold-500);
+.kiks-addr-links a:hover,
+.kiks-addr-links button:hover {
+  color: var(--color-gold-500);
 }
 
 .kiks-pure-form {
-    max-width: 600px;
-    margin: 0 auto;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .kiks-pure-form input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 18px 0;
-    margin-bottom: 30px;
-    color: #fff;
-    font-size: 12px;
-    letter-spacing: 0.2em;
-    outline: none;
-    transition: border-color 0.3s;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 18px 0;
+  margin-bottom: 30px;
+  color: #fff;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  outline: none;
+  transition: border-color 0.3s;
 }
 
 .kiks-pure-form input:focus {
-    border-color: #fff;
+  border-color: #fff;
 }
 
 .kiks-f-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
 }
 
 .kiks-f-btns {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 50px;
 }
 
 .kiks-btn-black {
-    background: #fff;
-    color: #000;
-    padding: 16px 50px;
-    border: none;
-    cursor: pointer;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    transition: background 0.3s;
+  background: #fff;
+  color: #000;
+  padding: 16px 50px;
+  border: none;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  transition: background 0.3s;
 }
 
 .kiks-btn-black:hover {
-    background: var(--color-gold-500);
+  background: var(--color-gold-500);
 }
 
 .kiks-cancel {
-    color: rgba(255, 255, 255, 0.3);
-    text-decoration: underline;
-    font-size: 9px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 900;
+  color: rgba(255, 255, 255, 0.3);
+  text-decoration: underline;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 900;
 }
 
 .kiks-add-new {
-    text-align: center;
-    margin-top: 80px;
+  text-align: center;
+  margin-top: 80px;
 }
 
-.kiks-add-new a, .kiks-add-new button {
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 16px 40px;
-    color: #fff;
-    text-decoration: none;
-    font-size: 10px;
-    letter-spacing: 4px;
-    font-weight: 900;
-    text-transform: uppercase;
-    transition: all 0.3s;
-    background: none;
-    cursor: pointer;
+.kiks-add-new a,
+.kiks-add-new button {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 16px 40px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: 4px;
+  font-weight: 900;
+  text-transform: uppercase;
+  transition: all 0.3s;
+  background: none;
+  cursor: pointer;
 }
 
-.kiks-add-new a:hover, .kiks-add-new button:hover {
-    border-color: #fff;
-    background: rgba(255, 255, 255, 0.05);
+.kiks-add-new a:hover,
+.kiks-add-new button:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 @media (max-width: 768px) {
-    .kiks-dual-grid, .kiks-f-row {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    
-    .kiks-f-btns {
-        flex-direction: column;
-        gap: 25px;
-    }
-    
-    .kiks-btn-black {
-        width: 100%;
-    }
 
-    .kiks-chanel-container {
-        margin: 0px auto !important;
-        padding: 5px 15px 40px 15px !important;
-    }
+  .kiks-dual-grid,
+  .kiks-f-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 
-    .kiks-main-title {
-        margin-bottom: 15px !important;
-        font-size: 16px !important;
-    }
+  .kiks-f-btns {
+    flex-direction: column;
+    gap: 25px;
+  }
 
-    .kiks-addr-col {
-        padding: 15px !important;
-    }
+  .kiks-btn-black {
+    width: 100%;
+  }
 
-    .kiks-section-line {
-        margin-bottom: 15px !important;
-        font-size: 12px !important;
-    }
+  .kiks-chanel-container {
+    margin: 0px auto !important;
+    padding: 5px 15px 40px 15px !important;
+  }
 
-    .kiks-add-new {
-        margin-top: 40px !important;
-    }
+  .kiks-main-title {
+    margin-bottom: 15px !important;
+    font-size: 16px !important;
+  }
+
+  .kiks-addr-col {
+    padding: 15px !important;
+  }
+
+  .kiks-section-line {
+    margin-bottom: 15px !important;
+    font-size: 12px !important;
+  }
+
+  .kiks-add-new {
+    margin-top: 40px !important;
+  }
 }

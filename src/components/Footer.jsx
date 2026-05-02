@@ -225,7 +225,7 @@ const Footer = () => {
                 onClick={() => setIsLocationModalOpen(true)} 
                 className="text-white flex items-center font-black"
               >
-                {t('footer.detect')} <ArrowRight size={12} className="ml-2" />
+                {t('footer.detect')} <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
               </button>
             </div>
             
