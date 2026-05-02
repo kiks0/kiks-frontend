@@ -2,7 +2,6 @@ import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchExchangeRates, setCurrency } from './store/currencySlice';
-import { useTranslation } from 'react-i18next';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
