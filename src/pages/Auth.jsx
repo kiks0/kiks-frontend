@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, User, ArrowRight, Eye, EyeOff, Sparkles, LogIn, UserPlus, Phone, Calendar, Globe, ChevronDown, CheckCircle2 } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, Eye, EyeOff, Sparkles, LogIn, UserPlus, Phone, Calendar, Globe, ChevronDown, CheckCircle2, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { login } from '../store/authSlice';
@@ -14,10 +14,37 @@ const Auth = ({ isRegisterInitial = false }) => {
     const [resetToken, setResetToken] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    // Reactivation State
+    const [showReactivateModal, setShowReactivateModal] = useState(false);
+    const [showOtpModal, setShowOtpModal] = useState(false);
+    const [reactivateEmail, setReactivateEmail] = useState('');
+    const [otpCode, setOtpCode] = useState(['', '', '', '', '', '']);
+    const [otpTimer, setOtpTimer] = useState(600); // 10 minutes in seconds
+    const [isReactivating, setIsReactivating] = useState(false);
+    const [otpError, setOtpError] = useState('');
     const [resetEmail, setResetEmail] = useState('');
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    // OTP Timer Logic
+    useEffect(() => {
+        let interval;
+        if (showOtpModal && otpTimer > 0) {
+            interval = setInterval(() => {
+                setOtpTimer((prev) => prev - 1);
+            }, 1000);
+        } else if (otpTimer === 0) {
+            clearInterval(interval);
+        }
+        return () => clearInterval(interval);
+    }, [showOtpModal, otpTimer]);
+
+    const formatTime = (seconds) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    };
     
     // Sync state when navigating between /login and /register
     useEffect(() => {
@@ -70,6 +97,13 @@ const Auth = ({ isRegisterInitial = false }) => {
 
             const data = await response.json();
 
+            if (data.reactivateAvailable) {
+                setReactivateEmail(formData.email);
+                setShowReactivateModal(true);
+                setIsLoading(false);
+                return;
+            }
+
             if (!response.ok) {
                 setErrorMessage(data.message || 'Authentication failed. Please try again.');
                 setStatus('error');
@@ -117,6 +151,79 @@ Marketing Consent: Granted
             setStatus('error');
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handleRequestReactivation = async () => {
+        setIsLoading(true);
+        try {
+            const response = await fetch(`${API_URL}/api/auth/request-reactivation`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: reactivateEmail })
+            });
+            const data = await response.json();
+            if (data.success) {
+                setShowReactivateModal(false);
+                setShowOtpModal(true);
+                setOtpTimer(600); // Reset to 10 mins
+            } else {
+                alert(data.message || 'Failed to send verification code.');
+            }
+        } catch (err) {
+            console.error('Reactivation request error:', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleOtpChange = (index, value) => {
+        if (!/^\d*$/.test(value)) return;
+        const newOtp = [...otpCode];
+        newOtp[index] = value.slice(-1);
+        setOtpCode(newOtp);
+        if (value && index < 5) {
+            document.getElementById(`otp-${index + 1}`).focus();
+        }
+    };
+
+    const handleKeyDown = (index, e) => {
+        if (e.key === 'Backspace' && !otpCode[index] && index > 0) {
+            document.getElementById(`otp-${index - 1}`).focus();
+        }
+    };
+
+    const handleVerifyOtp = async () => {
+        const code = otpCode.join('');
+        if (code.length !== 6) {
+            setOtpError('Please enter the full 6-digit code.');
+            return;
+        }
+
+        setIsReactivating(true);
+        setOtpError('');
+
+        try {
+            const response = await fetch(`${API_URL}/api/auth/verify-reactivation`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: reactivateEmail, code })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                dispatch(login({ user: data.user, token: data.token }));
+                dispatch(fetchWishlist());
+                setShowOtpModal(false);
+                navigate('/account');
+            } else {
+                setOtpError(data.message || 'Invalid verification code.');
+            }
+        } catch (err) {
+            setOtpError('An error occurred. Please try again.');
+        } finally {
+            setIsReactivating(false);
         }
     };
 
@@ -588,9 +695,121 @@ Marketing Consent: Granted
                         </motion.div>
                     )}
                 </AnimatePresence>
+                
+                {/* Reactivation Modal */}
+                <AnimatePresence>
+                    {showReactivateModal && (
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setShowReactivateModal(false)}
+                                className="absolute inset-0 bg-black/80 backdrop-blur-md"
+                            />
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                                className="relative bg-[#0a0a0a] border border-gold-500/20 p-8 md:p-12 max-w-md w-full shadow-[0_0_50px_rgba(212,175,55,0.1)] text-center"
+                            >
+                                <Sparkles size={40} className="text-gold-500 mx-auto mb-6" />
+                                <h2 className="kiks-title !text-2xl mb-4">Reactivate Account</h2>
+                                <p className="kiks-caption !text-white/40 mb-8 leading-relaxed">
+                                    Your account was deleted recently. Would you like to reactivate it?
+                                </p>
+                                <div className="space-y-4">
+                                    <button
+                                        onClick={handleRequestReactivation}
+                                        className="w-full h-14 bg-white text-black text-[10px] font-black tracking-[0.3em] uppercase hover:bg-gold-500 transition-all duration-500"
+                                    >
+                                        {isLoading ? 'Processing...' : 'Reactivate Now'}
+                                    </button>
+                                    <button
+                                        onClick={() => setShowReactivateModal(false)}
+                                        className="w-full h-14 border border-white/10 text-white/40 text-[10px] font-black tracking-[0.3em] uppercase hover:border-white/30 hover:text-white transition-all duration-500"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </motion.div>
+                        </div>
+                    )}
+                </AnimatePresence>
+
+                {/* OTP Verification Modal */}
+                <AnimatePresence>
+                    {showOtpModal && (
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="absolute inset-0 bg-black/80 backdrop-blur-md"
+                            />
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                                className="relative bg-[#0a0a0a] border border-gold-500/20 p-8 md:p-12 max-w-md w-full shadow-[0_0_50px_rgba(212,175,55,0.1)] text-center"
+                            >
+                                <Lock size={40} className="text-gold-500 mx-auto mb-6" />
+                                <h2 className="kiks-title !text-2xl mb-2">Verify Reactivation</h2>
+                                <p className="kiks-caption !text-white/40 mb-8 leading-relaxed text-sm">
+                                    We sent a code to your email.<br />
+                                    <span className="text-gold-500/60 font-bold">{reactivateEmail}</span>
+                                </p>
+
+                                <div className="flex justify-between gap-2 mb-8">
+                                    {otpCode.map((digit, i) => (
+                                        <input
+                                            key={i}
+                                            id={`otp-${i}`}
+                                            type="text"
+                                            value={digit}
+                                            onChange={(e) => handleOtpChange(i, e.target.value)}
+                                            onKeyDown={(e) => handleKeyDown(i, e)}
+                                            className="w-full h-14 bg-white/5 border border-white/10 text-center text-xl font-bold focus:border-gold-500 focus:outline-none transition-all text-white"
+                                            maxLength={1}
+                                        />
+                                    ))}
+                                </div>
+
+                                {otpError && (
+                                    <p className="text-red-500 text-[10px] tracking-widest uppercase mb-6">{otpError}</p>
+                                )}
+
+                                <div className="mb-8">
+                                    <p className="text-[10px] tracking-[0.2em] text-white/30 uppercase">
+                                        Code expires in: <span className={otpTimer < 60 ? 'text-red-400' : 'text-gold-500'}>{formatTime(otpTimer)}</span>
+                                    </p>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <button
+                                        onClick={handleVerifyOtp}
+                                        disabled={isReactivating}
+                                        className="w-full h-14 bg-white text-black text-[10px] font-black tracking-[0.3em] uppercase hover:bg-gold-500 transition-all duration-500 flex items-center justify-center gap-2"
+                                    >
+                                        {isReactivating ? <Loader2 className="animate-spin" size={16} /> : null}
+                                        {isReactivating ? 'Verifying...' : 'Verify & Reactivate'}
+                                    </button>
+                                    <button
+                                        disabled={otpTimer > 540} // Allow resend after 1 min
+                                        onClick={handleRequestReactivation}
+                                        className="text-[10px] tracking-[0.2em] font-bold text-gold-500/60 hover:text-gold-500 transition-all uppercase"
+                                    >
+                                        {otpTimer > 540 ? `Resend in ${otpTimer - 540}s` : 'Resend Code'}
+                                    </button>
+                                </div>
+                            </motion.div>
+                        </div>
+                    )}
+                </AnimatePresence>
             </div>
         </div>
     );
 };
+
 
 export default Auth;
