@@ -410,13 +410,13 @@ Marketing Consent: Granted
     });
 
     const inputClasses = "w-full bg-transparent border-b border-white/10 py-4 text-sm text-white focus:outline-none focus:border-gold-500 transition-all font-light tracking-widest placeholder:text-white/20 appearance-none";
-    const labelClasses = "text-[9px] tracking-[0.3em] font-bold text-white/30 uppercase block mb-1 mt-6";
+    const labelClasses = "text-[9px] tracking-[0.3em] font-bold text-white/30 uppercase block mb-1 mt-4";
 
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     return (
-        <div className="bg-dark-900 min-h-screen text-white pt-20 md:pt-44 pb-12 md:pb-20 font-sans selection:bg-gold-500/30 selection:text-white relative overflow-hidden">
+        <div className="bg-dark-900 min-h-screen text-white pt-32 md:pt-64 pb-12 md:pb-20 font-sans selection:bg-gold-500/30 selection:text-white relative overflow-hidden">
             
             {/* Ambient Background */}
             <div className="absolute top-[20%] right-[-10%] w-[800px] h-[800px] bg-gold-500/5 blur-[150px] rounded-full pointer-events-none" />
@@ -543,7 +543,7 @@ Marketing Consent: Granted
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
                         >
-                            <div className="text-center mb-10">
+                            <div className="text-center mb-6">
                                 <h1 className="text-4xl font-serif tracking-[0.1em] uppercase font-light">
                                     {isRegister ? 'User Registry' : 'User Login'}
                                 </h1>
