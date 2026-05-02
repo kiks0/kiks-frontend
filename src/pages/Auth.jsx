@@ -64,6 +64,50 @@ const Auth = ({ isRegisterInitial = false }) => {
     const [status, setStatus] = useState('idle'); // idle, success, error
     const [errorMessage, setErrorMessage] = useState('');
 
+    // Comprehensive Country data (Synchronized with PersonalDetails)
+    const countryList = [
+        { name: 'India', code: '+91', iso: 'IN', length: 10, pattern: /^[0-9]{10}$/ },
+        { name: 'United Arab Emirates', code: '+971', iso: 'AE', length: 9, pattern: /^[0-9]{9}$/ },
+        { name: 'Saudi Arabia', code: '+966', iso: 'SA', length: 9, pattern: /^[0-9]{9}$/ },
+        { name: 'Qatar', code: '+974', iso: 'QA', length: 8, pattern: /^[0-9]{8}$/ },
+        { name: 'Kuwait', code: '+965', iso: 'KW', length: 8, pattern: /^[0-9]{8}$/ },
+        { name: 'Oman', code: '+968', iso: 'OM', length: 8, pattern: /^[0-9]{8}$/ },
+        { name: 'Bahrain', code: '+973', iso: 'BH', length: 8, pattern: /^[0-9]{8}$/ },
+        { name: 'United Kingdom', code: '+44', iso: 'GB', length: 10, pattern: /^[0-9]{10}$/ },
+        { name: 'United States', code: '+1', iso: 'US', length: 10, pattern: /^[0-9]{10}$/ },
+        { name: 'France', code: '+33', iso: 'FR', length: 9, pattern: /^[0-9]{9}$/ },
+        { name: 'Germany', code: '+49', iso: 'DE', length: 11, pattern: /^[0-9]{11}$/ },
+        { name: 'Italy', code: '+39', iso: 'IT', length: 10, pattern: /^[0-9]{10}$/ },
+        { name: 'Spain', code: '+34', iso: 'ES', length: 9, pattern: /^[0-9]{9}$/ },
+        { name: 'Switzerland', code: '+41', iso: 'CH', length: 9, pattern: /^[0-9]{9}$/ },
+        { name: 'Singapore', code: '+65', iso: 'SG', length: 8, pattern: /^[0-9]{8}$/ },
+        { name: 'Canada', code: '+1', iso: 'CA', length: 10, pattern: /^[0-9]{10}$/ },
+        { name: 'Australia', code: '+61', iso: 'AU', length: 9, pattern: /^[0-9]{9}$/ },
+        { name: 'Japan', code: '+81', iso: 'JP', length: 10, pattern: /^[0-9]{10}$/ },
+        { name: 'South Korea', code: '+82', iso: 'KR', length: 10, pattern: /^[0-9]{10}$/ },
+        { name: 'China', code: '+86', iso: 'CN', length: 11, pattern: /^[0-9]{11}$/ },
+        { name: 'Hong Kong', code: '+852', iso: 'HK', length: 8, pattern: /^[0-9]{8}$/ },
+        { name: 'Malaysia', code: '+60', iso: 'MY', length: 9, pattern: /^[0-9]{9,10}$/ },
+        { name: 'Thailand', code: '+66', iso: 'TH', length: 9, pattern: /^[0-9]{9}$/ },
+        { name: 'Vietnam', code: '+84', iso: 'VN', length: 9, pattern: /^[0-9]{9,10}$/ },
+        { name: 'Indonesia', code: '+62', iso: 'ID', length: 10, pattern: /^[0-9]{10,12}$/ },
+        { name: 'Netherlands', code: '+31', iso: 'NL', length: 9, pattern: /^[0-9]{9}$/ },
+        { name: 'Belgium', code: '+32', iso: 'BE', length: 9, pattern: /^[0-9]{9}$/ },
+        { name: 'Sweden', code: '+46', iso: 'SE', length: 9, pattern: /^[0-9]{9,10}$/ },
+        { name: 'Norway', code: '+47', iso: 'NO', length: 8, pattern: /^[0-9]{8}$/ },
+        { name: 'Denmark', code: '+45', iso: 'DK', length: 8, pattern: /^[0-9]{8}$/ },
+        { name: 'Portugal', code: '+351', iso: 'PT', length: 9, pattern: /^[0-9]{9}$/ },
+        { name: 'Austria', code: '+43', iso: 'AT', length: 10, pattern: /^[0-9]{10,11}$/ },
+        { name: 'Greece', code: '+30', iso: 'GR', length: 10, pattern: /^[0-9]{10}$/ },
+        { name: 'Turkey', code: '+90', iso: 'TR', length: 10, pattern: /^[0-9]{10}$/ },
+        { name: 'Mexico', code: '+52', iso: 'MX', length: 10, pattern: /^[0-9]{10}$/ },
+        { name: 'Brazil', code: '+55', iso: 'BR', length: 11, pattern: /^[0-9]{11}$/ },
+        { name: 'Argentina', code: '+54', iso: 'AR', length: 10, pattern: /^[0-9]{10}$/ },
+        { name: 'South Africa', code: '+27', iso: 'ZA', length: 9, pattern: /^[0-9]{9}$/ },
+        { name: 'Russia', code: '+7', iso: 'RU', length: 10, pattern: /^[0-9]{10}$/ },
+        { name: 'Israel', code: '+972', iso: 'IL', length: 9, pattern: /^[0-9]{9}$/ }
+    ];
+
     // Form data with the extended fields from the luxury reference
     const [formData, setFormData] = useState({
         email: '',
@@ -79,6 +123,15 @@ const Auth = ({ isRegisterInitial = false }) => {
         location: 'India'
     });
 
+    const validatePhone = (code, number) => {
+        // Extract code part if it's in format "+91 (IN)"
+        const pureCode = code.split(' ')[0];
+        const country = countryList.find(c => c.code === pureCode);
+        if (!country) return true;
+        if (!number) return true; // Optional field
+        return country.pattern.test(number);
+    };
+
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
     const handleSubmit = async (e) => {
@@ -87,6 +140,17 @@ const Auth = ({ isRegisterInitial = false }) => {
         setErrorMessage('');
 
         try {
+            // Phone validation if register
+            if (isRegister && formData.telephone) {
+                if (!validatePhone(formData.countryCode, formData.telephone)) {
+                    const pureCode = formData.countryCode.split(' ')[0];
+                    const country = countryList.find(c => c.code === pureCode);
+                    setErrorMessage(`Please enter a valid ${country?.name || 'phone'} number.`);
+                    setIsLoading(false);
+                    return;
+                }
+            }
+
             // 1. Submit to the registration/login API
             const endpoint = isRegister ? '/api/auth/register' : '/api/auth/login';
             const response = await fetch(`${API_URL}${endpoint}`, {
@@ -522,8 +586,9 @@ Marketing Consent: Granted
                                                     type="text" 
                                                     required={isRegister}
                                                     value={formData.firstName}
-                                                    onChange={(e) => setFormData({...formData, firstName: e.target.value.toUpperCase()})}
+                                                    onChange={(e) => setFormData({...formData, firstName: e.target.value})}
                                                     className={inputClasses}
+                                                    placeholder="e.g. Alexander"
                                                 />
                                             </div>
                                             <div>
@@ -532,8 +597,9 @@ Marketing Consent: Granted
                                                     type="text" 
                                                     required={isRegister}
                                                     value={formData.lastName}
-                                                    onChange={(e) => setFormData({...formData, lastName: e.target.value.toUpperCase()})}
+                                                    onChange={(e) => setFormData({...formData, lastName: e.target.value})}
                                                     className={inputClasses}
+                                                    placeholder="e.g. McQueen"
                                                 />
                                             </div>
                                         </div>
@@ -545,12 +611,21 @@ Marketing Consent: Granted
                                                 <select 
                                                     className={inputClasses}
                                                     value={formData.countryCode}
-                                                    onChange={(e) => setFormData({...formData, countryCode: e.target.value})}
+                                                    onChange={(e) => {
+                                                        const selectedValue = e.target.value;
+                                                        const country = countryList.find(c => `${c.code} (${c.iso})` === selectedValue);
+                                                        setFormData({
+                                                            ...formData, 
+                                                            countryCode: selectedValue,
+                                                            location: country ? country.name : formData.location
+                                                        });
+                                                    }}
                                                 >
-                                                    <option className="bg-[#0a0a0a]" value="+91 (IN)">+91 (IN)</option>
-                                                    <option className="bg-[#0a0a0a]" value="+44 (UK)">+44 (UK)</option>
-                                                    <option className="bg-[#0a0a0a]" value="+1 (US)">+1 (US)</option>
-                                                    <option className="bg-[#0a0a0a]" value="+971 (UE)">+971 (UE)</option>
+                                                    {countryList.map(c => (
+                                                        <option key={`${c.iso}-${c.code}`} className="bg-[#0a0a0a]" value={`${c.code} (${c.iso})`}>
+                                                            {c.code} ({c.iso})
+                                                        </option>
+                                                    ))}
                                                 </select>
                                                 <ChevronDown size={14} className="absolute right-0 bottom-5 text-white/30 pointer-events-none" />
                                             </div>
@@ -633,12 +708,20 @@ Marketing Consent: Granted
                                         <select 
                                             className={inputClasses}
                                             value={formData.location}
-                                            onChange={(e) => setFormData({...formData, location: e.target.value})}
+                                            onChange={(e) => {
+                                                const selectedName = e.target.value;
+                                                const country = countryList.find(c => c.name === selectedName);
+                                                setFormData({
+                                                    ...formData, 
+                                                    location: selectedName,
+                                                    countryCode: country ? `${country.code} (${country.iso})` : formData.countryCode
+                                                });
+                                            }}
                                         >
-                                            <option className="bg-[#0a0a0a]" value="India">India</option>
-                                            <option className="bg-[#0a0a0a]" value="Dubai">Dubai</option>
-                                            <option className="bg-[#0a0a0a]" value="United Kingdom">United Kingdom</option>
-                                            <option className="bg-[#0a0a0a]" value="United States">United States</option>
+                                            {/* Deduplicate countries for location list */}
+                                            {[...new Set(countryList.map(c => c.name))].sort().map(name => (
+                                                <option key={name} className="bg-[#0a0a0a]" value={name}>{name}</option>
+                                            ))}
                                         </select>
                                         <ChevronDown size={14} className="absolute right-0 bottom-5 text-white/30 pointer-events-none" />
                                     </div>

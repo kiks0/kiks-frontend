@@ -125,11 +125,14 @@ const PersonalDetails = () => {
             setPhoneError(`Please enter a valid ${country.name} number (${country.length} digits).`);
             return;
         }
+
+        const selectedCountry = COUNTRIES.find(c => c.code === tempPhone.code);
         
         setFormData({
             ...formData,
             countryCode: tempPhone.code,
-            telephone: tempPhone.number
+            telephone: tempPhone.number,
+            location: selectedCountry ? selectedCountry.name : formData.location
         });
         setIsPhoneModalOpen(false);
         setPhoneError('');
@@ -381,9 +384,17 @@ const PersonalDetails = () => {
                             <div className="space-y-2 md:col-span-2">
                                 <label className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Location of residence</label>
                                 <select 
-                                    className="w-full border-b border-white/10 py-3 text-sm focus:border-gold-500 outline-none transition-colors bg-transparent cursor-pointer text-white"
+                                    className="w-full border-b border-white/10 py-3 text-sm focus:border-gold-500 outline-none transition-colors bg-transparent cursor-pointer text-white appearance-none"
                                     value={formData.location}
-                                    onChange={(e) => setFormData({...formData, location: e.target.value})}
+                                    onChange={(e) => {
+                                        const selectedName = e.target.value;
+                                        const country = COUNTRIES.find(c => c.name === selectedName);
+                                        setFormData({
+                                            ...formData, 
+                                            location: selectedName,
+                                            countryCode: country ? country.code : formData.countryCode
+                                        });
+                                    }}
                                 >
                                     {COUNTRIES.map(c => (
                                         <option className="bg-black text-white" key={c.name} value={c.name}>{c.name}</option>
