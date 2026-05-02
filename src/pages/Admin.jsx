@@ -1272,14 +1272,11 @@ const Admin = () => {
                                 </div>
                                 {/* Order Sub-Tabs */}
                                 <div className="flex items-center space-x-6 mb-8 border-b border-white/5 pb-2 overflow-x-auto scrollbar-hide">
-                                    {[
                                         { id: 'pending', label: 'Pending', count: orders.filter(o => !o.status || o.status === 'On Hold' || o.status === 'Pending').length },
                                         { id: 'processing', label: 'Processing', count: orders.filter(o => o.status === 'Accepted' || o.status === 'Processing').length },
                                         { id: 'dispatch', label: 'Dispatch', count: orders.filter(o => o.status === 'Dispatch').length },
-                                        { id: 'dispatched', label: 'Dispatched', count: orders.filter(o => o.status === 'Dispatched').length },
-                                        { id: 'delivered', label: 'Delivered', count: orders.filter(o => o.status === 'Delivered').length },
-                                        { id: 'rto', label: 'RTO Returned', count: orders.filter(o => o.status === 'RTO Returned').length },
-                                        { id: 'returned', label: 'Only Return', count: orders.filter(o => o.status === 'Customer Returned').length }
+                                        { id: 'dispatched', label: 'Dispatched', count: orders.filter(o => o.status === 'Dispatched' || o.status === 'Delivered').length },
+                                        { id: 'returns', label: 'Returns', count: orders.filter(o => o.status === 'RTO Returned' || o.status === 'Customer Returned').length }
                                     ].map(sub => (
                                         <button
                                             key={sub.id}
@@ -1302,10 +1299,8 @@ const Admin = () => {
                                         if (orderSubTab === 'pending') return !o.status || o.status === 'On Hold' || o.status === 'Pending';
                                         if (orderSubTab === 'processing') return o.status === 'Accepted' || o.status === 'Processing';
                                         if (orderSubTab === 'dispatch') return o.status === 'Dispatch';
-                                        if (orderSubTab === 'dispatched') return o.status === 'Dispatched';
-                                        if (orderSubTab === 'delivered') return o.status === 'Delivered';
-                                        if (orderSubTab === 'rto') return o.status === 'RTO Returned';
-                                        if (orderSubTab === 'returned') return o.status === 'Customer Returned';
+                                        if (orderSubTab === 'dispatched') return o.status === 'Dispatched' || o.status === 'Delivered';
+                                        if (orderSubTab === 'returns') return o.status === 'RTO Returned' || o.status === 'Customer Returned';
                                         return true;
                                     });
                                     const visibleSelected = selectedOrders.filter(id => filteredOrders.some(o => o.id === id));
@@ -1564,10 +1559,8 @@ const Admin = () => {
                                             if (orderSubTab === 'pending') return !o.status || o.status === 'On Hold' || o.status === 'Pending';
                                             if (orderSubTab === 'processing') return o.status === 'Accepted' || o.status === 'Processing';
                                             if (orderSubTab === 'dispatch') return o.status === 'Dispatch';
-                                            if (orderSubTab === 'dispatched') return o.status === 'Dispatched';
-                                            if (orderSubTab === 'delivered') return o.status === 'Delivered';
-                                            if (orderSubTab === 'rto') return o.status === 'RTO Returned';
-                                            if (orderSubTab === 'returned') return o.status === 'Customer Returned';
+                                            if (orderSubTab === 'dispatched') return o.status === 'Dispatched' || o.status === 'Delivered';
+                                            if (orderSubTab === 'returns') return o.status === 'RTO Returned' || o.status === 'Customer Returned';
                                             return true;
                                         });
 
