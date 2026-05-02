@@ -527,7 +527,7 @@ const Admin = () => {
 
     const ImageUploadZone = ({ label, value, onUpload, height = "h-40" }) => (
         <div className="w-full">
-            <label className="text-[9px] tracking-[0.3em] font-black uppercase text-white/40 mb-3 block">{label}</label>
+            <label className="text-[9px] tracking-[0.3em] font-black uppercase text-white/80 mb-3 block">{label}</label>
             <div
                 onClick={() => {
                     const input = document.createElement('input');
@@ -552,11 +552,11 @@ const Admin = () => {
                 ) : (
                     <>
                         <Upload size={24} className="text-white/10 group-hover:text-gold-500 transition-colors mb-2" />
-                        <span className="text-[8px] tracking-[0.2em] uppercase text-white/20 group-hover:text-white/40">Direct Upload</span>
+                        <span className="text-[8px] tracking-[0.2em] uppercase text-white/60 group-hover:text-white/80">Direct Upload</span>
                     </>
                 )}
             </div>
-            {value && <p className="text-[7px] text-white/20 mt-2 truncate max-w-full italic">{value}</p>}
+            {value && <p className="text-[7px] text-white/60 mt-2 truncate max-w-full italic">{value}</p>}
         </div>
     );
 
@@ -1035,7 +1035,7 @@ const Admin = () => {
     }
 
     const inputClasses = "w-full bg-white/5 border border-white/10 p-3 md:p-4 text-[10px] md:text-xs text-white focus:outline-none focus:border-gold-500 transition-all font-light tracking-[0.1em] md:tracking-[0.2em] mb-4";
-    const labelClasses = "text-[9px] tracking-[0.3em] font-bold text-white/30 uppercase block mb-1 mt-2";
+    const labelClasses = "text-[9px] tracking-[0.3em] font-bold text-white/70 uppercase block mb-1 mt-2";
 
     return (
         <div className="bg-black min-h-screen text-white pt-40 pb-20 px-6 lg:px-20 overflow-x-hidden relative">
@@ -1073,7 +1073,7 @@ const Admin = () => {
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 md:mb-16 gap-6">
                     <div>
                         <h1 className="text-2xl md:text-4xl font-serif tracking-[0.2em] md:tracking-[0.3em] uppercase mb-2 text-white">Registry Control</h1>
-                        <p className="text-white/40 text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.5em] mb-4 md:mb-12 flex flex-wrap items-center gap-2 md:gap-4">
+                        <p className="text-white/80 text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.5em] mb-4 md:mb-12 flex flex-wrap items-center gap-2 md:gap-4">
                             <span>Administrative Management Panel</span>
                             {waitlist.filter(e => e.request_type === 'callback').length > 0 && (
                                 <span className="text-gold-500 animate-pulse border-l border-white/10 pl-2 md:pl-4 font-black">
@@ -1115,7 +1115,7 @@ const Admin = () => {
                                 <button
                                     key={tab}
                                     onClick={() => { setActiveTab(tab); setIsAdding(false); setEditingId(null); }}
-                                    className={`text-[10px] tracking-[0.3em] uppercase pb-2 transition-all whitespace-nowrap relative flex items-center ${activeTab === tab ? 'text-gold-400' : 'text-white/20 hover:text-white/50'}`}
+                                    className={`text-[10px] tracking-[0.3em] uppercase pb-2 transition-all whitespace-nowrap relative flex items-center ${activeTab === tab ? 'text-gold-400' : 'text-white/60 hover:text-white'}`}
                                 >
                                     {tab}
                                     {callbackCount > 0 && (
@@ -1145,17 +1145,17 @@ const Admin = () => {
                                     {/* Analytics Cards */}
                                     <div className="bg-white/5 border border-white/10 p-8 hover:border-gold-500/50 transition-all">
                                         <div className="flex items-center justify-between mb-4">
-                                            <h3 className="text-[10px] tracking-[0.3em] uppercase text-white/50">Total Revenue</h3>
+                                            <h3 className="text-[10px] tracking-[0.3em] uppercase text-white/80">Total Revenue</h3>
                                             <DollarSign className="text-gold-500" size={18} />
                                         </div>
                                         <p className="text-4xl font-serif tracking-widest text-gold-400">
                                             {formatCurrency(analytics.totalRevenue, activeCurrency, rates, symbols)}
                                         </p>
-                                        <p className="text-[9px] tracking-[0.2em] uppercase text-white/30 mt-4">REAL-TIME VAULT TOTAL</p>
+                                        <p className="text-[9px] tracking-[0.2em] uppercase text-white/70 mt-4">REAL-TIME VAULT TOTAL</p>
                                     </div>
                                     <div className="bg-white/5 border border-white/10 p-8 hover:border-gold-500/50 transition-all">
                                         <div className="flex items-center justify-between mb-4">
-                                            <h3 className="text-[10px] tracking-[0.3em] uppercase text-white/50">Total Orders</h3>
+                                            <h3 className="text-[10px] tracking-[0.3em] uppercase text-white/80">Total Orders</h3>
                                             <Package className="text-gold-500" size={18} />
                                         </div>
                                         <p className="text-4xl font-serif tracking-widest text-white">{analytics.totalOrders}</p>
@@ -1163,16 +1163,16 @@ const Admin = () => {
                                     </div>
                                     <div className="bg-white/5 border border-white/10 p-8 hover:border-gold-500/50 transition-all">
                                         <div className="flex items-center justify-between mb-4">
-                                            <h3 className="text-[10px] tracking-[0.3em] uppercase text-white/50">Best Seller</h3>
+                                            <h3 className="text-[10px] tracking-[0.3em] uppercase text-white/80">Best Seller</h3>
                                             <TrendingUp className="text-gold-500" size={18} />
                                         </div>
                                         <p className="text-2xl font-serif tracking-widest text-white truncate">{analytics.bestSeller}</p>
-                                        <p className="text-[9px] tracking-[0.2em] uppercase text-white/30 mt-4">PEAK OLFACTORY DEMAND</p>
+                                        <p className="text-[9px] tracking-[0.2em] uppercase text-white/70 mt-4">PEAK OLFACTORY DEMAND</p>
                                     </div>
                                 </div>
 
                                 <h2 className="text-xl font-serif tracking-[0.2em] uppercase mb-8 mt-12 text-gold-500">Fast Inventory Restock</h2>
-                                <p className="text-[10px] uppercase text-white/40 tracking-widest mb-6">Quickly adjust available physical bottles for each fragrance.</p>
+                                <p className="text-[10px] uppercase text-white/80 tracking-widest mb-6">Quickly adjust available physical bottles for each fragrance.</p>
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                     {products.map(p => (
                                         <div key={p.id} className="bg-white/5 border border-white/10 p-6 flex justify-between items-center group hover:border-gold-500/30 transition-all">
@@ -1180,7 +1180,7 @@ const Admin = () => {
                                                 <img src={getFullImageUrl(p.image_url)} alt="" className="w-12 h-12 object-cover border border-white/10 transition-all" />
                                                 <div>
                                                     <h4 className="text-[10px] tracking-[0.2em] uppercase font-bold text-white group-hover:text-gold-400">{p.name}</h4>
-                                                    <p className="text-[8px] text-white/30 tracking-[0.1em] uppercase">{p.collection_name}</p>
+                                                    <p className="text-[8px] text-white/70 tracking-[0.1em] uppercase">{p.collection_name}</p>
                                                 </div>
                                             </div>
                                             <div className="flex items-center space-x-4">
@@ -1227,7 +1227,7 @@ const Admin = () => {
                                 <div className="bg-white/[0.02] border border-white/5 p-6 md:p-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 md:gap-10">
                                     <div className="max-w-md">
                                         <h3 className="text-[11px] md:text-xs tracking-[0.2em] md:tracking-[0.4em] font-black uppercase text-white mb-2 md:mb-3">Registry Intelligence</h3>
-                                        <p className="text-[9px] md:text-[10px] tracking-widest text-white/30 uppercase leading-relaxed italic">Generate monthly sales manifests for accounting and inventory audit.</p>
+                                        <p className="text-[9px] md:text-[10px] tracking-widest text-white/70 uppercase leading-relaxed italic">Generate monthly sales manifests for accounting and inventory audit.</p>
                                     </div>
                                     <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-4 w-full lg:w-auto">
                                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full lg:w-auto">
@@ -1281,10 +1281,10 @@ const Admin = () => {
                                         <button
                                             key={sub.id}
                                             onClick={() => { setOrderSubTab(sub.id); setSelectedOrders([]); }}
-                                            className={`text-[9px] md:text-[10px] tracking-[0.2em] uppercase pb-3 transition-all relative flex items-center gap-3 whitespace-nowrap ${orderSubTab === sub.id ? 'text-white' : 'text-white/20 hover:text-white/50'}`}
+                                            className={`text-[9px] md:text-[10px] tracking-[0.2em] uppercase pb-3 transition-all relative flex items-center gap-3 whitespace-nowrap ${orderSubTab === sub.id ? 'text-white' : 'text-white/60 hover:text-white/50'}`}
                                         >
                                             {sub.label}
-                                            <span className={`px-2 py-0.5 rounded-full text-[7px] font-black ${orderSubTab === sub.id ? 'bg-gold-500 text-black' : 'bg-white/5 text-white/20'}`}>
+                                            <span className={`px-2 py-0.5 rounded-full text-[7px] font-black ${orderSubTab === sub.id ? 'bg-gold-500 text-black' : 'bg-white/5 text-white/60'}`}>
                                                 {sub.count}
                                             </span>
                                             {orderSubTab === sub.id && (
@@ -1345,7 +1345,7 @@ const Admin = () => {
                                 {/* Desktop Table View */}
                                 <div className="hidden md:block bg-white/5 border border-white/10 overflow-x-auto scrollbar-hide">
                                     <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80 min-w-[1000px]">
-                                        <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/50 border-b border-white/10">
+                                        <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/80 border-b border-white/10">
                                             <tr>
                                                 <th className="p-6 w-10">
                                                     {(() => {
@@ -1394,7 +1394,7 @@ const Admin = () => {
                                                 });
 
                                                 if (filteredOrders.length === 0) {
-                                                    return <tr><td colSpan="6" className="p-12 text-center text-white/30 uppercase tracking-widest">No Orders in {orderSubTab.toUpperCase()}</td></tr>;
+                                                    return <tr><td colSpan="6" className="p-12 text-center text-white/70 uppercase tracking-widest">No Orders in {orderSubTab.toUpperCase()}</td></tr>;
                                                 }
 
                                                 return filteredOrders.map(order => (
@@ -1413,9 +1413,9 @@ const Admin = () => {
                                                         <td className="p-6 font-serif text-gold-400">#{order.id.toString().padStart(4, '0')}</td>
                                                         <td className="p-6">
                                                             <p className="font-bold uppercase tracking-widest">{order.customer_name}</p>
-                                                            <p className="text-[9px] text-white/40 mt-1 lowercase">{order.customer_email}</p>
-                                                            <p className="text-[9px] text-white/40 mt-1 pb-2 border-b border-white/5 mb-2">{order.customer_phone || 'N/A'}</p>
-                                                            <p className="text-[9px] text-white/30 truncate max-w-[200px] uppercase">{order.shipping_address}</p>
+                                                            <p className="text-[9px] text-white/80 mt-1 lowercase">{order.customer_email}</p>
+                                                            <p className="text-[9px] text-white/80 mt-1 pb-2 border-b border-white/5 mb-2">{order.customer_phone || 'N/A'}</p>
+                                                            <p className="text-[9px] text-white/70 truncate max-w-[200px] uppercase">{order.shipping_address}</p>
                                                         </td>
                                                         <td className="p-6">
                                                             {order.items?.map(it => (
@@ -1423,7 +1423,7 @@ const Admin = () => {
                                                             ))}
                                                             {order.customer_note && (
                                                                 <div className="mt-4 pt-2 border-t border-white/10">
-                                                                    <p className="text-[9px] text-white/40 uppercase font-black mb-1 italic">Customer Note:</p>
+                                                                    <p className="text-[9px] text-white/80 uppercase font-black mb-1 italic">Customer Note:</p>
                                                                     <p className="text-[10px] text-white/80 leading-relaxed font-serif italic">"{order.customer_note}"</p>
                                                                 </div>
                                                             )}
@@ -1432,18 +1432,18 @@ const Admin = () => {
                                                                 <span className="font-bold text-white uppercase text-xs">
                                                                     {formatCurrency(order.total_amount, activeCurrency, rates, symbols)}
                                                                 </span>
-                                                                <span className="text-[8px] tracking-[0.2em] uppercase text-white/30">{order.payment_method}</span>
+                                                                <span className="text-[8px] tracking-[0.2em] uppercase text-white/70">{order.payment_method}</span>
 
                                                                 {order.payment_method?.toLowerCase().includes('partial') && (
                                                                     <div className="mt-3 pt-2 border-t border-white/5 space-y-1">
                                                                         <div className="flex justify-between text-[8px] tracking-[0.1em] uppercase">
-                                                                            <span className="text-white/40 italic">Partial Paid (30%)</span>
+                                                                            <span className="text-white/80 italic">Partial Paid (30%)</span>
                                                                             <span className="text-green-500 font-bold">
                                                                                 {formatCurrency(order.amount_paid, activeCurrency, rates, symbols)}
                                                                             </span>
                                                                         </div>
                                                                         <div className="flex justify-between text-[8px] tracking-[0.1em] uppercase">
-                                                                            <span className="text-white/40 italic">Pending (70%)</span>
+                                                                            <span className="text-white/80 italic">Pending (70%)</span>
                                                                             <span className="text-gold-500 font-bold underline">
                                                                                 {formatCurrency(order.amount_pending, activeCurrency, rates, symbols)}
                                                                             </span>
@@ -1461,7 +1461,7 @@ const Admin = () => {
                                                                             order.status === 'Delivered' ? 'border-green-500/40 text-green-400 bg-green-500/5' :
                                                                                 order.status === 'RTO Returned' ? 'border-red-500/40 text-red-400 bg-red-500/5' :
                                                                                     order.status === 'Customer Returned' ? 'border-orange-500/40 text-orange-400 bg-orange-500/5' :
-                                                                                        'border-white/20 text-white/40'
+                                                                                        'border-white/20 text-white/80'
                                                                     }`}>
                                                                     {order.status || 'On Hold'}
                                                                 </div>
@@ -1538,7 +1538,7 @@ const Admin = () => {
                                                                             </button>
                                                                         </>
                                                                     )}
-                                                                    <button onClick={() => handleDeleteOrder(order.id)} className="flex items-center justify-center gap-1 border border-red-500/20 px-2 py-2 text-[8px] font-black tracking-widest uppercase hover:bg-red-500/20 hover:text-red-500 transition-all text-white/20">
+                                                                    <button onClick={() => handleDeleteOrder(order.id)} className="flex items-center justify-center gap-1 border border-red-500/20 px-2 py-2 text-[8px] font-black tracking-widest uppercase hover:bg-red-500/20 hover:text-red-500 transition-all text-white/60">
                                                                         <Trash2 size={11} />
                                                                     </button>
                                                                 </div>
@@ -1563,7 +1563,7 @@ const Admin = () => {
                                         });
 
                                         if (filteredOrders.length === 0) {
-                                            return <div className="p-12 text-center text-white/30 uppercase tracking-widest bg-white/5 border border-white/10">No Orders</div>;
+                                            return <div className="p-12 text-center text-white/70 uppercase tracking-widest bg-white/5 border border-white/10">No Orders</div>;
                                         }
 
                                         return filteredOrders.map(order => (
@@ -1584,14 +1584,14 @@ const Admin = () => {
                                                     <span className="text-[10px] uppercase font-bold text-white/50">{new Date(order.created_at || Date.now()).toLocaleDateString()}</span>
                                                 </div>
                                                 <div>
-                                                    <p className="text-[10px] uppercase tracking-widest text-white/40 mb-1">Customer</p>
+                                                    <p className="text-[10px] uppercase tracking-widest text-white/80 mb-1">Customer</p>
                                                     <p className="font-bold uppercase tracking-widest text-white">{order.customer_name}</p>
-                                                    <p className="text-[9px] lowercase text-white/40">{order.customer_email}</p>
+                                                    <p className="text-[9px] lowercase text-white/80">{order.customer_email}</p>
                                                     <p className="text-[9px] text-gold-500 mt-1 font-bold">{order.customer_phone || 'N/A'}</p>
                                                 </div>
                                                 <div className="bg-black/40 p-5 border border-white/5 space-y-4">
                                                     <div className="flex justify-between items-center mb-1">
-                                                        <p className="text-[9px] uppercase tracking-[0.3em] text-white/30">Order Summary</p>
+                                                        <p className="text-[9px] uppercase tracking-[0.3em] text-white/70">Order Summary</p>
                                                         <span className="text-[11px] font-black text-gold-400">
                                                             {formatCurrency(order.total_amount, activeCurrency, rates, symbols)}
                                                         </span>
@@ -1600,23 +1600,23 @@ const Admin = () => {
                                                         {order.items?.map(it => (
                                                             <p key={it.id} className="text-[10px] flex justify-between items-center">
                                                                 <span className="text-white/70 font-medium">{it.product_name}</span>
-                                                                <span className="text-white/30 text-[9px]">x{it.quantity}</span>
+                                                                <span className="text-white/70 text-[9px]">x{it.quantity}</span>
                                                             </p>
                                                         ))}
                                                     </div>
                                                     {order.customer_note && (
                                                         <div className="mt-4 pt-4 border-t border-white/5">
-                                                            <p className="text-[8px] text-white/20 uppercase font-black mb-2 tracking-widest italic">Note from Client</p>
+                                                            <p className="text-[8px] text-white/60 uppercase font-black mb-2 tracking-widest italic">Note from Client</p>
                                                             <p className="text-[10px] text-white/60 leading-relaxed font-serif italic">"{order.customer_note}"</p>
                                                         </div>
                                                     )}
-                                                    <div className="mt-2 pt-3 border-t border-white/5 flex justify-between items-center text-[8px] tracking-[0.2em] uppercase text-white/30">
+                                                    <div className="mt-2 pt-3 border-t border-white/5 flex justify-between items-center text-[8px] tracking-[0.2em] uppercase text-white/70">
                                                         <span>Payment Method</span>
                                                         <span className="text-white/50">{order.payment_method}</span>
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <p className="text-[10px] uppercase tracking-widest text-white/40 mb-2">Management</p>
+                                                    <p className="text-[10px] uppercase tracking-widest text-white/80 mb-2">Management</p>
                                                     <div className="flex flex-col gap-2">
                                                         {/* Status Badge */}
                                                         <div className={`text-center px-3 py-2 text-[9px] font-black tracking-widest uppercase border ${order.status === 'On Hold' ? 'border-yellow-500/40 text-yellow-400 bg-yellow-500/5' :
@@ -1625,7 +1625,7 @@ const Admin = () => {
                                                                     order.status === 'Delivered' ? 'border-green-500/40 text-green-400 bg-green-500/5' :
                                                                         order.status === 'RTO Returned' ? 'border-red-500/40 text-red-400 bg-red-500/5' :
                                                                             order.status === 'Customer Returned' ? 'border-orange-500/40 text-orange-400 bg-orange-500/5' :
-                                                                                'border-white/20 text-white/40'
+                                                                                'border-white/20 text-white/80'
                                                             }`}>
                                                             {order.status || 'On Hold'}
                                                         </div>
@@ -1702,7 +1702,7 @@ const Admin = () => {
                                                                     </button>
                                                                 </>
                                                             )}
-                                                            <button onClick={() => handleDeleteOrder(order.id)} className="flex items-center justify-center gap-2 border border-red-500/20 p-3 text-[10px] font-black tracking-widest uppercase hover:bg-red-500/20 hover:text-red-500 transition-all text-white/20">
+                                                            <button onClick={() => handleDeleteOrder(order.id)} className="flex items-center justify-center gap-2 border border-red-500/20 p-3 text-[10px] font-black tracking-widest uppercase hover:bg-red-500/20 hover:text-red-500 transition-all text-white/60">
                                                                 <Trash2 size={14} />
                                                             </button>
                                                         </div>
@@ -1729,13 +1729,13 @@ const Admin = () => {
                                 <div className="flex space-x-8 mb-12 border-b border-white/5 pb-2">
                                     <button
                                         onClick={() => setUserSubTab('users')}
-                                        className={`pb-4 px-2 uppercase tracking-[0.3em] text-[10px] transition-all border-b-2 ${userSubTab === 'users' ? 'border-gold-500 text-gold-500 font-bold' : 'border-transparent text-white/30'}`}
+                                        className={`pb-4 px-2 uppercase tracking-[0.3em] text-[10px] transition-all border-b-2 ${userSubTab === 'users' ? 'border-gold-500 text-gold-500 font-bold' : 'border-transparent text-white/70'}`}
                                     >
                                         Users
                                     </button>
                                     <button
                                         onClick={() => setUserSubTab('admins')}
-                                        className={`pb-4 px-2 uppercase tracking-[0.3em] text-[10px] transition-all border-b-2 ${userSubTab === 'admins' ? 'border-gold-500 text-gold-500 font-bold' : 'border-transparent text-white/30'}`}
+                                        className={`pb-4 px-2 uppercase tracking-[0.3em] text-[10px] transition-all border-b-2 ${userSubTab === 'admins' ? 'border-gold-500 text-gold-500 font-bold' : 'border-transparent text-white/70'}`}
                                     >
                                         Admins
                                     </button>
@@ -1744,20 +1744,20 @@ const Admin = () => {
                                 {userSubTab === 'users' ? (
                                     <>
                                         <div className="mb-8 flex items-center bg-white/[0.03] border border-white/10 px-5 md:px-8 py-4 md:py-6 group focus-within:border-gold-500/50 transition-all">
-                                            <Search size={18} className="text-white/20 group-focus-within:text-gold-500 transition-colors mr-6" />
+                                            <Search size={18} className="text-white/60 group-focus-within:text-gold-500 transition-colors mr-6" />
                                             <input
                                                 type="text"
                                                 placeholder="Search users..."
                                                 value={userSearch}
                                                 onChange={(e) => setUserSearch(e.target.value)}
-                                                className="bg-transparent border-none text-[10px] md:text-[11px] tracking-[0.2em] uppercase text-white placeholder:text-white/10 focus:outline-none w-full"
+                                                className="bg-transparent border-none text-[10px] md:text-[11px] tracking-[0.2em] uppercase text-white placeholder:text-white/80 focus:outline-none w-full"
                                             />
                                         </div>
                                         <div className="space-y-6">
                                             {/* Desktop Table View */}
                                             <div className="hidden md:block bg-white/5 border border-white/10 overflow-x-auto scrollbar-hide">
                                                 <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80 min-w-[900px]">
-                                                    <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/50 border-b border-white/10">
+                                                    <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/80 border-b border-white/10">
                                                         <tr>
                                                             <th className="p-6">User ID</th>
                                                             <th className="p-6">User Details</th>
@@ -1772,7 +1772,7 @@ const Admin = () => {
                                                             u.email.toLowerCase().includes(userSearch.toLowerCase()) ||
                                                             `${u.first_name} ${u.last_name}`.toLowerCase().includes(userSearch.toLowerCase())
                                                         ).length === 0 ? (
-                                                            <tr><td colSpan="6" className="p-12 text-center text-white/30 uppercase tracking-widest">No matching users found</td></tr>
+                                                            <tr><td colSpan="6" className="p-12 text-center text-white/70 uppercase tracking-widest">No matching users found</td></tr>
                                                         ) : (
                                                             users.filter(u =>
                                                                 u.email.toLowerCase().includes(userSearch.toLowerCase()) ||
@@ -1782,7 +1782,7 @@ const Admin = () => {
                                                                     <td className="p-6 font-serif text-gold-400">#{u.id.toString().padStart(4, '0')}</td>
                                                                     <td className="p-6">
                                                                         <p className="font-bold uppercase tracking-widest text-white">{u.first_name} {u.last_name}</p>
-                                                                        <p className="text-[9px] text-white/40 mt-1 flex items-center space-x-2 lowercase font-sans">
+                                                                        <p className="text-[9px] text-white/80 mt-1 flex items-center space-x-2 lowercase font-sans">
                                                                             <span>{u.email}</span>
                                                                         </p>
                                                                     </td>
@@ -1793,12 +1793,12 @@ const Admin = () => {
                                                                         </p>
                                                                     </td>
                                                                     <td className="p-6">
-                                                                        <span className={`px-3 py-1 text-[8px] font-black uppercase tracking-widest border ${u.role === 'admin' ? 'border-gold-500/50 text-gold-500 bg-gold-400/5' : 'border-white/10 text-white/40'}`}>
+                                                                        <span className={`px-3 py-1 text-[8px] font-black uppercase tracking-widest border ${u.role === 'admin' ? 'border-gold-500/50 text-gold-500 bg-gold-400/5' : 'border-white/10 text-white/80'}`}>
                                                                             {u.role || 'user'}
                                                                         </span>
                                                                     </td>
                                                                     <td className="p-6">
-                                                                        <p className="text-[9px] text-white/30 uppercase tracking-widest">
+                                                                        <p className="text-[9px] text-white/70 uppercase tracking-widest">
                                                                             {new Date(u.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                                                         </p>
                                                                     </td>
@@ -1830,7 +1830,7 @@ const Admin = () => {
                                                                     <p className="font-black uppercase tracking-[0.15em] text-white text-[14px] leading-tight mb-1">{u.first_name} {u.last_name}</p>
                                                                     <div className="flex items-center gap-3">
                                                                         <span className="font-serif text-gold-500/50 text-[10px]">#{u.id.toString().padStart(4, '0')}</span>
-                                                                        <span className={`text-[9px] uppercase tracking-widest font-black px-2 py-0.5 border ${u.role === 'admin' ? 'border-gold-500/30 text-gold-500' : 'border-white/10 text-white/20'}`}>
+                                                                        <span className={`text-[9px] uppercase tracking-widest font-black px-2 py-0.5 border ${u.role === 'admin' ? 'border-gold-500/30 text-gold-500' : 'border-white/10 text-white/60'}`}>
                                                                             {u.role || 'User'}
                                                                         </span>
                                                                     </div>
@@ -1842,14 +1842,14 @@ const Admin = () => {
                                                         </div>
                                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                             <div className="bg-black/40 p-4 border border-white/5">
-                                                                <p className="text-[8px] uppercase tracking-[0.3em] text-white/20 mb-2">Communication</p>
+                                                                <p className="text-[8px] uppercase tracking-[0.3em] text-white/60 mb-2">Communication</p>
                                                                 <p className="text-[10px] lowercase text-white/80 mb-1">{u.email}</p>
                                                                 <p className="text-[10px] text-gold-500/80 font-bold">{u.telephone || 'Contact Restricted'}</p>
                                                             </div>
                                                             <div className="bg-black/40 p-4 border border-white/5">
-                                                                <p className="text-[8px] uppercase tracking-[0.3em] text-white/20 mb-2">Acquisition History</p>
+                                                                <p className="text-[8px] uppercase tracking-[0.3em] text-white/60 mb-2">Acquisition History</p>
                                                                 <div className="flex justify-between items-center">
-                                                                    <span className="text-[9px] uppercase tracking-widest text-white/40">Joined Registry</span>
+                                                                    <span className="text-[9px] uppercase tracking-widest text-white/80">Joined Registry</span>
                                                                     <span className="text-[10px] text-white font-serif">{new Date(u.created_at).toLocaleDateString()}</span>
                                                                 </div>
                                                             </div>
@@ -1864,7 +1864,7 @@ const Admin = () => {
                                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white/5 border border-white/10 p-6 md:p-8 gap-6">
                                             <div>
                                                 <h2 className="text-lg md:text-xl font-serif tracking-[0.1em] md:tracking-widest uppercase italic text-gold-500">Administration Team</h2>
-                                                <p className="text-[9px] md:text-[10px] tracking-[0.2em] md:tracking-[0.3em] text-white/40 uppercase mt-1 md:mt-2">Managing platform access controls</p>
+                                                <p className="text-[9px] md:text-[10px] tracking-[0.2em] md:tracking-[0.3em] text-white/80 uppercase mt-1 md:mt-2">Managing platform access controls</p>
                                             </div>
                                             <button
                                                 onClick={() => setIsAdding(!isAdding)}
@@ -1912,7 +1912,7 @@ const Admin = () => {
                                                                 <button
                                                                     type="button"
                                                                     onClick={() => setShowPassword(!showPassword)}
-                                                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-gold-500 transition-colors"
+                                                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-gold-500 transition-colors"
                                                                 >
                                                                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                                                                 </button>
@@ -1930,7 +1930,7 @@ const Admin = () => {
 
                                         <div className="bg-white/5 border border-white/10 overflow-hidden">
                                             <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80">
-                                                <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/50 border-b border-white/10">
+                                                <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/80 border-b border-white/10">
                                                     <tr>
                                                         <th className="p-6">Admin Identity</th>
                                                         <th className="p-6">Permissions</th>
@@ -1948,14 +1948,14 @@ const Admin = () => {
                                                                     </div>
                                                                     <div>
                                                                         <p className="font-bold text-white uppercase tracking-widest">{adm.first_name} {adm.last_name}</p>
-                                                                        <p className="text-[9px] text-white/40 lowercase">{adm.email}</p>
+                                                                        <p className="text-[9px] text-white/80 lowercase">{adm.email}</p>
                                                                     </div>
                                                                 </div>
                                                             </td>
                                                             <td className="p-6">
                                                                 <span className="px-3 py-1 bg-gold-500/5 border border-gold-500/30 text-gold-500 text-[8px] font-black uppercase tracking-widest">Administrator</span>
                                                             </td>
-                                                            <td className="p-6 text-white/30 uppercase">
+                                                            <td className="p-6 text-white/70 uppercase">
                                                                 {new Date(adm.created_at).toLocaleDateString()}
                                                             </td>
                                                             <td className="p-6 text-right">
@@ -1989,7 +1989,7 @@ const Admin = () => {
                                 {/* Desktop Table View */}
                                 <div className="hidden md:block bg-white/5 border border-white/10 overflow-x-auto scrollbar-hide">
                                     <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80 min-w-[900px]">
-                                        <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/50 border-b border-white/10">
+                                        <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/80 border-b border-white/10">
                                             <tr>
                                                 <th className="p-6">User</th>
                                                 <th className="p-6">Essence</th>
@@ -1999,13 +1999,13 @@ const Admin = () => {
                                         </thead>
                                         <tbody>
                                             {reviews.length === 0 ? (
-                                                <tr><td colSpan="4" className="p-12 text-center text-white/30 uppercase tracking-widest">No Reviews Shared Yet</td></tr>
+                                                <tr><td colSpan="4" className="p-12 text-center text-white/70 uppercase tracking-widest">No Reviews Shared Yet</td></tr>
                                             ) : (
                                                 reviews.map(rev => (
                                                     <tr key={rev.id} className="border-b border-white/5 hover:bg-white/[0.02]">
                                                         <td className="p-6">
                                                             <p className="font-bold uppercase tracking-widest text-white">{rev.first_name} {rev.last_name}</p>
-                                                            <p className="text-[9px] text-white/40 mt-1 lowercase">{rev.email}</p>
+                                                            <p className="text-[9px] text-white/80 mt-1 lowercase">{rev.email}</p>
                                                         </td>
                                                         <td className="p-6">
                                                             <p className="tracking-widest uppercase text-gold-400">{rev.product_name}</p>
@@ -2034,7 +2034,7 @@ const Admin = () => {
                                 {/* Mobile Card View */}
                                 <div className="md:hidden space-y-4">
                                     {reviews.length === 0 ? (
-                                        <div className="p-12 text-center text-white/30 uppercase tracking-widest bg-white/5 border border-white/10">No Reviews</div>
+                                        <div className="p-12 text-center text-white/70 uppercase tracking-widest bg-white/5 border border-white/10">No Reviews</div>
                                     ) : (
                                         reviews.map(rev => (
                                             <div key={rev.id} className="bg-white/5 border border-white/10 p-6 space-y-4">
@@ -2053,19 +2053,19 @@ const Admin = () => {
                                                             <Star key={i} size={10} fill={i < rev.rating ? "currentColor" : "none"} className={i < rev.rating ? "" : "opacity-20"} />
                                                         ))}
                                                     </div>
-                                                    <span className="text-[8px] uppercase text-white/30">{new Date(rev.created_at || Date.now()).toLocaleDateString()}</span>
+                                                    <span className="text-[8px] uppercase text-white/70">{new Date(rev.created_at || Date.now()).toLocaleDateString()}</span>
                                                 </div>
                                                 <div className="bg-black/20 p-4 border border-white/5">
                                                     <p className="font-bold text-white text-[10px] uppercase tracking-widest mb-2 border-b border-white/10 pb-2">{rev.title}</p>
                                                     <p className="text-[10px] text-white/50 italic leading-relaxed">"{rev.comment}"</p>
                                                 </div>
                                                 <div className="flex items-center space-x-3 pt-2">
-                                                    <div className="w-8 h-8 rounded bg-white/5 border border-white/10 flex items-center justify-center text-[10px] font-serif text-white/40">
+                                                    <div className="w-8 h-8 rounded bg-white/5 border border-white/10 flex items-center justify-center text-[10px] font-serif text-white/80">
                                                         {rev.first_name[0]}
                                                     </div>
                                                     <div>
                                                         <p className="text-[10px] uppercase font-bold text-white/80">{rev.first_name} {rev.last_name}</p>
-                                                        <p className="text-[8px] lowercase text-white/30">{rev.email}</p>
+                                                        <p className="text-[8px] lowercase text-white/70">{rev.email}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2090,7 +2090,7 @@ const Admin = () => {
                                     <div>
                                         <h2 className="text-lg md:text-xl font-serif tracking-[0.1em] md:tracking-[0.2em] uppercase italic">Waitlist Manifest</h2>
                                         <div className="flex flex-wrap items-center gap-3 md:gap-4 mt-1 md:mt-2">
-                                            <p className="text-[9px] md:text-[10px] tracking-[0.2em] md:tracking-[0.3em] text-white/40 uppercase">Managing prospective acquisitions</p>
+                                            <p className="text-[9px] md:text-[10px] tracking-[0.2em] md:tracking-[0.3em] text-white/80 uppercase">Managing prospective acquisitions</p>
                                             {waitlist.filter(e => e.request_type === 'callback').length > 0 && (
                                                 <span className="bg-gold-500 text-black px-2 py-0.5 text-[8px] font-black uppercase tracking-widest animate-pulse">
                                                     {waitlist.filter(e => e.request_type === 'callback').length} Priority Callbacks
@@ -2099,7 +2099,7 @@ const Admin = () => {
                                         </div>
                                     </div>
                                     <div className="text-left sm:text-right">
-                                        <p className="text-[9px] md:text-[10px] text-white/40 uppercase tracking-widest">Total Manifest Entries</p>
+                                        <p className="text-[9px] md:text-[10px] text-white/80 uppercase tracking-widest">Total Manifest Entries</p>
                                         <p className="text-xl md:text-2xl font-serif text-gold-500">{waitlist.length}</p>
                                     </div>
                                 </div>
@@ -2107,7 +2107,7 @@ const Admin = () => {
                                 {/* Desktop Table View */}
                                 <div className="hidden md:block bg-white/5 border border-white/10 overflow-x-auto scrollbar-hide">
                                     <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80 min-w-[1100px]">
-                                        <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/50 border-b border-white/10">
+                                        <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/80 border-b border-white/10">
                                             <tr>
                                                 <th className="p-6">Type</th>
                                                 <th className="p-6">Client Identity</th>
@@ -2119,7 +2119,7 @@ const Admin = () => {
                                         </thead>
                                         <tbody>
                                             {waitlist.length === 0 ? (
-                                                <tr><td colSpan="6" className="p-12 text-center text-white/30 uppercase tracking-widest">The manifest is currently empty</td></tr>
+                                                <tr><td colSpan="6" className="p-12 text-center text-white/70 uppercase tracking-widest">The manifest is currently empty</td></tr>
                                             ) : (
                                                 waitlist.map(entry => (
                                                     <tr key={entry.id} className={`border-b border-white/5 transition-colors ${entry.request_type === 'callback' ? 'bg-gold-500/[0.03] border-l-2 border-l-gold-500' : 'hover:bg-white/[0.02]'}`}>
@@ -2129,14 +2129,14 @@ const Admin = () => {
                                                                     <Smartphone size={12} strokeWidth={2} /> Callback
                                                                 </span>
                                                             ) : (
-                                                                <span className="flex items-center gap-2 text-white/40 text-[8px] font-black tracking-widest uppercase">
+                                                                <span className="flex items-center gap-2 text-white/80 text-[8px] font-black tracking-widest uppercase">
                                                                     <Layers size={12} strokeWidth={2} /> Waitlist
                                                                 </span>
                                                             )}
                                                         </td>
                                                         <td className="p-6">
                                                             <p className="font-bold uppercase tracking-widest text-white">{entry.customer_name}</p>
-                                                            <p className="text-[9px] text-white/30 uppercase mt-1">ID: #{entry.id.toString().padStart(4, '0')}</p>
+                                                            <p className="text-[9px] text-white/70 uppercase mt-1">ID: #{entry.id.toString().padStart(4, '0')}</p>
                                                         </td>
                                                         <td className="p-6">
                                                             <div className="flex items-center gap-2 mb-1 lowercase">
@@ -2154,7 +2154,7 @@ const Admin = () => {
                                                             ) : (
                                                                 <>
                                                                     <p className="text-gold-500 font-bold uppercase tracking-widest">{entry.product_name || 'Restock Request'}</p>
-                                                                    <p className="text-[9px] text-white/40 italic font-serif">{entry.product_slug}</p>
+                                                                    <p className="text-[9px] text-white/80 italic font-serif">{entry.product_slug}</p>
                                                                 </>
                                                             )}
                                                         </td>
@@ -2163,7 +2163,7 @@ const Admin = () => {
                                                                 <span className="px-3 py-1 border border-gold-500/30 text-gold-500 text-[8px] font-black uppercase tracking-widest bg-gold-500/5 w-fit">
                                                                     {entry.status || 'Pending'}
                                                                 </span>
-                                                                <span className="text-[8px] text-white/20 uppercase">
+                                                                <span className="text-[8px] text-white/60 uppercase">
                                                                     {new Date(entry.created_at).toLocaleDateString()}
                                                                 </span>
                                                             </div>
@@ -2198,7 +2198,7 @@ const Admin = () => {
                                 {/* Mobile Card View */}
                                 <div className="md:hidden space-y-4">
                                     {waitlist.length === 0 ? (
-                                        <div className="p-12 text-center text-white/30 uppercase tracking-widest bg-white/5 border border-white/10">No Prospects</div>
+                                        <div className="p-12 text-center text-white/70 uppercase tracking-widest bg-white/5 border border-white/10">No Prospects</div>
                                     ) : (
                                         waitlist.map(entry => (
                                             <div key={entry.id} className={`bg-white/5 border border-white/10 p-6 space-y-4 ${entry.request_type === 'callback' ? 'border-l-2 border-l-gold-500' : ''}`}>
@@ -2228,12 +2228,12 @@ const Admin = () => {
                                                 </div>
                                                 <div className="grid grid-cols-1 gap-4">
                                                     <div className="bg-black/20 p-3 border border-white/5">
-                                                        <p className="text-[8px] uppercase tracking-widest text-white/20 mb-1">Contact</p>
+                                                        <p className="text-[8px] uppercase tracking-widest text-white/60 mb-1">Contact</p>
                                                         <p className="text-[10px] lowercase text-white/70">{entry.email}</p>
                                                         <p className="text-[10px] text-white/70 mt-1 font-bold">{entry.phone || 'N/A'}</p>
                                                     </div>
                                                     <div className="bg-black/20 p-3 border border-white/5">
-                                                        <p className="text-[8px] uppercase tracking-widest text-white/20 mb-1">Interest</p>
+                                                        <p className="text-[8px] uppercase tracking-widest text-white/60 mb-1">Interest</p>
                                                         {entry.request_type === 'callback' ? (
                                                             <p className="text-white/60 italic text-[10px]">Concierge Callback</p>
                                                         ) : (
@@ -2241,7 +2241,7 @@ const Admin = () => {
                                                         )}
                                                     </div>
                                                     <div className="flex justify-between items-center bg-black/20 p-3 border border-white/5">
-                                                        <span className="text-[8px] uppercase tracking-widest text-white/20">Status</span>
+                                                        <span className="text-[8px] uppercase tracking-widest text-white/60">Status</span>
                                                         <span className="px-2 py-0.5 border border-gold-500/30 text-gold-500 text-[8px] font-black uppercase tracking-widest bg-gold-500/5">
                                                             {entry.status || 'Pending'}
                                                         </span>
@@ -2279,7 +2279,7 @@ const Admin = () => {
                                                     <p className="text-[11px] tracking-[0.3em] font-black uppercase text-white mb-2">Engagement Status</p>
                                                     <div className="flex items-center space-x-3">
                                                         <div className={`w-2 h-2 rounded-full animate-pulse ${popupSettings.is_active ? 'bg-gold-500' : 'bg-red-500'}`} />
-                                                        <p className={`text-[10px] tracking-[0.2em] uppercase font-bold ${popupSettings.is_active ? 'text-gold-500' : 'text-white/30'}`}>
+                                                        <p className={`text-[10px] tracking-[0.2em] uppercase font-bold ${popupSettings.is_active ? 'text-gold-500' : 'text-white/70'}`}>
                                                             {popupSettings.is_active ? 'Registry Active' : 'Registry Paused'}
                                                         </p>
                                                     </div>
@@ -2357,8 +2357,8 @@ const Admin = () => {
                                                     <img src={getFullImageUrl(popupSettings.image_url)} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-1000" />
                                                 ) : (
                                                     <div className="text-center">
-                                                        <ImageIcon size={32} className="mx-auto mb-4 text-white/20 group-hover:text-gold-500" />
-                                                        <p className="text-[9px] tracking-widest text-white/40 uppercase">Upload Lifestyle Visual</p>
+                                                        <ImageIcon size={32} className="mx-auto mb-4 text-white/60 group-hover:text-gold-500" />
+                                                        <p className="text-[9px] tracking-widest text-white/80 uppercase">Upload Lifestyle Visual</p>
                                                     </div>
                                                 )}
 
@@ -2377,7 +2377,7 @@ const Admin = () => {
                                     <div className="flex justify-between items-center">
                                         <div>
                                             <h2 className="text-2xl font-serif tracking-widest uppercase">Seen In KIKS</h2>
-                                            <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase mt-2">Community Gallery & Social Proof</p>
+                                            <p className="text-[10px] tracking-[0.3em] text-white/80 uppercase mt-2">Community Gallery & Social Proof</p>
                                         </div>
                                         <button
                                             onClick={() => {
@@ -2424,7 +2424,7 @@ const Admin = () => {
                                         ))}
                                         {communityGallery.length === 0 && (
                                             <div className="col-span-full py-20 text-center border border-dashed border-white/10 bg-white/5">
-                                                <p className="text-[10px] uppercase tracking-[0.5em] text-white/20">The gallery remains uncurated.</p>
+                                                <p className="text-[10px] uppercase tracking-[0.5em] text-white/60">The gallery remains uncurated.</p>
                                             </div>
                                         )}
                                     </div>
@@ -2435,11 +2435,11 @@ const Admin = () => {
                                     <div className="flex justify-between items-center">
                                         <div>
                                             <h2 className="text-2xl font-serif tracking-widest uppercase italic">The Inner Circle Registry</h2>
-                                            <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase mt-2">Newsletter Subscriber Manifest</p>
+                                            <p className="text-[10px] tracking-[0.3em] text-white/80 uppercase mt-2">Newsletter Subscriber Manifest</p>
                                         </div>
                                         <div className="flex items-center gap-4">
                                             <div className="text-right">
-                                                <p className="text-[10px] text-white/40 uppercase tracking-widest">Total Members</p>
+                                                <p className="text-[10px] text-white/80 uppercase tracking-widest">Total Members</p>
                                                 <p className="text-xl font-serif text-gold-500">{newsletterSubscribers.length}</p>
                                             </div>
                                             <button
@@ -2464,9 +2464,9 @@ const Admin = () => {
                                         <table className="w-full text-left border-collapse">
                                             <thead>
                                                 <tr className="border-b border-white/10">
-                                                    <th className="py-6 text-[10px] uppercase tracking-[0.2em] font-black text-white/40">Email Identity</th>
-                                                    <th className="py-6 text-[10px] uppercase tracking-[0.2em] font-black text-white/40">Acquisition Source</th>
-                                                    <th className="py-6 text-[10px] uppercase tracking-[0.2em] font-black text-white/40">Date of Entry</th>
+                                                    <th className="py-6 text-[10px] uppercase tracking-[0.2em] font-black text-white/80">Email Identity</th>
+                                                    <th className="py-6 text-[10px] uppercase tracking-[0.2em] font-black text-white/80">Acquisition Source</th>
+                                                    <th className="py-6 text-[10px] uppercase tracking-[0.2em] font-black text-white/80">Date of Entry</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -2483,7 +2483,7 @@ const Admin = () => {
                                                                 {sub.source}
                                                             </span>
                                                         </td>
-                                                        <td className="py-6 text-[11px] text-white/40 font-mono">
+                                                        <td className="py-6 text-[11px] text-white/80 font-mono">
                                                             {new Date(sub.subscribed_at).toLocaleDateString()}
                                                         </td>
                                                     </tr>
@@ -2491,7 +2491,7 @@ const Admin = () => {
                                                 {newsletterSubscribers.length === 0 && (
                                                     <tr>
                                                         <td colSpan="3" className="py-20 text-center">
-                                                            <p className="text-[10px] uppercase tracking-[0.5em] text-white/20 italic">No members have joined the Inner Circle yet.</p>
+                                                            <p className="text-[10px] uppercase tracking-[0.5em] text-white/60 italic">No members have joined the Inner Circle yet.</p>
                                                         </td>
                                                     </tr>
                                                 )}
@@ -2580,7 +2580,7 @@ const Admin = () => {
                                                             ) : (
                                                                 <Upload className="text-white/10 group-hover:text-gold-500 mb-6 transition-colors" size={32} />
                                                             )}
-                                                            <span className="text-[11px] tracking-[0.4em] uppercase text-white/30 text-center">{uploading ? 'Analyzing Structure...' : 'Upload Cinematic Visual'}</span>
+                                                            <span className="text-[11px] tracking-[0.4em] uppercase text-white/70 text-center">{uploading ? 'Analyzing Structure...' : 'Upload Cinematic Visual'}</span>
                                                         </div>
                                                     )}
                                                 </div>
@@ -2691,15 +2691,15 @@ const Admin = () => {
                                                                 <label className={labelClasses}>Detailed Ingredient Labels</label>
                                                                 <div className="grid grid-cols-1 gap-6 mt-4">
                                                                     <div className="flex items-center space-x-4">
-                                                                        <span className="text-[8px] text-white/20 w-12 tracking-widest uppercase">Top</span>
+                                                                        <span className="text-[8px] text-white/60 w-12 tracking-widest uppercase">Top</span>
                                                                         <input className={inputClasses + " mb-0 bg-transparent"} value={prodFormData.top_note_label} placeholder="e.g. Sicilian Lemon" onChange={e => setProdFormData({ ...prodFormData, top_note_label: e.target.value })} />
                                                                     </div>
                                                                     <div className="flex items-center space-x-4">
-                                                                        <span className="text-[8px] text-white/20 w-12 tracking-widest uppercase">Heart</span>
+                                                                        <span className="text-[8px] text-white/60 w-12 tracking-widest uppercase">Heart</span>
                                                                         <input className={inputClasses + " mb-0 bg-transparent"} value={prodFormData.heart_note_label} placeholder="e.g. Bulgarian Rose" onChange={e => setProdFormData({ ...prodFormData, heart_note_label: e.target.value })} />
                                                                     </div>
                                                                     <div className="flex items-center space-x-4">
-                                                                        <span className="text-[8px] text-white/20 w-12 tracking-widest uppercase">Base</span>
+                                                                        <span className="text-[8px] text-white/60 w-12 tracking-widest uppercase">Base</span>
                                                                         <input className={inputClasses + " mb-0 bg-transparent"} value={prodFormData.base_note_label} placeholder="e.g. Indian Oud" onChange={e => setProdFormData({ ...prodFormData, base_note_label: e.target.value })} />
                                                                     </div>
                                                                 </div>
@@ -2723,10 +2723,10 @@ const Admin = () => {
                                                                                 {prodFormData[field] ? (
                                                                                     <img src={getFullImageUrl(prodFormData[field])} className="w-8 h-8 object-contain" />
                                                                                 ) : (
-                                                                                    <Plus className="text-white/20 group-hover:text-gold-500" size={16} />
+                                                                                    <Plus className="text-white/60 group-hover:text-gold-500" size={16} />
                                                                                 )}
                                                                             </div>
-                                                                            <p className="text-[7px] text-white/30 mt-3 uppercase tracking-tighter">{field.split('_')[0]}</p>
+                                                                            <p className="text-[7px] text-white/70 mt-3 uppercase tracking-tighter">{field.split('_')[0]}</p>
                                                                         </div>
                                                                     ))}
                                                                 </div>
@@ -2818,7 +2818,7 @@ const Admin = () => {
 
                                                         <div
                                                             onClick={() => galleryInputRef.current.click()}
-                                                            className="w-24 h-24 border border-dashed border-white/20 flex flex-col items-center justify-center cursor-pointer hover:border-gold-500 hover:text-gold-500 text-white/30 transition-colors"
+                                                            className="w-24 h-24 border border-dashed border-white/20 flex flex-col items-center justify-center cursor-pointer hover:border-gold-500 hover:text-gold-500 text-white/70 transition-colors"
                                                         >
                                                             <input type="file" ref={galleryInputRef} onChange={handleGalleryUpload} className="hidden" accept="image/*,video/mp4,video/webm,video/quicktime,video/ogg,.mp4,.webm,.mov,.ogg" />
                                                             {uploadingGallery ? <Loader2 size={24} className="animate-spin" /> : <Plus size={24} />}
@@ -2831,7 +2831,7 @@ const Admin = () => {
                                             <button
                                                 disabled={uploading}
                                                 type="submit"
-                                                className={`w-full py-6 text-[11px] font-black tracking-[0.5em] uppercase transition-all flex items-center justify-center ${uploading ? 'bg-zinc-800 text-white/20 cursor-wait' : 'bg-white text-black hover:bg-gold-500'}`}
+                                                className={`w-full py-6 text-[11px] font-black tracking-[0.5em] uppercase transition-all flex items-center justify-center ${uploading ? 'bg-zinc-800 text-white/60 cursor-wait' : 'bg-white text-black hover:bg-gold-500'}`}
                                             >
                                                 {uploading ? 'Processing Architecture...' : (
                                                     <><Save size={18} className="mr-4" /> {editingId ? 'Save Modifications' : 'Finalize Selection'}</>
@@ -2851,7 +2851,7 @@ const Admin = () => {
                                 </div>
                             ) : (
                                 (activeTab === 'collections' ? collections : activeTab === 'products' ? products : activeTab === 'promo-codes' ? promoCodes : blogs).length === 0 ? (
-                                    <div className="text-center py-20 text-white/20 tracking-widest uppercase text-xs">No records found</div>
+                                    <div className="text-center py-20 text-white/60 tracking-widest uppercase text-xs">No records found</div>
                                 ) : (
                                     (activeTab === 'collections' ? collections : activeTab === 'products' ? products : activeTab === 'promo-codes' ? promoCodes : blogs).map(item => (
                                         <div key={item.id} className="bg-white/[0.03] border border-white/5 p-5 md:p-8 hover:border-gold-500/30 transition-all">
@@ -2865,17 +2865,17 @@ const Admin = () => {
                                                 </div>
                                                 <div className="flex-grow space-y-2">
                                                     <h3 className="text-sm md:text-base tracking-[0.2em] font-bold text-white uppercase line-clamp-1">{item.name || item.title || item.code}</h3>
-                                                    <p className="text-[9px] md:text-[10px] tracking-[0.15em] text-white/40 uppercase italic leading-relaxed">
+                                                    <p className="text-[9px] md:text-[10px] tracking-[0.15em] text-white/80 uppercase italic leading-relaxed">
                                                         {activeTab === 'collections' ? item.slug :
                                                             activeTab === 'products' ? `${item.collection_name} | ${item.price} | Stock: ${item.stock_count || 0}` :
                                                                 activeTab === 'promo-codes' ? `${item.discount_type === 'percentage' ? item.discount_value + '%' : '₹' + item.discount_value} OFF | Used: ${item.usage_count}/${item.usage_limit || '∞'}` :
                                                                     `BY ${item.author} | ${new Date(item.created_at).toLocaleDateString()}`}
                                                     </p>
                                                     <div className="flex items-center space-x-6 pt-4 border-t border-white/5 sm:border-none sm:pt-0">
-                                                        <button onClick={() => handleEdit(activeTab, item)} className="text-white/30 hover:text-gold-500 transition-all flex items-center gap-2 uppercase text-[9px] font-black tracking-widest group">
+                                                        <button onClick={() => handleEdit(activeTab, item)} className="text-white/70 hover:text-gold-500 transition-all flex items-center gap-2 uppercase text-[9px] font-black tracking-widest group">
                                                             <Edit3 size={14} className="group-hover:scale-110 transition-transform" /> <span>Edit</span>
                                                         </button>
-                                                        <button onClick={() => handleDelete(activeTab === 'blogs' ? 'blogs' : activeTab, item.id)} className="text-white/30 hover:text-red-500 transition-all flex items-center gap-2 uppercase text-[9px] font-black tracking-widest group">
+                                                        <button onClick={() => handleDelete(activeTab === 'blogs' ? 'blogs' : activeTab, item.id)} className="text-white/70 hover:text-red-500 transition-all flex items-center gap-2 uppercase text-[9px] font-black tracking-widest group">
                                                             <Trash2 size={14} className="group-hover:scale-110 transition-transform" /> <span>Remove</span>
                                                         </button>
                                                     </div>
@@ -2901,17 +2901,17 @@ const Admin = () => {
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white/5 border border-white/10 p-6 md:p-10 gap-6">
                                     <div>
                                         <h2 className="text-xl font-serif tracking-[0.2em] uppercase italic">Vault Manifest</h2>
-                                        <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase mt-2">Monitoring active acquisitions & abandoned intent</p>
+                                        <p className="text-[10px] tracking-[0.3em] text-white/80 uppercase mt-2">Monitoring active acquisitions & abandoned intent</p>
                                     </div>
                                     <div className="text-left sm:text-right">
-                                        <p className="text-[9px] text-white/40 uppercase tracking-widest mb-1">Active Vaults</p>
+                                        <p className="text-[9px] text-white/80 uppercase tracking-widest mb-1">Active Vaults</p>
                                         <p className="text-2xl font-serif text-gold-500">{carts.length}</p>
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-1 gap-6">
                                     {carts.length === 0 ? (
-                                        <div className="p-20 text-center text-white/20 uppercase tracking-[0.3em] border border-white/5">The manifest is currently clear</div>
+                                        <div className="p-20 text-center text-white/60 uppercase tracking-[0.3em] border border-white/5">The manifest is currently clear</div>
                                     ) : (
                                         carts.map(cart => (
                                             <div key={cart.id} className="bg-white/5 border border-white/10 p-6 md:p-8 hover:border-gold-500/30 transition-all group">
@@ -2925,7 +2925,7 @@ const Admin = () => {
                                                                 <p className="text-xs font-black uppercase tracking-widest text-white">
                                                                     {cart.first_name ? `${cart.first_name} ${cart.last_name}` : 'Anonymous Guest'}
                                                                 </p>
-                                                                <p className="text-[9px] text-white/40 uppercase tracking-widest mt-1">
+                                                                <p className="text-[9px] text-white/80 uppercase tracking-widest mt-1">
                                                                     {cart.user_email || cart.email || 'Restricted Identity'}
                                                                 </p>
                                                             </div>
@@ -2949,16 +2949,16 @@ const Admin = () => {
                                                     <div className="md:w-64 flex flex-col justify-between items-end text-right border-t md:border-t-0 md:border-l border-white/5 pt-6 md:pt-0 md:pl-8">
                                                         <div className="space-y-4">
                                                             <div>
-                                                                <p className="text-[8px] uppercase tracking-[0.3em] text-white/20 mb-1">Status</p>
+                                                                <p className="text-[8px] uppercase tracking-[0.3em] text-white/60 mb-1">Status</p>
                                                                 <span className="px-3 py-1 bg-gold-500/5 border border-gold-500/20 text-gold-500 text-[8px] font-black uppercase tracking-widest">Active</span>
                                                             </div>
                                                             <div>
-                                                                <p className="text-[8px] uppercase tracking-[0.3em] text-white/20 mb-1">Last Intelligence Sync</p>
+                                                                <p className="text-[8px] uppercase tracking-[0.3em] text-white/60 mb-1">Last Intelligence Sync</p>
                                                                 <p className="text-[10px] text-white/60 font-sans">{new Date(cart.last_sync).toLocaleString()}</p>
                                                             </div>
                                                         </div>
                                                         <div className="mt-6">
-                                                            <p className="text-[8px] uppercase tracking-[0.3em] text-white/20 mb-1">Approx. Value</p>
+                                                            <p className="text-[8px] uppercase tracking-[0.3em] text-white/60 mb-1">Approx. Value</p>
                                                             <p className="text-lg font-serif text-white">
                                                                 {formatCurrency(
                                                                     cart.items?.reduce((acc, item) => acc + (item.price * item.quantity), 0) || 0,
