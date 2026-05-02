@@ -437,7 +437,7 @@ Marketing Consent: Granted
                                 {isRegister ? 'Patronage Established' : 'Welcome Back'}
                             </h2>
                             <p className="text-gray-400 text-[10px] tracking-[0.4em] uppercase">
-                                {isRegister ? 'Welcome to the KIKS Sanctuary' : 'Accessing your private vault'}
+                                {isRegister ? 'Welcome to KIKS' : 'Accessing your private vault'}
                             </p>
                         </motion.div>
                     ) : status === 'reset_sent' ? (
