@@ -118,14 +118,27 @@ const Auth = ({ isRegisterInitial = false }) => {
         title: 'Title',
         firstName: '',
         lastName: '',
-        countryCode: '+91 (IN)',
+        countryCode: '', // Will be set by useEffect
         telephone: '',
         dobDay: 'Day',
         dobMonth: 'Month',
         dobYear: 'Year',
         password: '',
-        location: 'India'
+        location: localStorage.getItem('kiks_location_name') || 'India'
     });
+
+    useEffect(() => {
+        // Set initial country code based on location
+        const loc = localStorage.getItem('kiks_location_name') || 'India';
+        const country = countryList.find(c => c.name === loc);
+        if (country) {
+            setFormData(prev => ({
+                ...prev,
+                location: loc,
+                countryCode: `${country.code} (${country.iso})`
+            }));
+        }
+    }, [countryList]);
 
     const validatePhone = (code, number) => {
         // Extract code part if it's in format "+91 (IN)"

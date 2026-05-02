@@ -78,3 +78,23 @@ export const applyLocationSettings = (countryName, i18n, dispatch, setCurrencyAc
     }
     return null;
 };
+
+/**
+ * Auto-detect user location based on IP and apply settings
+ */
+export const autoDetectLocation = async (i18n, dispatch, setCurrencyAction) => {
+    // Only auto-detect if no location is stored yet
+    if (localStorage.getItem('kiks_location_name')) return;
+
+    try {
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        
+        if (data && data.country_name) {
+            console.log(`[i18n] Auto-detected location: ${data.country_name}`);
+            applyLocationSettings(data.country_name, i18n, dispatch, setCurrencyAction);
+        }
+    } catch (err) {
+        console.error("[i18n] Location detection failed:", err);
+    }
+};

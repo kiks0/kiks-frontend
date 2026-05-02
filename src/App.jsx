@@ -1,7 +1,9 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { fetchExchangeRates } from './store/currencySlice';
+import { fetchExchangeRates, setCurrency } from './store/currencySlice';
+import { useTranslation } from 'react-i18next';
+import { autoDetectLocation } from './utils/i18nUtils';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -43,10 +45,12 @@ import PageLoader from './components/PageLoader';
 
 function App() {
   const dispatch = useDispatch();
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     dispatch(fetchExchangeRates());
-  }, [dispatch]);
+    autoDetectLocation(i18n, dispatch, setCurrency);
+  }, [dispatch, i18n]);
 
   return (
     <Router>

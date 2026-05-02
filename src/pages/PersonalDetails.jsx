@@ -66,10 +66,29 @@ const PersonalDetails = () => {
         dobDay: user?.dob_day?.toString() || '',
         dobMonth: user?.dob_month?.toString() || '',
         dobYear: user?.dob_year?.toString() || '',
-        location: user?.location || 'India',
+        location: user?.location || localStorage.getItem('kiks_location_name') || 'India',
         telephone: user?.telephone || '',
         countryCode: user?.country_code || '+91 (IN)'
     });
+
+    useEffect(() => {
+        // If user doesn't have a country code but we have a location, set the default code
+        if (!user?.country_code) {
+            const loc = user?.location || localStorage.getItem('kiks_location_name') || 'India';
+            const country = COUNTRIES.find(c => c.name === loc);
+            if (country) {
+                setFormData(prev => ({
+                    ...prev,
+                    location: loc,
+                    countryCode: country.code
+                }));
+                setTempPhone(prev => ({
+                    ...prev,
+                    code: country.code
+                }));
+            }
+        }
+    }, [user]);
 
     const [tempPhone, setTempPhone] = useState({
         code: user?.country_code || '+91 (IN)',

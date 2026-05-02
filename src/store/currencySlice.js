@@ -4,10 +4,14 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 export const fetchExchangeRates = createAsyncThunk(
   'currency/fetchRates',
   async () => {
-    // Using a free API for real-time rates
-    const response = await fetch('https://api.exchangerate-api.com/v4/latest/INR');
-    const data = await response.json();
-    return data.rates;
+    try {
+        const response = await fetch('https://api.exchangerate-api.com/v4/latest/INR');
+        const data = await response.json();
+        return data.rates;
+    } catch (err) {
+        console.error("Currency rates fetch failed:", err);
+        throw err;
+    }
   }
 );
 
@@ -17,17 +21,6 @@ const currencySlice = createSlice({
     baseCurrency: 'INR',
     activeCurrency: localStorage.getItem('kiks_currency') || 'INR',
     rates: { INR: 1 },
-    symbols: {
-      INR: '₹',
-      USD: '$',
-      EUR: '€',
-      GBP: '£',
-      MXN: '$',
-      CAD: '$',
-      JPY: '¥',
-      CNY: '¥',
-      AED: 'AED'
-    },
     status: 'idle'
   },
   reducers: {
@@ -47,8 +40,8 @@ const currencySlice = createSlice({
       })
       .addCase(fetchExchangeRates.rejected, (state) => {
         state.status = 'failed';
-        // Fallback rates if API fails
-        state.rates = { INR: 1, USD: 0.012, EUR: 0.011, GBP: 0.0094 };
+        // Fallback common rates if API fails
+        state.rates = { INR: 1, USD: 0.012, EUR: 0.011, GBP: 0.0094, AED: 0.044, CAD: 0.016, CNY: 0.086, JPY: 1.83 };
       });
   }
 });
