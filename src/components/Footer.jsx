@@ -207,12 +207,31 @@ const Footer = () => {
       {/* Bottom Footer Section */}
       <div className="container mx-auto px-6 md:px-12 lg:px-24">
         <div className="border-b border-white/10 pb-6 mb-6 flex flex-col md:flex-row justify-between items-center md:items-center">
-          <div className="flex items-center space-x-2 text-[#A0A0A0] text-[12px]">
-            <span>{t('footer.detect')}</span>
-            <button onClick={() => setIsLocationModalOpen(true)} className="text-white flex items-center font-medium ml-1 whitespace-nowrap text-[11px] sm:text-[12px]">
-              {selectedLocation} - {locations.find(l => l.name === selectedLocation)?.langName || 'English'}
-              <svg className="w-3 h-3 ml-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-            </button>
+          <div className="flex flex-col space-y-4">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[#A0A0A0] text-[10px] tracking-[0.1em] uppercase">
+              {locations.filter(l => ['India', 'United States', 'Germany', 'Spain', 'France'].includes(l.name)).map(loc => (
+                <button 
+                  key={loc.name}
+                  onClick={() => {
+                    applyLocationSettings(loc.name, i18n, dispatch, setCurrency);
+                    window.location.reload();
+                  }}
+                  className={`hover:text-white transition-colors ${selectedLocation === loc.name ? 'text-white font-black' : ''}`}
+                >
+                  {loc.langName}
+                </button>
+              ))}
+              <button 
+                onClick={() => setIsLocationModalOpen(true)} 
+                className="text-white flex items-center font-black"
+              >
+                {t('footer.detect')} <ArrowRight size={12} className="ml-2" />
+              </button>
+            </div>
+            
+            <div className="text-[#A0A0A0] text-[11px] tracking-widest uppercase">
+              Current: <span className="text-white font-medium">{selectedLocation}</span>
+            </div>
           </div>
           <div className="flex justify-center space-x-8 mt-6 md:mt-0 text-[#A0A0A0]">
             <a href="https://instagram.com/kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconInsta /></a>

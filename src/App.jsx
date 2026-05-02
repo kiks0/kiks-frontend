@@ -45,12 +45,9 @@ import PageLoader from './components/PageLoader';
 
 function App() {
   const dispatch = useDispatch();
-  const { i18n } = useTranslation();
-
   useEffect(() => {
     dispatch(fetchExchangeRates());
-    autoDetectLocation(i18n, dispatch, setCurrency);
-  }, [dispatch, i18n]);
+  }, [dispatch]);
 
   return (
     <Router>

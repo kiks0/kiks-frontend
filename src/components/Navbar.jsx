@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Menu, X, ShoppingBag, Heart, User, UserPlus, ChevronDown, Shield, ChevronLeft, ArrowRight } from 'lucide-react';
 import { toggleWishlistAndSync } from '../store/wishlistSlice';
 import { openAuthModal } from '../store/uiSlice';
-import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SearchOverlay from './SearchOverlay';
@@ -13,7 +12,6 @@ import CartDrawer from './CartDrawer';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const Navbar = () => {
-  const { t } = useTranslation();
   const location = useLocation();
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const wishlistCount = wishlistItems.length;
@@ -181,7 +179,7 @@ const Navbar = () => {
                   onMouseLeave={() => setIsCollectionsHovered(false)}
                 >
                   <div className="hover:text-gold-400 transition-colors flex items-center">
-                    {t('nav.collections')} <ChevronDown size={14} className="ml-1 opacity-60" strokeWidth={1.5} />
+                    COLLECTIONS <ChevronDown size={14} className="ml-1 opacity-60" strokeWidth={1.5} />
                   </div>
 
                   {/* Minimal Dropdown */}
@@ -195,16 +193,16 @@ const Navbar = () => {
                     </div>
                   </div>
                 </div>
-                <Link to="/blog" className="hover:text-gold-400 transition-colors">{t('nav.blog')}</Link>
-                <Link to="/contact" className="hover:text-gold-400 transition-colors">{t('nav.contact')}</Link>
+                <Link to="/blog" className="hover:text-gold-400 transition-colors">BLOG</Link>
+                <Link to="/contact" className="hover:text-gold-400 transition-colors">CONTACT</Link>
                 {!isAuthenticated && (
                   <>
-                    <Link to="/login" className="hover:text-gold-400 transition-colors">{t('nav.login')}</Link>
-                    <Link to="/register" className="hover:text-gold-400 transition-colors">{t('nav.register')}</Link>
+                    <Link to="/login" className="hover:text-gold-400 transition-colors">LOGIN</Link>
+                    <Link to="/register" className="hover:text-gold-400 transition-colors">REGISTER</Link>
                   </>
                 )}
                 {isAuthenticated && isAdmin && (
-                  <Link to="/admin" className="text-gold-500 hover:text-white transition-colors text-[9px] tracking-[0.2em] font-bold">{t('nav.admin')}</Link>
+                  <Link to="/admin" className="text-gold-500 hover:text-white transition-colors text-[9px] tracking-[0.2em] font-bold">ADMIN</Link>
                 )}
               </div>
 
@@ -306,7 +304,7 @@ const Navbar = () => {
                               onClick={() => setIsMobileMenuOpen(false)}
                               className="block w-full bg-gold-500 text-black text-center py-5 text-[11px] font-black tracking-[0.4em] uppercase hover:bg-gold-400 transition-all shadow-xl"
                             >
-                              {t('nav.register')} / JOIN THE CLUB
+                              REGISTER / JOIN THE CLUB
                             </Link>
                           </div>
                         )}
@@ -317,27 +315,27 @@ const Navbar = () => {
                             onClick={() => setMobileMenuLevel('collections')}
                             className="w-full flex items-center justify-between group text-white hover:text-gold-500 transition-colors py-1"
                           >
-                            <span className="text-[11px] tracking-[0.25em] uppercase font-medium font-sans">{t('nav.collections')}</span>
+                            <span className="text-[11px] tracking-[0.25em] uppercase font-medium font-sans">COLLECTIONS</span>
                             <ArrowRight size={14} className="text-white/20 group-hover:text-gold-500 transition-all transform group-hover:translate-x-1" />
                           </button>
                         </div>
 
                       <div className="space-y-8">
                         <Link to="/collection/arambh" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>
-                          {t('nav.collections')}
+                          COLLECTIONS
                         </Link>
                         <Link to="/about" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>
-                          {t('nav.about')}
+                          ABOUT
                         </Link>
                         <Link to="/essence" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>
-                          {t('nav.story')}
+                          STORY
                         </Link>
                         <Link to="/blog" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>
-                          {t('nav.blog')}
+                          BLOG
                         </Link>
                         
                         <Link to="/contact" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>
-                          {t('nav.contact')}
+                          CONTACT
                         </Link>
                       </div>
 
@@ -346,13 +344,13 @@ const Navbar = () => {
                         {!isAuthenticated ? (
                           <div className="space-y-6">
                             <Link to="/login" className="flex items-center text-[10px] tracking-[0.3em] text-white/30 uppercase hover:text-white font-sans" onClick={() => setIsMobileMenuOpen(false)}>
-                              <User size={16} className="mr-4" strokeWidth={1} /> {t('nav.login')}
+                              <User size={16} className="mr-4" strokeWidth={1} /> LOGIN
                             </Link>
                           </div>
                         ) : (
 
                           <Link to="/account" className="flex items-center text-[10px] tracking-[0.3em] text-white/30 uppercase hover:text-white font-sans" onClick={() => setIsMobileMenuOpen(false)}>
-                            <User size={16} className="mr-4" strokeWidth={1} /> {t('nav.profile')}
+                            <User size={16} className="mr-4" strokeWidth={1} /> PROFILE
                           </Link>
                         )}
                         
@@ -367,7 +365,7 @@ const Navbar = () => {
                           }}
                           className="flex items-center w-full text-[10px] tracking-[0.3em] text-white/30 uppercase hover:text-white font-sans relative text-left"
                         >
-                          <Heart size={16} className="mr-4" strokeWidth={1} /> {t('nav.wishlist')}
+                          <Heart size={16} className="mr-4" strokeWidth={1} /> WISHLIST
                           {wishlistCount > 0 && (
                             <span className="absolute left-4 top-[-6px] bg-white text-black text-[7px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-lg">
                               {wishlistCount}
@@ -377,7 +375,7 @@ const Navbar = () => {
 
                         {isAuthenticated && isAdmin && (
                           <Link to="/admin" className="flex items-center text-[10px] tracking-[0.3em] text-gold-500 font-bold uppercase font-sans" onClick={() => setIsMobileMenuOpen(false)}>
-                            <Shield size={16} className="mr-4" strokeWidth={1} /> {t('nav.admin')}
+                            <Shield size={16} className="mr-4" strokeWidth={1} /> ADMIN
                           </Link>
                         )}
                       </div>
