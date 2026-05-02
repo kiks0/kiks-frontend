@@ -1488,6 +1488,14 @@ const Admin = () => {
                                                                     </button>
                                                                 )}
                                                                 {order.status === 'Dispatched' && (
+                                                                    <div className="flex flex-col gap-2">
+                                                                        <button onClick={() => handleOrderStatusUpdate(order.id, 'Delivered')} className="bg-green-600 text-white px-4 py-2 text-[10px] font-black uppercase tracking-widest hover:bg-green-500 transition-all">
+                                                                            Mark Delivered
+                                                                        </button>
+                                                                        <div className="grid grid-cols-2 gap-1 mt-1">
+                                                                            <button
+                                                                                onClick={() => handleOrderStatusUpdate(order.id, 'RTO Returned')}
+                                                                                className="bg-red-500/10 border border-red-500/30 text-red-400 px-2 py-1.5 text-[8px] font-black uppercase tracking-tighter hover:bg-red-500 hover:text-white transition-all"
                                                                             >
                                                                                 RTO Return
                                                                             </button>
