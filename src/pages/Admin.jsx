@@ -1272,6 +1272,7 @@ const Admin = () => {
                                 </div>
                                 {/* Order Sub-Tabs */}
                                 <div className="flex items-center space-x-6 mb-8 border-b border-white/5 pb-2 overflow-x-auto scrollbar-hide">
+                                    {[
                                         { id: 'pending', label: 'Pending', count: orders.filter(o => !o.status || o.status === 'On Hold' || o.status === 'Pending').length },
                                         { id: 'processing', label: 'Processing', count: orders.filter(o => o.status === 'Accepted' || o.status === 'Processing').length },
                                         { id: 'dispatch', label: 'Dispatch', count: orders.filter(o => o.status === 'Dispatch').length },
