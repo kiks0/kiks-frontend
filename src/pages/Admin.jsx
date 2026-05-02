@@ -1273,9 +1273,11 @@ const Admin = () => {
                                 {/* Order Sub-Tabs */}
                                 <div className="flex items-center space-x-6 mb-8 border-b border-white/5 pb-2 overflow-x-auto scrollbar-hide">
                                     {[
-                                        { id: 'onhold', label: 'On Hold', count: orders.filter(o => !o.status || o.status === 'On Hold' || o.status === 'Pending').length },
-                                        { id: 'processing', label: 'Processing', count: orders.filter(o => o.status === 'Accepted').length },
-                                        { id: 'delivered', label: 'Delivered', count: orders.filter(o => o.status === 'Dispatched' || o.status === 'Delivered').length },
+                                        { id: 'pending', label: 'Pending', count: orders.filter(o => !o.status || o.status === 'On Hold' || o.status === 'Pending').length },
+                                        { id: 'processing', label: 'Processing', count: orders.filter(o => o.status === 'Accepted' || o.status === 'Processing').length },
+                                        { id: 'dispatch', label: 'Dispatch', count: orders.filter(o => o.status === 'Dispatch').length },
+                                        { id: 'dispatched', label: 'Dispatched', count: orders.filter(o => o.status === 'Dispatched').length },
+                                        { id: 'delivered', label: 'Delivered', count: orders.filter(o => o.status === 'Delivered').length },
                                         { id: 'rto', label: 'RTO Returned', count: orders.filter(o => o.status === 'RTO Returned').length },
                                         { id: 'returned', label: 'Only Return', count: orders.filter(o => o.status === 'Customer Returned').length }
                                     ].map(sub => (
@@ -1297,9 +1299,11 @@ const Admin = () => {
 
                                 {(() => {
                                     const filteredOrders = orders.filter(o => {
-                                        if (orderSubTab === 'onhold') return !o.status || o.status === 'On Hold' || o.status === 'Pending';
-                                        if (orderSubTab === 'processing') return o.status === 'Accepted';
-                                        if (orderSubTab === 'delivered') return o.status === 'Dispatched' || o.status === 'Delivered';
+                                        if (orderSubTab === 'pending') return !o.status || o.status === 'On Hold' || o.status === 'Pending';
+                                        if (orderSubTab === 'processing') return o.status === 'Accepted' || o.status === 'Processing';
+                                        if (orderSubTab === 'dispatch') return o.status === 'Dispatch';
+                                        if (orderSubTab === 'dispatched') return o.status === 'Dispatched';
+                                        if (orderSubTab === 'delivered') return o.status === 'Delivered';
                                         if (orderSubTab === 'rto') return o.status === 'RTO Returned';
                                         if (orderSubTab === 'returned') return o.status === 'Customer Returned';
                                         return true;
@@ -1313,7 +1317,7 @@ const Admin = () => {
                                     return (
                                         <div className="bg-zinc-900 border border-white/20 p-4 flex flex-wrap items-center justify-between gap-4 mb-4">
                                             <span className="text-[10px] text-gold-400 uppercase font-bold tracking-widest">
-                                                {visibleSelected.length} Order{visibleSelected.length > 1 ? 's' : ''} Selected in {orderSubTab.split('onhold').join('On Hold')}
+                                                {visibleSelected.length} Order{visibleSelected.length > 1 ? 's' : ''} Selected in {orderSubTab.split('pending').join('Pending')}
                                             </span>
                                             <div className="flex flex-wrap gap-3">
                                                 {hasOnHold && (
@@ -1321,7 +1325,7 @@ const Admin = () => {
                                                         onClick={() => handleBulkStatusUpdate(visibleSelected.filter(id => {
                                                             const o = filteredOrders.find(ord => ord.id === id);
                                                             return !o.status || o.status === 'On Hold' || o.status === 'Pending';
-                                                        }), 'Accepted')}
+                                                        }), 'Processing')}
                                                         className="bg-green-600 border border-green-500 text-white px-5 py-2 text-[10px] tracking-widest uppercase hover:bg-green-500 transition-all font-bold flex items-center gap-2"
                                                     >
                                                         <CheckCircle2 size={12} /> Accept Selection
@@ -1469,24 +1473,21 @@ const Admin = () => {
                                                                 </div>
                                                                 {/* Action Buttons by status */}
                                                                 {(order.status === 'On Hold' || order.status === 'Pending' || !order.status) && (
-                                                                    <button onClick={() => handleOrderStatusUpdate(order.id, 'Accepted')} className="bg-gold-500 text-black px-4 py-2 font-black text-[9px] uppercase tracking-widest hover:bg-gold-400 transition-all">
-                                                                        ✓ Accept Order
+                                                                    <button onClick={() => handleOrderStatusUpdate(order.id, 'Processing')} className="bg-gold-500 text-black px-4 py-2 text-[10px] font-black uppercase tracking-widest hover:bg-gold-400 transition-all">
+                                                                        Accept Order
                                                                     </button>
                                                                 )}
-                                                                {order.status === 'Accepted' && (
-                                                                    <button onClick={() => handleOrderStatusUpdate(order.id, 'Dispatched')} className="bg-blue-500/20 border border-blue-500/50 text-blue-300 px-4 py-2 font-black text-[9px] uppercase tracking-widest hover:bg-blue-500 hover:text-white transition-all">
-                                                                        → Out for Delivery
+                                                                {(order.status === 'Accepted' || order.status === 'Processing') && (
+                                                                    <button onClick={() => handleOrderStatusUpdate(order.id, 'Dispatch')} className="bg-blue-500 text-white px-4 py-2 text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 transition-all">
+                                                                        Mark as Dispatch
+                                                                    </button>
+                                                                )}
+                                                                {order.status === 'Dispatch' && (
+                                                                    <button onClick={() => handleOrderStatusUpdate(order.id, 'Dispatched')} className="bg-gold-500 text-black px-4 py-2 text-[10px] font-black uppercase tracking-widest hover:bg-gold-400 transition-all">
+                                                                        Mark as Dispatched
                                                                     </button>
                                                                 )}
                                                                 {order.status === 'Dispatched' && (
-                                                                    <div className="flex flex-col gap-2">
-                                                                        <button onClick={() => handleOrderStatusUpdate(order.id, 'Delivered')} className="bg-green-500/20 border border-green-500/50 text-green-300 px-4 py-2 font-black text-[9px] uppercase tracking-widest hover:bg-green-500 hover:text-white transition-all">
-                                                                            ✓ Mark Delivered
-                                                                        </button>
-                                                                        <div className="grid grid-cols-2 gap-1">
-                                                                            <button
-                                                                                onClick={() => handleOrderStatusUpdate(order.id, 'RTO Returned')}
-                                                                                className="bg-red-500/10 border border-red-500/30 text-red-400 px-2 py-1.5 text-[8px] font-black uppercase tracking-tighter hover:bg-red-500 hover:text-white transition-all"
                                                                             >
                                                                                 RTO Return
                                                                             </button>
@@ -1552,9 +1553,11 @@ const Admin = () => {
                                 <div className="md:hidden space-y-4">
                                     {(() => {
                                         const filteredOrders = orders.filter(o => {
-                                            if (orderSubTab === 'onhold') return !o.status || o.status === 'On Hold' || o.status === 'Pending';
-                                            if (orderSubTab === 'processing') return o.status === 'Accepted';
-                                            if (orderSubTab === 'delivered') return o.status === 'Dispatched' || o.status === 'Delivered';
+                                            if (orderSubTab === 'pending') return !o.status || o.status === 'On Hold' || o.status === 'Pending';
+                                            if (orderSubTab === 'processing') return o.status === 'Accepted' || o.status === 'Processing';
+                                            if (orderSubTab === 'dispatch') return o.status === 'Dispatch';
+                                            if (orderSubTab === 'dispatched') return o.status === 'Dispatched';
+                                            if (orderSubTab === 'delivered') return o.status === 'Delivered';
                                             if (orderSubTab === 'rto') return o.status === 'RTO Returned';
                                             if (orderSubTab === 'returned') return o.status === 'Customer Returned';
                                             return true;
@@ -1629,13 +1632,18 @@ const Admin = () => {
                                                         </div>
                                                         {/* Action Buttons */}
                                                         {(order.status === 'On Hold' || order.status === 'Pending' || !order.status) && (
-                                                            <button onClick={() => handleOrderStatusUpdate(order.id, 'Accepted')} className="w-full bg-gold-500 text-black py-3 font-black text-[10px] uppercase tracking-widest hover:bg-gold-400 transition-all">
+                                                            <button onClick={() => handleOrderStatusUpdate(order.id, 'Processing')} className="w-full bg-gold-500 text-black py-3 font-black text-[10px] uppercase tracking-widest hover:bg-gold-400 transition-all">
                                                                 ✓ Accept Order
                                                             </button>
                                                         )}
-                                                        {order.status === 'Accepted' && (
-                                                            <button onClick={() => handleOrderStatusUpdate(order.id, 'Dispatched')} className="w-full bg-blue-500/20 border border-blue-500/50 text-blue-300 py-3 font-black text-[10px] uppercase tracking-widest hover:bg-blue-500 hover:text-white transition-all">
-                                                                → Mark Out for Delivery
+                                                        {(order.status === 'Accepted' || order.status === 'Processing') && (
+                                                            <button onClick={() => handleOrderStatusUpdate(order.id, 'Dispatch')} className="w-full bg-blue-500 text-white py-3 font-black text-[10px] uppercase tracking-widest hover:bg-blue-600 transition-all">
+                                                                → Mark as Dispatch
+                                                            </button>
+                                                        )}
+                                                        {order.status === 'Dispatch' && (
+                                                            <button onClick={() => handleOrderStatusUpdate(order.id, 'Dispatched')} className="w-full bg-gold-500 text-black py-3 font-black text-[10px] uppercase tracking-widest hover:bg-gold-400 transition-all">
+                                                                → Mark as Dispatched
                                                             </button>
                                                         )}
                                                         {order.status === 'Dispatched' && (
