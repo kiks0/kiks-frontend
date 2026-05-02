@@ -6,6 +6,9 @@ import { useDispatch } from 'react-redux';
 import { login } from '../store/authSlice';
 import { fetchWishlist, clearWishlist } from '../store/wishlistSlice';
 import { useGoogleLogin } from '@react-oauth/google';
+import { useTranslation } from 'react-i18next';
+import { setCurrency } from '../store/currencySlice';
+import { applyLocationSettings } from '../utils/i18nUtils';
 
 const Auth = ({ isRegisterInitial = false }) => {
     const [isRegister, setIsRegister] = useState(isRegisterInitial);
@@ -26,6 +29,7 @@ const Auth = ({ isRegisterInitial = false }) => {
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { t, i18n } = useTranslation();
 
     // OTP Timer Logic
     useEffect(() => {
@@ -614,11 +618,18 @@ Marketing Consent: Granted
                                                     onChange={(e) => {
                                                         const selectedValue = e.target.value;
                                                         const country = countryList.find(c => `${c.code} (${c.iso})` === selectedValue);
+                                                        
+                                                        // Update form state
                                                         setFormData({
                                                             ...formData, 
                                                             countryCode: selectedValue,
                                                             location: country ? country.name : formData.location
                                                         });
+
+                                                        // Auto-apply language and currency based on country
+                                                        if (country) {
+                                                            applyLocationSettings(country.name, i18n, dispatch, setCurrency);
+                                                        }
                                                     }}
                                                 >
                                                     {countryList.map(c => (
@@ -711,11 +722,16 @@ Marketing Consent: Granted
                                             onChange={(e) => {
                                                 const selectedName = e.target.value;
                                                 const country = countryList.find(c => c.name === selectedName);
+                                                
+                                                // Update form state
                                                 setFormData({
                                                     ...formData, 
                                                     location: selectedName,
                                                     countryCode: country ? `${country.code} (${country.iso})` : formData.countryCode
                                                 });
+
+                                                // Auto-apply language and currency based on location
+                                                applyLocationSettings(selectedName, i18n, dispatch, setCurrency);
                                             }}
                                         >
                                             {/* Deduplicate countries for location list */}

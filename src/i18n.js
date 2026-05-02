@@ -327,6 +327,18 @@ const resources = {
       "product": { "masterpiece": "Ольфакторный шедевр", "not_found": "Товар не найден", "back_to": "Назад к", "acquire": "Приобрести эссенцию", "info": "Информация о продукте", "description": "Описание", "reviews": "Отзывы" },
       "cart": { "your_bag": "Ваша сумка", "empty": "Ваша сумка пуста", "subtotal": "Итого", "checkout": "Оформить" }
     }
+  },
+  ja: {
+    translation: {
+      "nav": { "collections": "コレクション", "blog": "ブログ", "contact": "お問い合わせ", "login": "ログイン", "register": "登録", "admin": "管理", "profile": "プロフィール", "wishlist": "ウィッシュリスト" },
+      "footer": { "explore": "KIKS.COMを探索", "services": "オンラインサービス", "detect": "場所と言語を変更", "high_contrast": "ハイコントラスト", "validate": "確認" }
+    }
+  },
+  ar: {
+    translation: {
+      "nav": { "collections": "المجموعات", "blog": "المدونة", "contact": "اتصل بنا", "login": "تسجيل الدخول", "register": "إنشاء حساب", "admin": "المسؤول", "profile": "الملف الشخصي", "wishlist": "قائمة الأمنيات" },
+      "footer": { "explore": "استكشف KIKS.COM", "services": "الخدمات عبر الإنترنت", "detect": "تغيير الموقع واللغة", "high_contrast": "تباين عالٍ", "validate": "تأكيد" }
+    }
   }
 };
 

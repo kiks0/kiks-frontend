@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setCurrency } from '../store/currencySlice';
+import { COUNTRY_MAPPING, applyLocationSettings } from '../utils/i18nUtils';
 
 // Inline SVGs for precise identical Chanel reproduction without dependency issues
 const IconInsta = () => <svg xmlns="http://www.w-equiv.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>;
@@ -38,43 +39,11 @@ const Footer = () => {
     fetchLatestCollection();
   }, []);
 
-  const locations = [
-    // Asia
-    { name: 'India', code: 'hi', lang: 'Hindi', currency: 'INR' },
-    { name: 'India (English)', code: 'en', lang: 'English', currency: 'INR' },
-    { name: 'Japan', code: 'ja', lang: 'Japanese', currency: 'JPY' },
-    { name: 'China', code: 'zh', lang: 'Chinese', currency: 'CNY' },
-    { name: 'United Arab Emirates', code: 'ar', lang: 'Arabic', currency: 'AED' },
-    { name: 'Saudi Arabia', code: 'ar', lang: 'Arabic', currency: 'AED' },
-    { name: 'Singapore', code: 'en', lang: 'English', currency: 'USD' },
-    
-    // Europe
-    { name: 'France', code: 'fr', lang: 'French', currency: 'EUR' },
-    { name: 'United Kingdom', code: 'en', lang: 'English', currency: 'GBP' },
-    { name: 'Germany', code: 'de', lang: 'German', currency: 'EUR' },
-    { name: 'Italy', code: 'it', lang: 'Italian', currency: 'EUR' },
-    { name: 'Spain', code: 'es', lang: 'Spanish', currency: 'EUR' },
-    { name: 'Switzerland', code: 'fr', lang: 'French', currency: 'EUR' },
-    
-    // North America
-    { name: 'United States', code: 'en', lang: 'English', currency: 'USD' },
-    { name: 'Canada', code: 'en', lang: 'English', currency: 'CAD' },
-    { name: 'Mexico', code: 'es', lang: 'Spanish', currency: 'MXN' },
-    
-    // Oceania
-    { name: 'Australia', code: 'en', lang: 'English', currency: 'USD' },
-    
-    // Others
-    { name: 'Brazil', code: 'es', lang: 'Spanish', currency: 'USD' },
-    { name: 'South Africa', code: 'en', lang: 'English', currency: 'USD' }
-  ];
+  const locations = COUNTRY_MAPPING;
 
   const handleValidateLocation = () => {
-    const loc = locations.find(l => l.name === selectedLocation);
+    const loc = applyLocationSettings(selectedLocation, i18n, dispatch, setCurrency);
     if (loc) {
-      i18n.changeLanguage(loc.code);
-      dispatch(setCurrency(loc.currency));
-      localStorage.setItem('kiks_location_name', loc.name);
       window.location.reload(); // Refresh to apply all translations and rates perfectly
     }
     setIsLocationModalOpen(false);
@@ -241,7 +210,7 @@ const Footer = () => {
           <div className="flex items-center space-x-2 text-[#A0A0A0] text-[12px]">
             <span>{t('footer.detect')}</span>
             <button onClick={() => setIsLocationModalOpen(true)} className="text-white flex items-center font-medium ml-1 whitespace-nowrap text-[11px] sm:text-[12px]">
-              {selectedLocation} - {locations.find(l => l.name === selectedLocation)?.lang || 'English'}
+              {selectedLocation} - {locations.find(l => l.name === selectedLocation)?.langName || 'English'}
               <svg className="w-3 h-3 ml-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
           </div>
