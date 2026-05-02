@@ -110,6 +110,32 @@ const Checkout = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    // Auto-detect City and State based on Pincode
+    useEffect(() => {
+        const detectLocation = async () => {
+            if (formData.pincode.length === 6 && /^\d+$/.test(formData.pincode)) {
+                try {
+                    const res = await fetch(`https://api.postalpincode.in/pincode/${formData.pincode}`);
+                    const data = await res.json();
+                    
+                    if (data[0].Status === "Success") {
+                        const { District, State } = data[0].PostOffice[0];
+                        setFormData(prev => ({
+                            ...prev,
+                            city: District,
+                            state: State
+                        }));
+                    }
+                } catch (err) {
+                    console.error("Pincode detection failed:", err);
+                }
+            }
+        };
+
+        const timer = setTimeout(detectLocation, 500); // Debounce for better UX
+        return () => clearTimeout(timer);
+    }, [formData.pincode]);
+
     const selectSavedAddress = (addr) => {
         setFormData(prev => ({
             ...prev,
