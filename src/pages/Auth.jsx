@@ -434,7 +434,7 @@ Marketing Consent: Granted
                                 <CheckCircle2 size={48} />
                             </div>
                             <h2 className="text-3xl font-serif tracking-widest uppercase mb-4">
-                                {isRegister ? 'Patronage Established' : 'Welcome Back'}
+                                {isRegister ? 'Account Created' : 'Welcome Back'}
                             </h2>
                             <p className="text-gray-400 text-[10px] tracking-[0.4em] uppercase">
                                 {isRegister ? 'Welcome to KIKS' : 'Accessing your private vault'}
