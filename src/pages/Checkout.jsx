@@ -190,8 +190,17 @@ const Checkout = () => {
                     setValidationError('');
                 }
 
-                // If any prices changed, sync with Redux
-                if (updatedItems.some(i => i.priceChanged)) {
+                // Determine if we need to update Redux (only if data actually changed)
+                const hasChanges = updatedItems.some((item, idx) => {
+                    const old = items[idx];
+                    if (!old) return true;
+                    return item.price !== old.price || 
+                           item.sale_price !== old.sale_price || 
+                           item.stock_count !== old.stock_count ||
+                           item.isOOS !== old.isOOS;
+                });
+
+                if (hasChanges) {
                     dispatch(setCart({ items: updatedItems }));
                 }
             } catch (err) {
