@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Minus, Plus, Trash2, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { removeFromCart, updateQuantity } from '../store/cartSlice';
+import { removeFromCart, updateQuantity, setCart } from '../store/cartSlice';
 import { useNavigate } from 'react-router-dom';
 import { getFullImageUrl } from '../utils/url';
 import { formatCurrency } from '../utils/currency';
@@ -15,6 +15,44 @@ const CartDrawer = ({ isOpen, onClose }) => {
   const { items, total } = useSelector(state => state.cart);
   const { activeCurrency, rates, symbols } = useSelector(state => state.currency);
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+  // --- REAL-TIME CART SYNC ---
+  useEffect(() => {
+    if (isOpen && items.length > 0) {
+      const syncCart = async () => {
+        try {
+          const updatedItems = await Promise.all(items.map(async (item) => {
+            const res = await fetch(`${API_URL}/api/products/${item.slug}`);
+            if (!res.ok) return item;
+            const fresh = await res.json();
+            
+            const priceRaw = (fresh.sale_price || fresh.price || "0").toString().replace(/[^0-9]/g, '');
+            const currentPrice = parseInt(priceRaw) || 0;
+            
+            const oldPriceRaw = (item.sale_price || item.price || "0").toString().replace(/[^0-9]/g, '');
+            const oldPrice = parseInt(oldPriceRaw) || 0;
+
+            return {
+              ...item,
+              price: fresh.price,
+              sale_price: fresh.sale_price,
+              stock_count: fresh.stock_count,
+              isOOS: fresh.stock_count < item.quantity,
+              priceChanged: currentPrice !== oldPrice
+            };
+          }));
+
+          if (updatedItems.some(i => i.priceChanged || i.isOOS)) {
+            dispatch(setCart({ items: updatedItems }));
+          }
+        } catch (err) {
+          console.error("Cart sync fault:", err);
+        }
+      };
+      syncCart();
+    }
+  }, [isOpen]);
 
   const parsePrice = (price) => {
     if (typeof price === 'number') return price;
