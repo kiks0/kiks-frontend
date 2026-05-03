@@ -72,8 +72,8 @@ function App() {
     };
 
     checkSession();
-    // Check every 2 minutes for long-running sessions
-    const interval = setInterval(checkSession, 120000);
+    // Check every 30 seconds for long-running sessions (Instant logout on deletion)
+    const interval = setInterval(checkSession, 30000);
     return () => clearInterval(interval);
   }, [dispatch]);
 
