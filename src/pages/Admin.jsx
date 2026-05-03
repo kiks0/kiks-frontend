@@ -497,18 +497,18 @@ const Admin = () => {
     };
 
     const handleDeleteUser = async (id) => {
-        if (!window.confirm('Are you absolutely certain? This will permanently erase the user and all their associated data (orders, items, etc). This action is irreversible.')) return;
+        if (!window.confirm('Are you sure you want to deactivate this user? They will be hidden from the registry immediately but can be reactivated if requested within the grace period.')) return;
         try {
             const res = await fetch(`${API_URL}/api/users/${id}`, {
                 method: 'DELETE',
                 headers: getAdminHeaders()
             });
             if (res.ok) {
-                showSuccessToast('User purged from the registry.');
+                showSuccessToast('User removed from the registry.');
                 fetchUsersData();
             } else {
                 const data = await res.json();
-                showErrorToast(data.msg || 'Purge failed.');
+                showErrorToast(data.msg || 'Deactivation failed.');
             }
         } catch (e) {
             showErrorToast('Registry communication fault.');
@@ -519,7 +519,7 @@ const Admin = () => {
         const targetIds = Array.isArray(idsToDelete) ? idsToDelete : selectedUsers;
         if (!targetIds || targetIds.length === 0) return;
 
-        if (!window.confirm(`Are you absolutely certain you want to permanently purge ${targetIds.length} selected user(s)? All their data will be lost forever.`)) return;
+        if (!window.confirm(`Are you sure you want to deactivate ${targetIds.length} selected user(s)? They will no longer appear in the registry.`)) return;
         
         try {
             const res = await fetch(`${API_URL}/api/users/bulk-delete`, {
@@ -529,12 +529,12 @@ const Admin = () => {
             });
 
             if (res.ok) {
-                showSuccessToast(`${targetIds.length} users purged successfully.`);
+                showSuccessToast(`${targetIds.length} users deactivated successfully.`);
                 setSelectedUsers(selectedUsers.filter(id => !targetIds.includes(id)));
                 fetchUsersData();
             } else {
                 const data = await res.json();
-                showErrorToast(data.msg || 'Bulk purge failed.');
+                showErrorToast(data.msg || 'Bulk deactivation failed.');
             }
         } catch (e) {
             showErrorToast('Registry synchronization fault.');
@@ -1845,7 +1845,7 @@ const Admin = () => {
                                                     className="bg-red-500/10 border border-red-500/30 text-red-500 px-8 py-4 text-[10px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-3"
                                                 >
                                                     <Trash2 size={14} />
-                                                    Purge {selectedUsers.length} Selected
+                                                    Deactivate {selectedUsers.length} Selected
                                                 </button>
                                             )}
                                         </div>
