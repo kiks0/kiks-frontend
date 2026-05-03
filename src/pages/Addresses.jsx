@@ -210,9 +210,13 @@ const Addresses = () => {
                                             <span className="text-[7px] tracking-[0.3em] uppercase text-gold-500 font-black border border-gold-500/20 px-2 py-0.5">
                                                 {addr.slot === 'billing' ? 'Billing Address' : addr.slot === 'shipping' ? 'Shipping Address' : `Address Blueprint ${idx + 1}`}
                                             </span>
-                                            <div className="flex space-x-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <button onClick={() => startAction(addr.slot === 'additional' ? 'edit_additional' : addr.slot, addr.index)} className="text-white/40 hover:text-white"><Edit2 size={12} /></button>
-                                                <button onClick={() => removeAddress(addr.slot, addr.index)} className="text-red-500/40 hover:text-red-500"><Trash2 size={12} /></button>
+                                            <div className="flex space-x-6 md:space-x-4 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                                                <button onClick={() => startAction(addr.slot === 'additional' ? 'edit_additional' : addr.slot, addr.index)} className="text-white/60 md:text-white/40 hover:text-white p-1">
+                                                    <Edit2 className="w-4 h-4 md:w-3 md:h-3" />
+                                                </button>
+                                                <button onClick={() => removeAddress(addr.slot, addr.index)} className="text-red-500/60 md:text-red-500/40 hover:text-red-500 p-1">
+                                                    <Trash2 className="w-4 h-4 md:w-3 md:h-3" />
+                                                </button>
                                             </div>
                                         </div>
                                         <strong className="text-xs tracking-widest uppercase block mb-3">{addr.first_name} {addr.last_name}</strong>
