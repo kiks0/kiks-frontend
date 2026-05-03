@@ -35,7 +35,7 @@ const Account = () => {
         // Fetch order count
         const token = localStorage.getItem('kiks_token') || null;
         if (token) {
-             fetch('http://localhost:5000/api/orders/myorders', {
+             fetch(`${API_URL}/api/orders/myorders`, {
                  headers: { 'Authorization': `Bearer ${token}` }
              })
              .then(res => {
@@ -156,7 +156,7 @@ const Account = () => {
                 <div>
                   <h4 className="text-[12px] font-bold tracking-wide mb-2 text-white group-hover:text-gold-400 transition-colors">Orders</h4>
                   <p className="text-[11px] text-neutral-500 font-medium leading-relaxed">
-                     {ordersCount === 0 ? "You have no recorded acquisitions" : `You have ${ordersCount} recent ${ordersCount === 1 ? 'acquisition' : 'acquisitions'}`}
+                     {ordersCount === 0 ? "You have no recorded acquisitions" : `You have ${ordersCount} ${ordersCount === 1 ? 'order' : 'orders'} recorded`}
                   </p>
                 </div>
               </Link>
