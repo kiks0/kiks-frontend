@@ -141,8 +141,15 @@ const CartDrawer = ({ isOpen, onClose }) => {
                           <p className="text-[9px] text-white/40 tracking-[0.1em] uppercase mb-1">
                             {item.category} • {item.volume || item.size}
                           </p>
-                          <p className="text-[11px] text-gold-500 font-bold tracking-widest">
-                            {formatCurrency(parsePrice(item.sale_price || item.price) * item.quantity, activeCurrency, rates, symbols)}
+                          <p className="text-[11px] text-gold-500 font-bold tracking-widest flex items-center justify-between">
+                            <span>{formatCurrency(parsePrice(item.sale_price || item.price) * item.quantity, activeCurrency, rates, symbols)}</span>
+                            {item.isOOS ? (
+                              <span className="text-[7px] bg-red-500/10 text-red-500 px-1.5 py-0.5 font-black border border-red-500/20 tracking-widest animate-pulse">OUT OF STOCK</span>
+                            ) : item.stock_count <= 5 ? (
+                              <span className="text-[7px] bg-orange-500/10 text-orange-500 px-1.5 py-0.5 font-black border border-orange-500/20 tracking-widest">ONLY {item.stock_count} LEFT</span>
+                            ) : (
+                              <span className="text-[7px] bg-green-500/10 text-green-500 px-1.5 py-0.5 font-black border border-green-500/20 tracking-widest">AVAILABLE</span>
+                            )}
                           </p>
                         </div>
 
