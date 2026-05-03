@@ -17,6 +17,8 @@ const Addresses = () => {
     const [editIndex, setEditIndex] = useState(null);
     const [formLoading, setFormLoading] = useState(false);
     const [successMsg, setSuccessMsg] = useState('');
+    const [pincodeError, setPincodeError] = useState(false);
+    const [isVerifyingPincode, setIsVerifyingPincode] = useState(false);
     
     const [formData, setFormData] = useState({
         first_name: '',
@@ -66,29 +68,41 @@ const Addresses = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // Auto-detect City and State based on Pincode
+    // Auto-detect City and State based on Pincode with strict verification
     useEffect(() => {
         const detectLocation = async () => {
             if (formData.pincode.length === 6 && /^\d+$/.test(formData.pincode)) {
+                setIsVerifyingPincode(true);
+                setPincodeError(false);
                 try {
                     const res = await fetch(`https://api.postalpincode.in/pincode/${formData.pincode}`);
                     const data = await res.json();
                     
-                    if (data[0].Status === "Success") {
+                    if (data[0].Status === "Success" && data[0].PostOffice) {
                         const { District, State } = data[0].PostOffice[0];
                         setFormData(prev => ({
                             ...prev,
                             city: District,
                             state: State
                         }));
+                        setPincodeError(false);
+                    } else {
+                        setPincodeError(true);
                     }
                 } catch (err) {
                     console.error("Pincode detection failed:", err);
+                    setPincodeError(true);
+                } finally {
+                    setIsVerifyingPincode(false);
                 }
+            } else if (formData.pincode.length > 0 && formData.pincode.length < 6) {
+                setPincodeError(false); // Still typing
+            } else if (formData.pincode.length > 6) {
+                setPincodeError(true);
             }
         };
 
-        const timer = setTimeout(detectLocation, 500); // Debounce for better UX
+        const timer = setTimeout(detectLocation, 500);
         return () => clearTimeout(timer);
     }, [formData.pincode]);
 
@@ -110,6 +124,8 @@ const Addresses = () => {
     const cancelAction = () => {
         setAction(null);
         setEditIndex(null);
+        setPincodeError(false);
+        setIsVerifyingPincode(false);
     };
 
     const saveAddress = async (e) => {
@@ -343,15 +359,19 @@ const Addresses = () => {
                                 </div>
 
                                 <div className="kiks-f-row mt-6 gap-6 md:gap-[30px]">
-                                    <div>
-                                        <label className="text-[8px] tracking-[0.4em] text-white/40 uppercase mb-2 block">Pincode</label>
+                                    <div className="relative">
+                                        <div className="flex justify-between items-center mb-2">
+                                            <label className="text-[8px] tracking-[0.4em] text-white/40 uppercase block">Pincode</label>
+                                            {pincodeError && <span className="text-[8px] text-red-500 font-black tracking-widest uppercase animate-pulse">Invalid Pincode</span>}
+                                            {isVerifyingPincode && <span className="text-[8px] text-gold-500/50 font-black tracking-widest uppercase">Verifying...</span>}
+                                        </div>
                                         <input 
                                             name="pincode" 
                                             value={formData.pincode} 
                                             onChange={handleFormChange} 
                                             placeholder="PINCODE" 
                                             required 
-                                            className="w-full bg-transparent border-b border-white/10 py-4 text-[12px] tracking-widest outline-none focus:border-white transition-colors"
+                                            className={`w-full bg-transparent border-b py-4 text-[12px] tracking-widest outline-none transition-colors ${pincodeError ? 'border-red-500 text-red-500' : 'border-white/10 focus:border-white'}`}
                                         />
                                     </div>
                                     <div>
@@ -362,7 +382,8 @@ const Addresses = () => {
                                             onChange={handleFormChange} 
                                             placeholder="COUNTRY" 
                                             required 
-                                            className="w-full bg-transparent border-b border-white/10 py-4 text-[12px] tracking-widest outline-none focus:border-white transition-colors"
+                                            readOnly
+                                            className="w-full bg-transparent border-b border-white/5 py-4 text-[12px] tracking-widest outline-none text-white/30 cursor-not-allowed"
                                         />
                                     </div>
                                 </div>
@@ -380,9 +401,13 @@ const Addresses = () => {
                                 </div>
 
                                 <div className="kiks-f-btns mt-10 md:mt-12 flex flex-col md:flex-row gap-6 md:gap-0">
-                                    <button type="submit" className="kiks-btn-black w-full md:w-auto flex items-center justify-center" disabled={formLoading}>
+                                    <button 
+                                        type="submit" 
+                                        className={`kiks-btn-black w-full md:w-auto flex items-center justify-center transition-all ${pincodeError || isVerifyingPincode ? 'opacity-50 cursor-not-allowed grayscale' : ''}`} 
+                                        disabled={formLoading || pincodeError || isVerifyingPincode}
+                                    >
                                         {formLoading ? <Loader2 className="animate-spin mr-2" size={12} /> : null}
-                                        SAVE ADDRESS
+                                        {isVerifyingPincode ? 'VERIFYING...' : 'SAVE ADDRESS'}
                                     </button>
                                     <button type="button" onClick={cancelAction} className="kiks-cancel text-[10px] tracking-[0.3em] font-black uppercase underline underline-offset-8 text-white/40 hover:text-white transition-colors">CANCEL</button>
                                 </div>
