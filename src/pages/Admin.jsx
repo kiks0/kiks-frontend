@@ -1310,8 +1310,7 @@ const Admin = () => {
                                     {[
                                         { id: 'pending', label: 'Pending', count: orders.filter(o => !o.status || o.status === 'On Hold' || o.status === 'Pending').length },
                                         { id: 'processing', label: 'Processing', count: orders.filter(o => o.status === 'Accepted' || o.status === 'Processing').length },
-                                        { id: 'dispatch', label: 'Dispatch', count: orders.filter(o => o.status === 'Dispatch' || o.status === 'Dispatched').length },
-                                        { id: 'delivered', label: 'Delivered', count: orders.filter(o => o.status === 'Delivered').length },
+                                        { id: 'dispatch', label: 'Dispatch', count: orders.filter(o => o.status === 'Dispatch' || o.status === 'Dispatched' || o.status === 'Delivered').length },
                                         { id: 'returns', label: 'Returns', count: orders.filter(o => o.status === 'RTO Returned' || o.status === 'Customer Returned').length }
                                     ].map(sub => (
                                         <button
@@ -1334,8 +1333,7 @@ const Admin = () => {
                                     const filteredOrders = orders.filter(o => {
                                         if (orderSubTab === 'pending') return !o.status || o.status === 'On Hold' || o.status === 'Pending';
                                         if (orderSubTab === 'processing') return o.status === 'Accepted' || o.status === 'Processing';
-                                        if (orderSubTab === 'dispatch') return o.status === 'Dispatch' || o.status === 'Dispatched';
-                                        if (orderSubTab === 'delivered') return o.status === 'Delivered';
+                                        if (orderSubTab === 'dispatch') return o.status === 'Dispatch' || o.status === 'Dispatched' || o.status === 'Delivered';
                                         if (orderSubTab === 'returns') return o.status === 'RTO Returned' || o.status === 'Customer Returned';
                                         return true;
                                     });
@@ -1387,11 +1385,10 @@ const Admin = () => {
                                                 <th className="p-6 w-10">
                                                     {(() => {
                                                         const filteredItems = orders.filter(o => {
-                                                            if (orderSubTab === 'onhold') return !o.status || o.status === 'On Hold' || o.status === 'Pending';
-                                                            if (orderSubTab === 'processing') return o.status === 'Accepted';
-                                                            if (orderSubTab === 'delivered') return o.status === 'Dispatched' || o.status === 'Delivered';
-                                                            if (orderSubTab === 'rto') return o.status === 'RTO Returned';
-                                                            if (orderSubTab === 'returned') return o.status === 'Customer Returned';
+                                                            if (orderSubTab === 'pending') return !o.status || o.status === 'On Hold' || o.status === 'Pending';
+                                                            if (orderSubTab === 'processing') return o.status === 'Accepted' || o.status === 'Processing';
+                                                            if (orderSubTab === 'dispatch') return o.status === 'Dispatch' || o.status === 'Dispatched' || o.status === 'Delivered';
+                                                            if (orderSubTab === 'returns') return o.status === 'RTO Returned' || o.status === 'Customer Returned';
                                                             return true;
                                                         });
                                                         const visibleSelected = selectedOrders.filter(id => filteredItems.some(f => f.id === id));
@@ -1422,11 +1419,10 @@ const Admin = () => {
                                         <tbody>
                                             {(() => {
                                                 const filteredOrders = orders.filter(o => {
-                                                    if (orderSubTab === 'onhold') return !o.status || o.status === 'On Hold' || o.status === 'Pending';
-                                                    if (orderSubTab === 'processing') return o.status === 'Accepted';
-                                                    if (orderSubTab === 'delivered') return o.status === 'Dispatched' || o.status === 'Delivered';
-                                                    if (orderSubTab === 'rto') return o.status === 'RTO Returned';
-                                                    if (orderSubTab === 'returned') return o.status === 'Customer Returned';
+                                                    if (orderSubTab === 'pending') return !o.status || o.status === 'On Hold' || o.status === 'Pending';
+                                                    if (orderSubTab === 'processing') return o.status === 'Accepted' || o.status === 'Processing';
+                                                    if (orderSubTab === 'dispatch') return o.status === 'Dispatch' || o.status === 'Dispatched' || o.status === 'Delivered';
+                                                    if (orderSubTab === 'returns') return o.status === 'RTO Returned' || o.status === 'Customer Returned';
                                                     return true;
                                                 });
 
