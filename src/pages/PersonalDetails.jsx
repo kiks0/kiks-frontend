@@ -203,9 +203,9 @@ const PersonalDetails = () => {
             
             {/* Phone Edit Modal */}
             {isPhoneModalOpen && (
-                <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4">
-                    <div className="absolute inset-0 bg-black/95 backdrop-blur-xl" onClick={() => setIsPhoneModalOpen(false)}></div>
-                    <div className="bg-[#0a0a0a] border border-white/10 text-white w-full max-w-lg p-5 md:p-12 relative animate-in fade-in zoom-in duration-300 shadow-2xl max-h-[90vh] overflow-y-auto scrollbar-hide">
+                <div className="fixed inset-0 z-[1000000] flex items-center justify-center p-3 sm:p-6">
+                    <div className="absolute inset-0 bg-black/98 backdrop-blur-2xl" onClick={() => setIsPhoneModalOpen(false)}></div>
+                    <div className="bg-[#0b0b0b] border border-white/10 text-white w-[94%] max-w-md p-6 md:p-12 relative animate-in fade-in zoom-in duration-300 shadow-2xl max-h-[85vh] overflow-y-auto scrollbar-hide my-auto">
                         <button 
                             onClick={() => setIsPhoneModalOpen(false)}
                             className="absolute top-4 right-4 md:top-6 md:right-6 text-white/40 hover:text-white transition-colors z-10"
@@ -214,7 +214,7 @@ const PersonalDetails = () => {
                         </button>
 
                         <div className="text-center mb-8 md:mb-12 pt-6 md:pt-0">
-                            <h2 className="text-[14px] md:text-2xl font-serif tracking-[0.2em] uppercase mb-2 md:mb-4 text-gold-500 leading-relaxed px-8">Edit Phone Number</h2>
+                            <h2 className="text-[12px] md:text-2xl font-serif tracking-[0.2em] uppercase mb-2 md:mb-4 text-gold-500 leading-relaxed px-10">Edit Phone Number</h2>
                         </div>
 
                         <div className="space-y-6 md:space-y-8">
