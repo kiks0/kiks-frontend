@@ -157,11 +157,11 @@ const Security = () => {
                         className="space-y-6"
                     >
                         <div className="space-y-2">
-                            <h2 className="text-[12px] font-bold tracking-[0.2em] uppercase">Login Email</h2>
+                            <h2 className="text-[12px] font-bold tracking-[0.2em] uppercase text-white/40">Login email</h2>
                             <div className="w-full h-px bg-white/10"></div>
                         </div>
 
-                        <p className="text-[10px] md:text-[11px] text-white/40 leading-relaxed max-w-lg">
+                        <p className="text-[11px] md:text-[12px] text-white/70 leading-relaxed max-w-lg font-light">
                             Your login email is needed to sign in to your account and to receive notifications such as order updates and verification codes.
                         </p>
 
@@ -169,7 +169,7 @@ const Security = () => {
                             <div className="space-y-6">
                                 {/* Email Field */}
                                 <div className="space-y-1 relative">
-                                    <label className="text-[8px] tracking-[0.2em] text-white/30 uppercase block">Email</label>
+                                    <label className="text-[10px] tracking-[0.2em] text-white/50 uppercase block">Email</label>
                                     <input 
                                         type="email"
                                         value={emailForm.newEmail}
@@ -179,11 +179,11 @@ const Security = () => {
                                     />
                                 </div>
 
-                                <p className="text-[10px] text-white/30 italic">To modify your email, please enter your current password.</p>
+                                <p className="text-[11px] text-white/50 italic font-light">To modify your email, please enter your current password.</p>
 
                                 {/* Password Verification */}
                                 <div className="space-y-1 relative">
-                                    <label className="text-[8px] tracking-[0.2em] text-white/30 uppercase block">Current Password</label>
+                                    <label className="text-[10px] tracking-[0.2em] text-white/50 uppercase block">Current password</label>
                                     <input 
                                         type={showEmailPass ? "text" : "password"}
                                         value={emailForm.currentPassword}
@@ -213,7 +213,7 @@ const Security = () => {
                                 disabled={updatingEmail}
                                 className="w-full md:w-fit px-12 py-3 border border-white text-[9px] font-bold tracking-[0.4em] uppercase hover:bg-white hover:text-black transition-all flex items-center justify-center gap-3"
                             >
-                                {updatingEmail ? <Loader2 size={12} className="animate-spin" /> : 'Modify Login Email'}
+                                {updatingEmail ? <Loader2 size={12} className="animate-spin" /> : 'Modify login email'}
                             </button>
                         </form>
                     </motion.section>
@@ -226,11 +226,11 @@ const Security = () => {
                         className="space-y-6"
                     >
                         <div className="space-y-2">
-                            <h2 className="text-[12px] font-bold tracking-[0.2em] uppercase">Password</h2>
+                            <h2 className="text-[12px] font-bold tracking-[0.2em] uppercase text-white/40">Password</h2>
                             <div className="w-full h-px bg-white/10"></div>
                         </div>
 
-                        <p className="text-[10px] md:text-[11px] text-white/40 leading-relaxed max-w-lg">
+                        <p className="text-[11px] md:text-[12px] text-white/70 leading-relaxed max-w-lg font-light">
                             If you wish to modify your password, please use this section. All fields are mandatory.
                         </p>
 
@@ -238,7 +238,7 @@ const Security = () => {
                             <div className="space-y-8">
                                 {/* Current Password */}
                                 <div className="space-y-1 relative">
-                                    <label className="text-[8px] tracking-[0.2em] text-white/30 uppercase block">Current Password</label>
+                                    <label className="text-[10px] tracking-[0.2em] text-white/50 uppercase block">Current password</label>
                                     <input 
                                         type={showPass1 ? "text" : "password"}
                                         value={passForm.currentPassword}
@@ -258,7 +258,7 @@ const Security = () => {
                                 {/* New Password */}
                                 <div className="space-y-3">
                                     <div className="space-y-1 relative">
-                                        <label className="text-[8px] tracking-[0.2em] text-white/30 uppercase block">New Password</label>
+                                        <label className="text-[10px] tracking-[0.2em] text-white/50 uppercase block">New password</label>
                                         <input 
                                             type={showPass2 ? "text" : "password"}
                                             value={passForm.newPassword}
@@ -292,7 +292,7 @@ const Security = () => {
                                 disabled={updatingPass}
                                 className="w-full md:w-fit px-12 py-3 border border-white text-[9px] font-bold tracking-[0.4em] uppercase hover:bg-white hover:text-black transition-all flex items-center justify-center gap-3"
                             >
-                                {updatingPass ? <Loader2 size={12} className="animate-spin" /> : 'Change Password'}
+                                {updatingPass ? <Loader2 size={12} className="animate-spin" /> : 'Change password'}
                             </button>
                         </form>
                     </motion.section>
