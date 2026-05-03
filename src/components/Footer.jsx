@@ -86,29 +86,38 @@ const Footer = () => {
                 <div className="w-12 h-[1px] bg-gold-500/30 mx-auto"></div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8">
-                {['Americas', 'Europe', 'Asia-Pacific', 'Middle East'].map(region => (
-                  <div key={region} className="space-y-6">
-                    <h3 className="text-[10px] font-black tracking-[0.3em] text-white/30 uppercase border-b border-white/5 pb-4">{region}</h3>
-                    <ul className="space-y-4">
-                      {locations.filter(l => l.region === region).map(loc => (
-                        <li key={loc.name}>
-                          <button 
-                            onClick={() => {
-                              setSelectedLocation(loc.name);
-                              // Auto-validate for better UX like Chanel
-                              const applied = applyLocationSettings(loc.name, i18n, dispatch, setCurrency);
-                              if (applied) window.location.reload();
-                            }}
-                            className={`text-[11px] uppercase tracking-widest transition-all text-left w-full hover:text-gold-500 ${selectedLocation === loc.name ? 'text-gold-500 font-bold' : 'text-white/60'}`}
-                          >
-                            {loc.name} <span className="text-[8px] opacity-40 ml-1">({loc.langName})</span>
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-16 max-h-[60vh] overflow-y-auto pr-4 custom-scrollbar">
+                {['Americas', 'Europe', 'Asia-Pacific', 'Middle East'].map(region => {
+                  const filteredLocations = locations.filter(l => l.region === region);
+                  if (filteredLocations.length === 0) return null;
+                  
+                  return (
+                    <div key={region} className="flex flex-col space-y-6">
+                      <h3 className="text-[10px] font-black tracking-[0.4em] text-gold-500 uppercase border-b border-white/5 pb-6 mb-2">
+                        {region}
+                      </h3>
+                      <ul className="space-y-4">
+                        {filteredLocations.map(loc => (
+                          <li key={loc.name}>
+                            <button 
+                              onClick={() => {
+                                setSelectedLocation(loc.name);
+                                const applied = applyLocationSettings(loc.name, i18n, dispatch, setCurrency);
+                                if (applied) window.location.reload();
+                              }}
+                              className={`text-[10px] uppercase tracking-[0.2em] transition-all text-left w-full hover:text-white group flex items-center justify-between ${selectedLocation === loc.name ? 'text-white font-bold' : 'text-white/30'}`}
+                            >
+                              <span className="flex-grow">{loc.name}</span>
+                              <span className="text-[8px] opacity-0 group-hover:opacity-40 transition-all ml-2 whitespace-nowrap">
+                                {loc.langName}
+                              </span>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                })}
               </div>
 
               <div className="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
