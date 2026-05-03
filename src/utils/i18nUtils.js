@@ -5,7 +5,7 @@
 
 export const COUNTRY_MAPPING = [
     // Asia
-    { name: 'India', langCode: 'hi', langName: 'Hindi', currency: 'INR' },
+    { name: 'India', langCode: 'en', langName: 'English', currency: 'INR' },
     { name: 'United Arab Emirates', langCode: 'en', langName: 'English', currency: 'AED' },
     { name: 'Saudi Arabia', langCode: 'en', langName: 'English', currency: 'AED' },
     { name: 'Qatar', langCode: 'en', langName: 'English', currency: 'QAR' },

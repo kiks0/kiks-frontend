@@ -218,7 +218,7 @@ const Footer = () => {
                   }}
                   className={`hover:text-white transition-colors ${selectedLocation === loc.name ? 'text-white font-black' : ''}`}
                 >
-                  {loc.langName}
+                  {loc.name} ({loc.langName})
                 </button>
               ))}
               <button 
