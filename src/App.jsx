@@ -44,8 +44,36 @@ import PageLoader from './components/PageLoader';
 
 function App() {
   const dispatch = useDispatch();
+  
   useEffect(() => {
     dispatch(fetchExchangeRates());
+    
+    // Global session validator for real-time security (e.g. instant logout on deletion)
+    const checkSession = async () => {
+      const token = localStorage.getItem('kiks_token');
+      if (!token) return;
+      
+      try {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        const res = await fetch(`${API_URL}/api/users/me`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (res.status === 401) {
+          console.warn("[SECURITY] Session invalidated by authority. Executing professional logout.");
+          const { logout } = await import('./store/authSlice');
+          dispatch(logout());
+          window.location.href = '/login?reason=session_expired';
+        }
+      } catch (e) {
+        console.error("Session verification failed", e);
+      }
+    };
+
+    checkSession();
+    // Check every 2 minutes for long-running sessions
+    const interval = setInterval(checkSession, 120000);
+    return () => clearInterval(interval);
   }, [dispatch]);
 
   return (

@@ -22,7 +22,7 @@ const Auth = ({ isRegisterInitial = false }) => {
     const [showOtpModal, setShowOtpModal] = useState(false);
     const [reactivateEmail, setReactivateEmail] = useState('');
     const [otpCode, setOtpCode] = useState(['', '', '', '', '', '']);
-    const [otpTimer, setOtpTimer] = useState(600); // 10 minutes in seconds
+    const [otpTimer, setOtpTimer] = useState(180); // 3 minutes in seconds
     const [isReactivating, setIsReactivating] = useState(false);
     const [otpError, setOtpError] = useState('');
     const [resetEmail, setResetEmail] = useState('');
@@ -238,7 +238,7 @@ Marketing Consent: Granted
     const handleRequestReactivation = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch(`${API_URL}/api/auth/request-reactivation`, {
+            const response = await fetch(`${API_URL}/api/users/reactivate-request`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: reactivateEmail })
@@ -247,7 +247,7 @@ Marketing Consent: Granted
             if (data.success) {
                 setShowReactivateModal(false);
                 setShowOtpModal(true);
-                setOtpTimer(600); // Reset to 10 mins
+                setOtpTimer(180); // Reset to 3 mins
             } else {
                 alert(data.message || 'Failed to send verification code.');
             }
@@ -285,7 +285,7 @@ Marketing Consent: Granted
         setOtpError('');
 
         try {
-            const response = await fetch(`${API_URL}/api/auth/verify-reactivation`, {
+            const response = await fetch(`${API_URL}/api/users/reactivate-verify`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: reactivateEmail, code })
@@ -905,11 +905,11 @@ Marketing Consent: Granted
                                         {isReactivating ? 'Verifying...' : 'Verify & Reactivate'}
                                     </button>
                                     <button
-                                        disabled={otpTimer > 540} // Allow resend after 1 min
+                                        disabled={otpTimer > 120} // Allow resend after 1 min (180 - 60 = 120)
                                         onClick={handleRequestReactivation}
                                         className="text-[10px] tracking-[0.2em] font-bold text-gold-500/60 hover:text-gold-500 transition-all uppercase"
                                     >
-                                        {otpTimer > 540 ? `Resend in ${otpTimer - 540}s` : 'Resend Code'}
+                                        {otpTimer > 120 ? `Resend in ${otpTimer - 120}s` : 'Resend Code'}
                                     </button>
                                 </div>
                             </motion.div>

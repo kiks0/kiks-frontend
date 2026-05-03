@@ -44,7 +44,8 @@ const Admin = () => {
     const [blogs, setBlogs] = useState([]);
     const [users, setUsers] = useState([]);
     const [admins, setAdmins] = useState([]);
-    const [userSubTab, setUserSubTab] = useState('users'); // users, admins
+    const [userSubTab, setUserSubTab] = useState('users'); // users, admins, requests
+    const [deletionRequests, setDeletionRequests] = useState([]);
     const [waitlist, setWaitlist] = useState([]);
     const [promoCodes, setPromoCodes] = useState([]);
     const [analytics, setAnalytics] = useState({ totalOrders: 0, totalRevenue: 0, bestSeller: 'N/A' });
@@ -130,7 +131,11 @@ const Admin = () => {
             case 'products': fetchProductsData(); break;
             case 'blogs': fetchBlogsData(); break;
             case 'reviews': fetchReviewsData(); break;
-            case 'users': fetchUsersData(); break;
+            case 'users': 
+                fetchUsersData(); 
+                fetchAdminsData();
+                fetchDeletionRequests();
+                break;
             case 'waitlist': fetchWaitlistData(); break;
             case 'promo-codes': fetchPromoCodesData(); break;
             case 'marketing': fetchMarketingData(); break;
@@ -438,6 +443,33 @@ const Admin = () => {
             if (res.ok) setAdmins(await res.json());
         } catch (e) { console.error("Admins fetch failed", e); }
         finally { setTabLoading('admins', false); }
+    const fetchDeletionRequests = async () => {
+        setTabLoading('users', true);
+        try {
+            const res = await fetch(`${API_URL}/api/users/deletion-requests`, { headers: getAdminHeaders() });
+            if (res.ok) setDeletionRequests(await res.json());
+        } catch (e) { console.error("Deletion requests fetch failed", e); }
+        finally { setTabLoading('users', false); }
+    };
+
+    const handleApproveDeletion = async (id) => {
+        if (!window.confirm('Are you absolutely certain? This will soft-delete the account, log the user out immediately, and hide them from the registry. This is a professional-grade administrative action.')) return;
+        try {
+            const res = await fetch(`${API_URL}/api/users/approve-deletion/${id}`, {
+                method: 'POST',
+                headers: getAdminHeaders()
+            });
+            if (res.ok) {
+                showSuccessToast('Account deletion approved and processed.');
+                fetchUsersData();
+                fetchDeletionRequests();
+            } else {
+                const data = await res.json();
+                showErrorToast(data.msg || 'Approval failed.');
+            }
+        } catch (e) {
+            showErrorToast('System fault during approval.');
+        }
     };
 
     const handleAddAdmin = async (e) => {
@@ -1739,6 +1771,12 @@ const Admin = () => {
                                     >
                                         Admins
                                     </button>
+                                    <button
+                                        onClick={() => setUserSubTab('requests')}
+                                        className={`pb-4 px-2 uppercase tracking-[0.3em] text-[10px] transition-all border-b-2 ${userSubTab === 'requests' ? 'border-gold-500 text-gold-500 font-bold' : 'border-transparent text-white/70'}`}
+                                    >
+                                        Requests {deletionRequests.length > 0 && <span className="ml-2 bg-red-500 text-white px-2 py-0.5 rounded-full text-[8px] animate-pulse">{deletionRequests.length}</span>}
+                                    </button>
                                 </div>
 
                                 {userSubTab === 'users' ? (
@@ -1754,7 +1792,6 @@ const Admin = () => {
                                             />
                                         </div>
                                         <div className="space-y-6">
-                                            {/* Desktop Table View */}
                                             <div className="hidden md:block bg-white/5 border border-white/10 overflow-x-auto scrollbar-hide">
                                                 <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80 min-w-[900px]">
                                                     <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/80 border-b border-white/10">
@@ -1814,7 +1851,6 @@ const Admin = () => {
                                                 </table>
                                             </div>
 
-                                            {/* Mobile Card View */}
                                             <div className="md:hidden space-y-4">
                                                 {users.filter(u =>
                                                     u.email.toLowerCase().includes(userSearch.toLowerCase()) ||
@@ -1859,7 +1895,7 @@ const Admin = () => {
                                             </div>
                                         </div>
                                     </>
-                                ) : (
+                                ) : userSubTab === 'admins' ? (
                                     <div className="space-y-8 md:space-y-12">
                                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white/5 border border-white/10 p-6 md:p-8 gap-6">
                                             <div>
@@ -1967,6 +2003,55 @@ const Admin = () => {
                                                             </td>
                                                         </tr>
                                                     ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-8">
+                                        <div className="bg-red-500/5 border border-red-500/10 p-6 md:p-8">
+                                            <h2 className="text-lg md:text-xl font-serif tracking-widest uppercase italic text-red-500">Account Deletion Requests</h2>
+                                            <p className="text-[9px] md:text-[10px] tracking-widest text-white/60 uppercase mt-2 italic">Pending formal profile removals from the KIKS registry</p>
+                                        </div>
+                                        <div className="bg-white/5 border border-white/10 overflow-x-auto scrollbar-hide">
+                                            <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80 min-w-[800px]">
+                                                <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/80 border-b border-white/10">
+                                                    <tr>
+                                                        <th className="p-6">Client</th>
+                                                        <th className="p-6">Contact Details</th>
+                                                        <th className="p-6">Requested On</th>
+                                                        <th className="p-6 text-right">Administrative Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {deletionRequests.length === 0 ? (
+                                                        <tr><td colSpan="4" className="p-12 text-center text-white/70 uppercase tracking-widest">No pending deletion requests</td></tr>
+                                                    ) : (
+                                                        deletionRequests.map(req => (
+                                                            <tr key={req.id} className="border-b border-white/5 hover:bg-red-500/[0.02]">
+                                                                <td className="p-6">
+                                                                    <p className="font-bold uppercase tracking-widest text-white">{req.first_name} {req.last_name}</p>
+                                                                    <p className="text-[8px] text-gold-500/50 mt-1 uppercase">ID: #{req.id.toString().padStart(4, '0')}</p>
+                                                                </td>
+                                                                <td className="p-6">
+                                                                    <p className="lowercase mb-1">{req.email}</p>
+                                                                    <p className="text-[10px] font-bold text-white/60">{req.telephone || 'N/A'}</p>
+                                                                </td>
+                                                                <td className="p-6">
+                                                                    <p className="text-white/70 uppercase">{new Date(req.deletion_requested_at).toLocaleDateString()}</p>
+                                                                    <p className="text-[8px] text-white/40 uppercase mt-1">{new Date(req.deletion_requested_at).toLocaleTimeString()}</p>
+                                                                </td>
+                                                                <td className="p-6 text-right">
+                                                                    <button 
+                                                                        onClick={() => handleApproveDeletion(req.id)}
+                                                                        className="bg-red-500 text-white px-4 py-2 text-[8px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all"
+                                                                    >
+                                                                        Approve Deletion
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                    )}
                                                 </tbody>
                                             </table>
                                         </div>

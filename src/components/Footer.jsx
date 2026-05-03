@@ -61,42 +61,72 @@ const Footer = () => {
     <footer className="bg-black text-white pt-8 md:pt-20 pb-10 font-sans overflow-hidden border-t border-white/10">
 
       {/* Location Selection Modal (Chanel Style) */}
-      {isLocationModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setIsLocationModalOpen(false)}></div>
-          <div className="bg-[#0A0A0A] text-white w-full max-w-[600px] p-6 sm:p-10 md:p-16 relative z-10 text-center animate-fade-in shadow-2xl border border-white/10 mx-4">
-            <button onClick={() => setIsLocationModalOpen(false)} className="absolute top-6 right-6 text-white hover:text-gold-500 transition-all">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M18 6L6 18M6 6l12 12"></path></svg>
-            </button>
-            <h2 className="text-[12px] sm:text-[14px] md:text-[18px] font-black tracking-[0.2em] sm:tracking-[0.4em] mb-6 sm:mb-10 leading-relaxed px-2 sm:px-4 text-white uppercase font-serif">
-              {t('footer.modal.title', { location: selectedLocation })}
-            </h2>
-            <p className="text-[9px] sm:text-[11px] md:text-[12px] text-white/50 tracking-[0.15em] sm:tracking-[0.2em] mb-8 sm:mb-12 max-w-sm mx-auto leading-relaxed uppercase font-black px-2">
-              {t('footer.modal.desc')}
-            </p>
-            <div className="mb-12">
-              <p className="text-[8px] sm:text-[9px] md:text-[10px] font-black tracking-[0.3em] mb-6 text-white/30 uppercase">{t('footer.modal.change')}</p>
-              <div className="relative border-b border-white/20 pb-4">
-                <select
-                  value={selectedLocation}
-                  onChange={(e) => setSelectedLocation(e.target.value)}
-                  className="w-full bg-transparent text-[12px] sm:text-[14px] md:text-[16px] text-center focus:outline-none cursor-pointer appearance-none px-4 sm:px-8 text-white font-bold tracking-[0.1em] sm:tracking-widest uppercase"
-                >
-                  {locations.map(loc => (
-                    <option key={loc.name} value={loc.name} className="text-white bg-[#0A0A0A]">{loc.name}</option>
-                  ))}
-                </select>
-                <div className="absolute right-0 top-1 pointer-events-none text-white/40">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"></path></svg>
-                </div>
+      <AnimatePresence>
+        {isLocationModalOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-4"
+          >
+            <div className="absolute inset-0 bg-black/95 backdrop-blur-md" onClick={() => setIsLocationModalOpen(false)}></div>
+            <motion.div 
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 50, opacity: 0 }}
+              className="bg-[#050505] text-white w-full h-full md:h-auto md:max-w-[1000px] p-8 md:p-16 relative z-10 overflow-y-auto scrollbar-hide border border-white/5"
+            >
+              <button onClick={() => setIsLocationModalOpen(false)} className="absolute top-8 right-8 text-white/40 hover:text-white transition-all group">
+                <span className="text-[10px] uppercase tracking-[0.3em] mr-4 opacity-0 group-hover:opacity-100 transition-all">Close</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+              </button>
+
+              <div className="text-center mb-16">
+                <h2 className="text-[14px] md:text-[20px] font-serif tracking-[0.4em] uppercase mb-4 text-gold-500">Change Location & Language</h2>
+                <div className="w-12 h-[1px] bg-gold-500/30 mx-auto"></div>
               </div>
-            </div>
-            <button onClick={handleValidateLocation} className="w-full md:w-auto bg-white text-black px-10 md:px-20 py-4 md:py-5 text-[10px] md:text-[12px] font-black tracking-[0.3em] md:tracking-[0.5em] uppercase hover:bg-gold-500 hover:text-white transition-all duration-500 shadow-xl">
-              {t('footer.validate')}
-            </button>
-          </div>
-        </div>
-      )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8">
+                {['Americas', 'Europe', 'Asia-Pacific', 'Middle East'].map(region => (
+                  <div key={region} className="space-y-6">
+                    <h3 className="text-[10px] font-black tracking-[0.3em] text-white/30 uppercase border-b border-white/5 pb-4">{region}</h3>
+                    <ul className="space-y-4">
+                      {locations.filter(l => l.region === region).map(loc => (
+                        <li key={loc.name}>
+                          <button 
+                            onClick={() => {
+                              setSelectedLocation(loc.name);
+                              // Auto-validate for better UX like Chanel
+                              const applied = applyLocationSettings(loc.name, i18n, dispatch, setCurrency);
+                              if (applied) window.location.reload();
+                            }}
+                            className={`text-[11px] uppercase tracking-widest transition-all text-left w-full hover:text-gold-500 ${selectedLocation === loc.name ? 'text-gold-500 font-bold' : 'text-white/60'}`}
+                          >
+                            {loc.name} <span className="text-[8px] opacity-40 ml-1">({loc.langName})</span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+                <div className="text-center md:text-left">
+                  <p className="text-[9px] text-white/30 uppercase tracking-widest mb-2">Current Selection</p>
+                  <p className="text-[12px] uppercase tracking-[0.2em] text-white font-bold">{selectedLocation}</p>
+                </div>
+                <button 
+                  onClick={handleValidateLocation} 
+                  className="bg-white text-black px-16 py-4 text-[10px] font-black tracking-[0.4em] uppercase hover:bg-gold-500 hover:text-white transition-all shadow-2xl"
+                >
+                  Confirm Selection
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Top Centered Brand Logo */}
       <div className="flex flex-col items-center mb-8 md:mb-20 font-serif">

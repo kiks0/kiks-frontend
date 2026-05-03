@@ -26,6 +26,8 @@ const Account = () => {
   const [callbackPhone, setCallbackPhone] = useState('');
   const [callbackStatus, setCallbackStatus] = useState('idle'); // idle, loading, success
   const [callbacksCount, setCallbacksCount] = useState(0);
+  const [deletionRequested, setDeletionRequested] = useState(false);
+  const [deletionStatus, setDeletionStatus] = useState('idle'); // idle, loading, success
 
   useEffect(() => {
     if (appUser) {
@@ -48,6 +50,9 @@ const Account = () => {
              .then(res => res.json())
              .then(data => setCallbacksCount(data.count || 0))
              .catch(err => console.error("Error fetching callbacks:", err));
+
+             // Fetch deletion status
+             setDeletionRequested(appUser.deletion_requested || false);
         }
     } else {
         const savedUser = localStorage.getItem('currentUser');
@@ -366,6 +371,46 @@ const Account = () => {
                     )}
                   </motion.div>
                 )}
+
+                {/* ACCOUNT DELETION REQUEST */}
+                <div className="pt-6 border-t border-white/5">
+                  {deletionStatus === 'success' || deletionRequested ? (
+                    <div className="p-6 bg-red-500/5 border border-red-500/20 text-center">
+                      <p className="text-red-500 text-[10px] tracking-widest uppercase font-bold mb-2">Deletion Requested</p>
+                      <p className="text-white/40 text-[9px] tracking-wide uppercase leading-relaxed">
+                        Your request is being reviewed by our administration. You will be notified via email once processed.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col space-y-4">
+                      <p className="text-white/20 text-[9px] tracking-widest uppercase text-center">Security & Privacy</p>
+                      <button 
+                        disabled={deletionStatus === 'loading'}
+                        onClick={async () => {
+                          if (!window.confirm("Are you certain you wish to request account deletion? This action will formally notify our administrators to remove your profile from our registry.")) return;
+                          setDeletionStatus('loading');
+                          try {
+                            const res = await fetch(`${API_URL}/api/users/request-deletion`, {
+                              method: 'POST',
+                              headers: { 
+                                'Authorization': `Bearer ${localStorage.getItem('kiks_token')}`
+                              }
+                            });
+                            if (res.ok) {
+                              setDeletionStatus('success');
+                              setDeletionRequested(true);
+                            }
+                          } catch (e) {
+                            setDeletionStatus('idle');
+                          }
+                        }}
+                        className="w-full border border-white/10 py-4 text-[9px] tracking-[0.3em] uppercase text-white/40 hover:text-red-500 hover:border-red-500/30 transition-all font-bold"
+                      >
+                        {deletionStatus === 'loading' ? 'Processing Request...' : 'Request Account Deletion'}
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="mt-8 sm:mt-12 text-center">
