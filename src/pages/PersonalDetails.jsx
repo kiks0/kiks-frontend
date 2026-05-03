@@ -213,8 +213,8 @@ const PersonalDetails = () => {
                             <X className="w-5 h-5 md:w-6 md:h-6" />
                         </button>
 
-                        <div className="text-center mb-6 md:mb-10">
-                            <h2 className="text-[16px] md:text-2xl font-serif tracking-[0.2em] uppercase mb-2 md:mb-4 text-gold-500 leading-relaxed">Edit Phone Number</h2>
+                        <div className="text-center mb-8 md:mb-12 pt-6 md:pt-0">
+                            <h2 className="text-[14px] md:text-2xl font-serif tracking-[0.2em] uppercase mb-2 md:mb-4 text-gold-500 leading-relaxed px-8">Edit Phone Number</h2>
                         </div>
 
                         <div className="space-y-6 md:space-y-8">
