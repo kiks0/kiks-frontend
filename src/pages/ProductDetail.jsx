@@ -374,9 +374,9 @@ const ProductDetail = () => {
                     >
                         <div className="flex flex-col mb-6">
                             <div className="relative mb-2">
-                                <h1 className="text-2xl md:text-3xl font-black tracking-[0.2em] uppercase leading-tight pb-2">
-                                    {product.name}
-                                </h1>
+                                <h1 className="text-xl md:text-2xl font-serif tracking-[0.1em] uppercase leading-tight pb-2 font-light">
+                                     {product.name}
+                                 </h1>
                                 <div className="w-full h-[2px] bg-white" />
                             </div>
 
@@ -685,7 +685,15 @@ const ProductDetail = () => {
                                 </div>
                             ) : (
                                 <div className="mb-20 p-10 text-center border border-white/5 italic">
-                                    <p className="text-[11px] tracking-[0.3em] text-white/30">{t('product.restricted')} <Link to="/auth" className="text-white font-black underline underline-offset-8 decoration-gold-500">Authenticate</Link></p>
+                                    <p className="text-[11px] tracking-[0.3em] text-white/30">
+                                        {t('product.restricted')}{' '}
+                                        <button 
+                                            onClick={() => dispatch(openAuthModal())} 
+                                            className="text-white font-black underline underline-offset-8 decoration-gold-500"
+                                        >
+                                            Authenticate
+                                        </button>
+                                    </p>
                                 </div>
                             )}
 

@@ -297,7 +297,8 @@ Marketing Consent: Granted
                 dispatch(login({ user: data.user, token: data.token }));
                 dispatch(fetchWishlist());
                 setShowOtpModal(false);
-                navigate('/account');
+                setStatus('success');
+                setTimeout(() => navigate('/account'), 3000);
             } else {
                 setOtpError(data.message || 'Invalid verification code.');
             }
@@ -426,19 +427,43 @@ Marketing Consent: Granted
                     {status === 'success' ? (
                         <motion.div 
                             key="success"
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="text-center py-20"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="text-center py-24 flex flex-col items-center"
                         >
-                            <div className="w-24 h-24 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mb-8 mx-auto">
-                                <CheckCircle2 size={48} />
-                            </div>
-                            <h2 className="text-3xl font-serif tracking-widest uppercase mb-4">
-                                {isRegister ? 'Account Created' : 'Welcome Back'}
-                            </h2>
-                            <p className="text-gray-400 text-[10px] tracking-[0.4em] uppercase">
-                                {isRegister ? 'Welcome to KIKS' : 'Accessing your private vault'}
-                            </p>
+                            <motion.div 
+                                animate={{ 
+                                    scale: [1, 1.1, 1],
+                                    rotate: [0, 5, -5, 0],
+                                    opacity: [0.5, 1, 0.5]
+                                }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                className="mb-12 relative"
+                            >
+                                <div className="absolute inset-0 bg-gold-500/20 blur-3xl rounded-full" />
+                                <Sparkles size={80} className="text-gold-500 relative z-10" strokeWidth={1} />
+                            </motion.div>
+                            
+                            <motion.h2 
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.5, duration: 1 }}
+                                className="text-4xl font-serif tracking-[0.2em] uppercase mb-6 font-light"
+                            >
+                                {isRegister ? 'Identity Verified' : 'Welcome Back'}
+                            </motion.h2>
+                            
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 1.2, duration: 1 }}
+                                className="flex flex-col items-center"
+                            >
+                                <p className="text-gold-500/40 text-[10px] tracking-[0.5em] uppercase mb-10">
+                                    {isRegister ? 'Entry granted to the vault' : 'Accessing your private portal'}
+                                </p>
+                                <div className="w-12 h-[1px] bg-gold-500/30 animate-pulse" />
+                            </motion.div>
                         </motion.div>
                     ) : status === 'reset_sent' ? (
                         <motion.div key="reset_sent" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">

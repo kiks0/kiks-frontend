@@ -114,7 +114,13 @@ const Navbar = () => {
             <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-center pointer-events-none">
               <Link
                 to="/"
-                onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); setIsMobileMenuOpen(false); }}
+                onClick={(e) => {
+                  if (window.location.pathname === '/') {
+                    e.preventDefault();
+                    window.location.reload();
+                  }
+                  setIsMobileMenuOpen(false);
+                }}
                 className="flex items-center justify-center transform transition hover:opacity-70 pointer-events-auto"
               >
                 <img
@@ -157,7 +163,12 @@ const Navbar = () => {
             {/* Brand Logo - Centered Top */}
             <Link
               to="/"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              onClick={(e) => {
+                if (window.location.pathname === '/') {
+                  e.preventDefault();
+                  window.location.reload();
+                }
+              }}
               className="flex items-center justify-center transform transition hover:opacity-70 z-50 relative mt-2 mb-1"
             >
               <img
