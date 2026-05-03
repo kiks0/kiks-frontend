@@ -1,3 +1,4 @@
+// KIKS ULTRA LUXURY - Production Build v1.0.4
 import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
