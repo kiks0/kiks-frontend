@@ -176,7 +176,7 @@ const Addresses = () => {
     }
 
     return (
-        <div className="bg-black min-h-screen text-white pt-10 md:pt-32 pb-8 md:pb-32">
+        <div className="bg-black min-h-screen text-white pt-28 md:pt-32 pb-8 md:pb-32">
             <div className="kiks-chanel-container">
                 
                 <div className="mb-4 md:mb-12 text-center">
