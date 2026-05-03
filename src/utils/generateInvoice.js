@@ -49,6 +49,11 @@ export const generateInvoice = (orderInput) => {
             const orderDate = new Date(order?.created_at || Date.now());
             doc.text(orderDate.toLocaleDateString('en-IN'), 155, 47);
 
+            doc.setFont("helvetica", "bold");
+            doc.text("Payment Mode:", 130, 54);
+            doc.setFont("helvetica", "normal");
+            doc.text(order?.payment_method?.toUpperCase() || "PREPAID", 155, 54);
+
             // Address Section
             doc.setFont("helvetica", "bold");
             doc.text("Address:", 14, 72);

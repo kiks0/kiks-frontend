@@ -105,11 +105,21 @@ export const generateShippingLabel = async (orderInput) => {
             const pendingNum = parseFloat(String(order?.amount_pending || "0").replace(/[^0-9.]/g, '')) || 0;
             
             const isPartialCOD = order?.payment_method && order.payment_method.toLowerCase().includes('partial');
-            const isPrepaid = !isPartialCOD; 
             
             // Amount collected on delivery (Use actual pending amount if available, otherwise 70%)
             const collectable = isPartialCOD ? (pendingNum > 0 ? pendingNum : Math.round(totalNum * 0.70)) : 0;
-            const paymentText = isPartialCOD ? "PARTIAL COD" : "PREPAID";
+            
+            // Refined Payment Text for logistics
+            let paymentText = "PREPAID";
+            if (isPartialCOD) {
+                paymentText = "PARTIAL COD";
+            } else if (order?.payment_method) {
+                const pm = order.payment_method.toLowerCase();
+                if (pm.includes('upi')) paymentText = "UPI PREPAID";
+                else if (pm.includes('card')) paymentText = "CARD PREPAID";
+                else if (pm.includes('debit') || pm.includes('credit')) paymentText = "CARD PREPAID";
+                else paymentText = order.payment_method.toUpperCase();
+            }
 
             doc.setFontSize(10);
             doc.text(paymentText, 96, 44, { align: 'right' });
