@@ -203,7 +203,11 @@ const Checkout = () => {
             const response = await fetch(`${API_URL}/api/promo-codes/validate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ code: promoInput, cartTotal: subtotal })
+                body: JSON.stringify({ 
+                    code: promoInput, 
+                    cartTotal: subtotal,
+                    items: items 
+                })
             });
             const data = await response.json();
             if (response.ok) {
