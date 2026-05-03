@@ -396,16 +396,24 @@ const ProductDetail = () => {
                         <div className="flex items-center justify-between mb-4 md:mb-8">
                             <div className="flex flex-col">
                                 {product.sale_price ? (
-                                    <>
-                                        <p className="text-[10px] md:text-[11px] text-white/40 line-through tracking-[0.1em] mb-1">
-                                            {formatCurrency(product.price, activeCurrency, rates, symbols)}
-                                        </p>
-                                        <p className="text-xl md:text-2xl font-bold text-gold-500 tracking-[0.1em]">
-                                            {formatCurrency(product.sale_price, activeCurrency, rates, symbols)}*
-                                        </p>
-                                    </>
+                                    <div className="flex flex-col space-y-2">
+                                        <div className="flex items-center space-x-3">
+                                            <p className="text-[11px] md:text-xs text-white/40 line-through tracking-[0.1em]">
+                                                {formatCurrency(product.price, activeCurrency, rates, symbols)}
+                                            </p>
+                                            <span className="bg-gold-500 text-black text-[9px] font-black px-2 py-0.5 tracking-widest uppercase">
+                                                SAVE {Math.round((1 - (parseFloat(product.sale_price.toString().replace(/[^0-9.]/g, '')) / parseFloat(product.price.toString().replace(/[^0-9.]/g, '')))) * 100)}%
+                                            </span>
+                                        </div>
+                                        <div className="flex items-baseline space-x-2">
+                                            <p className="text-2xl md:text-4xl font-bold text-gold-500 tracking-[0.1em]">
+                                                {formatCurrency(product.sale_price, activeCurrency, rates, symbols)}
+                                            </p>
+                                            <span className="text-[10px] text-gold-500/50 tracking-[0.2em] font-black uppercase italic">Boutique Offer</span>
+                                        </div>
+                                    </div>
                                 ) : (
-                                    <p className="text-xl font-bold text-white tracking-[0.1em]">
+                                    <p className="text-xl md:text-2xl font-bold text-white tracking-[0.1em]">
                                         {formatCurrency(product.price, activeCurrency, rates, symbols)}*
                                     </p>
                                 )}

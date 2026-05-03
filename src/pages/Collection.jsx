@@ -9,6 +9,7 @@ import { addToCart } from '../store/cartSlice';
 import { toggleWishlistAndSync } from '../store/wishlistSlice';
 import { openAuthModal, openWishlistAuthPopup } from '../store/uiSlice';
 import { getFullImageUrl } from '../utils/url';
+import { formatCurrency } from '../utils/currency';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -29,6 +30,7 @@ const Collection = () => {
     const dispatch = useDispatch();
     const { isAuthenticated } = useSelector(state => state.auth);
     const wishlistItems = useSelector(state => state.wishlist.items);
+    const { activeCurrency, rates, symbols } = useSelector(state => state.currency);
 
     useEffect(() => {
         const fetchCollectionData = async () => {
@@ -231,13 +233,21 @@ const Collection = () => {
                                         <p className="text-[8px] md:text-[9px] tracking-[0.2em] text-white/20 mb-3 md:mb-4 uppercase">Selection</p>
                                         <div className="h-px w-6 md:w-8 bg-gold-500/40 mb-4 md:mb-6" />
                                         {product.sale_price ? (
-                                            <div className="flex items-center space-x-3">
-                                                <span className="text-[10px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-gold-500">{product.sale_price}</span>
-                                                <span className="text-[8px] md:text-[9px] line-through text-white/30 tracking-widest">{product.price}</span>
-                                                <span className="text-[7px] bg-gold-500/10 text-gold-500 px-1.5 py-0.5 font-bold uppercase tracking-widest border border-gold-500/20">Offer</span>
+                                            <div className="flex flex-col items-center">
+                                                <div className="flex items-center space-x-3 mb-1">
+                                                    <span className="text-[10px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-gold-500">
+                                                        {formatCurrency(product.sale_price, activeCurrency, rates, symbols)}
+                                                    </span>
+                                                    <span className="text-[8px] md:text-[9px] line-through text-white/30 tracking-widest">
+                                                        {formatCurrency(product.price, activeCurrency, rates, symbols)}
+                                                    </span>
+                                                </div>
+                                                <span className="text-[7px] bg-gold-500/10 text-gold-500 px-1.5 py-0.5 font-bold uppercase tracking-widest border border-gold-500/20">Boutique Offer</span>
                                             </div>
                                         ) : (
-                                            <span className="text-xs md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-gold-500/80">{product.price}</span>
+                                            <span className="text-xs md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-gold-500/80">
+                                                {formatCurrency(product.price, activeCurrency, rates, symbols)}
+                                            </span>
                                         )}
                                         
                                         <Link 
