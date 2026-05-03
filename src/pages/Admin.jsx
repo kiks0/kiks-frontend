@@ -41,6 +41,7 @@ const Admin = () => {
     const [orderSubTab, setOrderSubTab] = useState('onhold'); // onhold, processing, delivered, rto, returned
     const [reportType, setReportType] = useState('selling'); // selling, return
     const [selectedOrders, setSelectedOrders] = useState([]);
+    const [selectedUsers, setSelectedUsers] = useState([]);
     const [reviews, setReviews] = useState([]);
     const [blogs, setBlogs] = useState([]);
     const [users, setUsers] = useState([]);
@@ -493,6 +494,51 @@ const Admin = () => {
                 showErrorToast(data.msg || 'Failed to register administrator.');
             }
         } catch (e) { showErrorToast('Server communication fault.'); }
+    };
+
+    const handleDeleteUser = async (id) => {
+        if (!window.confirm('Are you absolutely certain? This will permanently erase the user and all their associated data (orders, items, etc). This action is irreversible.')) return;
+        try {
+            const res = await fetch(`${API_URL}/api/users/${id}`, {
+                method: 'DELETE',
+                headers: getAdminHeaders()
+            });
+            if (res.ok) {
+                showSuccessToast('User purged from the registry.');
+                fetchUsersData();
+            } else {
+                const data = await res.json();
+                showErrorToast(data.msg || 'Purge failed.');
+            }
+        } catch (e) {
+            showErrorToast('Registry communication fault.');
+        }
+    };
+
+    const handleBulkDeleteUsers = async (idsToDelete) => {
+        const targetIds = Array.isArray(idsToDelete) ? idsToDelete : selectedUsers;
+        if (!targetIds || targetIds.length === 0) return;
+
+        if (!window.confirm(`Are you absolutely certain you want to permanently purge ${targetIds.length} selected user(s)? All their data will be lost forever.`)) return;
+        
+        try {
+            const res = await fetch(`${API_URL}/api/users/bulk-delete`, {
+                method: 'POST',
+                headers: getAdminHeaders(),
+                body: JSON.stringify({ ids: targetIds })
+            });
+
+            if (res.ok) {
+                showSuccessToast(`${targetIds.length} users purged successfully.`);
+                setSelectedUsers(selectedUsers.filter(id => !targetIds.includes(id)));
+                fetchUsersData();
+            } else {
+                const data = await res.json();
+                showErrorToast(data.msg || 'Bulk purge failed.');
+            }
+        } catch (e) {
+            showErrorToast('Registry synchronization fault.');
+        }
     };
 
     // Keep legacy fetchData for backward compatibility in actions if needed, or point them to specific ones
@@ -1782,21 +1828,46 @@ const Admin = () => {
 
                                 {userSubTab === 'users' ? (
                                     <>
-                                        <div className="mb-8 flex items-center bg-white/[0.03] border border-white/10 px-5 md:px-8 py-4 md:py-6 group focus-within:border-gold-500/50 transition-all">
-                                            <Search size={18} className="text-white/60 group-focus-within:text-gold-500 transition-colors mr-6" />
-                                            <input
-                                                type="text"
-                                                placeholder="Search users..."
-                                                value={userSearch}
-                                                onChange={(e) => setUserSearch(e.target.value)}
-                                                className="bg-transparent border-none text-[10px] md:text-[11px] tracking-[0.2em] uppercase text-white placeholder:text-white/80 focus:outline-none w-full"
-                                            />
+                                        <div className="flex flex-col md:flex-row gap-6 mb-8">
+                                            <div className="flex-grow flex items-center bg-white/[0.03] border border-white/10 px-5 md:px-8 py-4 md:py-6 group focus-within:border-gold-500/50 transition-all">
+                                                <Search size={18} className="text-white/60 group-focus-within:text-gold-500 transition-colors mr-6" />
+                                                <input
+                                                    type="text"
+                                                    placeholder="Search users..."
+                                                    value={userSearch}
+                                                    onChange={(e) => setUserSearch(e.target.value)}
+                                                    className="bg-transparent border-none text-[10px] md:text-[11px] tracking-[0.2em] uppercase text-white placeholder:text-white/80 focus:outline-none w-full"
+                                                />
+                                            </div>
+                                            {selectedUsers.length > 0 && (
+                                                <button 
+                                                    onClick={() => handleBulkDeleteUsers()}
+                                                    className="bg-red-500/10 border border-red-500/30 text-red-500 px-8 py-4 text-[10px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-3"
+                                                >
+                                                    <Trash2 size={14} />
+                                                    Purge {selectedUsers.length} Selected
+                                                </button>
+                                            )}
                                         </div>
                                         <div className="space-y-6">
                                             <div className="hidden md:block bg-white/5 border border-white/10 overflow-x-auto scrollbar-hide">
                                                 <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80 min-w-[900px]">
                                                     <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/80 border-b border-white/10">
                                                         <tr>
+                                                            <th className="p-6 w-12">
+                                                                <input 
+                                                                    type="checkbox" 
+                                                                    className="w-4 h-4 cursor-pointer accent-gold-500"
+                                                                    checked={users.length > 0 && users.every(u => selectedUsers.includes(u.id))}
+                                                                    onChange={(e) => {
+                                                                        if (e.target.checked) {
+                                                                            setSelectedUsers(users.map(u => u.id));
+                                                                        } else {
+                                                                            setSelectedUsers([]);
+                                                                        }
+                                                                    }}
+                                                                />
+                                                            </th>
                                                             <th className="p-6">User ID</th>
                                                             <th className="p-6">User Details</th>
                                                             <th className="p-6">Contact</th>
@@ -1817,6 +1888,17 @@ const Admin = () => {
                                                                 `${u.first_name} ${u.last_name}`.toLowerCase().includes(userSearch.toLowerCase())
                                                             ).map(u => (
                                                                 <tr key={u.id} className="border-b border-white/5 hover:bg-white/[0.02]">
+                                                                    <td className="p-6">
+                                                                        <input 
+                                                                            type="checkbox" 
+                                                                            className="w-4 h-4 cursor-pointer accent-gold-500"
+                                                                            checked={selectedUsers.includes(u.id)}
+                                                                            onChange={(e) => {
+                                                                                if (e.target.checked) setSelectedUsers([...selectedUsers, u.id]);
+                                                                                else setSelectedUsers(selectedUsers.filter(id => id !== u.id));
+                                                                            }}
+                                                                        />
+                                                                    </td>
                                                                     <td className="p-6 font-serif text-gold-400">#{u.id.toString().padStart(4, '0')}</td>
                                                                     <td className="p-6">
                                                                         <p className="font-bold uppercase tracking-widest text-white">{u.first_name} {u.last_name}</p>
@@ -1859,14 +1941,23 @@ const Admin = () => {
                                                 ).map(u => (
                                                     <div key={u.id} className="bg-white/[0.03] border border-white/10 p-6 space-y-6 relative group overflow-hidden">
                                                         <div className="flex justify-between items-start border-b border-white/5 pb-5">
-                                                            <div className="flex items-center space-x-5">
-                                                                <div className="w-14 h-14 rounded bg-gold-400/5 border border-gold-500/10 flex items-center justify-center text-gold-500 font-serif text-2xl">
-                                                                    {u.first_name[0]}
-                                                                </div>
-                                                                <div>
-                                                                    <p className="font-black uppercase tracking-[0.15em] text-white text-[14px] leading-tight mb-1">{u.first_name} {u.last_name}</p>
-                                                                    <div className="flex items-center gap-3">
-                                                                        <span className="font-serif text-gold-500/50 text-[10px]">#{u.id.toString().padStart(4, '0')}</span>
+                                                                 <div className="flex items-center gap-5">
+                                                                    <input 
+                                                                        type="checkbox" 
+                                                                        className="w-4 h-4 cursor-pointer accent-gold-500"
+                                                                        checked={selectedUsers.includes(u.id)}
+                                                                        onChange={(e) => {
+                                                                            if (e.target.checked) setSelectedUsers([...selectedUsers, u.id]);
+                                                                            else setSelectedUsers(selectedUsers.filter(id => id !== u.id));
+                                                                        }}
+                                                                    />
+                                                                    <div className="w-14 h-14 rounded bg-gold-400/5 border border-gold-500/10 flex items-center justify-center text-gold-500 font-serif text-2xl">
+                                                                        {u.first_name[0]}
+                                                                    </div>
+                                                                    <div>
+                                                                        <p className="font-black uppercase tracking-[0.15em] text-white text-[14px] leading-tight mb-1">{u.first_name} {u.last_name}</p>
+                                                                        <div className="flex items-center gap-3">
+                                                                            <span className="font-serif text-gold-500/50 text-[10px]">#{u.id.toString().padStart(4, '0')}</span>
                                                                         <span className={`text-[9px] uppercase tracking-widest font-black px-2 py-0.5 border ${u.role === 'admin' ? 'border-gold-500/30 text-gold-500' : 'border-white/10 text-white/60'}`}>
                                                                             {u.role || 'User'}
                                                                         </span>
