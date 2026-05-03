@@ -224,7 +224,7 @@ Marketing Consent: Granted
             dispatch(login({ user: data.user, token: data.token }));
             dispatch(fetchWishlist());
             setStatus('success');
-            setTimeout(() => navigate('/'), 1500);
+            setTimeout(() => navigate('/'), 500);
             
         } catch (error) {
             console.error('Auth error:', error);
@@ -298,7 +298,7 @@ Marketing Consent: Granted
                 dispatch(fetchWishlist());
                 setShowOtpModal(false);
                 setStatus('success');
-                setTimeout(() => navigate('/'), 1500);
+                setTimeout(() => navigate('/'), 500);
             } else {
                 setOtpError(data.message || 'Invalid verification code.');
             }
@@ -397,7 +397,7 @@ Marketing Consent: Granted
                     dispatch(login({ user: data.user, token: data.token }));
                     dispatch(fetchWishlist());
                     setStatus('success');
-                    setTimeout(() => navigate('/'), 1500);
+                    setTimeout(() => navigate('/'), 500);
                 } else {
                     setErrorMessage(data.message || 'Google Login failed.');
                 }
@@ -447,7 +447,7 @@ Marketing Consent: Granted
                             <motion.h2 
                                 initial={{ y: 20, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
-                                transition={{ delay: 0.5, duration: 1 }}
+                                transition={{ delay: 0.1, duration: 0.5 }}
                                 className="text-4xl font-serif tracking-[0.2em] uppercase mb-6 font-light"
                             >
                                 {isRegister ? 'Identity Verified' : 'Welcome Back'}
@@ -456,7 +456,7 @@ Marketing Consent: Granted
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                transition={{ delay: 1.2, duration: 1 }}
+                                transition={{ delay: 0.3, duration: 0.5 }}
                                 className="flex flex-col items-center"
                             >
                                 <p className="text-gold-500/40 text-[10px] tracking-[0.5em] uppercase mb-10">
