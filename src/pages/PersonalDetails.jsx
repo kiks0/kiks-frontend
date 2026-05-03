@@ -305,7 +305,6 @@ const PersonalDetails = () => {
                     <section>
                         <div className="border-b border-white/10 pb-2 mb-6 md:mb-10 flex justify-between items-end">
                             <h2 className="text-[12px] font-black tracking-[0.2em] uppercase text-white/80">Profile</h2>
-                            <div className="w-24 h-[1px] bg-gold-500/30"></div>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
