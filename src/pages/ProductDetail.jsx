@@ -409,7 +409,7 @@ const ProductDetail = () => {
                                             <p className="text-2xl md:text-4xl font-bold text-gold-500 tracking-[0.1em]">
                                                 {formatCurrency(product.sale_price, activeCurrency, rates, symbols)}
                                             </p>
-                                            <span className="text-[10px] text-gold-500/50 tracking-[0.2em] font-black uppercase italic">Boutique Offer</span>
+                                            <span className="text-[10px] text-gold-500/50 tracking-[0.2em] font-black uppercase italic">OFFER</span>
                                         </div>
                                     </div>
                                 ) : (

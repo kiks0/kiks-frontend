@@ -242,7 +242,7 @@ const Collection = () => {
                                                         {formatCurrency(product.price, activeCurrency, rates, symbols)}
                                                     </span>
                                                 </div>
-                                                <span className="text-[7px] bg-gold-500/10 text-gold-500 px-1.5 py-0.5 font-bold uppercase tracking-widest border border-gold-500/20">Boutique Offer</span>
+                                                <span className="text-[7px] bg-gold-500/10 text-gold-500 px-1.5 py-0.5 font-bold uppercase tracking-widest border border-gold-500/20">OFFER</span>
                                             </div>
                                         ) : (
                                             <span className="text-xs md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-gold-500/80">
