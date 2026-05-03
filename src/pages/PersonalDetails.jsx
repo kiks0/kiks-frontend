@@ -205,19 +205,19 @@ const PersonalDetails = () => {
             {isPhoneModalOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/90 backdrop-blur-md" onClick={() => setIsPhoneModalOpen(false)}></div>
-                    <div className="bg-[#0a0a0a] border border-white/10 text-white w-full max-w-lg p-8 md:p-12 relative animate-in fade-in zoom-in duration-300 shadow-2xl">
+                    <div className="bg-[#0a0a0a] border border-white/10 text-white w-full max-w-lg p-6 md:p-12 relative animate-in fade-in zoom-in duration-300 shadow-2xl max-h-[90vh] overflow-y-auto scrollbar-hide">
                         <button 
                             onClick={() => setIsPhoneModalOpen(false)}
-                            className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors"
+                            className="absolute top-4 right-4 md:top-6 md:right-6 text-white/40 hover:text-white transition-colors z-10"
                         >
-                            <X size={24} />
+                            <X className="w-5 h-5 md:w-6 md:h-6" />
                         </button>
 
-                        <div className="text-center mb-10">
-                            <h2 className="text-xl md:text-2xl font-serif tracking-[0.2em] uppercase mb-4 text-gold-500">Edit Phone Number</h2>
+                        <div className="text-center mb-6 md:mb-10">
+                            <h2 className="text-lg md:text-2xl font-serif tracking-[0.2em] uppercase mb-2 md:mb-4 text-gold-500">Edit Phone Number</h2>
                         </div>
 
-                        <div className="space-y-8">
+                        <div className="space-y-6 md:space-y-8">
                             <div className="space-y-2">
                                 <label className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Phone Number Type</label>
                                 <select className="w-full border-b border-white/10 py-3 text-sm focus:border-gold-500 outline-none transition-colors bg-transparent cursor-pointer text-white appearance-none">
@@ -226,7 +226,7 @@ const PersonalDetails = () => {
                                 </select>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-[130px_1fr] gap-6">
                                 <div className="space-y-2">
                                     <label className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Location code</label>
                                     <select 
