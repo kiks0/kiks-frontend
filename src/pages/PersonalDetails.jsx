@@ -288,9 +288,9 @@ const PersonalDetails = () => {
             <div className="max-w-3xl mx-auto px-6">
                 
                 {/* Back Link */}
-                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-                    <Link to="/account" className="inline-flex items-center text-[10px] tracking-[0.4em] text-white/30 hover:text-white transition-colors uppercase mb-12 group">
-                        <ArrowLeft size={14} className="mr-3 group-hover:-translate-x-1 transition-transform" /> Back to Account
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-center mb-12">
+                    <Link to="/account" className="inline-flex items-center text-[10px] tracking-[0.4em] text-white/30 hover:text-white transition-colors uppercase group">
+                        <ArrowLeft size={14} className="mr-3 group-hover:-translate-x-1 transition-transform" /> BACK TO ACCOUNT
                     </Link>
                 </motion.div>
 
