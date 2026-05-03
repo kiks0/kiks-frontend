@@ -718,7 +718,7 @@ const Checkout = () => {
                                 )}
 
                                 <div className="flex justify-between items-center text-gold-500 font-black">
-                                    <span>Home Delivery</span>
+                                    <span>Standard Delivery</span>
                                     <span className="text-[9px] tracking-[0.1em]">Complimentary</span>
                                 </div>
                             </div>
