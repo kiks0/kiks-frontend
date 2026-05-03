@@ -75,6 +75,12 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isMobileMenuOpen]);
 
+  // Handle Route Changes (Close menu and reset scroll lock)
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setMobileMenuLevel('main');
+  }, [location.pathname]);
+
   // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -133,7 +139,7 @@ const Navbar = () => {
 
             {/* Right: Mobile Icons */}
             <div className="flex items-center space-x-3.5 px-1">
-              <Link to="/account" className="hover:text-gold-400 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+              <Link to="/account" className="hover:text-gold-400 transition-colors">
                 <User size={20} strokeWidth={1} />
               </Link>
               <button
@@ -141,7 +147,6 @@ const Navbar = () => {
                 onClick={(e) => {
                   e.preventDefault();
                   setIsCartOpen(true);
-                  setIsMobileMenuOpen(false);
                 }}
                 className="hover:text-gold-400 transition-colors relative flex items-center justify-center"
               >
@@ -312,7 +317,6 @@ const Navbar = () => {
                           <div className="mb-4">
                             <Link 
                               to="/register" 
-                              onClick={() => setIsMobileMenuOpen(false)}
                               className="block w-full bg-gold-500 text-black text-center py-5 text-[11px] font-black tracking-[0.4em] uppercase hover:bg-gold-400 transition-all shadow-xl"
                             >
                               REGISTER / JOIN THE CLUB
@@ -333,11 +337,11 @@ const Navbar = () => {
 
                       <div className="space-y-8">
 
-                        <Link to="/blog" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Link to="/blog" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500">
                           BLOG
                         </Link>
                         
-                        <Link to="/contact" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Link to="/contact" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500">
                           CONTACT
                         </Link>
                       </div>
@@ -346,13 +350,13 @@ const Navbar = () => {
                       <div className="pt-10 mt-4 border-t border-white/5 space-y-6">
                         {!isAuthenticated ? (
                           <div className="space-y-6">
-                            <Link to="/login" className="flex items-center text-[10px] tracking-[0.3em] text-white/80 uppercase hover:text-white font-sans" onClick={() => setIsMobileMenuOpen(false)}>
+                            <Link to="/login" className="flex items-center text-[10px] tracking-[0.3em] text-white/80 uppercase hover:text-white font-sans">
                               <User size={16} className="mr-4" strokeWidth={1} /> LOGIN
                             </Link>
                           </div>
                         ) : (
 
-                          <Link to="/account" className="flex items-center text-[10px] tracking-[0.3em] text-white/80 uppercase hover:text-white font-sans" onClick={() => setIsMobileMenuOpen(false)}>
+                          <Link to="/account" className="flex items-center text-[10px] tracking-[0.3em] text-white/80 uppercase hover:text-white font-sans">
                             <User size={16} className="mr-4" strokeWidth={1} /> PROFILE
                           </Link>
                         )}
@@ -377,7 +381,7 @@ const Navbar = () => {
                         </button>
 
                         {isAuthenticated && isAdmin && (
-                          <Link to="/admin" className="flex items-center text-[10px] tracking-[0.3em] text-gold-500 font-bold uppercase font-sans" onClick={() => setIsMobileMenuOpen(false)}>
+                          <Link to="/admin" className="flex items-center text-[10px] tracking-[0.3em] text-gold-500 font-bold uppercase font-sans">
                             <Shield size={16} className="mr-4" strokeWidth={1} /> ADMIN
                           </Link>
                         )}
@@ -397,7 +401,6 @@ const Navbar = () => {
                           key={col.id} 
                           to={`/collection/${col.slug}`} 
                           className="block text-[11px] tracking-[0.2em] text-white/60 hover:text-gold-500 uppercase transition-colors py-4 border-b border-white/5 font-sans"
-                          onClick={() => setIsMobileMenuOpen(false)}
                         >
                           {col.name}
                         </Link>
