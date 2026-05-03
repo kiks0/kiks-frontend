@@ -177,18 +177,7 @@ const Footer = () => {
         <div className="border-b border-white/10 pb-6 mb-6 flex flex-col md:flex-row justify-between items-center md:items-center">
           <div className="flex flex-col space-y-4">
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[#A0A0A0] text-[10px] tracking-[0.1em] uppercase">
-              {locations.filter(l => ['India', 'United States', 'Germany', 'Spain', 'France'].includes(l.name)).map(loc => (
-                <button 
-                  key={loc.name}
-                  onClick={() => {
-                    applyLocationSettings(loc.name, i18n, dispatch, setCurrency);
-                    window.location.reload();
-                  }}
-                  className={`hover:text-white transition-colors ${selectedLocation === loc.name ? 'text-white font-black' : ''}`}
-                >
-                  {loc.name} ({loc.langName})
-                </button>
-              ))}
+              {/* CLEANED UP: Only show the detect button, no messy shortcut links */}
               <button 
                 onClick={() => setIsLocationModalOpen(true)} 
                 className="text-white flex items-center font-black"
