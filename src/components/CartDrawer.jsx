@@ -39,7 +39,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
+            className="fixed inset-0 bg-black/80 backdrop-blur-md z-[10005]"
           />
 
           {/* Drawer */}
@@ -48,19 +48,19 @@ const CartDrawer = ({ isOpen, onClose }) => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 h-full w-full max-w-[450px] bg-[#0a0a0a] z-[101] shadow-2xl flex flex-col font-sans"
+            className="fixed right-0 top-0 h-full w-full max-w-[450px] bg-[#0a0a0a] z-[10006] shadow-2xl flex flex-col font-sans"
           >
             {/* Header */}
-            <div className="p-6 md:p-8 border-b border-white/5 flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <h2 className="text-xl font-light tracking-[0.2em] text-white uppercase">{t('cart.your_bag')}</h2>
-                <span className="text-[10px] bg-white/10 px-2.5 py-1 rounded-full text-white/60 font-medium tracking-widest">{cartCount}</span>
+            <div className="p-5 md:p-8 border-b border-white/5 flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <h2 className="text-sm md:text-xl font-black tracking-[0.3em] text-white uppercase">{t('cart.your_bag')}</h2>
+                <span className="text-[9px] bg-white/10 px-2 py-0.5 rounded-full text-white/60 font-bold tracking-widest">{cartCount}</span>
               </div>
               <button 
                 onClick={onClose}
                 className="p-2 hover:bg-white/5 rounded-full transition-colors text-white/40 hover:text-white"
               >
-                <X size={24} strokeWidth={1} />
+                <X size={20} strokeWidth={1.5} />
               </button>
             </div>
 
