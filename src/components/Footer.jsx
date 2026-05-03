@@ -103,104 +103,110 @@ const Footer = () => {
         </Link>
       </div>
 
-      {/* Main 4-Column Architectural Grid */}
-      <div className="container mx-auto px-6 md:px-12 lg:px-24 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 lg:gap-8 mb-8 md:mb-20">
+      {/* Main Grid */}
+      <div className="container mx-auto px-6 md:px-12 lg:px-24 grid grid-cols-1 md:grid-cols-3 gap-12 mb-8 md:mb-20">
         <div className="text-center md:text-left">
-          <h4 className="text-white text-[10px] md:text-[11px] font-bold uppercase tracking-wider mb-4">{t('footer.explore')}</h4>
+          <h4 className="text-white text-[10px] font-bold uppercase tracking-wider mb-4">Explore</h4>
           <ul className="space-y-[10px]">
-            <li><Link to={`/collection/${latestCollectionSlug}`} className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">{t('footer.links.new')}</Link></li>
+            <li><Link to={`/collection/${latestCollectionSlug}`} className="text-[12px] text-[#A0A0A0] hover:text-white transition-colors">New Arrivals</Link></li>
           </ul>
           <div className="mt-8 flex items-center justify-center md:justify-start space-x-3">
-            <span className="text-[12px] md:text-[13px] text-[#A0A0A0]">{t('footer.high_contrast')}</span>
-            <button onClick={() => setIsHighContrast(!isHighContrast)} className={`w-9 h-4 rounded-full relative focus:outline-none flex items-center transition-colors duration-300 ${isHighContrast ? 'bg-white' : 'bg-[#333]'}`}>
+            <span className="text-[12px] text-[#A0A0A0]">Contrast</span>
+            <button onClick={() => setIsHighContrast(!isHighContrast)} className={`w-9 h-4 rounded-full relative transition-colors duration-300 ${isHighContrast ? 'bg-white' : 'bg-[#333]'}`}>
               <div className={`w-3.5 h-3.5 rounded-full absolute top-[1px] transition-all duration-300 ${isHighContrast ? 'bg-black left-[19px]' : 'bg-gray-400 left-[1px]'}`}></div>
             </button>
           </div>
         </div>
         <div className="text-center md:text-left">
-          <h4 className="text-white text-[10px] md:text-[11px] font-bold uppercase tracking-wider mb-4">{t('footer.services')}</h4>
+          <h4 className="text-white text-[10px] font-bold uppercase tracking-wider mb-4">Services</h4>
           <ul className="space-y-[10px]">
-            <li><Link to="/account" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">{t('footer.links.account')}</Link></li>
-            <li><Link to="/refund-policy" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Refund Policy</Link></li>
-            <li><Link to="/return-policy" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Return Policy</Link></li>
-            <li><Link to="/cancellation-policy" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Cancellation Policy</Link></li>
+            <li><Link to="/account" className="text-[12px] text-[#A0A0A0] hover:text-white transition-colors">My Account</Link></li>
+            <li><Link to="/refund-policy" className="text-[12px] text-[#A0A0A0] hover:text-white transition-colors">Refund Policy</Link></li>
+            <li><Link to="/return-policy" className="text-[12px] text-[#A0A0A0] hover:text-white transition-colors">Return Policy</Link></li>
           </ul>
         </div>
 
         <div className="text-center md:text-left">
-          <h4 className="text-white text-[10px] md:text-[11px] font-bold uppercase tracking-wider mb-4">{t('footer.house')}</h4>
-          <ul className="space-y-[10px] mb-8">
-            <li><Link to="/terms-conditions" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Terms & Conditions</Link></li>
-            <li><Link to="/privacy-policy" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Privacy Policy</Link></li>
-            <li><Link to="/disclaimer" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Disclaimer</Link></li>
-          </ul>
-
-          {/* Compact Newsletter */}
-          <div className="mt-6">
-            <h4 className="text-white text-[10px] font-bold uppercase tracking-wider mb-6">Newsletter</h4>
-            <form 
-              onSubmit={async (e) => {
-                e.preventDefault();
-                try {
-                  const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/newsletter/subscribe`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: newsletterEmail, source: 'footer' })
-                  });
-                  if (res.ok) {
-                    setIsSubscribed(true);
-                    setNewsletterEmail('');
-                    setTimeout(() => setIsSubscribed(false), 4000);
-                  }
-                } catch (err) {}
-              }}
-              className="relative border-b border-white/20 pb-2 flex items-center"
-            >
-              <input 
-                type="email" 
-                required
-                value={newsletterEmail}
-                onChange={(e) => setNewsletterEmail(e.target.value)}
-                placeholder="Your address"
-                className="w-full bg-transparent text-[13px] text-white outline-none placeholder:text-white/10 text-center md:text-left"
-              />
-              <button type="submit" className="text-white hover:text-gold-500 transition-colors ml-4">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
-              </button>
-            </form>
-          </div>
+          <h4 className="text-white text-[10px] font-bold uppercase tracking-wider mb-4">Newsletter</h4>
+          <form 
+            onSubmit={async (e) => {
+              e.preventDefault();
+              try {
+                const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/newsletter/subscribe`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ email: newsletterEmail, source: 'footer' })
+                });
+                if (res.ok) {
+                  setIsSubscribed(true);
+                  setNewsletterEmail('');
+                  setTimeout(() => setIsSubscribed(false), 4000);
+                }
+              } catch (err) {}
+            }}
+            className="relative border-b border-white/20 pb-2 flex items-center"
+          >
+            <input 
+              type="email" 
+              required
+              value={newsletterEmail}
+              onChange={(e) => setNewsletterEmail(e.target.value)}
+              placeholder="Your address"
+              className="w-full bg-transparent text-[13px] text-white outline-none placeholder:text-white/10"
+            />
+            <button type="submit" className="text-white hover:text-gold-500 transition-colors ml-4">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+            </button>
+          </form>
         </div>
       </div>
 
-      {/* Bottom Footer Section */}
+      {/* Bottom Footer Section - MATCHING SCREENSHOT EXACTLY */}
       <div className="container mx-auto px-6 md:px-12 lg:px-24">
-        <div className="border-b border-white/10 pb-6 mb-6 flex flex-col md:flex-row justify-between items-center md:items-center">
-          <div className="flex flex-col space-y-4">
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[#A0A0A0] text-[10px] tracking-[0.1em] uppercase">
-              {/* CLEANED UP: Only show the detect button, no messy shortcut links */}
+        <div className="border-t border-white/10 pt-12">
+          
+          {/* Horizontal Row of Languages */}
+          <div className="flex flex-wrap items-center gap-x-12 gap-y-4 mb-8">
+            {locations.filter(l => ['France', 'Germany', 'India', 'Spain', 'United States'].includes(l.name)).map(loc => (
               <button 
-                onClick={() => setIsLocationModalOpen(true)} 
-                className="text-white flex items-center font-black"
+                key={loc.name}
+                onClick={() => {
+                  applyLocationSettings(loc.name, i18n, dispatch, setCurrency);
+                  window.location.reload();
+                }}
+                className="text-[11px] font-medium tracking-[0.05em] text-[#666666] hover:text-white transition-colors"
               >
-                {t('footer.detect')} <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+                {loc.name} ({loc.langName})
               </button>
+            ))}
+            
+            <button 
+              onClick={() => setIsLocationModalOpen(true)} 
+              className="flex items-center text-[11px] font-bold tracking-[0.1em] text-white hover:text-gold-500 transition-all uppercase"
+            >
+              Change location and language 
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="ml-3"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+            </button>
+          </div>
+
+          {/* Current Selection Status */}
+          <div className="flex flex-col md:flex-row justify-between items-center text-[11px] font-black tracking-[0.2em] uppercase">
+            <div className="mb-4 md:mb-0">
+              <span className="text-[#444444] mr-2">CURRENT:</span>
+              <span className="text-white">{selectedLocation} ({locations.find(l => l.name === selectedLocation)?.langName || 'English'})</span>
             </div>
             
-            <div className="text-[#A0A0A0] text-[11px] tracking-widest uppercase">
-              Current: <span className="text-white font-medium">{selectedLocation}</span>
+            <div className="flex items-center space-x-12">
+              <div className="flex space-x-8 text-[#444444]">
+                <a href="https://instagram.com/kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconInsta /></a>
+                <a href="https://facebook.com/kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconFb /></a>
+              </div>
+              <p className="text-[#222222]">
+                &copy; {new Date().getFullYear()} KIKS ULTRA LUXURY
+              </p>
             </div>
           </div>
-          <div className="flex justify-center space-x-8 mt-6 md:mt-0 text-[#A0A0A0]">
-            <a href="https://instagram.com/kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconInsta /></a>
-            <a href="https://facebook.com/kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconFb /></a>
-            <a href="https://youtube.com/@kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconYt /></a>
-            <a href="https://linkedin.com/company/kiks-ultra-luxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconIn /></a>
-          </div>
-        </div>
-        <div className="text-center md:text-left">
-          <p className="text-[#666666] text-[10px] md:text-[11px] leading-relaxed max-w-4xl tracking-widest mx-auto md:mx-0">
-            Kiksultraluxury ({selectedLocation})
-          </p>
+
         </div>
       </div>
     </footer>
