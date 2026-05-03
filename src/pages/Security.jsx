@@ -133,7 +133,7 @@ const Security = () => {
                     animate={{ opacity: 1, x: 0 }}
                     className="mb-12"
                 >
-                    <Link to="/account" className="inline-flex items-center text-[10px] tracking-[0.4em] text-white/30 hover:text-white transition-colors uppercase group">
+                    <Link to="/account" className="inline-flex items-center text-[10px] tracking-[0.4em] text-white/30 hover:text-white transition-colors uppercase mb-12 group">
                         <ArrowLeft size={14} className="mr-3 group-hover:-translate-x-1 transition-transform" /> Back to Account
                     </Link>
                 </motion.div>

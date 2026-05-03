@@ -70,8 +70,8 @@ const Orders = () => {
                 {/* Header */}
                 <div className="mb-8 md:mb-24 text-center">
                     <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
-                        <Link to="/account" className="inline-flex items-center text-[9px] tracking-[0.4em] text-white/30 hover:text-white transition-colors uppercase mb-8 group">
-                            <ArrowLeft size={14} className="mr-2 group-hover:-translate-x-1 transition-transform" /> Back to Account
+                        <Link to="/account" className="inline-flex items-center text-[10px] tracking-[0.4em] text-white/30 hover:text-white transition-colors uppercase mb-12 group">
+                            <ArrowLeft size={14} className="mr-3 group-hover:-translate-x-1 transition-transform" /> Back to Account
                         </Link>
                         <h1 className="text-3xl md:text-5xl font-serif tracking-[0.2em] uppercase mb-4">Your Orders</h1>
                         <p className="text-[10px] tracking-[0.5em] text-white/20 uppercase font-black italic">History of your perfume purchases</p>

@@ -37,8 +37,8 @@ const Wishlist = () => {
         {/* Page Header */}
         <header className="mb-16 md:mb-24 flex flex-col items-center text-center">
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-            <Link to="/account" className="inline-flex items-center text-[9px] tracking-[0.4em] text-white/30 hover:text-white transition-colors uppercase mb-8 group">
-              <ArrowLeft size={14} className="mr-2 group-hover:-translate-x-1 transition-transform" /> Back to Account
+            <Link to="/account" className="inline-flex items-center text-[10px] tracking-[0.4em] text-white/30 hover:text-white transition-colors uppercase mb-12 group">
+              <ArrowLeft size={14} className="mr-3 group-hover:-translate-x-1 transition-transform" /> Back to Account
             </Link>
           </motion.div>
           <p className="text-[10px] md:text-[11px] tracking-[0.4em] font-medium uppercase mb-4 opacity-50">Private Selection</p>

@@ -44,7 +44,7 @@ const Navbar = () => {
     fetch(`${API_URL}/api/collections`)
       .then(res => res.json())
       .then(data => setNavCollections(data))
-      .catch(() => {});
+      .catch(() => { });
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -123,7 +123,7 @@ const Navbar = () => {
                       e.preventDefault();
                       window.location.reload();
                     }
-                  } catch (e) {}
+                  } catch (e) { }
                   setIsMobileMenuOpen(false);
                 }}
                 className="flex items-center justify-center transform transition hover:opacity-70 pointer-events-auto"
@@ -227,7 +227,7 @@ const Navbar = () => {
                   <Search size={18} strokeWidth={1} />
                 </button>
                 <Link to="/account" className="hover:text-gold-400 transition-colors"><User size={18} strokeWidth={1} /></Link>
-                <button 
+                <button
                   onClick={() => {
                     if (!isAuthenticated) {
                       dispatch(openWishlistAuthPopup());
@@ -311,31 +311,31 @@ const Navbar = () => {
                       exit={{ opacity: 0, x: -20 }}
                       className="p-8 space-y-8 flex flex-col"
                     >
-                        {/* Prominent Register CTA for Guests - At Top */}
+                      {/* Prominent Register CTA for Guests - At Top */}
 
-                        {/* Main Links */}
-                        <div className="space-y-6">
-                          <button 
-                            onClick={() => setMobileMenuLevel('collections')}
-                            className="w-full flex items-center justify-between group text-white hover:text-gold-500 transition-colors py-1"
-                          >
-                            <span className="text-[11px] tracking-[0.25em] uppercase font-medium font-sans">COLLECTIONS</span>
-                            <ArrowRight size={14} className="text-white/20 group-hover:text-gold-500 transition-all transform group-hover:translate-x-1" />
-                          </button>
-                        </div>
+                      {/* Main Links */}
+                      <div className="space-y-6">
+                        <button
+                          onClick={() => setMobileMenuLevel('collections')}
+                          className="w-full flex items-center justify-between group text-white hover:text-gold-500 transition-colors py-1"
+                        >
+                          <span className="text-[11px] tracking-[0.25em] uppercase font-medium font-sans">COLLECTIONS</span>
+                          <ArrowRight size={14} className="text-white/20 group-hover:text-gold-500 transition-all transform group-hover:translate-x-1" />
+                        </button>
+                      </div>
 
                       <div className="space-y-8">
 
-                        <Link 
-                          to="/blog" 
+                        <Link
+                          to="/blog"
                           onClick={() => { setIsMobileMenuOpen(false); setMobileMenuLevel('main'); }}
                           className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500"
                         >
                           BLOG
                         </Link>
-                        
-                        <Link 
-                          to="/contact" 
+
+                        <Link
+                          to="/contact"
                           onClick={() => { setIsMobileMenuOpen(false); setMobileMenuLevel('main'); }}
                           className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500"
                         >
@@ -347,8 +347,8 @@ const Navbar = () => {
                       <div className="pt-10 mt-4 border-t border-white/5 space-y-6">
                         {!isAuthenticated ? (
                           <div className="space-y-6">
-                            <Link 
-                              to="/login" 
+                            <Link
+                              to="/login"
                               onClick={() => { setIsMobileMenuOpen(false); setMobileMenuLevel('main'); }}
                               className="flex items-center text-[10px] tracking-[0.3em] text-white/80 uppercase hover:text-white font-sans"
                             >
@@ -357,16 +357,16 @@ const Navbar = () => {
                           </div>
                         ) : (
 
-                          <Link 
-                            to="/account" 
+                          <Link
+                            to="/account"
                             onClick={() => { setIsMobileMenuOpen(false); setMobileMenuLevel('main'); }}
                             className="flex items-center text-[10px] tracking-[0.3em] text-white/80 uppercase hover:text-white font-sans"
                           >
                             <User size={16} className="mr-4" strokeWidth={1} /> PROFILE
                           </Link>
                         )}
-                        
-                        <button 
+
+                        <button
                           onClick={() => {
                             setIsMobileMenuOpen(false);
                             if (!isAuthenticated) {
@@ -386,8 +386,8 @@ const Navbar = () => {
                         </button>
 
                         {isAuthenticated && isAdmin && (
-                          <Link 
-                            to="/admin" 
+                          <Link
+                            to="/admin"
                             onClick={() => { setIsMobileMenuOpen(false); setMobileMenuLevel('main'); }}
                             className="flex items-center text-[10px] tracking-[0.3em] text-gold-500 font-bold uppercase font-sans"
                           >
@@ -406,9 +406,9 @@ const Navbar = () => {
                     >
                       {/* Nested Collection Links */}
                       {navCollections.map(col => (
-                        <Link 
-                          key={col.id} 
-                          to={`/collection/${col.slug}`} 
+                        <Link
+                          key={col.id}
+                          to={`/collection/${col.slug}`}
                           onClick={() => { setIsMobileMenuOpen(false); setMobileMenuLevel('main'); }}
                           className="block text-[11px] tracking-[0.2em] text-white/60 hover:text-gold-500 uppercase transition-colors py-4 border-b border-white/5 font-sans"
                         >
@@ -439,7 +439,7 @@ const Navbar = () => {
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
 
       {/* Back to Top Button */}
-      <button 
+      <button
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         className={`fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[60] w-12 h-12 md:w-14 md:h-14 bg-black border border-gold-500/30 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 group ${isScrolled ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'}`}
       >
