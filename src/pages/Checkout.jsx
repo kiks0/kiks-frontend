@@ -181,7 +181,7 @@ const Checkout = () => {
                                 product_id: i.id,
                                 product_name: i.name,
                                 quantity: i.quantity,
-                                price: i.price,
+                                price: i.sale_price || i.price,
                                 image_url: i.image_url
                             }))
                         })
@@ -231,7 +231,7 @@ const Checkout = () => {
 
     const calculateSubtotal = () => {
         return items.reduce((acc, item) => {
-            const rawPrice = item?.price?.toString() || "0";
+            const rawPrice = (item?.sale_price || item?.price || "0").toString();
             const price = parseInt(rawPrice.replace(/[^0-9]/g, '')) || 0;
             return acc + (price * (item.quantity || 1));
         }, 0);

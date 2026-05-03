@@ -26,12 +26,12 @@ export const cartSlice = createSlice({
       } else {
         state.items.push({ ...action.payload, quantity: qty });
       }
-      state.total = state.items.reduce((acc, item) => acc + (parsePrice(item.price) * Number(item.quantity || 1)), 0);
+      state.total = state.items.reduce((acc, item) => acc + (parsePrice(item.sale_price || item.price) * Number(item.quantity || 1)), 0);
       localStorage.setItem('kiks_cart', JSON.stringify({ items: state.items, total: state.total }));
     },
     removeFromCart: (state, action) => {
       state.items = state.items.filter(item => !(item.id === action.payload.id && item.size === action.payload.size));
-      state.total = state.items.reduce((acc, item) => acc + (parsePrice(item.price) * item.quantity), 0);
+      state.total = state.items.reduce((acc, item) => acc + (parsePrice(item.sale_price || item.price) * item.quantity), 0);
       localStorage.setItem('kiks_cart', JSON.stringify({ items: state.items, total: state.total }));
     },
     updateQuantity: (state, action) => {
@@ -39,7 +39,7 @@ export const cartSlice = createSlice({
       if (item) {
         item.quantity = action.payload.quantity;
       }
-      state.total = state.items.reduce((acc, item) => acc + (parsePrice(item.price) * item.quantity), 0);
+      state.total = state.items.reduce((acc, item) => acc + (parsePrice(item.sale_price || item.price) * item.quantity), 0);
       localStorage.setItem('kiks_cart', JSON.stringify({ items: state.items, total: state.total }));
     },
     clearCart: (state) => {
@@ -53,7 +53,7 @@ export const cartSlice = createSlice({
         id: String(item.id),
         quantity: Number(item.quantity || 1)
       }));
-      state.total = state.items.reduce((acc, item) => acc + (parsePrice(item.price) * Number(item.quantity || 1)), 0);
+      state.total = state.items.reduce((acc, item) => acc + (parsePrice(item.sale_price || item.price) * Number(item.quantity || 1)), 0);
       localStorage.setItem('kiks_cart', JSON.stringify({ items: state.items, total: state.total }));
     }
   },

@@ -394,9 +394,22 @@ const ProductDetail = () => {
 
                         {/* Price & Wishlist Row */}
                         <div className="flex items-center justify-between mb-4 md:mb-8">
-                            <p className="text-xl font-bold text-white tracking-[0.1em]">
-                                {formatCurrency(product.price, activeCurrency, rates, symbols)}*
-                            </p>
+                            <div className="flex flex-col">
+                                {product.sale_price ? (
+                                    <>
+                                        <p className="text-[10px] md:text-[11px] text-white/40 line-through tracking-[0.1em] mb-1">
+                                            {formatCurrency(product.price, activeCurrency, rates, symbols)}
+                                        </p>
+                                        <p className="text-xl md:text-2xl font-bold text-gold-500 tracking-[0.1em]">
+                                            {formatCurrency(product.sale_price, activeCurrency, rates, symbols)}*
+                                        </p>
+                                    </>
+                                ) : (
+                                    <p className="text-xl font-bold text-white tracking-[0.1em]">
+                                        {formatCurrency(product.price, activeCurrency, rates, symbols)}*
+                                    </p>
+                                )}
+                            </div>
                             <div className="flex items-center space-x-3 md:space-x-5">
                                 <span className="bg-white px-2 py-0.5 text-black text-[9px] font-black tracking-[0.1em] uppercase">New</span>
                                 <button

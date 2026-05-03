@@ -117,7 +117,16 @@ const Wishlist = () => {
                        {product.volume || '100ML'} - EXTRAIT DE PARFUM
                     </p>
                     <div className="pt-2 flex items-center justify-between mb-4">
-                       <span className="text-sm tracking-[0.1em] font-light">{formatCurrency(product.price, activeCurrency, rates, symbols)}</span>
+                       <div className="flex flex-col">
+                           {product.sale_price ? (
+                               <div className="flex items-center space-x-3">
+                                   <span className="text-sm tracking-[0.1em] font-bold text-gold-500">{formatCurrency(product.sale_price, activeCurrency, rates, symbols)}</span>
+                                   <span className="text-[10px] line-through text-white/30 tracking-widest">{formatCurrency(product.price, activeCurrency, rates, symbols)}</span>
+                               </div>
+                           ) : (
+                               <span className="text-sm tracking-[0.1em] font-light">{formatCurrency(product.price, activeCurrency, rates, symbols)}</span>
+                           )}
+                       </div>
                        <Link to={`/product/${product.slug}`} className="text-[9px] tracking-[0.2em] text-white/40 hover:text-white uppercase transition-colors underline underline-offset-4">Details</Link>
                     </div>
 

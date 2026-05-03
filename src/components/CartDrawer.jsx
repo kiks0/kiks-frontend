@@ -103,7 +103,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                             {item.category} • {item.volume || item.size}
                           </p>
                           <p className="text-[11px] text-gold-500 font-bold tracking-widest">
-                            {formatCurrency(parsePrice(item.price) * item.quantity, activeCurrency, rates, symbols)}
+                            {formatCurrency(parsePrice(item.sale_price || item.price) * item.quantity, activeCurrency, rates, symbols)}
                           </p>
                         </div>
 

@@ -83,7 +83,7 @@ const Admin = () => {
 
     const [colFormData, setColFormData] = useState({ name: '', slug: '', banner_url: '', description: '' });
     const [prodFormData, setProdFormData] = useState({
-        collection_id: '', name: '', slug: '', price: '', image_url: '', gallery_urls: [],
+        collection_id: '', name: '', slug: '', price: '', sale_price: '', image_url: '', gallery_urls: [],
         description: '', top_notes: '', heart_notes: '', base_notes: '', stock_count: 50,
         size: '100ml', variants: [],
         muse_story: '', muse_image: '', story_banner: '',
@@ -770,7 +770,7 @@ const Admin = () => {
                 setIsAdding(false);
                 setEditingId(null);
                 setProdFormData({
-                    collection_id: '', name: '', slug: '', price: '', image_url: '', gallery_urls: [],
+                    collection_id: '', name: '', slug: '', price: '', sale_price: '', image_url: '', gallery_urls: [],
                     description: '', top_notes: '', heart_notes: '', base_notes: '', stock_count: 50,
                     size: '100ml', variants: [],
                     muse_story: '', muse_image: '', story_banner: '',
@@ -1057,6 +1057,7 @@ const Admin = () => {
                 name: item.name,
                 slug: item.slug,
                 price: item.price,
+                sale_price: item.sale_price || '',
                 image_url: item.image_url,
                 gallery_urls: item.gallery_urls || [],
                 description: item.description,
@@ -2882,6 +2883,10 @@ const Admin = () => {
                                                 <div className="md:col-span-1">
                                                     <label className={labelClasses}>Price (₹)</label>
                                                     <input required className={inputClasses} value={prodFormData.price} onChange={e => setProdFormData({ ...prodFormData, price: e.target.value })} placeholder="18,500" />
+                                                </div>
+                                                <div className="md:col-span-1">
+                                                    <label className={labelClasses}>Boutique Sale Price (₹ - Optional)</label>
+                                                    <input className={`${inputClasses} border-gold-500/30 text-gold-500 placeholder:text-gold-500/20`} value={prodFormData.sale_price} onChange={e => setProdFormData({ ...prodFormData, sale_price: e.target.value })} placeholder="15,000" />
                                                 </div>
                                                 <div className="md:col-span-1">
                                                     <label className={labelClasses}>Stock Registry</label>
