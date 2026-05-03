@@ -684,16 +684,19 @@ const ProductDetail = () => {
                                     </form>
                                 </div>
                             ) : (
-                                <div className="mb-20 p-10 text-center border border-white/5 italic">
-                                    <p className="text-[11px] tracking-[0.3em] text-white/30">
-                                        {t('product.restricted')}{' '}
-                                        <button 
-                                            onClick={() => dispatch(openAuthModal())} 
-                                            className="text-white font-black underline underline-offset-8 decoration-gold-500"
-                                        >
-                                            Authenticate
-                                        </button>
+                                <div className="mb-20 p-10 text-center border border-white/5 bg-white/[0.01]">
+                                    <p className="text-[10px] tracking-[0.5em] text-gold-500 uppercase font-black mb-4">
+                                        Verified Purchase Required
                                     </p>
+                                    <p className="text-[9px] tracking-[0.3em] text-white/30 uppercase leading-relaxed max-w-xs mx-auto mb-10">
+                                        Critiques are reserved for patrons who have acquired this essence through the official boutique.
+                                    </p>
+                                    <Link 
+                                        to="/login" 
+                                        className="inline-block text-[9px] tracking-[0.4em] text-white font-black border-b border-white/30 pb-2 hover:text-gold-500 hover:border-gold-500 transition-all uppercase"
+                                    >
+                                        Access Account
+                                    </Link>
                                 </div>
                             )}
 

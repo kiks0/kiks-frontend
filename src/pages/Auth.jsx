@@ -224,7 +224,7 @@ Marketing Consent: Granted
             dispatch(login({ user: data.user, token: data.token }));
             dispatch(fetchWishlist());
             setStatus('success');
-            setTimeout(() => navigate('/account'), 2000);
+            setTimeout(() => navigate('/'), 1500);
             
         } catch (error) {
             console.error('Auth error:', error);
@@ -298,7 +298,7 @@ Marketing Consent: Granted
                 dispatch(fetchWishlist());
                 setShowOtpModal(false);
                 setStatus('success');
-                setTimeout(() => navigate('/account'), 3000);
+                setTimeout(() => navigate('/'), 1500);
             } else {
                 setOtpError(data.message || 'Invalid verification code.');
             }
@@ -397,7 +397,7 @@ Marketing Consent: Granted
                     dispatch(login({ user: data.user, token: data.token }));
                     dispatch(fetchWishlist());
                     setStatus('success');
-                    setTimeout(() => navigate('/account'), 2000);
+                    setTimeout(() => navigate('/'), 1500);
                 } else {
                     setErrorMessage(data.message || 'Google Login failed.');
                 }

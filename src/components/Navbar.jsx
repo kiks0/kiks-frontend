@@ -312,16 +312,6 @@ const Navbar = () => {
                       className="p-8 space-y-8 flex flex-col"
                     >
                         {/* Prominent Register CTA for Guests - At Top */}
-                        {!isAuthenticated && (
-                          <div className="mb-4">
-                            <Link 
-                              to="/register" 
-                              className="block w-full bg-gold-500 text-black text-center py-5 text-[11px] font-black tracking-[0.4em] uppercase hover:bg-gold-400 transition-all shadow-xl"
-                            >
-                              REGISTER / JOIN THE CLUB
-                            </Link>
-                          </div>
-                        )}
 
                         {/* Main Links */}
                         <div className="space-y-6">
