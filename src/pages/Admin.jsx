@@ -1154,21 +1154,21 @@ const Admin = () => {
     const labelClasses = "text-[9px] tracking-[0.3em] font-bold text-white/70 uppercase block mb-1 mt-2";
 
     return (
-        <div className="bg-black min-h-screen text-white pt-40 pb-20 px-6 lg:px-20 overflow-x-hidden relative">
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gold-400/5 blur-[150px] rounded-full pointer-events-none" />
+        <div className="bg-black min-h-screen text-white pt-24 md:pt-40 pb-20 px-4 md:px-10 lg:px-20 overflow-x-hidden relative">
+            <div className="absolute top-0 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-gold-400/5 blur-[100px] md:blur-[150px] rounded-full pointer-events-none" />
 
             {/* NOTIFICATIONS */}
-            <div className="fixed bottom-10 right-10 z-[100] flex flex-col space-y-4">
+            <div className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[100] flex flex-col space-y-4 max-w-[calc(100vw-3rem)]">
                 <AnimatePresence>
                     {successMessage && (
                         <motion.div
                             initial={{ x: 100, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
                             exit={{ x: 100, opacity: 0 }}
-                            className="bg-zinc-900 border border-gold-500/50 p-6 flex items-center space-x-4 shadow-2xl backdrop-blur-xl"
+                            className="bg-zinc-900 border border-gold-500/50 p-4 md:p-6 flex items-center space-x-4 shadow-2xl backdrop-blur-xl"
                         >
-                            <CheckCircle2 className="text-gold-500" size={20} />
-                            <span className="text-[10px] tracking-[0.2em] text-white uppercase font-bold">{successMessage}</span>
+                            <CheckCircle2 className="text-gold-500 flex-shrink-0" size={18} />
+                            <span className="text-[9px] md:text-[10px] tracking-[0.2em] text-white uppercase font-bold">{successMessage}</span>
                         </motion.div>
                     )}
                     {errorMessage && (
@@ -1176,20 +1176,20 @@ const Admin = () => {
                             initial={{ x: 100, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
                             exit={{ x: 100, opacity: 0 }}
-                            className="bg-red-900/20 border border-red-500/50 p-6 flex items-center space-x-4 shadow-2xl backdrop-blur-xl"
+                            className="bg-red-900/20 border border-red-500/50 p-4 md:p-6 flex items-center space-x-4 shadow-2xl backdrop-blur-xl"
                         >
-                            <AlertCircle className="text-red-500" size={20} />
-                            <span className="text-[10px] tracking-[0.2em] text-white uppercase font-bold">{errorMessage}</span>
+                            <AlertCircle className="text-red-500 flex-shrink-0" size={18} />
+                            <span className="text-[9px] md:text-[10px] tracking-[0.2em] text-white uppercase font-bold">{errorMessage}</span>
                         </motion.div>
                     )}
                 </AnimatePresence>
             </div>
 
-            <div className="container mx-auto px-4 md:px-6 max-w-7xl relative z-10" ref={formRef}>
+            <div className="container mx-auto max-w-7xl relative z-10" ref={formRef}>
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 md:mb-16 gap-6">
                     <div>
-                        <h1 className="text-2xl md:text-4xl font-serif tracking-[0.2em] md:tracking-[0.3em] uppercase mb-2 text-white">Registry Control</h1>
-                        <p className="text-white/80 text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.5em] mb-4 md:mb-12 flex flex-wrap items-center gap-2 md:gap-4">
+                        <h1 className="text-xl md:text-4xl font-serif tracking-[0.2em] md:tracking-[0.3em] uppercase mb-2 text-white">Registry Control</h1>
+                        <p className="text-white/80 text-[8px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.5em] mb-2 md:mb-12 flex flex-wrap items-center gap-2 md:gap-4">
                             <span>Administrative Management Panel</span>
                             {waitlist.filter(e => e.request_type === 'callback').length > 0 && (
                                 <span className="text-gold-500 animate-pulse border-l border-white/10 pl-2 md:pl-4 font-black">
@@ -2092,7 +2092,8 @@ const Admin = () => {
                                         </AnimatePresence>
 
                                         <div className="bg-white/5 border border-white/10 overflow-hidden">
-                                            <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80">
+                                            {/* Desktop Table */}
+                                            <table className="hidden md:table w-full text-left text-[11px] tracking-[0.1em] text-white/80">
                                                 <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/80 border-b border-white/10">
                                                     <tr>
                                                         <th className="p-6">Admin Identity</th>
@@ -2132,6 +2133,34 @@ const Admin = () => {
                                                     ))}
                                                 </tbody>
                                             </table>
+
+                                            {/* Mobile Card List */}
+                                            <div className="md:hidden divide-y divide-white/5">
+                                                {admins.map(adm => (
+                                                    <div key={adm.id} className="p-6 space-y-4">
+                                                        <div className="flex items-center justify-between">
+                                                            <div className="flex items-center space-x-4">
+                                                                <div className="w-10 h-10 bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-500 font-serif text-lg">
+                                                                    {adm.first_name?.[0] || 'A'}
+                                                                </div>
+                                                                <div>
+                                                                    <p className="font-bold text-white uppercase tracking-widest text-[11px]">{adm.first_name} {adm.last_name}</p>
+                                                                    <p className="text-[9px] text-white/60 lowercase font-sans">{adm.email}</p>
+                                                                </div>
+                                                            </div>
+                                                            {adm.id !== 1 && (
+                                                                <button onClick={() => handleDeleteUser(adm.id)} className="text-red-500/40 hover:text-red-500 transition-colors p-2">
+                                                                    <Trash2 size={18} />
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                        <div className="flex justify-between items-center bg-black/20 p-4 border border-white/5">
+                                                            <span className="text-[8px] uppercase tracking-widest text-gold-500 font-black">Full Access Admin</span>
+                                                            <span className="text-[9px] text-white/50">{new Date(adm.created_at).toLocaleDateString()}</span>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                 ) : (
@@ -2672,43 +2701,67 @@ const Admin = () => {
                                         </div>
                                     </div>
 
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full text-left border-collapse">
-                                            <thead>
-                                                <tr className="border-b border-white/10">
-                                                    <th className="py-6 text-[10px] uppercase tracking-[0.2em] font-black text-white/80">Email Identity</th>
-                                                    <th className="py-6 text-[10px] uppercase tracking-[0.2em] font-black text-white/80">Acquisition Source</th>
-                                                    <th className="py-6 text-[10px] uppercase tracking-[0.2em] font-black text-white/80">Date of Entry</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {newsletterSubscribers.map((sub) => (
-                                                    <tr key={sub.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
-                                                        <td className="py-6">
-                                                            <div className="flex items-center gap-3">
-                                                                <Mail size={14} className="text-gold-500/50" />
-                                                                <span className="text-[12px] text-white tracking-wider">{sub.email}</span>
-                                                            </div>
-                                                        </td>
-                                                        <td className="py-6">
-                                                            <span className={`text-[9px] px-3 py-1 border ${sub.source === 'popup' ? 'border-gold-500/30 text-gold-500' : 'border-white/20 text-white/60'} uppercase tracking-widest`}>
-                                                                {sub.source}
-                                                            </span>
-                                                        </td>
-                                                        <td className="py-6 text-[11px] text-white/80 font-mono">
-                                                            {new Date(sub.subscribed_at).toLocaleDateString()}
-                                                        </td>
+                                    <div className="overflow-hidden">
+                                        {/* Desktop View */}
+                                        <div className="hidden md:block overflow-x-auto">
+                                            <table className="w-full text-left border-collapse">
+                                                <thead>
+                                                    <tr className="border-b border-white/10">
+                                                        <th className="py-6 text-[10px] uppercase tracking-[0.2em] font-black text-white/80">Email Identity</th>
+                                                        <th className="py-6 text-[10px] uppercase tracking-[0.2em] font-black text-white/80">Acquisition Source</th>
+                                                        <th className="py-6 text-[10px] uppercase tracking-[0.2em] font-black text-white/80">Date of Entry</th>
                                                     </tr>
-                                                ))}
-                                                {newsletterSubscribers.length === 0 && (
-                                                    <tr>
-                                                        <td colSpan="3" className="py-20 text-center">
-                                                            <p className="text-[10px] uppercase tracking-[0.5em] text-white/60 italic">No members have joined the Inner Circle yet.</p>
-                                                        </td>
-                                                    </tr>
-                                                )}
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    {newsletterSubscribers.map((sub) => (
+                                                        <tr key={sub.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+                                                            <td className="py-6">
+                                                                <div className="flex items-center gap-3">
+                                                                    <Mail size={14} className="text-gold-500/50" />
+                                                                    <span className="text-[12px] text-white tracking-wider">{sub.email}</span>
+                                                                </div>
+                                                            </td>
+                                                            <td className="py-6">
+                                                                <span className={`text-[9px] px-3 py-1 border ${sub.source === 'popup' ? 'border-gold-500/30 text-gold-500' : 'border-white/20 text-white/60'} uppercase tracking-widest`}>
+                                                                    {sub.source}
+                                                                </span>
+                                                            </td>
+                                                            <td className="py-6 text-[11px] text-white/80 font-mono">
+                                                                {new Date(sub.subscribed_at).toLocaleDateString()}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                    {newsletterSubscribers.length === 0 && (
+                                                        <tr>
+                                                            <td colSpan="3" className="py-20 text-center">
+                                                                <p className="text-[10px] uppercase tracking-[0.5em] text-white/60 italic">No members have joined the Inner Circle yet.</p>
+                                                            </td>
+                                                        </tr>
+                                                    )}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        {/* Mobile View */}
+                                        <div className="md:hidden space-y-4">
+                                            {newsletterSubscribers.map((sub) => (
+                                                <div key={sub.id} className="bg-white/5 border border-white/10 p-5 space-y-4">
+                                                    <div className="flex items-center gap-3 border-b border-white/5 pb-4">
+                                                        <Mail size={16} className="text-gold-500" />
+                                                        <span className="text-[11px] text-white font-bold tracking-wider truncate">{sub.email}</span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center">
+                                                        <span className={`text-[8px] px-2 py-1 border ${sub.source === 'popup' ? 'border-gold-500/30 text-gold-500 bg-gold-500/5' : 'border-white/20 text-white/60'} uppercase tracking-[0.2em] font-black`}>
+                                                            {sub.source}
+                                                        </span>
+                                                        <span className="text-[9px] text-white/40 uppercase font-sans">{new Date(sub.subscribed_at).toLocaleDateString()}</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            {newsletterSubscribers.length === 0 && (
+                                                <div className="py-12 text-center text-white/40 uppercase tracking-widest text-[9px] bg-white/5 border border-dashed border-white/10">No Members Found</div>
+                                            )}
+                                        </div>
                                     </div>
                                 </section>
                             </>
