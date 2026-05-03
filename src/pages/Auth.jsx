@@ -417,7 +417,7 @@ Marketing Consent: Granted
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     return (
-        <div className="bg-dark-900 min-h-screen text-white pt-24 md:pt-40 pb-12 md:pb-20 font-sans selection:bg-gold-500/30 selection:text-white relative overflow-hidden">
+        <div className="bg-dark-900 min-h-screen text-white pt-24 md:pt-40 pb-12 md:pb-20 font-sans selection:bg-gold-500/30 selection:text-white relative overflow-x-hidden">
             
             {/* Ambient Background */}
             <div className="absolute top-[20%] right-[-10%] w-[800px] h-[800px] bg-gold-500/5 blur-[150px] rounded-full pointer-events-none" />

@@ -95,7 +95,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled || isAccountPage ? 'bg-black/90 backdrop-blur-md border-b border-white/5 py-1.5 md:py-2.5 shadow-2xl text-white' : 'bg-transparent py-2.5 md:py-4 text-white'}`}>
+      <nav className={`fixed w-full z-[1000] transition-all duration-700 ${isScrolled || isAccountPage ? 'bg-black/90 backdrop-blur-md border-b border-white/5 py-1.5 md:py-2.5 shadow-2xl text-white' : 'bg-transparent py-2.5 md:py-4 text-white'}`}>
         <div className="container mx-auto px-5 lg:px-12 flex flex-col items-center">
 
           {/* ======================================= */}
@@ -272,7 +272,7 @@ const Navbar = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => { setIsMobileMenuOpen(false); setMobileMenuLevel('main'); }}
-              className="fixed inset-0 bg-black/80 backdrop-blur-md z-[90] md:hidden"
+              className="fixed inset-0 bg-black/80 backdrop-blur-md z-[1001] md:hidden"
             />
 
             {/* Sidebar */}
@@ -281,7 +281,7 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 left-0 bottom-0 w-[85%] max-w-[400px] bg-black z-[100] md:hidden flex flex-col shadow-[20px_0_50px_rgba(0,0,0,0.5)] border-r border-white/5"
+              className="fixed top-0 left-0 bottom-0 w-[85%] max-w-[400px] bg-black z-[1002] md:hidden flex flex-col shadow-[20px_0_50px_rgba(0,0,0,0.5)] border-r border-white/5"
             >
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-white/10">
@@ -336,11 +336,19 @@ const Navbar = () => {
 
                       <div className="space-y-8">
 
-                        <Link to="/blog" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500">
+                        <Link 
+                          to="/blog" 
+                          onClick={() => { setIsMobileMenuOpen(false); setMobileMenuLevel('main'); }}
+                          className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500"
+                        >
                           BLOG
                         </Link>
                         
-                        <Link to="/contact" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500">
+                        <Link 
+                          to="/contact" 
+                          onClick={() => { setIsMobileMenuOpen(false); setMobileMenuLevel('main'); }}
+                          className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500"
+                        >
                           CONTACT
                         </Link>
                       </div>
@@ -349,13 +357,21 @@ const Navbar = () => {
                       <div className="pt-10 mt-4 border-t border-white/5 space-y-6">
                         {!isAuthenticated ? (
                           <div className="space-y-6">
-                            <Link to="/login" className="flex items-center text-[10px] tracking-[0.3em] text-white/80 uppercase hover:text-white font-sans">
+                            <Link 
+                              to="/login" 
+                              onClick={() => { setIsMobileMenuOpen(false); setMobileMenuLevel('main'); }}
+                              className="flex items-center text-[10px] tracking-[0.3em] text-white/80 uppercase hover:text-white font-sans"
+                            >
                               <User size={16} className="mr-4" strokeWidth={1} /> LOGIN
                             </Link>
                           </div>
                         ) : (
 
-                          <Link to="/account" className="flex items-center text-[10px] tracking-[0.3em] text-white/80 uppercase hover:text-white font-sans">
+                          <Link 
+                            to="/account" 
+                            onClick={() => { setIsMobileMenuOpen(false); setMobileMenuLevel('main'); }}
+                            className="flex items-center text-[10px] tracking-[0.3em] text-white/80 uppercase hover:text-white font-sans"
+                          >
                             <User size={16} className="mr-4" strokeWidth={1} /> PROFILE
                           </Link>
                         )}
@@ -380,7 +396,11 @@ const Navbar = () => {
                         </button>
 
                         {isAuthenticated && isAdmin && (
-                          <Link to="/admin" className="flex items-center text-[10px] tracking-[0.3em] text-gold-500 font-bold uppercase font-sans">
+                          <Link 
+                            to="/admin" 
+                            onClick={() => { setIsMobileMenuOpen(false); setMobileMenuLevel('main'); }}
+                            className="flex items-center text-[10px] tracking-[0.3em] text-gold-500 font-bold uppercase font-sans"
+                          >
                             <Shield size={16} className="mr-4" strokeWidth={1} /> ADMIN
                           </Link>
                         )}
@@ -399,6 +419,7 @@ const Navbar = () => {
                         <Link 
                           key={col.id} 
                           to={`/collection/${col.slug}`} 
+                          onClick={() => { setIsMobileMenuOpen(false); setMobileMenuLevel('main'); }}
                           className="block text-[11px] tracking-[0.2em] text-white/60 hover:text-gold-500 uppercase transition-colors py-4 border-b border-white/5 font-sans"
                         >
                           {col.name}

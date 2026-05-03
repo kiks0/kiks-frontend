@@ -58,7 +58,7 @@ const Footer = () => {
   }, [isHighContrast]);
 
   return (
-    <footer className="bg-black text-white pt-8 md:pt-20 pb-10 font-sans overflow-hidden border-t border-white/10 relative z-[10]">
+    <footer className="bg-black text-white pt-8 md:pt-20 pb-10 font-sans overflow-hidden border-t border-white/10 relative z-[100]">
 
       {/* Location Selection Modal (Chanel Style) */}
       <AnimatePresence>
