@@ -44,6 +44,8 @@ const Checkout = () => {
     const [orderError, setOrderError] = useState('');
     const [agreedToTerms, setAgreedToTerms] = useState(false);
     const [showPartialCodPopup, setShowPartialCodPopup] = useState(false);
+    const [pincodeError, setPincodeError] = useState(false);
+    const [isVerifyingPincode, setIsVerifyingPincode] = useState(false);
 
     const [formData, setFormData] = useState({
         firstName: user?.name?.split(' ')[0] || '',
@@ -110,29 +112,41 @@ const Checkout = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    // Auto-detect City and State based on Pincode
+    // Auto-detect City and State based on Pincode with strict verification
     useEffect(() => {
         const detectLocation = async () => {
             if (formData.pincode.length === 6 && /^\d+$/.test(formData.pincode)) {
+                setIsVerifyingPincode(true);
+                setPincodeError(false);
                 try {
                     const res = await fetch(`https://api.postalpincode.in/pincode/${formData.pincode}`);
                     const data = await res.json();
                     
-                    if (data[0].Status === "Success") {
+                    if (data[0].Status === "Success" && data[0].PostOffice) {
                         const { District, State } = data[0].PostOffice[0];
                         setFormData(prev => ({
                             ...prev,
                             city: District,
                             state: State
                         }));
+                        setPincodeError(false);
+                    } else {
+                        setPincodeError(true);
                     }
                 } catch (err) {
                     console.error("Pincode detection failed:", err);
+                    setPincodeError(true);
+                } finally {
+                    setIsVerifyingPincode(false);
                 }
+            } else if (formData.pincode.length > 0 && formData.pincode.length < 6) {
+                setPincodeError(false);
+            } else if (formData.pincode.length > 6) {
+                setPincodeError(true);
             }
         };
 
-        const timer = setTimeout(detectLocation, 500); // Debounce for better UX
+        const timer = setTimeout(detectLocation, 500);
         return () => clearTimeout(timer);
     }, [formData.pincode]);
 
@@ -514,8 +528,17 @@ const Checkout = () => {
                                                 <input name="state" value={formData.state} onChange={handleInputChange} className={inputClasses} />
                                             </div>
                                             <div className="relative group">
-                                                <label className={labelClasses}>Pincode</label>
-                                                <input name="pincode" value={formData.pincode} onChange={handleInputChange} className={inputClasses} />
+                                                <div className="flex justify-between items-center mb-1">
+                                                    <label className={labelClasses}>Pincode</label>
+                                                    {pincodeError && <span className="text-[8px] text-red-500 font-black tracking-widest uppercase animate-pulse">Invalid Pincode</span>}
+                                                    {isVerifyingPincode && <span className="text-[8px] text-gold-500/50 font-black tracking-widest uppercase">Verifying...</span>}
+                                                </div>
+                                                <input 
+                                                    name="pincode" 
+                                                    value={formData.pincode} 
+                                                    onChange={handleInputChange} 
+                                                    className={`${inputClasses} ${pincodeError ? 'border-red-500 text-red-500' : 'border-white/20 focus:border-white'}`} 
+                                                />
                                             </div>
                                         </div>
 
@@ -536,9 +559,10 @@ const Checkout = () => {
                                         <div className="pt-10">
                                             <button
                                                 onClick={() => setStep(2)}
-                                                className="w-full h-16 bg-white text-black text-[11px] font-black tracking-[0.6em] uppercase hover:bg-gold-500 transition-all flex items-center justify-center font-sans"
+                                                disabled={pincodeError || isVerifyingPincode || !formData.pincode}
+                                                className={`w-full h-16 bg-white text-black text-[11px] font-black tracking-[0.6em] uppercase transition-all flex items-center justify-center font-sans ${pincodeError || isVerifyingPincode || !formData.pincode ? 'opacity-20 cursor-not-allowed grayscale' : 'hover:bg-gold-500'}`}
                                             >
-                                                Proceed to Payment
+                                                {isVerifyingPincode ? 'Verifying Details...' : 'Proceed to Payment'}
                                             </button>
                                         </div>
                                     </div>
