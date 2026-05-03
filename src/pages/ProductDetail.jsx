@@ -373,12 +373,15 @@ const ProductDetail = () => {
                         transition={{ duration: 0.8 }}
                     >
                         <div className="flex flex-col mb-6">
-                            <div className="relative mb-2">
-                                <h1 className="text-xl md:text-2xl font-serif tracking-[0.1em] uppercase leading-tight pb-2 font-light">
-                                     {product.name}
-                                 </h1>
+                                <div className="flex items-center justify-between pb-2">
+                                    <h1 className="text-xl md:text-2xl font-serif tracking-[0.1em] uppercase leading-tight font-light">
+                                         {product.name}
+                                     </h1>
+                                    {product.stock_count <= 0 && (
+                                        <span className="text-[9px] bg-red-600/20 text-red-500 border border-red-600/30 px-3 py-1 font-black tracking-widest animate-pulse uppercase">OUT OF STOCK</span>
+                                    )}
+                                </div>
                                 <div className="w-full h-[2px] bg-white" />
-                            </div>
 
                             <p className="text-[9px] tracking-[0.2em] uppercase text-white/50 font-black mb-4">{product.product_type || 'EXTRAIT DE PARFUM SPRAY'}</p>
 
