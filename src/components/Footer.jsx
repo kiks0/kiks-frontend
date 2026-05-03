@@ -238,30 +238,13 @@ const Footer = () => {
       <div className="container mx-auto px-6 md:px-12 lg:px-24">
         <div className="border-b border-white/10 pb-6 mb-6 flex flex-col md:flex-row justify-between items-center md:items-center">
           <div className="flex flex-col space-y-4">
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[#A0A0A0] text-[10px] tracking-[0.1em] uppercase">
-              {locations.filter(l => ['India', 'United States', 'Germany', 'Spain', 'France'].includes(l.name)).map(loc => (
-                <button 
-                  key={loc.name}
-                  onClick={() => {
-                    applyLocationSettings(loc.name, i18n, dispatch, setCurrency);
-                    window.location.reload();
-                  }}
-                  className={`hover:text-white transition-colors ${selectedLocation === loc.name ? 'text-white font-black' : ''}`}
-                >
-                  {loc.langName}
-                </button>
-              ))}
-              <button 
-                onClick={() => setIsLocationModalOpen(true)} 
-                className="text-white flex items-center font-black"
-              >
-                {t('footer.detect')} <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
-              </button>
-            </div>
-            
-            <div className="text-[#A0A0A0] text-[11px] tracking-widest uppercase">
-              Current: <span className="text-white font-medium">{selectedLocation}</span>
-            </div>
+            <button 
+              onClick={() => setIsLocationModalOpen(true)} 
+              className="text-white flex items-center font-bold text-[10px] tracking-[0.2em] uppercase hover:text-gold-500 transition-colors"
+            >
+              Change location and language : <span className="ml-2 text-white/60 font-medium">{selectedLocation} ({COUNTRY_MAPPING.find(c => c.name === selectedLocation)?.langName || 'English'})</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+            </button>
           </div>
           <div className="flex justify-center space-x-8 mt-6 md:mt-0 text-[#A0A0A0]">
             <a href="https://instagram.com/kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconInsta /></a>
