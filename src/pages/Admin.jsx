@@ -2169,8 +2169,9 @@ const Admin = () => {
                                             <h2 className="text-lg md:text-xl font-serif tracking-widest uppercase italic text-red-500">Account Deletion Requests</h2>
                                             <p className="text-[9px] md:text-[10px] tracking-widest text-white/60 uppercase mt-2 italic">Pending formal profile removals from the KIKS registry</p>
                                         </div>
-                                        <div className="bg-white/5 border border-white/10 overflow-x-auto scrollbar-hide">
-                                            <table className="w-full text-left text-[11px] tracking-[0.1em] text-white/80 min-w-[800px]">
+                                        <div className="bg-white/5 border border-white/10 overflow-hidden">
+                                            {/* Desktop View */}
+                                            <table className="hidden md:table w-full text-left text-[11px] tracking-[0.1em] text-white/80">
                                                 <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/80 border-b border-white/10">
                                                     <tr>
                                                         <th className="p-6">Client</th>
@@ -2210,6 +2211,38 @@ const Admin = () => {
                                                     )}
                                                 </tbody>
                                             </table>
+
+                                            {/* Mobile View */}
+                                            <div className="md:hidden divide-y divide-white/5">
+                                                {deletionRequests.length === 0 ? (
+                                                    <div className="p-12 text-center text-white/40 uppercase tracking-widest text-[9px]">The manifest is currently clear</div>
+                                                ) : (
+                                                    deletionRequests.map(req => (
+                                                        <div key={req.id} className="p-6 space-y-4 bg-red-500/[0.02]">
+                                                            <div className="flex justify-between items-start">
+                                                                <div>
+                                                                    <p className="text-[11px] font-black uppercase tracking-widest text-white mb-1">{req.first_name} {req.last_name}</p>
+                                                                    <p className="text-[9px] text-white/60 lowercase font-sans">{req.email}</p>
+                                                                    <p className="text-[8px] text-gold-500/50 mt-1 font-bold">ID: #{req.id.toString().padStart(4, '0')}</p>
+                                                                </div>
+                                                                <span className="text-[9px] text-white/40 uppercase font-sans">{new Date(req.deletion_requested_at).toLocaleDateString()}</span>
+                                                            </div>
+                                                            <div className="bg-black/20 p-4 border border-white/5 flex flex-col space-y-3">
+                                                                <div className="flex justify-between items-center text-[8px] uppercase tracking-widest text-white/60">
+                                                                    <span>Telephone</span>
+                                                                    <span className="text-white font-bold">{req.telephone || 'RESTRICTED'}</span>
+                                                                </div>
+                                                                <button 
+                                                                    onClick={() => handleApproveDeletion(req.id)}
+                                                                    className="w-full bg-red-600 text-white py-4 text-[10px] font-black uppercase tracking-[0.2em] shadow-lg active:scale-[0.98] transition-all"
+                                                                >
+                                                                    Approve Deletion
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    ))
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 )}
