@@ -7,10 +7,10 @@ import { setCurrency } from '../store/currencySlice';
 import { COUNTRY_MAPPING, applyLocationSettings } from '../utils/i18nUtils';
 
 // Inline SVGs for precise identical Chanel reproduction without dependency issues
-const IconInsta = () => <svg xmlns="http://www.w-equiv.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>;
-const IconFb = () => <svg xmlns="http://www.w-equiv.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>;
-const IconYt = () => <svg xmlns="http://www.w-equiv.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" /><path d="m10 15 5-3-5-3z" /></svg>;
-const IconIn = () => <svg xmlns="http://www.w-equiv.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></svg>;
+const IconInsta = () => <svg xmlns="http://www.w-equiv.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>;
+const IconFb = () => <svg xmlns="http://www.w-equiv.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>;
+const IconYt = () => <svg xmlns="http://www.w-equiv.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" /><path d="m10 15 5-3-5-3z" /></svg>;
+const IconIn = () => <svg xmlns="http://www.w-equiv.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></svg>;
 
 const Footer = () => {
   const { t, i18n } = useTranslation();
@@ -237,24 +237,24 @@ const Footer = () => {
           <div className="flex flex-col space-y-4">
             <button 
               onClick={() => setIsLocationModalOpen(true)} 
-              className="text-white flex items-center text-[11px] tracking-widest hover:text-gold-500 transition-colors group"
+              className="text-white flex flex-col md:flex-row items-center md:items-center text-[10px] md:text-[11px] tracking-[0.2em] md:tracking-widest hover:text-gold-500 transition-colors group space-y-2 md:space-y-0"
             >
-              <span className="font-bold border-b border-white/20 pb-0.5 group-hover:border-gold-500 transition-all">Change location and language</span>
-              <span className="mx-2 text-white/40">:</span>
-              <span className="text-white/60 font-medium">{selectedLocation.replace(/\s*\(.*\)/, '')} ({COUNTRY_MAPPING.find(c => c.name === selectedLocation.replace(/\s*\(.*\)/, ''))?.langName || 'English'})</span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-2 transform group-hover:translate-x-1 transition-transform"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+              <span className="font-bold border-b border-white/20 pb-0.5 group-hover:border-gold-500 transition-all uppercase whitespace-nowrap">Change location and language</span>
+              <span className="hidden md:inline mx-2 text-white/40">:</span>
+              <span className="text-white/40 md:text-white/60 font-medium uppercase text-[9px] md:text-[11px]">{selectedLocation.replace(/\s*\(.*\)/, '')} ({COUNTRY_MAPPING.find(c => c.name === selectedLocation.replace(/\s*\(.*\)/, ''))?.langName || 'English'})</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hidden md:block ml-2 transform group-hover:translate-x-1 transition-transform"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
             </button>
           </div>
-          <div className="flex justify-center space-x-8 mt-6 md:mt-0 text-[#A0A0A0]">
-            <a href="https://instagram.com/kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconInsta /></a>
-            <a href="https://facebook.com/kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconFb /></a>
-            <a href="https://youtube.com/@kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconYt /></a>
-            <a href="https://linkedin.com/company/kiks-ultra-luxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconIn /></a>
+          <div className="flex justify-center space-x-6 md:space-x-8 mt-10 md:mt-0 text-[#A0A0A0]">
+            <a href="https://instagram.com/kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors p-1"><IconInsta /></a>
+            <a href="https://facebook.com/kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors p-1"><IconFb /></a>
+            <a href="https://youtube.com/@kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors p-1"><IconYt /></a>
+            <a href="https://linkedin.com/company/kiks-ultra-luxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors p-1"><IconIn /></a>
           </div>
         </div>
-        <div className="text-center md:text-left">
-          <p className="text-[#666666] text-[10px] md:text-[11px] leading-relaxed max-w-4xl tracking-widest mx-auto md:mx-0">
-            Kiksultraluxury ({selectedLocation})
+        <div className="text-center md:text-left mt-12 border-t border-white/5 pt-8">
+          <p className="text-[#666666] text-[8px] md:text-[10px] leading-relaxed max-w-4xl tracking-[0.4em] mx-auto md:mx-0 uppercase font-bold">
+            © COPYRIGHT BY KIKSULTRALUXURY 2026. ALL RIGHTS RESERVED.
           </p>
         </div>
       </div>
