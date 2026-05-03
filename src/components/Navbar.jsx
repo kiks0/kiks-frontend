@@ -335,13 +335,13 @@ const Navbar = () => {
                       <div className="pt-10 mt-4 border-t border-white/5 space-y-6">
                         {!isAuthenticated ? (
                           <div className="space-y-6">
-                            <Link to="/login" className="flex items-center text-[10px] tracking-[0.3em] text-white/30 uppercase hover:text-white font-sans" onClick={() => setIsMobileMenuOpen(false)}>
+                            <Link to="/login" className="flex items-center text-[10px] tracking-[0.3em] text-white/80 uppercase hover:text-white font-sans" onClick={() => setIsMobileMenuOpen(false)}>
                               <User size={16} className="mr-4" strokeWidth={1} /> LOGIN
                             </Link>
                           </div>
                         ) : (
 
-                          <Link to="/account" className="flex items-center text-[10px] tracking-[0.3em] text-white/30 uppercase hover:text-white font-sans" onClick={() => setIsMobileMenuOpen(false)}>
+                          <Link to="/account" className="flex items-center text-[10px] tracking-[0.3em] text-white/80 uppercase hover:text-white font-sans" onClick={() => setIsMobileMenuOpen(false)}>
                             <User size={16} className="mr-4" strokeWidth={1} /> PROFILE
                           </Link>
                         )}
@@ -355,7 +355,7 @@ const Navbar = () => {
                               navigate('/wishlist');
                             }
                           }}
-                          className="flex items-center w-full text-[10px] tracking-[0.3em] text-white/30 uppercase hover:text-white font-sans relative text-left"
+                          className="flex items-center w-full text-[10px] tracking-[0.3em] text-white/80 uppercase hover:text-white font-sans relative text-left"
                         >
                           <Heart size={16} className="mr-4" strokeWidth={1} /> WISHLIST
                           {wishlistCount > 0 && (
@@ -401,7 +401,7 @@ const Navbar = () => {
 
               {/* Footer Info */}
               <div className="p-8 border-t border-white/5 bg-zinc-900/30">
-                <p className="text-[8px] tracking-[0.4em] uppercase text-white/20 text-center">© {new Date().getFullYear()} KIKSULTRALUXURY</p>
+                <p className="text-[8px] tracking-[0.4em] uppercase text-white/60 text-center">© {new Date().getFullYear()} KIKSULTRALUXURY</p>
               </div>
             </motion.div>
           </>
