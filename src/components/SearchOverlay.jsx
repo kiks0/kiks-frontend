@@ -174,7 +174,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
           animate="visible"
           exit="exit"
           variants={containerVariants}
-          className="fixed inset-0 z-[9999] bg-black/98 backdrop-blur-3xl overflow-hidden font-sans"
+          className="fixed inset-0 z-[200001] bg-black/98 backdrop-blur-3xl overflow-hidden font-sans"
         >
           {/* Subtle Background Mark */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.02]">

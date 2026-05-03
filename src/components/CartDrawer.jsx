@@ -39,7 +39,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-md z-[10005]"
+            className="fixed inset-0 bg-black/80 backdrop-blur-md z-[199999]"
           />
 
           {/* Drawer */}
@@ -48,7 +48,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 h-full w-full max-w-[450px] bg-[#0a0a0a] z-[10006] shadow-2xl flex flex-col font-sans"
+            className="fixed right-0 top-0 h-full w-full max-w-[450px] bg-[#0a0a0a] z-[200000] shadow-2xl flex flex-col font-sans"
           >
             {/* Header */}
             <div className="p-5 md:p-8 border-b border-white/5 flex items-center justify-between">
