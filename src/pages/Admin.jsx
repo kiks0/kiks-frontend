@@ -2822,11 +2822,45 @@ const Admin = () => {
                                                         <option value="fixed" className="bg-black">Fixed Amount (₹)</option>
                                                     </select>
                                                 </div>
-                                                <div><label className={labelClasses}>Discount Value</label><input required type="number" className={inputClasses} value={promoFormData.discount_value} onChange={e => setPromoFormData({ ...promoFormData, discount_value: e.target.value })} /></div>
-                                                <div><label className={labelClasses}>Min Order Amount (₹)</label><input type="number" className={inputClasses} value={promoFormData.min_order_amount} onChange={e => setPromoFormData({ ...promoFormData, min_order_amount: e.target.value })} /></div>
-                                                <div><label className={labelClasses}>Max Discount (₹ - for % type)</label><input type="number" className={inputClasses} value={promoFormData.max_discount} onChange={e => setPromoFormData({ ...promoFormData, max_discount: e.target.value })} /></div>
+                                                <div>
+                                                    <label className={labelClasses}>Discount Value {promoFormData.discount_type === 'percentage' ? '(%)' : '(₹)'}</label>
+                                                    <div className="relative">
+                                                        <input required type="number" className={inputClasses} value={promoFormData.discount_value} onChange={e => setPromoFormData({ ...promoFormData, discount_value: e.target.value })} placeholder={promoFormData.discount_type === 'percentage' ? 'e.g. 10' : 'e.g. 500'} />
+                                                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 text-[10px] font-bold">
+                                                            {promoFormData.discount_type === 'percentage' ? '%' : '₹'}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label className={labelClasses}>Min Order Amount (₹ Required)</label>
+                                                    <input type="number" className={inputClasses} value={promoFormData.min_order_amount} onChange={e => setPromoFormData({ ...promoFormData, min_order_amount: e.target.value })} placeholder="e.g. 1000" />
+                                                </div>
+                                                <div>
+                                                    <label className={labelClasses}>Max Discount Cap {promoFormData.discount_type === 'percentage' ? '(₹)' : '(N/A)'}</label>
+                                                    <input 
+                                                        type="number" 
+                                                        disabled={promoFormData.discount_type === 'fixed'}
+                                                        className={`${inputClasses} ${promoFormData.discount_type === 'fixed' ? 'opacity-20 grayscale cursor-not-allowed' : ''}`} 
+                                                        value={promoFormData.max_discount} 
+                                                        onChange={e => setPromoFormData({ ...promoFormData, max_discount: e.target.value })} 
+                                                        placeholder={promoFormData.discount_type === 'percentage' ? 'Max rupee limit' : 'Only for % type'}
+                                                    />
+                                                </div>
+                                                <div className="md:col-span-2 bg-white/[0.02] border border-white/5 p-6 space-y-4">
+                                                    <p className="text-[8px] tracking-[0.3em] font-black uppercase text-gold-500 italic">Calculation Manifest</p>
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-[10px] tracking-widest text-white/60 leading-relaxed">
+                                                        <div className="border-l border-white/10 pl-4">
+                                                            <p className="text-white font-bold mb-1 uppercase">Percentage Mode:</p>
+                                                            <p>Applies {promoFormData.discount_value || 'X'}% discount on Subtotal. {promoFormData.max_discount ? `Limit to ₹${promoFormData.max_discount}.` : ''}</p>
+                                                        </div>
+                                                        <div className="border-l border-white/10 pl-4">
+                                                            <p className="text-white font-bold mb-1 uppercase">Fixed Mode:</p>
+                                                            <p>Subtracts flat ₹{promoFormData.discount_value || 'X'} from Subtotal. Min order ₹{promoFormData.min_order_amount || '0'} required.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div><label className={labelClasses}>Expiry Date</label><input type="date" className={inputClasses} value={promoFormData.expiry_date} onChange={e => setPromoFormData({ ...promoFormData, expiry_date: e.target.value })} /></div>
-                                                <div><label className={labelClasses}>Usage Limit (Total)</label><input type="number" className={inputClasses} value={promoFormData.usage_limit} onChange={e => setPromoFormData({ ...promoFormData, usage_limit: e.target.value })} /></div>
+                                                <div><label className={labelClasses}>Usage Limit (Total)</label><input type="number" className={inputClasses} value={promoFormData.usage_limit} onChange={e => setPromoFormData({ ...promoFormData, usage_limit: e.target.value })} placeholder="e.g. 100" /></div>
                                             </>
                                         ) : (
                                             <>
