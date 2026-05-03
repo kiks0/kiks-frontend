@@ -28,8 +28,6 @@ const Footer = () => {
         const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/collections`);
         const data = await res.json();
         if (data && data.length > 0) {
-          // APIs usually return newest first, if not, we pick the last one.
-          // Let's check the first one as standard for 'latest'.
           setLatestCollectionSlug(data[0].slug);
         }
       } catch (err) {
@@ -39,12 +37,12 @@ const Footer = () => {
     fetchLatestCollection();
   }, []);
 
-  const locations = COUNTRY_MAPPING;
+  const locations = [...COUNTRY_MAPPING].sort((a, b) => a.name.localeCompare(b.name));
 
   const handleValidateLocation = () => {
     const loc = applyLocationSettings(selectedLocation, i18n, dispatch, setCurrency);
     if (loc) {
-      window.location.reload(); // Refresh to apply all translations and rates perfectly
+      window.location.reload(); 
     }
     setIsLocationModalOpen(false);
   };
@@ -61,42 +59,57 @@ const Footer = () => {
     <footer className="bg-black text-white pt-8 md:pt-20 pb-10 font-sans overflow-hidden border-t border-white/10">
 
       {/* Location Selection Modal (Chanel Style) */}
-      {isLocationModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setIsLocationModalOpen(false)}></div>
-          <div className="bg-[#0A0A0A] text-white w-full max-w-[600px] p-6 sm:p-10 md:p-16 relative z-10 text-center animate-fade-in shadow-2xl border border-white/10 mx-4">
-            <button onClick={() => setIsLocationModalOpen(false)} className="absolute top-6 right-6 text-white hover:text-gold-500 transition-all">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M18 6L6 18M6 6l12 12"></path></svg>
-            </button>
-            <h2 className="text-[12px] sm:text-[14px] md:text-[18px] font-black tracking-[0.2em] sm:tracking-[0.4em] mb-6 sm:mb-10 leading-relaxed px-2 sm:px-4 text-white uppercase font-serif">
-              {t('footer.modal.title', { location: selectedLocation })}
-            </h2>
-            <p className="text-[9px] sm:text-[11px] md:text-[12px] text-white/50 tracking-[0.15em] sm:tracking-[0.2em] mb-8 sm:mb-12 max-w-sm mx-auto leading-relaxed uppercase font-black px-2">
-              {t('footer.modal.desc')}
-            </p>
-            <div className="mb-12">
-              <p className="text-[8px] sm:text-[9px] md:text-[10px] font-black tracking-[0.3em] mb-6 text-white/30 uppercase">{t('footer.modal.change')}</p>
-              <div className="relative border-b border-white/20 pb-4">
-                <select
-                  value={selectedLocation}
-                  onChange={(e) => setSelectedLocation(e.target.value)}
-                  className="w-full bg-transparent text-[12px] sm:text-[14px] md:text-[16px] text-center focus:outline-none cursor-pointer appearance-none px-4 sm:px-8 text-white font-bold tracking-[0.1em] sm:tracking-widest uppercase"
-                >
-                  {locations.map(loc => (
-                    <option key={loc.name} value={loc.name} className="text-white bg-[#0A0A0A]">{loc.name}</option>
-                  ))}
-                </select>
-                <div className="absolute right-0 top-1 pointer-events-none text-white/40">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"></path></svg>
+      <AnimatePresence>
+        {isLocationModalOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          >
+            <div className="absolute inset-0 bg-black/90 backdrop-blur-md" onClick={() => setIsLocationModalOpen(false)}></div>
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-[#0A0A0A] text-white w-full max-w-[500px] p-8 sm:p-12 relative z-10 text-center shadow-2xl border border-white/10"
+            >
+              <button onClick={() => setIsLocationModalOpen(false)} className="absolute top-6 right-6 text-white/40 hover:text-white transition-all">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+              </button>
+              
+              <h2 className="text-[14px] font-bold tracking-[0.4em] mb-4 uppercase font-serif">Select Location</h2>
+              <p className="text-[10px] text-white/40 tracking-[0.2em] mb-10 uppercase leading-relaxed">
+                Choose your region to see appropriate currency and delivery options.
+              </p>
+
+              <div className="mb-12">
+                <div className="relative border-b border-white/20 pb-4">
+                  <select
+                    value={selectedLocation}
+                    onChange={(e) => setSelectedLocation(e.target.value)}
+                    className="w-full bg-transparent text-[16px] text-center focus:outline-none cursor-pointer appearance-none px-8 text-white font-medium tracking-widest uppercase"
+                  >
+                    {locations.map(loc => (
+                      <option key={loc.name} value={loc.name} className="text-white bg-[#0A0A0A]">{loc.name}</option>
+                    ))}
+                  </select>
+                  <div className="absolute right-0 top-1 pointer-events-none text-white/40">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"></path></svg>
+                  </div>
                 </div>
               </div>
-            </div>
-            <button onClick={handleValidateLocation} className="w-full md:w-auto bg-white text-black px-10 md:px-20 py-4 md:py-5 text-[10px] md:text-[12px] font-black tracking-[0.3em] md:tracking-[0.5em] uppercase hover:bg-gold-500 hover:text-white transition-all duration-500 shadow-xl">
-              {t('footer.validate')}
-            </button>
-          </div>
-        </div>
-      )}
+
+              <button 
+                onClick={handleValidateLocation} 
+                className="w-full bg-white text-black py-5 text-[11px] font-black tracking-[0.5em] uppercase hover:bg-gold-500 hover:text-white transition-all duration-500"
+              >
+                Apply Selection
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Top Centered Brand Logo */}
       <div className="flex flex-col items-center mb-8 md:mb-20 font-serif">
@@ -105,144 +118,90 @@ const Footer = () => {
         </Link>
       </div>
 
-      {/* Main 4-Column Architectural Grid */}
-      <div className="container mx-auto px-6 md:px-12 lg:px-24 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 lg:gap-8 mb-8 md:mb-20">
+      {/* Main Grid */}
+      <div className="container mx-auto px-6 md:px-12 lg:px-24 grid grid-cols-1 md:grid-cols-3 gap-12 mb-8 md:mb-20">
         <div className="text-center md:text-left">
-          <h4 className="text-white text-[10px] md:text-[11px] font-bold uppercase tracking-wider mb-4">{t('footer.explore')}</h4>
+          <h4 className="text-white text-[10px] font-bold uppercase tracking-wider mb-4">Explore</h4>
           <ul className="space-y-[10px]">
-            <li><Link to={`/collection/${latestCollectionSlug}`} className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">{t('footer.links.new')}</Link></li>
-          </ul>
-          <div className="mt-8 flex items-center justify-center md:justify-start space-x-3">
-            <span className="text-[12px] md:text-[13px] text-[#A0A0A0]">{t('footer.high_contrast')}</span>
-            <button onClick={() => setIsHighContrast(!isHighContrast)} className={`w-9 h-4 rounded-full relative focus:outline-none flex items-center transition-colors duration-300 ${isHighContrast ? 'bg-white' : 'bg-[#333]'}`}>
-              <div className={`w-3.5 h-3.5 rounded-full absolute top-[1px] transition-all duration-300 ${isHighContrast ? 'bg-black left-[19px]' : 'bg-gray-400 left-[1px]'}`}></div>
-            </button>
-          </div>
-        </div>
-        <div className="text-center md:text-left">
-          <h4 className="text-white text-[10px] md:text-[11px] font-bold uppercase tracking-wider mb-4">{t('footer.services')}</h4>
-          <ul className="space-y-[10px]">
-
-            <li><Link to="/account" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">{t('footer.links.account')}</Link></li>
-            <li><Link to="/refund-policy" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Refund Policy</Link></li>
-            <li><Link to="/return-policy" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Return Policy</Link></li>
-            <li><Link to="/cancellation-policy" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Cancellation Policy</Link></li>
-
+            <li><Link to={`/collection/${latestCollectionSlug}`} className="text-[12px] text-[#A0A0A0] hover:text-white transition-colors">New Arrivals</Link></li>
+            <li><Link to="/account" className="text-[12px] text-[#A0A0A0] hover:text-white transition-colors">My Account</Link></li>
           </ul>
         </div>
 
         <div className="text-center md:text-left">
-          <h4 className="text-white text-[10px] md:text-[11px] font-bold uppercase tracking-wider mb-4">{t('footer.house')}</h4>
-          <ul className="space-y-[10px] mb-8">
-            <li><Link to="/terms-conditions" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Terms & Conditions</Link></li>
-            <li><Link to="/privacy-policy" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Privacy Policy</Link></li>
-            <li><Link to="/disclaimer" className="text-[12px] md:text-[13px] text-[#A0A0A0] hover:text-white transition-colors">Disclaimer</Link></li>
+          <h4 className="text-white text-[10px] font-bold uppercase tracking-wider mb-4">Legal</h4>
+          <ul className="space-y-[10px]">
+            <li><Link to="/terms-conditions" className="text-[12px] text-[#A0A0A0] hover:text-white transition-colors">Terms & Conditions</Link></li>
+            <li><Link to="/privacy-policy" className="text-[12px] text-[#A0A0A0] hover:text-white transition-colors">Privacy Policy</Link></li>
+            <li><Link to="/refund-policy" className="text-[12px] text-[#A0A0A0] hover:text-white transition-colors">Refund Policy</Link></li>
           </ul>
+        </div>
 
-          {/* Compact Newsletter */}
-          <div className="mt-6">
-            <h4 className="text-white text-[10px] font-bold uppercase tracking-wider mb-6">Newsletter</h4>
-            <form 
-              onSubmit={async (e) => {
-                e.preventDefault();
-                try {
-                  const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/newsletter/subscribe`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: newsletterEmail, source: 'footer' })
-                  });
-                  
-                  if (res.ok) {
-                    setIsSubscribed(true);
-                    setNewsletterEmail('');
-                    setTimeout(() => setIsSubscribed(false), 4000);
-                  } else {
-                    console.error("Server rejected subscription");
-                  }
-                } catch (err) {
-                  console.error("Newsletter subscription failed", err);
+        <div className="text-center md:text-left">
+          <h4 className="text-white text-[10px] font-bold uppercase tracking-wider mb-4">Newsletter</h4>
+          <form 
+            onSubmit={async (e) => {
+              e.preventDefault();
+              try {
+                const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/newsletter/subscribe`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ email: newsletterEmail, source: 'footer' })
+                });
+                if (res.ok) {
+                  setIsSubscribed(true);
+                  setNewsletterEmail('');
+                  setTimeout(() => setIsSubscribed(false), 4000);
                 }
-              }}
-              className="relative border-b border-white/20 pb-2 group focus-within:border-white transition-all"
-            >
-              <label className="text-[10px] text-[#A0A0A0] block mb-2 font-medium">Email</label>
-              <div className="flex items-center">
-                <input 
-                  type="email" 
-                  required
-                  value={newsletterEmail}
-                  onChange={(e) => setNewsletterEmail(e.target.value)}
-                  placeholder="Your address"
-                  className="w-full bg-transparent text-[13px] text-white outline-none placeholder:text-white/10 text-center md:text-left"
-                />
-                <button type="submit" className="text-white hover:text-gold-500 transition-colors ml-4">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
-                </button>
-              </div>
-            </form>
-          </div>
+              } catch (err) {}
+            }}
+            className="relative border-b border-white/20 pb-2 flex items-center"
+          >
+            <input 
+              type="email" 
+              required
+              value={newsletterEmail}
+              onChange={(e) => setNewsletterEmail(e.target.value)}
+              placeholder="YOUR EMAIL"
+              className="w-full bg-transparent text-[12px] text-white outline-none placeholder:text-white/20 uppercase tracking-widest"
+            />
+            <button type="submit" className="text-white hover:text-gold-500 transition-colors ml-4">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+            </button>
+          </form>
         </div>
-
-        {/* Success Popup */}
-        <AnimatePresence>
-          {isSubscribed && (
-            <motion.div 
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 50 }}
-              className="fixed bottom-12 right-12 z-[300] bg-white text-black p-8 shadow-2xl border border-black/10 flex items-center space-x-6"
-            >
-              <div className="w-10 h-10 rounded-full border border-black flex items-center justify-center">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-              </div>
-              <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em]">Welcome to KIKS</p>
-                <p className="text-[10px] text-black/60 uppercase tracking-widest mt-1">You are now part of the circle</p>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
 
       {/* Bottom Footer Section */}
       <div className="container mx-auto px-6 md:px-12 lg:px-24">
-        <div className="border-b border-white/10 pb-6 mb-6 flex flex-col md:flex-row justify-between items-center md:items-center">
-          <div className="flex flex-col space-y-4">
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[#A0A0A0] text-[10px] tracking-[0.1em] uppercase">
-              {locations.filter(l => ['India', 'United States', 'Germany', 'Spain', 'France'].includes(l.name)).map(loc => (
-                <button 
-                  key={loc.name}
-                  onClick={() => {
-                    applyLocationSettings(loc.name, i18n, dispatch, setCurrency);
-                    window.location.reload();
-                  }}
-                  className={`hover:text-white transition-colors ${selectedLocation === loc.name ? 'text-white font-black' : ''}`}
-                >
-                  {loc.name} ({loc.langName})
-                </button>
-              ))}
-              <button 
-                onClick={() => setIsLocationModalOpen(true)} 
-                className="text-white flex items-center font-black"
-              >
-                {t('footer.detect')} <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+        <div className="border-t border-white/10 pt-10 flex flex-col md:flex-row justify-between items-center">
+          
+          {/* THE NEW CLEAN SELECTOR */}
+          <div className="flex flex-col items-center md:items-start mb-8 md:mb-0">
+            <button 
+              onClick={() => setIsLocationModalOpen(true)} 
+              className="group flex items-center space-x-4 text-[11px] font-black tracking-[0.3em] uppercase hover:text-white transition-all"
+            >
+              <span className="text-white/40 group-hover:text-white transition-colors">Location</span>
+              <span className="text-white">{selectedLocation}</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/40 group-hover:text-white group-hover:translate-x-1 transition-all"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+            </button>
+            <div className="mt-4 flex items-center space-x-3">
+              <span className="text-[10px] text-white/30 tracking-widest uppercase">Contrast</span>
+              <button onClick={() => setIsHighContrast(!isHighContrast)} className={`w-8 h-4 rounded-full relative transition-colors duration-300 ${isHighContrast ? 'bg-white' : 'bg-white/10'}`}>
+                <div className={`w-3 h-3 rounded-full absolute top-[2px] transition-all duration-300 ${isHighContrast ? 'bg-black left-[17px]' : 'bg-white/40 left-[2px]'}`}></div>
               </button>
             </div>
-            
-            <div className="text-[#A0A0A0] text-[11px] tracking-widest uppercase">
-              Current: <span className="text-white font-medium">{selectedLocation}</span>
-            </div>
           </div>
-          <div className="flex justify-center space-x-8 mt-6 md:mt-0 text-[#A0A0A0]">
+
+          <div className="flex justify-center space-x-10 text-white/40 mb-8 md:mb-0">
             <a href="https://instagram.com/kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconInsta /></a>
             <a href="https://facebook.com/kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconFb /></a>
             <a href="https://youtube.com/@kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconYt /></a>
-            <a href="https://linkedin.com/company/kiks-ultra-luxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><IconIn /></a>
           </div>
-        </div>
-        <div className="text-center md:text-left">
-          <p className="text-[#666666] text-[10px] md:text-[11px] leading-relaxed max-w-4xl tracking-widest mx-auto md:mx-0">
-            Kiksultraluxury ({selectedLocation})
+
+          <p className="text-white/20 text-[10px] tracking-[0.4em] uppercase">
+            &copy; {new Date().getFullYear()} KIKS ULTRA LUXURY
           </p>
         </div>
       </div>
