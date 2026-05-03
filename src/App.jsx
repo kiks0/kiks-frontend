@@ -61,14 +61,11 @@ function App() {
         });
         
         if (res.status === 401) {
-          console.warn("[SECURITY] Session invalidated by authority. Executing professional logout.");
           const { logout } = await import('./store/authSlice');
           dispatch(logout());
           window.location.href = '/login?reason=session_expired';
         }
-      } catch (e) {
-        console.error("Session verification failed", e);
-      }
+      } catch (e) {}
     };
 
     checkSession();

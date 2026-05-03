@@ -78,7 +78,7 @@ const resources = {
         "experience_eternal": "Experience the essence",
         "enter_vault": "Shop Collection"
       },
-        "collection": {
+      "collection": {
         "not_found": "Collection Not Found",
         "mastery": "Quality in every note",
         "open_vault": "Explore Collection",
@@ -128,14 +128,14 @@ const resources = {
     translation: {
       "nav": { "collections": "संग्रह", "blog": "ब्लॉग", "contact": "संपर्क", "login": "लॉगइन", "register": "पंजीकरण", "admin": "एडमिन", "profile": "प्रोफ़ाइल", "wishlist": "विशलिस्ट", "vault_empty": "वॉल्ट खाली है" },
       "common": { "scroll": "स्क्रॉल" },
-      "footer": { 
+      "footer": {
         "explore": "अन्वेषण", "services": "सेवाएं", "boutique": "बुटिक", "house": "KIKS हाउस", "detect": "स्थान बदलें", "high_contrast": "कंट्रास्ट", "validate": "पुष्टि",
         "modal": { "title": "आप Kiks {{location}} वेबसाइट देख रहे हैं", "desc": "स्थान चयन KIKS को आपकी स्थानीयता के संबंध में आपको सर्वोत्तम सेवाएँ प्रदान करने की अनुमति देता है।", "change": "अपना स्थान बदलें" },
         "links": { "discover": "संग्रह खोजें", "new": "नया आगमन", "payment": "भुगतान के तरीके", "shipping": "शिपिंग विकल्प", "account": "मेरा खाता", "returns": "प्रतिफल", "care": "देखभाल और सेवाएँ", "faq": "सामान्य प्रश्न", "find": "एक बुटीक खोजें", "book": "एक नियुक्ति बुक करें", "careers": "करियर", "legal": "कानूनी बयान", "privacy": "गोपनीयता नीति", "report": "सोसाइटी को रिपोर्ट", "fighting": "जालसाजी से लड़ना", "sustainability": "सस्टेनेबिलिटी-लिंक्ड बॉन्ड अपडेट", "perfumery": "जिम्मेदार इत्र बयान" }
       },
-      "home": { 
-        "hero_subtitle": "लालित्य के सार का अनुभव करें।", 
-        "discover": "और जानें", 
+      "home": {
+        "hero_subtitle": "लालित्य के सार का अनुभव करें।",
+        "discover": "और जानें",
         "elite_title": "अभिजात वर्ग संग्रह",
         "elite_desc": "गर्मी और कामुकता का सुनहरा आलिंगन।",
         "discover_btn": "खोजें",
@@ -162,14 +162,14 @@ const resources = {
     translation: {
       "nav": { "collections": "系列", "blog": "博客", "contact": "联系我们", "login": "登录", "register": "注册", "admin": "管理员", "profile": "个人资料", "wishlist": "心愿单", "vault_empty": "金库已空" },
       "common": { "scroll": "滚动" },
-      "footer": { 
+      "footer": {
         "explore": "探索 KIKS.COM", "services": "在线服务", "boutique": "精品店服务", "house": "KIKS 之家", "detect": "更改位置和语言", "high_contrast": "开启高对比度", "validate": "验证",
         "modal": { "title": "您正在访问 Kiks {{location}} 网站", "desc": "位置选择允许 KIKS 根据您的本地化为您提供最佳服务。", "change": "更改您的位置" },
         "links": { "discover": "探索系列", "new": "新品上架", "payment": "支付方式", "shipping": "配送选项", "account": "我的账户", "returns": "退货", "care": "保养与服务", "faq": "常见问题", "find": "查找精品店", "book": "预约", "careers": "职业生涯", "legal": "法律声明", "privacy": "隐私政策", "report": "向社会报告", "fighting": "打击假冒", "sustainability": "可持续发展挂钩债券更新", "perfumery": "负责任香氛声明" }
       },
-      "home": { 
-        "hero_subtitle": "体验前所未有的优雅精华。", 
-        "discover": "发现更多", 
+      "home": {
+        "hero_subtitle": "体验前所未有的优雅精华。",
+        "discover": "发现更多",
         "elite_title": "精英系列",
         "elite_desc": "温暖与感性的金色拥抱。",
         "discover_btn": "发现",
@@ -196,14 +196,14 @@ const resources = {
     translation: {
       "nav": { "collections": "COLECCIONES", "blog": "BLOG", "contact": "CONTACTO", "login": "INICIAR SESIÓN", "register": "REGISTRARSE", "admin": "ADMIN", "profile": "PERFIL", "wishlist": "DESEOS" },
       "common": { "scroll": "Desplazarse" },
-      "footer": { 
+      "footer": {
         "explore": "EXPLORAR KIKS.COM", "services": "SERVICIOS ONLINE", "boutique": "SERVICIOS BOUTIQUE", "house": "LA CASA KIKS", "detect": "Cambiar ubicación e idioma", "high_contrast": "Contraste alto", "validate": "Validar",
         "modal": { "title": "Estás visitando el sitio web de Kiks {{location}}", "desc": "La selección de ubicación le permite a KIKS brindarle los mejores servicios con respecto a su localización.", "change": "Cambia tu ubicación" },
         "links": { "discover": "Descubre las Colecciones", "new": "Novedades", "payment": "Métodos de Pago", "shipping": "Opciones de Envío", "account": "Mi Cuenta", "returns": "Devoluciones", "care": "Cuidado y Servicios", "faq": "Preguntas Frecuentes", "find": "Buscar una Boutique", "book": "Reservar cita", "careers": "Carreras", "legal": "Declaración Legal", "privacy": "Política de Privacidad", "report": "Informe a la Sociedad", "fighting": "Lucha contra las falsificaciones", "sustainability": "Actualización de bonos vinculados a la sostenibilidad", "perfumery": "Declaración de Perfumería Responsable" }
       },
-      "home": { 
-        "hero_subtitle": "Experimente la esencia de la elegancia como nunca antes.", 
-        "discover": "Descubrir más", 
+      "home": {
+        "hero_subtitle": "Experimente la esencia de la elegancia como nunca antes.",
+        "discover": "Descubrir más",
         "elite_title": "Colección Élite",
         "elite_desc": "Un abrazo dorado de calidez y sensualidad.",
         "discover_btn": "Descubrir",
@@ -230,14 +230,14 @@ const resources = {
     translation: {
       "nav": { "collections": "KOLLEKTIONEN", "blog": "BLOG", "contact": "KONTAKT", "login": "ANMELDEN", "register": "REGISTRIEREN", "admin": "ADMIN", "profile": "PROFIL", "wishlist": "WUNSCHLISTE" },
       "common": { "scroll": "Scrollen" },
-      "footer": { 
+      "footer": {
         "explore": "KIKS.COM ENTDECKEN", "services": "ONLINE SERVICES", "boutique": "BOUTIQUE SERVICES", "house": "DAS HAUS KIKS", "detect": "Standort und Sprache ändern", "high_contrast": "Hoher Kontrast", "validate": "Bestätigen",
         "modal": { "title": "Sie besuchen die KIKS {{location}} Website", "desc": "Die Standortwahl ermöglicht es KIKS, Ihnen den besten Service in Bezug auf Ihren Standort zu bieten.", "change": "Ändern Sie Ihren Standort" },
         "links": { "discover": "Kollektionen entdecken", "new": "Neuheiten", "payment": "Zahlungsmethoden", "shipping": "Versandoptionen", "account": "Mein Konto", "returns": "Rücksendungen", "care": "Pflege & Services", "faq": "FAQ", "find": "Boutique finden", "book": "Termin buchen", "careers": "Karriere", "legal": "Rechtliche Hinweise", "privacy": "Datenschutz", "report": "Bericht an die Gesellschaft", "fighting": "Kampf gegen Fälschungen", "sustainability": "Sustainability-Linked Bond Update", "perfumery": "Verantwortungsvolle Parfümerie" }
       },
-      "home": { 
-        "hero_subtitle": "Erleben Sie die Essenz der Eleganz.", 
-        "discover": "Mehr entdecken", 
+      "home": {
+        "hero_subtitle": "Erleben Sie die Essenz der Eleganz.",
+        "discover": "Mehr entdecken",
         "elite_title": "Elite-Kollektion",
         "elite_desc": "Eine goldene Umarmung von Wärme und Sinnlichkeit.",
         "discover_btn": "Entdecken",
@@ -264,14 +264,14 @@ const resources = {
     translation: {
       "nav": { "collections": "COLLEZIONI", "blog": "BLOG", "contact": "CONTATTI", "login": "ACCEDI", "register": "REGISTRATI", "admin": "ADMIN", "profile": "PROFILO", "wishlist": "WISHLIST" },
       "common": { "scroll": "Scorrere" },
-      "footer": { 
+      "footer": {
         "explore": "SCOPRI KIKS.COM", "services": "SERVIZI ONLINE", "boutique": "SERVIZI BOUTIQUE", "house": "LA MAISON KIKS", "detect": "Cambia località e lingua", "high_contrast": "Alto contrasto", "validate": "Conferma",
         "modal": { "title": "Stai visitando il sito web Kiks {{location}}", "desc": "La scelta della posizione consente a KIKS di fornirti i migliori servizi in base alla tua localizzazione.", "change": "Cambia la tua posizione" },
         "links": { "discover": "Scopri le Collezioni", "new": "Nuovi Arrivi", "payment": "Metodi di Pagamento", "shipping": "Opzioni di Spedizione", "account": "Il mio Account", "returns": "Resi", "care": "Cura e Servizi", "faq": "FAQ", "find": "Trova una Boutique", "book": "Prenota un appuntamento", "careers": "Carriere", "legal": "Note Legali", "privacy": "Privacy Policy", "report": "Rapporto alla Società", "fighting": "Lotta alla contraffazione", "sustainability": "Sustainability-Linked Bond Update", "perfumery": "Dichiarazione Profumeria Responsabile" }
       },
-      "home": { 
-        "hero_subtitle": "Vivi l'essenza dell'eleganza.", 
-        "discover": "Scopri di più", 
+      "home": {
+        "hero_subtitle": "Vivi l'essenza dell'eleganza.",
+        "discover": "Scopri di più",
         "elite_title": "Collezione Elite",
         "elite_desc": "Un abbraccio dorato di calore e sensualità.",
         "discover_btn": "Scopri",
@@ -298,14 +298,14 @@ const resources = {
     translation: {
       "nav": { "collections": "КОЛЛЕКЦИИ", "blog": "БЛОГ", "contact": "КОНТАКТЫ", "login": "ВХОД", "register": "РЕГИСТРАЦИЯ", "admin": "АДМИН", "profile": "ПРОФИЛЬ", "wishlist": "ИЗБРАННОЕ" },
       "common": { "scroll": "Прокрутка" },
-      "footer": { 
+      "footer": {
         "explore": "ИЗУЧИТЬ KIKS.COM", "services": "ОНЛАЙН СЕРВИСЫ", "boutique": "БУТИК СЕРВИСЫ", "house": "ДОМ KIKS", "detect": "Изменить регион и язык", "high_contrast": "Высокий контраст", "validate": "Подтвердить",
         "modal": { "title": "Вы посещаете сайт Kiks {{location}}", "desc": "Выбор местоположения позволяет KIKS предоставлять вам лучшие услуги с учетом вашего региона.", "change": "Измените ваше местоположение" },
         "links": { "discover": "Посмотреть коллекции", "new": "Новинки", "payment": "Способы оплаты", "shipping": "Варианты доставки", "account": "Мой аккаунт", "returns": "Возвраты", "care": "Уход и сервис", "faq": "FAQ", "find": "Найти бутик", "book": "Записаться на прием", "careers": "Карьера", "legal": "Юридическая информация", "privacy": "Политика конфиденциальности", "report": "Отчет обществу", "fighting": "Борьба с подделками", "sustainability": "Sustainability-Linked Bond Update", "perfumery": "Ответственная парфюмерия" }
       },
-      "home": { 
-        "hero_subtitle": "Почувствуйте эссенцию элегантности.", 
-        "discover": "Узнать больше", 
+      "home": {
+        "hero_subtitle": "Почувствуйте эссенцию элегантности.",
+        "discover": "Узнать больше",
         "elite_title": "Элитная коллекция",
         "elite_desc": "Золотое объятие тепла и чувственности.",
         "discover_btn": "Узнать",

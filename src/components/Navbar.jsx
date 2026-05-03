@@ -44,7 +44,7 @@ const Navbar = () => {
     fetch(`${API_URL}/api/collections`)
       .then(res => res.json())
       .then(data => setNavCollections(data))
-      .catch(err => console.error("Nav collections error:", err));
+      .catch(() => {});
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -95,7 +95,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled || isAccountPage ? 'bg-black/95 backdrop-blur-md border-b border-white/5 py-3 md:py-4 shadow-2xl text-white' : 'bg-transparent py-4 md:py-6 text-white'}`}>
+      <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled || isAccountPage ? 'bg-black/90 backdrop-blur-md border-b border-white/5 py-1.5 md:py-2.5 shadow-2xl text-white' : 'bg-transparent py-2.5 md:py-4 text-white'}`}>
         <div className="container mx-auto px-5 lg:px-12 flex flex-col items-center">
 
           {/* ======================================= */}
@@ -118,10 +118,12 @@ const Navbar = () => {
               <Link
                 to="/"
                 onClick={(e) => {
-                  if (window.location.pathname === '/') {
-                    e.preventDefault();
-                    window.location.reload();
-                  }
+                  try {
+                    if (window.location.pathname === '/') {
+                      e.preventDefault();
+                      window.location.reload();
+                    }
+                  } catch (e) {}
                   setIsMobileMenuOpen(false);
                 }}
                 className="flex items-center justify-center transform transition hover:opacity-70 pointer-events-auto"
@@ -160,7 +162,7 @@ const Navbar = () => {
           {/* ========================================= */}
           {/* DESKTOP NAVBAR (Visible only on Desktop)  */}
           {/* ========================================= */}
-          <div className="hidden lg:flex flex-col items-center w-full relative z-50">
+          <div className="hidden md:flex flex-col items-center w-full relative z-50">
 
             {/* Brand Logo - Centered Top */}
             <Link
@@ -171,7 +173,7 @@ const Navbar = () => {
                   window.location.reload();
                 }
               }}
-              className="flex items-center justify-center transform transition hover:opacity-70 z-50 relative mt-1 mb-0"
+              className="flex items-center justify-center transform transition hover:opacity-70 z-50 relative mt-2 mb-1"
             >
               <img
                 src="/logo-kiks.webp"
@@ -182,7 +184,7 @@ const Navbar = () => {
 
             {/* Desktop Menu - Centered Below Logo */}
             <div
-              className={`w-full flex items-center justify-center relative transition-all duration-500 ease-in-out px-10 mt-1 ${showMenu ? 'max-h-24 opacity-100 mb-1' : 'max-h-0 opacity-0 mb-0 pointer-events-none'
+              className={`w-full flex items-center justify-center relative transition-all duration-500 ease-in-out px-10 ${showMenu ? 'max-h-24 opacity-100 mb-1' : 'max-h-0 opacity-0 mb-0 pointer-events-none'
                 }`}
             >
               <div className="flex space-x-12 text-[11px] tracking-[0.15em] font-medium items-center mx-auto text-white font-sans">
