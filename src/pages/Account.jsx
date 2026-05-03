@@ -245,7 +245,7 @@ const Account = () => {
       {/* CONCIERGE MODAL */}
       <AnimatePresence>
         {isConciergeOpen && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 md:p-10">
+          <div className="fixed inset-0 z-[200002] flex items-center justify-center p-4 sm:p-6 md:p-10">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -258,7 +258,7 @@ const Account = () => {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-lg bg-[#0F0F0F] border border-white/10 p-6 sm:p-10 md:p-12 overflow-y-auto max-h-[90vh] custom-scrollbar"
+              className="relative w-full max-w-[480px] bg-[#0F0F0F] border border-white/10 p-5 sm:p-10 md:p-12 overflow-y-auto max-h-[85vh] md:max-h-[90vh] shadow-[0_0_100px_rgba(0,0,0,0.8)] font-sans"
             >
               <button 
                 onClick={() => setIsConciergeOpen(false)}
