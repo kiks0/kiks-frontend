@@ -210,7 +210,13 @@ const CartDrawer = ({ isOpen, onClose }) => {
                 </div>
                 
                 <div className="space-y-3">
+                  {items.some(i => i.isOOS) && (
+                    <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 text-red-500 text-[8px] tracking-widest uppercase text-center animate-pulse">
+                      Remove out of stock items to proceed
+                    </div>
+                  )}
                   <button 
+                    disabled={items.some(i => i.isOOS)}
                     onClick={() => {
                       onClose();
                       if (!isAuthenticated) {
@@ -219,10 +225,10 @@ const CartDrawer = ({ isOpen, onClose }) => {
                         navigate('/checkout');
                       }
                     }}
-                    className="flex h-14 w-full items-center justify-center bg-white text-black text-[11px] font-black tracking-[0.3em] uppercase hover:bg-gold-500 transition-all duration-500 relative group overflow-hidden"
+                    className="flex h-14 w-full items-center justify-center bg-white text-black text-[11px] font-black tracking-[0.3em] uppercase hover:bg-gold-500 transition-all duration-500 relative group overflow-hidden disabled:opacity-20 disabled:cursor-not-allowed"
                   >
                     <span className="relative z-10 flex items-center">
-                      {t('cart.checkout')} <ArrowRight size={16} className="ml-3 group-hover:translate-x-1 transition-transform" />
+                      {items.some(i => i.isOOS) ? 'OOS ITEMS DETECTED' : t('cart.checkout')} <ArrowRight size={16} className="ml-3 group-hover:translate-x-1 transition-transform" />
                     </span>
                   </button>
                   <button 
