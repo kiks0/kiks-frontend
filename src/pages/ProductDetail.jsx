@@ -469,26 +469,10 @@ const ProductDetail = () => {
                                     {!isAuthenticated && (
                                         <div className="space-y-4">
                                             <input
-                                                type="text"
-                                                placeholder="FULL NAME"
-                                                value={notifyName}
-                                                onChange={(e) => setNotifyName(e.target.value.toUpperCase())}
-                                                required
-                                                className="w-full bg-black border border-white/10 p-5 text-[10px] tracking-[0.2em] uppercase focus:border-white outline-none transition-colors"
-                                            />
-                                            <input
                                                 type="email"
                                                 placeholder="EMAIL ADDRESS"
                                                 value={notifyEmail}
                                                 onChange={(e) => setNotifyEmail(e.target.value.toUpperCase())}
-                                                required
-                                                className="w-full bg-black border border-white/10 p-5 text-[10px] tracking-[0.2em] uppercase focus:border-white outline-none transition-colors"
-                                            />
-                                            <input
-                                                type="tel"
-                                                placeholder="MOBILE NUMBER"
-                                                value={notifyPhone}
-                                                onChange={(e) => setNotifyPhone(e.target.value)}
                                                 required
                                                 className="w-full bg-black border border-white/10 p-5 text-[10px] tracking-[0.2em] uppercase focus:border-white outline-none transition-colors"
                                             />
