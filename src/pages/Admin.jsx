@@ -237,26 +237,6 @@ const Admin = () => {
         finally { setTabLoading('reviews', false); }
     };
 
-    const handleDeleteUser = async (id) => {
-        if (!window.confirm('Are you sure you want to remove this user from the registry? This action is permanent.')) return;
-        try {
-            const res = await fetch(`${API_URL}/api/users/${id}`, {
-                method: 'DELETE',
-                headers: getAdminHeaders()
-            });
-            if (res.ok) {
-                showSuccessToast('User removed successfully.');
-                fetchUsersData();
-            } else {
-                const data = await res.json();
-                showErrorToast(data.msg || 'User deletion failed.');
-            }
-        } catch (e) {
-            console.error("User delete failed", e);
-            showErrorToast('System error during deletion.');
-        }
-    };
-
     const fetchCartsData = async () => {
         setTabLoading('carts', true);
         try {
