@@ -54,6 +54,7 @@ const Admin = () => {
     const [selectedWaitlistIds, setSelectedWaitlistIds] = useState([]);
     const [downloadedHistory, setDownloadedHistory] = useState({ invoices: [], labels: [] });
     const [carts, setCarts] = useState([]);
+    const [selectedCarts, setSelectedCarts] = useState([]);
 
     // Marketing States
     const [popupSettings, setPopupSettings] = useState({ is_active: true, title: '', offer_text: '', image_url: '', delay_seconds: 5, redirect_url: '' });
@@ -275,6 +276,26 @@ const Admin = () => {
                 fetchCartsData();
             } else {
                 showErrorToast('Failed to remove item.');
+            }
+        } catch (e) { showErrorToast('Network error.'); }
+    };
+
+    const handleBulkRemoveCarts = async () => {
+        if (!selectedCarts.length) return;
+        if (!window.confirm(`Permanently clear ${selectedCarts.length} selected vault sessions?`)) return;
+        
+        try {
+            const res = await fetch(`${API_URL}/api/carts/bulk-delete`, {
+                method: 'POST',
+                headers: getAdminHeaders(),
+                body: JSON.stringify({ ids: selectedCarts })
+            });
+            if (res.ok) {
+                showSuccessToast(`${selectedCarts.length} vaults cleared.`);
+                setSelectedCarts([]);
+                fetchCartsData();
+            } else {
+                showErrorToast('Bulk removal failed.');
             }
         } catch (e) { showErrorToast('Network error.'); }
     };
@@ -3088,26 +3109,56 @@ const Admin = () => {
                             </div>
                         ) : (
                             <div className="space-y-8">
-                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white/5 border border-white/10 p-6 md:p-10 gap-6">
-                                    <div>
-                                        <h2 className="text-xl font-serif tracking-[0.2em] uppercase italic">Vault Manifest</h2>
-                                        <p className="text-[10px] tracking-[0.3em] text-white/80 uppercase mt-2">Monitoring active acquisitions & abandoned intent</p>
+                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white/5 border border-white/10 p-6 md:p-10 gap-6">
+                                        <div className="flex items-center gap-6">
+                                            <input 
+                                                type="checkbox" 
+                                                className="w-5 h-5 accent-gold-500 cursor-pointer"
+                                                checked={carts.length > 0 && carts.every(c => selectedCarts.includes(c.id))}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) setSelectedCarts(carts.map(c => c.id));
+                                                    else setSelectedCarts([]);
+                                                }}
+                                            />
+                                            <div>
+                                                <h2 className="text-xl font-serif tracking-[0.2em] uppercase italic">Vault Manifest</h2>
+                                                <p className="text-[10px] tracking-[0.3em] text-white/80 uppercase mt-2">Monitoring active acquisitions & abandoned intent</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-8">
+                                            {selectedCarts.length > 0 && (
+                                                <button 
+                                                    onClick={handleBulkRemoveCarts}
+                                                    className="bg-red-500/10 border border-red-500/30 text-red-500 px-6 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center gap-3"
+                                                >
+                                                    <Trash2 size={14} /> Clear {selectedCarts.length} Selected
+                                                </button>
+                                            )}
+                                            <div className="text-left sm:text-right">
+                                                <p className="text-[9px] text-white/80 uppercase tracking-widest mb-1">Active Vaults</p>
+                                                <p className="text-2xl font-serif text-gold-500">{carts.length}</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="text-left sm:text-right">
-                                        <p className="text-[9px] text-white/80 uppercase tracking-widest mb-1">Active Vaults</p>
-                                        <p className="text-2xl font-serif text-gold-500">{carts.length}</p>
-                                    </div>
-                                </div>
 
                                 <div className="grid grid-cols-1 gap-6">
                                     {carts.length === 0 ? (
                                         <div className="p-20 text-center text-white/60 uppercase tracking-[0.3em] border border-white/5">The manifest is currently clear</div>
                                     ) : (
                                         carts.map(cart => (
-                                            <div key={cart.id} className="bg-white/5 border border-white/10 p-6 md:p-8 hover:border-gold-500/30 transition-all group">
-                                                <div className="flex flex-col md:flex-row justify-between gap-6">
+                                            <div key={cart.id} className={`bg-white/5 border transition-all group relative overflow-hidden ${selectedCarts.includes(cart.id) ? 'border-red-500/50 bg-red-500/[0.02]' : 'border-white/10 hover:border-gold-500/30'}`}>
+                                                <div className="flex flex-col md:flex-row justify-between gap-6 p-6 md:p-8">
                                                     <div className="space-y-4 flex-1">
                                                         <div className="flex items-center gap-4 border-b border-white/5 pb-4">
+                                                            <input 
+                                                                type="checkbox" 
+                                                                className="w-4 h-4 accent-gold-500 cursor-pointer mr-2"
+                                                                checked={selectedCarts.includes(cart.id)}
+                                                                onChange={(e) => {
+                                                                    if (e.target.checked) setSelectedCarts([...selectedCarts, cart.id]);
+                                                                    else setSelectedCarts(selectedCarts.filter(id => id !== cart.id));
+                                                                }}
+                                                            />
                                                             <div className="w-10 h-10 bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-500 font-serif">
                                                                 {(cart.user_email || cart.email)?.[0]?.toUpperCase() || 'G'}
                                                             </div>
