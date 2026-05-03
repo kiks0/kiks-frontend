@@ -330,8 +330,123 @@ const resources = {
   },
   ja: {
     translation: {
-      "nav": { "collections": "コレクション", "blog": "ブログ", "contact": "お問い合わせ", "login": "ログイン", "register": "登録", "admin": "管理", "profile": "プロフィール", "wishlist": "ウィッシュリスト" },
-      "footer": { "explore": "KIKS.COMを探索", "services": "オンラインサービス", "detect": "場所と言語を変更", "high_contrast": "ハイコントラスト", "validate": "確認" }
+      "nav": {
+        "collections": "コレクション",
+        "blog": "ブログ",
+        "contact": "お問い合わせ",
+        "login": "ログイン",
+        "register": "会員登録",
+        "admin": "管理",
+        "profile": "プロフィール",
+        "wishlist": "ウィッシュリスト",
+        "vault_empty": "アイテムがありません"
+      },
+      "common": {
+        "scroll": "スクロール"
+      },
+      "footer": {
+        "explore": "KIKS.COMを探索",
+        "services": "オンラインサービス",
+        "boutique": "ブティックサービス",
+        "house": "THE HOUSE OF KIKS",
+        "detect": "国と言語を変更",
+        "high_contrast": "ハイコントラストを有効にする",
+        "validate": "確認",
+        "modal": {
+          "title": "KIKS {{location}} サイトを訪問中",
+          "desc": "場所を選択することで、お客様の地域に最適なサービスを提供いたします。",
+          "change": "場所を変更する"
+        },
+        "links": {
+          "discover": "コレクションを見る",
+          "new": "新作アイテム",
+          "payment": "お支払い方法",
+          "shipping": "配送オプション",
+          "account": "マイアカウント",
+          "returns": "返品",
+          "care": "ケア＆サービス",
+          "faq": "よくある質問",
+          "find": "ブティックを探す",
+          "book": "来店予約",
+          "careers": "採用情報",
+          "legal": "法的通知",
+          "privacy": "プライバシーポリシー",
+          "report": "社会への報告",
+          "fighting": "模倣品への対策",
+          "sustainability": "サステナビリティ・リンク・ボンド",
+          "perfumery": "責任ある調香声明"
+        }
+      },
+      "home": {
+        "hero_subtitle": "かつてないエレガンスの真髄を体験してください。",
+        "discover": "詳細を見る",
+        "elite_title": "プレミアムコレクション",
+        "elite_desc": "芳醇なアンバーが溶け合う、温もりと官能の黄金の抱擁。",
+        "discover_btn": "探索する",
+        "timeless_trail": "永遠に続くラグジュアリーな余韻",
+        "fragrance_rich": "豊かさを感じさせる香り",
+        "elixir_bottle": "ボトルの中のエリクサー",
+        "potion_enchantment": "純粋な魅惑のポーション。",
+        "into_ocean": "深海へ",
+        "call_deep": "深い青の呼び声。",
+        "teal_glass": "クールなティールガラスに包まれて",
+        "art_creation": "調香の芸術",
+        "symphony_notes": "希少な香料の交響曲。",
+        "creation_desc": "地球上で最も貴重な成分から蒸留されたKIKS Ultra Luxuryのすべての香りは、五感を呼び覚まし、生の感情をクリスタルのボトルに閉じ込めるために細心の注意を払って作られています。",
+        "campaign_title": "新たなクラシック。",
+        "campaign_season": "2026年 春夏コレクション",
+        "view_campaign": "キャンペーンを見る",
+        "la_reina_desc": "豪華さへの荘厳な降下。現代の女性らしさの最高傑作。",
+        "discover_extrait": "エキストレを探索",
+        "el_rey_desc": "大胆で刺激的な香りの絶対的な王者。その場を支配する。",
+        "exclusive_parfums": "限定コレクション",
+        "experience_eternal": "永遠の真髄を体験",
+        "enter_vault": "コレクションを見る"
+      },
+      "collection": {
+        "not_found": "コレクションが見つかりません",
+        "mastery": "すべてのノートに宿るクオリティ",
+        "open_vault": "コレクションを探索",
+        "anthology": "コレクションリスト",
+        "view_composition": "詳細を見る"
+      },
+      "product": {
+        "masterpiece": "プレミアムフレグランス",
+        "not_found": "製品が見つかりません",
+        "back_to": "戻る",
+        "acquire": "今すぐ購入",
+        "dispatch": "エクスプレス配送",
+        "arrive_by": "お届け予定日",
+        "info": "製品情報",
+        "description": "商品説明",
+        "additional": "追加情報",
+        "concentration": "濃度",
+        "volume": "容量",
+        "notes": {
+          "top": "トップノート",
+          "heart": "ハートノート",
+          "base": "ベースノート"
+        },
+        "care": "フランスのグラースで最高品質の成分を使用して設計・製造されています。香りを長く新鮮に保つため、直射日光を避け、涼しく暗い場所に保管してください。",
+        "reviews": "レビュー",
+        "share_critique": "レビューを書く",
+        "rating": "評価:",
+        "headline": "レビューのタイトル",
+        "experience_placeholder": "こちらにレビューを記入してください...",
+        "log_critique": "レビューを送信",
+        "vault_empty": "この製品のレビューはまだありません。",
+        "verified": "確認済みの購入者",
+        "restricted": "レビューを投稿するにはログインが必要です。"
+      },
+      "cart": {
+        "your_bag": "ショッピングバッグ",
+        "empty": "バッグは空です",
+        "start": "探索を始める",
+        "subtotal": "小計",
+        "checkout": "チェックアウト",
+        "continue": "お買い物を続ける",
+        "free_shipping": "全品送料無料"
+      }
     }
   },
   ar: {

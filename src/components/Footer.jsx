@@ -120,18 +120,6 @@ const Footer = () => {
                 })}
               </div>
 
-              <div className="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
-                <div className="text-center md:text-left">
-                  <p className="text-[9px] text-white/30 uppercase tracking-widest mb-2">Current Selection</p>
-                  <p className="text-[12px] uppercase tracking-[0.2em] text-white font-bold">{selectedLocation}</p>
-                </div>
-                <button 
-                  onClick={handleValidateLocation} 
-                  className="bg-white text-black px-16 py-4 text-[10px] font-black tracking-[0.4em] uppercase hover:bg-gold-500 hover:text-white transition-all shadow-2xl"
-                >
-                  Confirm Selection
-                </button>
-              </div>
             </motion.div>
           </motion.div>
         )}
