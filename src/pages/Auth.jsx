@@ -417,7 +417,7 @@ Marketing Consent: Granted
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     return (
-        <div className="bg-dark-900 min-h-screen text-white pt-24 md:pt-40 pb-12 md:pb-20 font-sans selection:bg-gold-500/30 selection:text-white relative overflow-x-hidden">
+        <div className="bg-dark-900 min-h-screen text-white pt-24 md:pt-40 pb-12 md:pb-20 font-sans selection:bg-gold-500/30 selection:text-white relative z-0">
             
             {/* Ambient Background */}
             <div className="absolute top-[20%] right-[-10%] w-[800px] h-[800px] bg-gold-500/5 blur-[150px] rounded-full pointer-events-none" />
@@ -569,7 +569,7 @@ Marketing Consent: Granted
                             exit={{ opacity: 0, y: -20 }}
                         >
                             <div className="text-center mb-6">
-                                <h1 className="text-4xl font-serif tracking-[0.1em] uppercase font-light">
+                                <h1 className="text-3xl md:text-4xl font-serif tracking-[0.1em] uppercase font-light">
                                     {isRegister ? 'User Registry' : 'User Login'}
                                 </h1>
                                 <p className="text-[10px] tracking-[0.5em] text-white/40 uppercase mt-2">
