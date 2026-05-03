@@ -46,6 +46,8 @@ const Checkout = () => {
     const [showPartialCodPopup, setShowPartialCodPopup] = useState(false);
     const [pincodeError, setPincodeError] = useState(false);
     const [isVerifyingPincode, setIsVerifyingPincode] = useState(false);
+    const [isValidating, setIsValidating] = useState(true);
+    const [validationError, setValidationError] = useState('');
 
     const [formData, setFormData] = useState({
         firstName: user?.name?.split(' ')[0] || '',
@@ -150,6 +152,58 @@ const Checkout = () => {
         return () => clearTimeout(timer);
     }, [formData.pincode]);
 
+    // --- REAL-TIME CART VALIDATION (Price & Stock) ---
+    useEffect(() => {
+        const validateCart = async () => {
+            if (items.length === 0) {
+                setIsValidating(false);
+                return;
+            }
+
+            try {
+                // Fetch latest data for all items in the cart
+                const updatedItems = await Promise.all(items.map(async (item) => {
+                    const res = await fetch(`${API_URL}/api/products/${item.slug}`);
+                    if (!res.ok) return item; 
+                    const freshProduct = await res.json();
+                    
+                    const priceRaw = (freshProduct.sale_price || freshProduct.price || "0").toString().replace(/[^0-9]/g, '');
+                    const currentPrice = parseInt(priceRaw) || 0;
+                    
+                    const oldPriceRaw = (item.sale_price || item.price || "0").toString().replace(/[^0-9]/g, '');
+                    const oldPrice = parseInt(oldPriceRaw) || 0;
+
+                    return {
+                        ...item,
+                        price: freshProduct.price,
+                        sale_price: freshProduct.sale_price,
+                        stock_count: freshProduct.stock_count,
+                        isOOS: freshProduct.stock_count < item.quantity,
+                        priceChanged: currentPrice !== oldPrice
+                    };
+                }));
+
+                const oosItems = updatedItems.filter(i => i.isOOS);
+                if (oosItems.length > 0) {
+                    setValidationError(`Inventory depletion detected: ${oosItems.map(i => i.name).join(', ')} is currently unavailable.`);
+                } else {
+                    setValidationError('');
+                }
+
+                // If any prices changed, sync with Redux
+                if (updatedItems.some(i => i.priceChanged)) {
+                    dispatch(setCart({ items: updatedItems }));
+                }
+            } catch (err) {
+                console.error("Cart validation fault:", err);
+            } finally {
+                setIsValidating(false);
+            }
+        };
+
+        validateCart();
+    }, []);
+
     const selectSavedAddress = (addr) => {
         setFormData(prev => ({
             ...prev,
@@ -251,6 +305,11 @@ const Checkout = () => {
     const amountCOD = isPartialSelected ? (finalTotal - amountOnline) : 0;
 
     const handleSubmitOrder = async () => {
+        if (isValidating) return;
+        if (validationError) {
+            setOrderError(validationError);
+            return;
+        }
         setIsLoading(true);
         setOrderError('');
 
@@ -634,12 +693,15 @@ const Checkout = () => {
                                                     {orderError && <p className="text-red-400 text-[10px] tracking-widest mb-6 uppercase text-center">{orderError}</p>}
                                                     
                                                     <button
-                                                        disabled={isLoading || !agreedToTerms}
+                                                        disabled={isLoading || isValidating || !agreedToTerms || !!validationError}
                                                         onClick={handleSubmitOrder}
                                                         className="w-full h-16 bg-white text-black text-[11px] font-black tracking-[0.5em] uppercase hover:bg-gold-500 transition-all flex flex-col items-center justify-center disabled:opacity-20 disabled:cursor-not-allowed"
                                                     >
-                                                        {isLoading ? (
-                                                            <Loader className="animate-spin" />
+                                                        {isLoading || isValidating ? (
+                                                            <div className="flex flex-col items-center">
+                                                                <Loader className="animate-spin mb-1" size={14} />
+                                                                <span className="text-[7px] tracking-[0.2em]">{isValidating ? 'VALIDATING BOUTIQUE INVENTORY' : 'PROCESSING'}</span>
+                                                            </div>
                                                         ) : (
                                                             <>
                                                                 <span className="mb-1">Complete Purchase</span>
