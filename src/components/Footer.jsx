@@ -233,7 +233,7 @@ const Footer = () => {
 
       {/* Bottom Footer Section */}
       <div className="container mx-auto px-6 md:px-12 lg:px-24">
-        <div className="border-b border-white/10 pb-6 mb-6 flex flex-col md:flex-row justify-between items-center md:items-center">
+        <div className="border-b border-white/10 pb-6 mb-4 flex flex-col md:flex-row justify-between items-center md:items-center">
           <div className="flex flex-col space-y-4">
             <button 
               onClick={() => setIsLocationModalOpen(true)} 
@@ -245,14 +245,14 @@ const Footer = () => {
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hidden md:block ml-2 transform group-hover:translate-x-1 transition-transform"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
             </button>
           </div>
-          <div className="flex justify-center space-x-6 md:space-x-8 mt-10 md:mt-0 text-[#A0A0A0]">
+          <div className="flex justify-center space-x-6 md:space-x-8 mt-8 md:mt-0 text-[#A0A0A0]">
             <a href="https://instagram.com/kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors p-1"><IconInsta /></a>
             <a href="https://facebook.com/kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors p-1"><IconFb /></a>
             <a href="https://youtube.com/@kiksultraluxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors p-1"><IconYt /></a>
             <a href="https://linkedin.com/company/kiks-ultra-luxury" target="_blank" rel="noreferrer" className="hover:text-white transition-colors p-1"><IconIn /></a>
           </div>
         </div>
-        <div className="text-center md:text-left mt-12 border-t border-white/5 pt-8">
+        <div className="text-center md:text-left mt-4 border-t border-white/5 pt-6">
           <p className="text-[#666666] text-[8px] md:text-[10px] leading-relaxed max-w-4xl tracking-[0.4em] mx-auto md:mx-0 uppercase font-bold">
             © COPYRIGHT BY KIKSULTRALUXURY 2026. ALL RIGHTS RESERVED.
           </p>
