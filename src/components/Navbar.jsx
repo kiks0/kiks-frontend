@@ -95,7 +95,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className={`fixed w-full z-[99999] transition-all duration-700 ${isScrolled || isAccountPage ? 'bg-black/90 backdrop-blur-md border-b border-white/5 py-1.5 md:py-2.5 shadow-2xl text-white' : 'bg-transparent py-2.5 md:py-4 text-white'}`}>
+      <nav className={`fixed w-full z-[99999] transition-all duration-700 ${isScrolled || isAccountPage ? 'bg-black/90 backdrop-blur-md py-1.5 md:py-2.5 shadow-2xl text-white' : 'bg-transparent py-2.5 md:py-4 text-white'}`}>
         <div className="container mx-auto px-5 lg:px-12 flex flex-col items-center">
 
           {/* ======================================= */}
