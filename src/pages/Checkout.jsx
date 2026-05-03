@@ -750,10 +750,8 @@ const Checkout = () => {
                                             <p className="text-[9px] tracking-[0.4em] text-white/30 uppercase font-black">Qty {item.quantity}</p>
                                             <div className="flex items-center justify-between mt-2">
                                                 <span className="text-[11px] font-bold tracking-widest text-white font-sans">{item.price}</span>
-                                                {item.isOOS ? (
+                                                {item.isOOS && (
                                                     <span className="text-[7px] bg-red-500/10 text-red-500 px-1.5 py-0.5 font-black border border-red-500/20 tracking-widest">OUT OF STOCK</span>
-                                                ) : (
-                                                    <span className="text-[7px] bg-green-500/10 text-green-500 px-1.5 py-0.5 font-black border border-green-500/20 tracking-widest">READY</span>
                                                 )}
                                             </div>
                                         </div>
