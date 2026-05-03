@@ -443,6 +443,8 @@ const Admin = () => {
             if (res.ok) setAdmins(await res.json());
         } catch (e) { console.error("Admins fetch failed", e); }
         finally { setTabLoading('admins', false); }
+    };
+
     const fetchDeletionRequests = async () => {
         setTabLoading('users', true);
         try {
