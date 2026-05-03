@@ -334,13 +334,13 @@ const Home = () => {
               className="w-full md:w-[45%] relative group"
             >
               <div className="absolute -inset-4 border border-white/5 pointer-events-none group-hover:border-gold-500/20 transition-colors duration-1000" />
-              <div className="relative block overflow-hidden rounded-sm bg-[#0a0a0a] border border-white/5 p-4 md:p-8">
+              <Link to="/collection/arambh/elite" className="relative block overflow-hidden rounded-sm bg-[#0a0a0a] border border-white/5 p-4 md:p-8">
                 <img
                   src="/elite1.webp"
                   alt="Elite"
                   className="w-full h-auto object-contain transition-transform duration-[2000ms] ease-out group-hover:scale-105"
                 />
-              </div>
+              </Link>
             </motion.div>
 
             {/* Right: Content Section */}
@@ -422,9 +422,9 @@ const Home = () => {
                 {/* Image in Middle */}
                 <div className="relative group w-full max-w-[200px] aspect-[3/4] mb-6">
                   <div className="absolute inset-0 bg-gold-500/5 blur-3xl rounded-full opacity-30" />
-                  <div className="relative block w-full h-full bg-[#0d0d0d] border border-white/10 overflow-hidden">
+                  <Link to={`/collection/arambh/${product.id}`} className="relative block w-full h-full bg-[#0d0d0d] border border-white/10 overflow-hidden">
                     <img src={getFullImageUrl(product.image)} alt={product.name} className="w-full h-full object-contain p-6" />
-                  </div>
+                  </Link>
                 </div>
 
                 {/* Description at Bottom */}
@@ -468,13 +468,13 @@ const Home = () => {
                   className="showcasePhoto absolute inset-0 flex items-center justify-center p-2 md:p-8 lg:p-12"
                   style={{ opacity: index === 0 ? 1 : 0 }}
                 >
-                  <div className="relative w-full max-w-lg aspect-[3/4] bg-[#0d0d0d] border border-white/10 overflow-hidden group">
+                  <Link to={`/collection/arambh/${product.id}`} className="relative block w-full h-full bg-[#0d0d0d] border border-white/10 overflow-hidden group">
                     <img
                       src={getFullImageUrl(product.image)}
                       alt={product.name}
                       className="w-full h-full object-contain p-4 md:p-16"
                     />
-                  </div>
+                  </Link>
                 </div>
               ))}
             </div>
@@ -535,11 +535,9 @@ const Home = () => {
 
           {/* Left Column: The Visual Muse */}
           <div className="lg:col-span-5 relative group">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1.5, ease: "circOut" }}
-              className="relative aspect-[3/4] overflow-hidden border border-white/10 p-2 bg-white/[0.02]"
+            <Link
+              to="/collection/arambh"
+              className="relative block aspect-[3/4] overflow-hidden border border-white/10 p-2 bg-white/[0.02]"
             >
               <img
                 src="/la-reina-story.webp"
@@ -547,7 +545,7 @@ const Home = () => {
                 alt="Editorial Muse"
               />
               <div className="absolute inset-0 border border-gold-500/20 m-4 pointer-events-none" />
-            </motion.div>
+            </Link>
 
             {/* Floating Label */}
             <div className="absolute -right-8 -bottom-8 bg-black border border-white/10 p-8 hidden md:block">
