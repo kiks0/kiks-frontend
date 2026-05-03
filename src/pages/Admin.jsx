@@ -246,6 +246,39 @@ const Admin = () => {
         finally { setTabLoading('carts', false); }
     };
 
+    const handleRemoveCart = async (cartId) => {
+        if (!window.confirm('Are you certain you want to permanently clear this user\'s entire vault session? This cannot be undone.')) return;
+        try {
+            const res = await fetch(`${API_URL}/api/carts/${cartId}`, {
+                method: 'DELETE',
+                headers: getAdminHeaders()
+            });
+            if (res.ok) {
+                showSuccessToast('Vault session cleared.');
+                fetchCartsData();
+            } else {
+                showErrorToast('Failed to clear vault.');
+            }
+        } catch (e) { showErrorToast('Network error during removal.'); }
+    };
+
+    const handleRemoveCartItem = async (cartId, productId) => {
+        if (!window.confirm('Surgically remove this specific item from the user\'s vault?')) return;
+        try {
+            const res = await fetch(`${API_URL}/api/carts/${cartId}/remove-item`, {
+                method: 'POST',
+                headers: getAdminHeaders(),
+                body: JSON.stringify({ productId })
+            });
+            if (res.ok) {
+                showSuccessToast('Item removed from user cart.');
+                fetchCartsData();
+            } else {
+                showErrorToast('Failed to remove item.');
+            }
+        } catch (e) { showErrorToast('Network error.'); }
+    };
+
     const fetchWaitlistData = async () => {
         setTabsLoading(prev => ({ ...prev, waitlist: true }));
         try {
@@ -3090,14 +3123,21 @@ const Admin = () => {
 
                                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
                                                             {cart.items?.map((item, i) => (
-                                                                <div key={i} className="flex items-center gap-4 bg-black/40 p-3 border border-white/5 group-hover:border-white/10 transition-colors">
+                                                                <div key={i} className="flex items-center gap-4 bg-black/40 p-3 border border-white/5 group-hover:border-white/10 transition-colors relative group/item">
                                                                     <div className="w-12 h-16 bg-zinc-900 flex-shrink-0">
                                                                         <img src={item.image_url || item.product_image} alt="" className="w-full h-full object-cover opacity-60" />
                                                                     </div>
-                                                                    <div className="min-w-0">
+                                                                    <div className="min-w-0 pr-8">
                                                                         <p className="text-[10px] font-bold uppercase truncate text-white/80">{item.name || item.product_name}</p>
                                                                         <p className="text-[9px] text-gold-500/60 mt-1 uppercase tracking-widest">{item.quantity} Unit(s)</p>
                                                                     </div>
+                                                                    <button 
+                                                                        onClick={() => handleRemoveCartItem(cart.id, item.id || item.product_id)}
+                                                                        className="absolute right-2 top-1/2 -translate-y-1/2 text-red-500/20 hover:text-red-500 transition-all p-2 opacity-0 group-hover/item:opacity-100"
+                                                                        title="Remove Item"
+                                                                    >
+                                                                        <X size={14} />
+                                                                    </button>
                                                                 </div>
                                                             ))}
                                                         </div>
@@ -3114,14 +3154,23 @@ const Admin = () => {
                                                                 <p className="text-[10px] text-white/60 font-sans">{new Date(cart.last_sync).toLocaleString()}</p>
                                                             </div>
                                                         </div>
-                                                        <div className="mt-6">
-                                                            <p className="text-[8px] uppercase tracking-[0.3em] text-white/60 mb-1">Approx. Value</p>
-                                                            <p className="text-lg font-serif text-white">
-                                                                {formatCurrency(
-                                                                    cart.items?.reduce((acc, item) => acc + (item.price * item.quantity), 0) || 0,
-                                                                    activeCurrency, rates, symbols
-                                                                )}
-                                                            </p>
+                                                        <div className="mt-6 flex flex-col items-end gap-4 w-full">
+                                                            <div className="text-right">
+                                                                <p className="text-[8px] uppercase tracking-[0.3em] text-white/60 mb-1">Approx. Value</p>
+                                                                <p className="text-lg font-serif text-white">
+                                                                    {formatCurrency(
+                                                                        cart.items?.reduce((acc, item) => acc + (item.price * item.quantity), 0) || 0,
+                                                                        activeCurrency, rates, symbols
+                                                                    )}
+                                                                </p>
+                                                            </div>
+                                                            <button 
+                                                                onClick={() => handleRemoveCart(cart.id)}
+                                                                className="flex items-center gap-3 bg-red-500/10 border border-red-500/30 text-red-500 px-6 py-3 text-[8px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all w-full sm:w-auto justify-center"
+                                                            >
+                                                                <Trash2 size={12} />
+                                                                Clear Vault
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
