@@ -321,15 +321,7 @@ const Navbar = () => {
                         </div>
 
                       <div className="space-y-8">
-                        <Link to="/collection/arambh" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>
-                          COLLECTIONS
-                        </Link>
-                        <Link to="/about" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>
-                          ABOUT
-                        </Link>
-                        <Link to="/essence" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>
-                          STORY
-                        </Link>
+
                         <Link to="/blog" className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-white hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>
                           BLOG
                         </Link>
