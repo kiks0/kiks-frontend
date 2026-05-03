@@ -11,6 +11,7 @@ import * as XLSX from 'xlsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { generateInvoice } from '../utils/generateInvoice';
+import { generateShippingLabel } from '../utils/generateShippingLabel';
 import { getFullImageUrl } from '../utils/url';
 import PageLoader from '../components/PageLoader';
 import { formatCurrency } from '../utils/currency';
