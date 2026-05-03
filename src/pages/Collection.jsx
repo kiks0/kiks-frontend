@@ -195,16 +195,11 @@ const Collection = () => {
                                     className="group relative"
                                 >
                                     <Link to={`/collection/${category}/${product.slug}`} className="block relative aspect-[3/4] md:aspect-[4/5] mb-4 md:mb-8 overflow-hidden bg-zinc-900 border border-white/5 group-hover:border-gold-500/30 transition-colors">
-                                        {product.stock_count <= 0 && (
-                                            <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/60 backdrop-blur-[2px]">
-                                                <span className="text-[10px] md:text-[11px] font-black tracking-[0.5em] uppercase text-white border border-white/20 px-6 py-3 bg-red-600/20">OUT OF STOCK</span>
-                                            </div>
-                                        )}
                                         <img 
                                             src={getFullImageUrl(product.image_url)} 
                                             alt={product.name} 
                                             loading="lazy"
-                                            className={`w-full h-full object-cover opacity-90 group-hover:scale-105 group-hover:opacity-100 transition-transform duration-700 ${product.stock_count <= 0 ? 'grayscale' : ''}`}
+                                            className="w-full h-full object-cover opacity-90 group-hover:scale-105 group-hover:opacity-100 transition-transform duration-700"
                                         />
                                         
                                         {/* Floating Actions - Scaled down for mobile */}
@@ -224,8 +219,7 @@ const Collection = () => {
                                             </button>
                                             <button 
                                                 onClick={(e) => { e.preventDefault(); dispatch(addToCart({...product, quantity: 1})); }}
-                                                disabled={product.stock_count <= 0}
-                                                className={`p-1.5 md:p-3 rounded-full backdrop-blur-md border border-white/10 text-white hover:bg-gold-500 hover:text-black transition-all ${product.stock_count <= 0 ? 'bg-black/20 opacity-20 cursor-not-allowed' : 'bg-black/40'}`}
+                                                className="p-1.5 md:p-3 rounded-full backdrop-blur-md border border-white/10 bg-black/40 text-white hover:bg-gold-500 hover:text-black transition-all"
                                             >
                                                 <ShoppingBag size={12} />
                                             </button>
