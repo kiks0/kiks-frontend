@@ -257,8 +257,8 @@ const Addresses = () => {
                                 )}
                             </h2>
 
-                            <form onSubmit={saveAddress} className="kiks-pure-form">
-                                <div className="kiks-f-row">
+                            <form onSubmit={saveAddress} className="kiks-pure-form px-4 sm:px-0">
+                                <div className="kiks-f-row gap-6 md:gap-[30px]">
                                     <div>
                                         <label className="text-[8px] tracking-[0.4em] text-white/40 uppercase mb-2 block">First Name</label>
                                         <input 
@@ -267,6 +267,7 @@ const Addresses = () => {
                                             onChange={handleFormChange} 
                                             placeholder="FIRST NAME" 
                                             required 
+                                            className="w-full bg-transparent border-b border-white/10 py-4 text-[12px] tracking-widest outline-none focus:border-white transition-colors"
                                         />
                                     </div>
                                     <div>
@@ -277,11 +278,12 @@ const Addresses = () => {
                                             onChange={handleFormChange} 
                                             placeholder="LAST NAME" 
                                             required 
+                                            className="w-full bg-transparent border-b border-white/10 py-4 text-[12px] tracking-widest outline-none focus:border-white transition-colors"
                                         />
                                     </div>
                                 </div>
 
-                                <div>
+                                <div className="mt-6">
                                     <label className="text-[8px] tracking-[0.4em] text-white/40 uppercase mb-2 block">House No / Apt / Suite</label>
                                     <input 
                                         name="house_no" 
@@ -289,9 +291,10 @@ const Addresses = () => {
                                         onChange={handleFormChange} 
                                         placeholder="E.G. VILLA 402, 4TH FLOOR" 
                                         required 
+                                        className="w-full bg-transparent border-b border-white/10 py-4 text-[12px] tracking-widest outline-none focus:border-white transition-colors"
                                     />
                                 </div>
-                                <div>
+                                <div className="mt-6">
                                     <label className="text-[8px] tracking-[0.4em] text-white/40 uppercase mb-2 block">Area / Street</label>
                                     <input 
                                         name="area" 
@@ -299,9 +302,10 @@ const Addresses = () => {
                                         onChange={handleFormChange} 
                                         placeholder="E.G. EMERALD HILLS" 
                                         required 
+                                        className="w-full bg-transparent border-b border-white/10 py-4 text-[12px] tracking-widest outline-none focus:border-white transition-colors"
                                     />
                                 </div>
-                                <div>
+                                <div className="mt-6">
                                     <label className="text-[8px] tracking-[0.4em] text-white/40 uppercase mb-2 block">Landmark (Near you)</label>
                                     <input 
                                         name="landmark" 
@@ -309,10 +313,11 @@ const Addresses = () => {
                                         onChange={handleFormChange} 
                                         placeholder="E.G. NEAR MARINA TOWER" 
                                         required 
+                                        className="w-full bg-transparent border-b border-white/10 py-4 text-[12px] tracking-widest outline-none focus:border-white transition-colors"
                                     />
                                 </div>
 
-                                <div className="kiks-f-row">
+                                <div className="kiks-f-row mt-6 gap-6 md:gap-[30px]">
                                     <div>
                                         <label className="text-[8px] tracking-[0.4em] text-white/40 uppercase mb-2 block">City</label>
                                         <input 
@@ -321,6 +326,7 @@ const Addresses = () => {
                                             onChange={handleFormChange} 
                                             placeholder="CITY" 
                                             required 
+                                            className="w-full bg-transparent border-b border-white/10 py-4 text-[12px] tracking-widest outline-none focus:border-white transition-colors"
                                         />
                                     </div>
                                     <div>
@@ -331,11 +337,12 @@ const Addresses = () => {
                                             onChange={handleFormChange} 
                                             placeholder="STATE" 
                                             required 
+                                            className="w-full bg-transparent border-b border-white/10 py-4 text-[12px] tracking-widest outline-none focus:border-white transition-colors"
                                         />
                                     </div>
                                 </div>
 
-                                <div className="kiks-f-row">
+                                <div className="kiks-f-row mt-6 gap-6 md:gap-[30px]">
                                     <div>
                                         <label className="text-[8px] tracking-[0.4em] text-white/40 uppercase mb-2 block">Pincode</label>
                                         <input 
@@ -344,6 +351,7 @@ const Addresses = () => {
                                             onChange={handleFormChange} 
                                             placeholder="PINCODE" 
                                             required 
+                                            className="w-full bg-transparent border-b border-white/10 py-4 text-[12px] tracking-widest outline-none focus:border-white transition-colors"
                                         />
                                     </div>
                                     <div>
@@ -354,11 +362,12 @@ const Addresses = () => {
                                             onChange={handleFormChange} 
                                             placeholder="COUNTRY" 
                                             required 
+                                            className="w-full bg-transparent border-b border-white/10 py-4 text-[12px] tracking-widest outline-none focus:border-white transition-colors"
                                         />
                                     </div>
                                 </div>
 
-                                <div>
+                                <div className="mt-6">
                                     <label className="text-[8px] tracking-[0.4em] text-white/40 uppercase mb-2 block">Phone Number</label>
                                     <input 
                                         name="phone" 
@@ -366,15 +375,16 @@ const Addresses = () => {
                                         onChange={handleFormChange} 
                                         placeholder="PHONE" 
                                         required 
+                                        className="w-full bg-transparent border-b border-white/10 py-4 text-[12px] tracking-widest outline-none focus:border-white transition-colors"
                                     />
                                 </div>
 
-                                <div className="kiks-f-btns">
-                                    <button type="submit" className="kiks-btn-black flex items-center" disabled={formLoading}>
+                                <div className="kiks-f-btns mt-10 md:mt-12 flex flex-col md:flex-row gap-6 md:gap-0">
+                                    <button type="submit" className="kiks-btn-black w-full md:w-auto flex items-center justify-center" disabled={formLoading}>
                                         {formLoading ? <Loader2 className="animate-spin mr-2" size={12} /> : null}
                                         SAVE ADDRESS
                                     </button>
-                                    <button type="button" onClick={cancelAction} className="kiks-cancel">CANCEL</button>
+                                    <button type="button" onClick={cancelAction} className="kiks-cancel text-[10px] tracking-[0.3em] font-black uppercase underline underline-offset-8 text-white/40 hover:text-white transition-colors">CANCEL</button>
                                 </div>
                             </form>
                         </motion.div>
