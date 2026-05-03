@@ -146,7 +146,7 @@ const Account = () => {
             
             {/* YOUR PRODUCTS */}
             <div className="flex flex-col">
-              <h3 className="text-[12px] md:text-[13px] font-bold tracking-[0.2em] uppercase mb-4 text-white">Your Products</h3>
+              <h3 className="text-[10px] md:text-[11px] font-bold tracking-[0.2em] uppercase mb-4 text-white/40">Your products</h3>
               <div className="w-full h-[1px] bg-white/10 mb-8"></div>
               
               <Link to="/orders" className="flex items-start space-x-5 group cursor-pointer">
@@ -164,7 +164,7 @@ const Account = () => {
 
             {/* SELECTIONS */}
             <div className="flex flex-col">
-              <h3 className="text-[12px] md:text-[13px] font-bold tracking-[0.2em] uppercase mb-4 text-white">Selections</h3>
+              <h3 className="text-[10px] md:text-[11px] font-bold tracking-[0.2em] uppercase mb-4 text-white/40">Selections</h3>
               <div className="w-full h-[1px] bg-white/10 mb-8"></div>
               
               <Link to="/wishlist" className="flex items-start space-x-5 group cursor-pointer">
@@ -182,7 +182,7 @@ const Account = () => {
 
              {/* SERVICES */}
             <div className="flex flex-col">
-              <h3 className="text-[12px] md:text-[13px] font-bold tracking-[0.2em] uppercase mb-4 text-white">Services</h3>
+              <h3 className="text-[10px] md:text-[11px] font-bold tracking-[0.2em] uppercase mb-4 text-white/40">Services</h3>
               <div className="w-full h-[1px] bg-white/10 mb-8"></div>
               
               <div 
@@ -193,7 +193,7 @@ const Account = () => {
                   <Smartphone size={20} strokeWidth={1} />
                 </div>
                 <div>
-                  <h4 className="text-[12px] font-bold tracking-wide mb-2 text-white group-hover:text-gold-400 transition-colors">Client Services</h4>
+                  <h4 className="text-[11px] font-bold tracking-wide mb-2 text-white group-hover:text-gold-400 transition-colors">Client services</h4>
                   <p className="text-[11px] text-neutral-500 font-medium leading-relaxed max-w-[280px]">
                     Access your dedicated KIKS advisor for priority assistance, bespoke requests, and expert guidance.
                   </p>
@@ -205,23 +205,23 @@ const Account = () => {
 
           {/* ACCOUNT DETAILS */}
           <div className="flex flex-col mt-12 md:mt-20">
-            <h3 className="text-[12px] md:text-[13px] font-bold tracking-[0.2em] uppercase mb-4 text-white">Account Details</h3>
+            <h3 className="text-[10px] md:text-[11px] font-bold tracking-[0.2em] uppercase mb-4 text-white/40">Account details</h3>
             <div className="w-full h-[1px] bg-white/10 mb-0"></div>
             
             <div className="grid grid-cols-1 md:grid-cols-3">
               {/* Link items */}
               <Link to="/account/security" className="flex items-center justify-between py-8 md:pr-12 group border-b border-white/5 hover:border-white/20 transition-all">
-                <h4 className="text-[12px] font-bold tracking-wide text-white group-hover:text-gold-400 transition-colors">Login & Security</h4>
+                <h4 className="text-[11px] font-medium tracking-wider text-white/80 group-hover:text-gold-400 transition-colors uppercase">Login & security</h4>
                 <ChevronRight size={14} className="text-white/20 group-hover:text-gold-400 group-hover:translate-x-1 transition-all" />
               </Link>
               
               <Link to="/account/personal-details" className="flex items-center justify-between py-8 md:px-12 group border-b border-white/5 hover:border-white/20 transition-all">
-                <h4 className="text-[12px] font-bold tracking-wide text-white group-hover:text-gold-400 transition-colors">Personal details</h4>
+                <h4 className="text-[11px] font-medium tracking-wider text-white/80 group-hover:text-gold-400 transition-colors uppercase">Personal details</h4>
                 <ChevronRight size={14} className="text-white/20 group-hover:text-gold-400 group-hover:translate-x-1 transition-all" />
               </Link>
 
               <Link to="/addresses" className="flex items-center justify-between py-8 md:pl-12 group border-b border-white/5 hover:border-white/20 transition-all">
-                <h4 className="text-[12px] font-bold tracking-wide text-white group-hover:text-gold-400 transition-colors">Addresses</h4>
+                <h4 className="text-[11px] font-medium tracking-wider text-white/80 group-hover:text-gold-400 transition-colors uppercase">Addresses</h4>
                 <ChevronRight size={14} className="text-white/20 group-hover:text-gold-400 group-hover:translate-x-1 transition-all" />
               </Link>
 
