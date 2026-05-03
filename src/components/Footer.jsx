@@ -240,10 +240,12 @@ const Footer = () => {
           <div className="flex flex-col space-y-4">
             <button 
               onClick={() => setIsLocationModalOpen(true)} 
-              className="text-white flex items-center font-bold text-[10px] tracking-[0.2em] uppercase hover:text-gold-500 transition-colors"
+              className="text-white flex items-center text-[11px] tracking-widest hover:text-gold-500 transition-colors group"
             >
-              Change location and language : <span className="ml-2 text-white/60 font-medium">{selectedLocation} ({COUNTRY_MAPPING.find(c => c.name === selectedLocation)?.langName || 'English'})</span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+              <span className="font-bold border-b border-white/20 pb-0.5 group-hover:border-gold-500 transition-all">Change location and language</span>
+              <span className="mx-2 text-white/40">:</span>
+              <span className="text-white/60 font-medium">{selectedLocation.replace(/\s*\(.*\)/, '')} ({COUNTRY_MAPPING.find(c => c.name === selectedLocation.replace(/\s*\(.*\)/, ''))?.langName || 'English'})</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-2 transform group-hover:translate-x-1 transition-transform"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
             </button>
           </div>
           <div className="flex justify-center space-x-8 mt-6 md:mt-0 text-[#A0A0A0]">
