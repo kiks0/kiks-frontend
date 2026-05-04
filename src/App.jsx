@@ -41,13 +41,14 @@ const CancellationPolicy = lazy(() => import('./pages/CancellationPolicy'));
 const Story = lazy(() => import('./pages/Story'));
 const PersonalDetails = lazy(() => import('./pages/PersonalDetails'));
 
-import PageLoader from './components/PageLoader';
+import { fetchWishlist } from './store/wishlistSlice';
 
 function App() {
   const dispatch = useDispatch();
   
   useEffect(() => {
     dispatch(fetchExchangeRates());
+    dispatch(fetchWishlist());
     
     // Global session validator for real-time security (e.g. instant logout on deletion)
     const checkSession = async () => {
