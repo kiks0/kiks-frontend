@@ -229,10 +229,13 @@ const ProductDetail = () => {
 
     const [isAdded, setIsAdded] = useState(false);
     const [isAdding, setIsAdding] = useState(false);
+    const [isCartGlowing, setIsCartGlowing] = useState(false);
+    const [isWishlistGlowing, setIsWishlistGlowing] = useState(false);
 
     const handleAddToCart = async () => {
         if (product) {
             setIsAdding(true);
+            setIsCartGlowing(true);
             
             // Artificial delay for premium "Processing" feel
             await new Promise(resolve => setTimeout(resolve, 800));
@@ -240,12 +243,24 @@ const ProductDetail = () => {
             dispatch(addToCart({ ...product, quantity }));
             setIsAdding(false);
             setIsAdded(true);
+            setIsCartGlowing(false);
             
             setTimeout(() => setIsAdded(false), 2000);
         }
     };
 
+    const handleWishlistToggle = () => {
+        if (!isAuthenticated) {
+            dispatch(openWishlistAuthPopup());
+        } else {
+            dispatch(toggleWishlistAndSync(product));
+            setIsWishlistGlowing(true);
+            setTimeout(() => setIsWishlistGlowing(false), 800);
+        }
+    };
+
     const handleBuyNow = () => {
+// ... existing code ...
         if (product) {
             navigate('/checkout', { 
                 state: { 
@@ -449,18 +464,19 @@ const ProductDetail = () => {
                             </div>
                             <div className="flex items-center space-x-3 md:space-x-5">
                                 <span className="bg-white px-2 py-0.5 text-black text-[9px] font-black tracking-[0.1em] uppercase">New</span>
-                                <button
-                                    onClick={() => {
-                                        if (!isAuthenticated) {
-                                            dispatch(openWishlistAuthPopup());
-                                        } else {
-                                            dispatch(toggleWishlistAndSync(product));
-                                        }
-                                    }}
-                                    className={`transition-all duration-300 ${isProductInWishlist ? 'text-gold-500' : 'text-white/30 hover:text-white'}`}
+                                <motion.button
+                                    onClick={handleWishlistToggle}
+                                    whileTap={{ scale: 0.9 }}
+                                    animate={isWishlistGlowing ? { 
+                                        backgroundColor: "#fff", 
+                                        color: "#000", 
+                                        boxShadow: "0 0 30px #fff",
+                                        scale: 1.1 
+                                    } : {}}
+                                    className={`transition-all duration-300 p-2 rounded-full ${isProductInWishlist ? 'text-gold-500' : 'text-white/30 hover:text-white'}`}
                                 >
                                     <Heart size={20} fill={isProductInWishlist ? "currentColor" : "none"} strokeWidth={1} />
-                                </button>
+                                </motion.button>
                             </div>
                         </div>
 
@@ -486,10 +502,17 @@ const ProductDetail = () => {
                             className="w-full flex flex-col space-y-4 md:space-y-6"
                         >
                             <div className="flex flex-row gap-2 md:gap-4 w-full">
-                                <button
+                                <motion.button
                                     onClick={handleAddToCart}
                                     disabled={isAdding || isAdded}
-                                    className={`flex-1 h-12 md:h-14 border border-white text-[9px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.4em] uppercase transition-all duration-500 active:scale-[0.98] flex items-center justify-center ${isAdding || isAdded ? 'bg-white text-black' : 'bg-black text-white hover:bg-white hover:text-black'}`}
+                                    whileTap={{ scale: 0.95 }}
+                                    animate={isCartGlowing ? { 
+                                        backgroundColor: "#fff", 
+                                        color: "#000", 
+                                        boxShadow: "0 0 35px #fff",
+                                        scale: 1.02 
+                                    } : {}}
+                                    className={`flex-1 h-12 md:h-14 border border-white text-[9px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.4em] uppercase transition-all duration-500 flex items-center justify-center ${isAdding || isAdded ? 'bg-white text-black' : 'bg-black text-white hover:bg-white hover:text-black'}`}
                                 >
                                     {isAdding ? (
                                         <Loader2 size={16} className="animate-spin text-black" />
@@ -498,7 +521,7 @@ const ProductDetail = () => {
                                     ) : (
                                         'ADD TO BAG'
                                     )}
-                                </button>
+                                </motion.button>
                                 <button
                                     onClick={handleBuyNow}
                                     className="flex-1 h-12 md:h-14 bg-white text-black border border-white text-[9px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.4em] uppercase hover:bg-gold-500 hover:border-gold-500 transition-all duration-500 active:scale-[0.98]"

@@ -56,8 +56,29 @@ const Collection = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [category, view]); // Re-run when view changes
 
+    const [glowingId, setGlowingId] = useState(null);
+    const [wishlistGlowingId, setWishlistGlowingId] = useState(null);
+
     const handleOpenProducts = () => {
         navigate(`?category=${category}&view=products`);
+    };
+
+    const handleAddToCart = (e, product) => {
+        e.preventDefault();
+        dispatch(addToCart({...product, quantity: 1}));
+        setGlowingId(product.id);
+        setTimeout(() => setGlowingId(null), 800);
+    };
+
+    const handleWishlist = (e, product) => {
+        e.preventDefault();
+        if (!isAuthenticated) {
+            dispatch(openWishlistAuthPopup());
+        } else {
+            dispatch(toggleWishlistAndSync(product));
+            setWishlistGlowingId(product.id);
+            setTimeout(() => setWishlistGlowingId(null), 800);
+        }
     };
 
     if (loading) {
@@ -204,25 +225,32 @@ const Collection = () => {
                                         
                                         {/* Floating Actions - Scaled down for mobile */}
                                         <div className="absolute top-2 right-2 md:top-6 md:right-6 flex flex-col space-y-2 md:space-y-4 md:opacity-0 md:group-hover:opacity-100 transition-all duration-500 md:translate-x-4 md:group-hover:translate-x-0">
-                                            <button 
-                                                onClick={(e) => { 
-                                                    e.preventDefault(); 
-                                                    if (!isAuthenticated) {
-                                                        dispatch(openWishlistAuthPopup());
-                                                    } else {
-                                                        dispatch(toggleWishlistAndSync(product)); 
-                                                    }
-                                                }}
-                                                className={`p-1.5 md:p-3 rounded-full backdrop-blur-md border border-white/10 hover:bg-white hover:text-black transition-all ${wishlistItems.some(i => i.id === product.id) ? 'bg-gold-500 text-black' : 'bg-black/40 text-white'}`}
+                                            <motion.button 
+                                                onClick={(e) => handleWishlist(e, product)}
+                                                whileTap={{ scale: 0.9 }}
+                                                animate={wishlistGlowingId === product.id ? { 
+                                                    backgroundColor: "#fff", 
+                                                    color: "#000", 
+                                                    boxShadow: "0 0 25px #fff",
+                                                    scale: 1.1 
+                                                } : {}}
+                                                className={`p-1.5 md:p-3 rounded-full backdrop-blur-md border border-white/10 transition-all ${wishlistItems.some(i => i.id === product.id) ? 'bg-gold-500 text-black' : 'bg-black/40 text-white'}`}
                                             >
                                                 <Heart size={12} fill={wishlistItems.some(i => i.id === product.id) ? "currentColor" : "none"} />
-                                            </button>
-                                            <button 
-                                                onClick={(e) => { e.preventDefault(); dispatch(addToCart({...product, quantity: 1})); }}
-                                                className="p-1.5 md:p-3 rounded-full backdrop-blur-md border border-white/10 bg-black/40 text-white hover:bg-gold-500 hover:text-black transition-all"
+                                            </motion.button>
+                                            <motion.button 
+                                                onClick={(e) => handleAddToCart(e, product)}
+                                                whileTap={{ scale: 0.9 }}
+                                                animate={glowingId === product.id ? { 
+                                                    backgroundColor: "#fff", 
+                                                    color: "#000", 
+                                                    boxShadow: "0 0 25px #fff",
+                                                    scale: 1.1 
+                                                } : {}}
+                                                className="p-1.5 md:p-3 rounded-full backdrop-blur-md border border-white/10 bg-black/40 text-white transition-all"
                                             >
                                                 <ShoppingBag size={12} />
-                                            </button>
+                                            </motion.button>
                                         </div>
                                     </Link>
                                     

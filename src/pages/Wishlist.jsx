@@ -23,11 +23,16 @@ const Wishlist = () => {
   }, [isAuthenticated, dispatch]);
 
   const [addedId, setAddedId] = useState(null);
+  const [glowingId, setGlowingId] = useState(null);
 
   const handleAddToCart = (product) => {
     dispatch(addToCart({ ...product, quantity: 1 }));
     setAddedId(product.id);
-    setTimeout(() => setAddedId(null), 2000);
+    setGlowingId(product.id);
+    setTimeout(() => {
+      setAddedId(null);
+      setGlowingId(null);
+    }, 1500);
   };
 
   return (
@@ -96,12 +101,19 @@ const Wishlist = () => {
                     
                     {/* Hover Overlay Actions (Desktop Only) */}
                     <div className="hidden md:flex absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 items-center justify-center pointer-events-none group-hover:pointer-events-auto">
-                        <button 
+                        <motion.button 
                           onClick={() => handleAddToCart(product)}
-                          className="px-8 py-3 bg-black text-white border border-white text-[10px] tracking-[0.2em] font-bold uppercase transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 hover:bg-white hover:text-black flex items-center gap-2"
+                          whileTap={{ scale: 0.95 }}
+                          animate={glowingId === product.id ? { 
+                            backgroundColor: "#fff", 
+                            color: "#000", 
+                            boxShadow: "0 0 30px #fff",
+                            scale: 1.05 
+                          } : {}}
+                          className="px-8 py-3 bg-black text-white border border-white text-[10px] tracking-[0.2em] font-bold uppercase transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 hover:bg-white hover:text-black flex items-center gap-2 pointer-events-auto"
                         >
                            {addedId === product.id ? <><Check size={14} /> ADDED</> : 'ADD TO BAG'}
-                        </button>
+                        </motion.button>
                     </div>
                   </div>
 
@@ -131,12 +143,19 @@ const Wishlist = () => {
                     </div>
 
                     {/* Mobile Only Add to Bag Button */}
-                    <button 
+                    <motion.button 
                       onClick={() => handleAddToCart(product)}
-                      className="md:hidden w-full py-4 bg-white text-black text-[10px] tracking-[0.2em] font-bold uppercase flex items-center justify-center gap-2 active:bg-gold-500 transition-colors"
+                      whileTap={{ scale: 0.9 }}
+                      animate={glowingId === product.id ? { 
+                        backgroundColor: "#fff", 
+                        color: "#000", 
+                        boxShadow: "0 0 25px #fff",
+                        scale: 1.05 
+                      } : {}}
+                      className="md:hidden w-full py-4 bg-white text-black text-[10px] tracking-[0.2em] font-bold uppercase flex items-center justify-center gap-2 transition-colors"
                     >
                         {addedId === product.id ? <><Check size={14} /> ADDED TO BAG</> : <><ShoppingBag size={14} /> ADD TO BAG</>}
-                    </button>
+                    </motion.button>
                   </div>
                 </motion.div>
               ))}
