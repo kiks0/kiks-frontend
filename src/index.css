@@ -51,13 +51,21 @@
   }
 }
 
-@keyframes scrollLine {
+@keyframes luxuryPulse {
   0% {
-    transform: translateY(-100%);
+    transform: scale(0.92);
+    opacity: 0.6;
+    filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0));
   }
-
+  50% {
+    transform: scale(1);
+    opacity: 1;
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
+  }
   100% {
-    transform: translateY(100%);
+    transform: scale(0.92);
+    opacity: 0.6;
+    filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0));
   }
 }
 
@@ -67,6 +75,10 @@
 
 .animate-luxury-fade {
   animation: luxuryFade 1.8s ease-in-out infinite alternate;
+}
+
+.animate-luxury-pulse {
+  animation: luxuryPulse 3s ease-in-out infinite;
 }
 
 :root {
