@@ -403,14 +403,17 @@ const Addresses = () => {
                                 <div className="kiks-f-btns mt-10 md:mt-12 flex flex-col md:flex-row gap-6 md:gap-0">
                                     <button 
                                         type="submit" 
-                                        className={`kiks-btn-black w-full md:w-auto flex items-center justify-center transition-all ${pincodeError || isVerifyingPincode ? 'opacity-50 cursor-not-allowed grayscale' : ''}`} 
-                                        disabled={formLoading || pincodeError || isVerifyingPincode}
+                                        className={`kiks-btn-black w-full md:w-auto flex items-center justify-center transition-all ${formLoading || pincodeError || isVerifyingPincode || !formData.first_name || !formData.last_name || !formData.house_no || !formData.area || !formData.landmark || !formData.city || !formData.state || !formData.pincode || !formData.phone ? 'opacity-50 cursor-not-allowed grayscale' : ''}`} 
+                                        disabled={formLoading || pincodeError || isVerifyingPincode || !formData.first_name || !formData.last_name || !formData.house_no || !formData.area || !formData.landmark || !formData.city || !formData.state || !formData.pincode || !formData.phone}
                                     >
                                         {formLoading ? <Loader2 className="animate-spin mr-2" size={12} /> : null}
                                         {isVerifyingPincode ? 'VERIFYING...' : 'SAVE ADDRESS'}
                                     </button>
                                     <button type="button" onClick={cancelAction} className="kiks-cancel text-[10px] tracking-[0.3em] font-black uppercase underline underline-offset-8 text-white/40 hover:text-white transition-colors">CANCEL</button>
                                 </div>
+                                {(!formData.first_name || !formData.last_name || !formData.house_no || !formData.area || !formData.landmark || !formData.city || !formData.state || !formData.pincode || !formData.phone) && (
+                                    <p className="mt-6 text-[8px] tracking-[0.2em] text-red-500/60 uppercase italic">All fields must be completed to securely store this blueprint</p>
+                                )}
                             </form>
                         </motion.div>
                     )

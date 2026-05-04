@@ -637,10 +637,13 @@ const Checkout = () => {
                                         </div>
 
                                         <div className="pt-10">
+                                            {(!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.houseNo || !formData.area || !formData.landmark || !formData.city || !formData.state || !formData.pincode) && (
+                                                <p className="text-[9px] text-red-500/60 tracking-[0.2em] uppercase mb-4 text-center italic">Please complete all required fields to continue</p>
+                                            )}
                                             <button
                                                 onClick={() => setStep(2)}
-                                                disabled={pincodeError || isVerifyingPincode || !formData.pincode}
-                                                className={`w-full h-16 bg-white text-black text-[11px] font-black tracking-[0.6em] uppercase transition-all flex items-center justify-center font-sans ${pincodeError || isVerifyingPincode || !formData.pincode ? 'opacity-20 cursor-not-allowed grayscale' : 'hover:bg-gold-500'}`}
+                                                disabled={pincodeError || isVerifyingPincode || !formData.pincode || !formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.houseNo || !formData.area || !formData.landmark || !formData.city || !formData.state}
+                                                className={`w-full h-16 bg-white text-black text-[11px] font-black tracking-[0.6em] uppercase transition-all flex items-center justify-center font-sans ${pincodeError || isVerifyingPincode || !formData.pincode || !formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.houseNo || !formData.area || !formData.landmark || !formData.city || !formData.state ? 'opacity-20 cursor-not-allowed grayscale' : 'hover:bg-gold-500'}`}
                                             >
                                                 {isVerifyingPincode ? 'Verifying Details...' : 'Proceed to Payment'}
                                             </button>
