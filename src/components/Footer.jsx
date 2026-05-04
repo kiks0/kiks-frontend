@@ -67,14 +67,14 @@ const Footer = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-4"
+            className="fixed inset-0 z-[1000000] flex items-center justify-center p-0 md:p-4"
           >
             <div className="absolute inset-0 bg-black/95 backdrop-blur-md" onClick={() => setIsLocationModalOpen(false)}></div>
             <motion.div 
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 50, opacity: 0 }}
-              className="bg-[#050505] text-white w-full h-full md:h-auto md:max-w-[1000px] p-8 md:p-16 relative z-10 overflow-y-auto scrollbar-hide border border-white/5"
+              className="bg-[#050505] text-white w-full h-full md:h-auto md:max-w-[1000px] pt-32 pb-12 px-6 md:p-16 relative z-10 overflow-y-auto scrollbar-hide border border-white/5"
             >
               <button onClick={() => setIsLocationModalOpen(false)} className="absolute top-8 right-8 text-white/40 hover:text-white transition-all group">
                 <span className="text-[10px] uppercase tracking-[0.3em] mr-4 opacity-0 group-hover:opacity-100 transition-all">Close</span>
@@ -82,11 +82,11 @@ const Footer = () => {
               </button>
 
               <div className="text-center mb-16">
-                <h2 className="text-[14px] md:text-[20px] font-serif tracking-[0.4em] uppercase mb-4 text-gold-500">Change Location & Language</h2>
+                <h2 className="text-[11px] md:text-[20px] font-serif tracking-[0.4em] uppercase mb-4 text-gold-500">Change Location & Language</h2>
                 <div className="w-12 h-[1px] bg-gold-500/30 mx-auto"></div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-16 max-h-[60vh] overflow-y-auto pr-4 custom-scrollbar">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-12 md:gap-y-16 max-h-[60vh] md:max-h-none overflow-y-visible pr-4 custom-scrollbar">
                 {['Americas', 'Europe', 'Asia-Pacific', 'Middle East'].map(region => {
                   const filteredLocations = locations.filter(l => l.region === region);
                   if (filteredLocations.length === 0) return null;
