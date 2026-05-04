@@ -36,27 +36,28 @@ const Auth = ({ isRegisterInitial = false }) => {
     const [isLoading, setIsLoading] = useState(false);
     const { isAuthenticated } = useSelector((state) => state.auth);
 
-    // Redirect if already authenticated
+    // Redirect if already authenticated (but not if showing success)
     useEffect(() => {
         if (isAuthenticated && status !== 'success') {
-            navigate('/');
+            navigate('/', { replace: true });
         }
     }, [isAuthenticated, navigate, status]);
 
-    // Enhanced Success Navigation with Fail-Safe
+    // Robust Success Navigation
     useEffect(() => {
         if (status === 'success') {
             const timer = setTimeout(() => {
-                navigate('/');
+                // First try standard navigation
+                navigate('/', { replace: true });
                 
-                // Fallback: Force redirect if still on auth page after 1s
+                // Fallback: If still here after 1s, force a reload to home
                 setTimeout(() => {
-                    const currentPath = window.location.pathname;
-                    if (currentPath.includes('/login') || currentPath.includes('/register')) {
+                    const path = window.location.pathname;
+                    if (path.includes('/login') || path.includes('/register')) {
                         window.location.href = '/';
                     }
                 }, 1000);
-            }, 2000);
+            }, 1500);
             return () => clearTimeout(timer);
         }
     }, [status, navigate]);
