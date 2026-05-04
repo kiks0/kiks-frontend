@@ -52,7 +52,19 @@ const Auth = ({ isRegisterInitial = false }) => {
     
     // Sync state when navigating between /login and /register
     useEffect(() => {
-        setIsRegister(isRegisterInitial);
+        // Direct path detection as a fail-safe
+        const path = window.location.pathname;
+        if (path.includes('/register')) {
+            setIsRegister(true);
+        } else if (path.includes('/login')) {
+            setIsRegister(false);
+            setIsForgotPassword(false);
+            setIsResetPassword(false);
+        }
+        
+        // Reset status/errors on path change
+        setStatus('idle');
+        setErrorMessage('');
         
         // Check for reset token in URL
         const params = new URLSearchParams(window.location.search);
@@ -61,7 +73,7 @@ const Auth = ({ isRegisterInitial = false }) => {
             setResetToken(token);
             setIsResetPassword(true);
         }
-    }, [isRegisterInitial]);
+    }, [isRegisterInitial, window.location.pathname]);
     
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
