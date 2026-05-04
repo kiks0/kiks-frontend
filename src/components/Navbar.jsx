@@ -232,7 +232,7 @@ const Navbar = () => {
                 <button
                   onClick={() => {
                     if (!isAuthenticated) {
-                      dispatch(openWishlistAuthPopup());
+                      navigate('/login');
                     } else {
                       navigate('/wishlist');
                     }
@@ -378,7 +378,7 @@ const Navbar = () => {
                           onClick={() => {
                             setIsMobileMenuOpen(false);
                             if (!isAuthenticated) {
-                              dispatch(openWishlistAuthPopup());
+                              navigate('/login');
                             } else {
                               navigate('/wishlist');
                             }
