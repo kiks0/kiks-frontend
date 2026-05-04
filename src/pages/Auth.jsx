@@ -30,6 +30,10 @@ const Auth = ({ isRegisterInitial = false }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
+    const [status, setStatus] = useState('idle'); // idle, success, error
+    const [errorMessage, setErrorMessage] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const { isAuthenticated } = useSelector((state) => state.auth);
 
     // Redirect if already authenticated
@@ -85,11 +89,6 @@ const Auth = ({ isRegisterInitial = false }) => {
         }
     }, [isRegisterInitial, location.pathname, location.search]);
     
-    const [showPassword, setShowPassword] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [status, setStatus] = useState('idle'); // idle, success, error
-    const [errorMessage, setErrorMessage] = useState('');
-
     // Comprehensive Country data (Synchronized with PersonalDetails)
     const countryList = [
         { name: 'India', code: '+91', iso: 'IN', length: 10, pattern: /^[0-9]{10}$/ },
