@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     ShoppingBag,
@@ -28,15 +28,21 @@ import {
     AlertCircle
 } from 'lucide-react';
 import { getFullImageUrl } from '../utils/url';
-import { clearCart } from '../store/cartSlice';
+import { clearCart, setCart } from '../store/cartSlice';
 import { formatCurrency } from '../utils/currency';
 import ActionLoader from '../components/ActionLoader';
 
 const Checkout = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const dispatch = useDispatch();
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-    const { items = [], total = 0 } = useSelector(state => state.cart || {});
+    
+    // Support Direct Buy (Buy Now) from Product Page
+    const directItem = location.state?.directItem;
+    const { items: cartItems = [], total: cartTotal = 0 } = useSelector(state => state.cart || {});
+    const items = directItem ? [directItem] : cartItems;
+    
     const { user = null, isAuthenticated = false, token = null } = useSelector(state => state.auth || {});
     const { activeCurrency, rates, symbols } = useSelector(state => state.currency);
 

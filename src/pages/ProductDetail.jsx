@@ -233,6 +233,19 @@ const ProductDetail = () => {
         }
     };
 
+    const handleBuyNow = () => {
+        if (product) {
+            navigate('/checkout', { 
+                state: { 
+                    directItem: { 
+                        ...product, 
+                        quantity: 1 
+                    } 
+                } 
+            });
+        }
+    };
+
     const handleWaitlistSubmit = async (e) => {
         e.preventDefault();
         setNotifyStatus({ type: 'loading', msg: 'Processing request...' });
@@ -460,12 +473,20 @@ const ProductDetail = () => {
                             transition={{ delay: 0.5 }}
                             className="w-full flex flex-col space-y-4 md:space-y-6"
                         >
-                            <button
-                                onClick={handleAddToCart}
-                                className="w-full h-12 md:h-14 bg-black text-white border border-white text-[11px] font-black tracking-[0.4em] uppercase hover:bg-white hover:text-black transition-all duration-500 active:scale-[0.98]"
-                            >
-                                ADD TO BAG
-                            </button>
+                            <div className="flex flex-col md:flex-row gap-4 w-full">
+                                <button
+                                    onClick={handleAddToCart}
+                                    className="flex-1 h-12 md:h-14 bg-black text-white border border-white text-[11px] font-black tracking-[0.4em] uppercase hover:bg-white hover:text-black transition-all duration-500 active:scale-[0.98]"
+                                >
+                                    ADD TO BAG
+                                </button>
+                                <button
+                                    onClick={handleBuyNow}
+                                    className="flex-1 h-12 md:h-14 bg-white text-black border border-white text-[11px] font-black tracking-[0.4em] uppercase hover:bg-gold-500 hover:border-gold-500 transition-all duration-500 active:scale-[0.98]"
+                                >
+                                    BUY NOW
+                                </button>
+                            </div>
 
                             <div className="flex flex-col space-y-4 md:space-y-8 pt-1">
                                 <p className="text-[9px] md:text-[10px] text-white/30 tracking-widest leading-loose">
