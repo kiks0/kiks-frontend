@@ -958,7 +958,7 @@ const ProductDetail = () => {
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            className="relative max-w-5xl w-full bg-[#0a0a0a] border border-white/10 overflow-hidden flex flex-col md:flex-row shadow-2xl"
+                            className="relative max-w-5xl w-full bg-[#0a0a0a] border border-white/10 overflow-hidden flex flex-col md:flex-row shadow-2xl max-h-[90vh] md:max-h-none overflow-y-auto md:overflow-visible"
                             onClick={(e) => e.stopPropagation()}
                         >
                             {/* Close Button */}
@@ -970,44 +970,44 @@ const ProductDetail = () => {
                             </button>
 
                             {/* Image Section */}
-                            <div className="w-full md:w-2/3 h-[50vh] md:h-[80vh] bg-black flex items-center justify-center overflow-hidden border-b md:border-b-0 md:border-r border-white/10">
+                            <div className="w-full md:w-2/3 h-[40vh] sm:h-[50vh] md:h-[80vh] bg-black flex items-center justify-center overflow-hidden border-b md:border-b-0 md:border-r border-white/10 flex-shrink-0">
                                 <img
                                     src={getFullImageUrl(selectedReviewImage.url)}
                                     alt="Review Large"
-                                    className="max-w-full max-h-full object-contain"
+                                    className="max-w-full max-h-full object-contain p-2"
                                 />
                             </div>
 
                             {/* Info Section */}
-                            <div className="w-full md:w-1/3 p-8 flex flex-col justify-between bg-gradient-to-b from-[#0a0a0a] to-black">
+                            <div className="w-full md:w-1/3 p-6 sm:p-8 flex flex-col justify-between bg-gradient-to-b from-[#0a0a0a] to-black overflow-y-auto">
                                 <div>
-                                    <div className="flex mb-6">
+                                    <div className="flex mb-4 sm:mb-6">
                                         {[...Array(5)].map((_, i) => (
                                             <Star
                                                 key={i}
-                                                size={14}
+                                                size={12}
                                                 className={i < selectedReviewImage.review.rating ? "fill-gold-400 text-gold-400" : "text-[#333]"}
                                             />
                                         ))}
                                     </div>
-                                    <h3 className="text-xl font-serif text-white mb-4 tracking-wide uppercase italic">
+                                    <h3 className="text-lg sm:text-xl font-serif text-white mb-3 sm:mb-4 tracking-wide uppercase italic">
                                         {selectedReviewImage.review.title}
                                     </h3>
-                                    <p className="text-sm text-white/60 leading-relaxed font-sans tracking-wide">
+                                    <p className="text-xs sm:text-sm text-white/60 leading-relaxed font-sans tracking-wide">
                                         {selectedReviewImage.review.comment}
                                     </p>
                                 </div>
 
-                                <div className="mt-8 pt-8 border-t border-white/5">
+                                <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-white/5">
                                     <div className="flex items-center space-x-4">
-                                        <div className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center text-[12px] font-bold text-white uppercase italic">
+                                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/5 border border-white/10 flex items-center justify-center text-[10px] sm:text-[12px] font-bold text-white uppercase italic">
                                             {selectedReviewImage.review.first_name?.[0]}
                                         </div>
                                         <div>
-                                            <p className="text-[10px] text-white/80 uppercase tracking-[0.2em] font-bold">
+                                            <p className="text-[9px] sm:text-[10px] text-white/80 uppercase tracking-[0.2em] font-bold">
                                                 {selectedReviewImage.review.first_name} {selectedReviewImage.review.last_name}
                                             </p>
-                                            <p className="text-[9px] text-white/40 uppercase tracking-[0.1em] mt-1">
+                                            <p className="text-[8px] sm:text-[9px] text-white/40 uppercase tracking-[0.1em] mt-1">
                                                 {new Date(selectedReviewImage.review.created_at).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}
                                             </p>
                                         </div>
