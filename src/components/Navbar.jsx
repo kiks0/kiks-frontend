@@ -294,7 +294,6 @@ const Navbar = () => {
                     </button>
                   )}
                   <span className="text-[11px] tracking-[0.4em] uppercase font-medium text-white font-serif italic">
-                    MENU
                   </span>
                 </div>
                 <button onClick={() => { setIsMobileMenuOpen(false); setMobileMenuLevel('main'); }} className="text-white/60 hover:text-white transition-colors">
