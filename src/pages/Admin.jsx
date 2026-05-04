@@ -2776,13 +2776,13 @@ const Admin = () => {
                                             <p className="text-[10px] tracking-[0.3em] text-gold-500/80 uppercase">Strategic Acquisition Popup</p>
                                         </div>
                                         <div className="flex items-center gap-4 bg-black/40 p-2 border border-white/10">
-                                            <span className="text-[9px] uppercase tracking-widest text-white/60 ml-3">Visibility Status</span>
+                                            <span className="text-[9px] uppercase tracking-widest text-white/60 ml-3">Popup Status</span>
                                             <button
                                                 type="button"
                                                 onClick={() => setPopupSettings({ ...popupSettings, is_active: !popupSettings.is_active })}
-                                                className={`px-6 py-2 text-[9px] font-black uppercase tracking-[0.2em] transition-all border ${popupSettings.is_active ? 'bg-gold-500 border-gold-500 text-black' : 'bg-transparent border-white/20 text-white/40'}`}
+                                                className={`px-8 py-2 text-[10px] font-black uppercase tracking-[0.2em] transition-all border ${popupSettings.is_active ? 'bg-gold-500 border-gold-500 text-black' : 'bg-transparent border-white/20 text-white/40'}`}
                                             >
-                                                {popupSettings.is_active ? 'Live' : 'Dark'}
+                                                {popupSettings.is_active ? 'LIVE' : 'OFF'}
                                             </button>
                                         </div>
                                     </div>
