@@ -489,10 +489,10 @@ const ProductDetail = () => {
                                 <button
                                     onClick={handleAddToCart}
                                     disabled={isAdding || isAdded}
-                                    className={`flex-1 h-12 md:h-14 border border-white text-[9px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.4em] uppercase transition-all duration-500 active:scale-[0.98] flex items-center justify-center ${isAdded ? 'bg-white text-black' : 'bg-black text-white hover:bg-white hover:text-black'}`}
+                                    className={`flex-1 h-12 md:h-14 border border-white text-[9px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.4em] uppercase transition-all duration-500 active:scale-[0.98] flex items-center justify-center ${isAdding || isAdded ? 'bg-white text-black' : 'bg-black text-white hover:bg-white hover:text-black'}`}
                                 >
                                     {isAdding ? (
-                                        <Loader2 size={16} className="animate-spin text-white" />
+                                        <Loader2 size={16} className="animate-spin text-black" />
                                     ) : isAdded ? (
                                         'ADDED TO BAG'
                                     ) : (
