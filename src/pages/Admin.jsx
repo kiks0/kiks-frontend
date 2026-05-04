@@ -32,6 +32,7 @@ const Admin = () => {
     const [activeTab, setActiveTab] = useState('dashboard'); // dashboard, orders, collections, products, blogs, marketing
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
@@ -426,6 +427,7 @@ const Admin = () => {
 
     const handleUpdatePopup = async (e) => {
         e.preventDefault();
+        setIsProcessing(true);
         try {
             const res = await fetch(`${API_URL}/api/marketing/popup`, {
                 method: 'PUT',
@@ -435,6 +437,7 @@ const Admin = () => {
             if (res.ok) showSuccessToast('Popup settings updated.');
             else showErrorToast('Failed to update popup.');
         } catch (e) { showErrorToast('Network error.'); }
+        finally { setIsProcessing(false); }
     };
 
     const handleAddGalleryImage = async (url) => {
@@ -526,6 +529,7 @@ const Admin = () => {
 
     const handleApproveDeletion = async (id) => {
         if (!window.confirm('Are you absolutely certain? This will soft-delete the account, log the user out immediately, and hide them from the registry. This is a professional-grade administrative action.')) return;
+        setIsProcessing(true);
         try {
             const res = await fetch(`${API_URL}/api/users/approve-deletion/${id}`, {
                 method: 'POST',
@@ -541,11 +545,14 @@ const Admin = () => {
             }
         } catch (e) {
             showErrorToast('System fault during approval.');
+        } finally {
+            setIsProcessing(false);
         }
     };
 
     const handleAddAdmin = async (e) => {
         e.preventDefault();
+        setIsProcessing(true);
         try {
             const res = await fetch(`${API_URL}/api/users/admins`, {
                 method: 'POST',
@@ -562,6 +569,7 @@ const Admin = () => {
                 showErrorToast(data.msg || 'Failed to register administrator.');
             }
         } catch (e) { showErrorToast('Server communication fault.'); }
+        finally { setIsProcessing(false); }
     };
 
     const handleDeleteUser = async (id) => {
@@ -763,7 +771,7 @@ const Admin = () => {
             return showErrorToast('Please upload a visual banner first.');
         }
 
-        setUploading(true);
+        setIsProcessing(true);
         try {
             const url = editingId
                 ? `${API_URL}/api/collections/${editingId}`
@@ -789,7 +797,7 @@ const Admin = () => {
         } catch (error) {
             showErrorToast('Operation failed.');
         } finally {
-            setUploading(false);
+            setIsProcessing(false);
         }
     };
 
@@ -802,7 +810,7 @@ const Admin = () => {
             return showErrorToast('Please upload a product visual first.');
         }
 
-        setUploading(true);
+        setIsProcessing(true);
         try {
             const url = editingId
                 ? `${API_URL}/api/products/${editingId}`
@@ -835,7 +843,7 @@ const Admin = () => {
         } catch (error) {
             showErrorToast('Operation failed.');
         } finally {
-            setUploading(false);
+            setIsProcessing(false);
         }
     };
 
@@ -844,7 +852,7 @@ const Admin = () => {
         setSuccessMessage('');
         setErrorMessage('');
 
-        setUploading(true);
+        setIsProcessing(true);
         try {
             const url = editingId
                 ? `${API_URL}/api/blogs/${editingId}`
@@ -869,7 +877,7 @@ const Admin = () => {
         } catch (error) {
             showErrorToast('Operation failed.');
         } finally {
-            setUploading(false);
+            setIsProcessing(false);
         }
     };
 
@@ -2284,8 +2292,19 @@ const Admin = () => {
                                                             </div>
                                                         </div>
                                                         <div className="md:col-span-2 pt-4">
-                                                            <button type="submit" className="w-full bg-gold-500 text-black py-5 text-[11px] font-black tracking-[0.5em] uppercase hover:bg-white transition-all">
-                                                                Confirm Appointment
+                                                            <button
+                                                                type="submit"
+                                                                disabled={isProcessing}
+                                                                className="w-full bg-gold-500 text-black py-5 text-[11px] font-black tracking-[0.5em] uppercase hover:bg-white transition-all flex items-center justify-center gap-3"
+                                                            >
+                                                                {isProcessing ? (
+                                                                    <>
+                                                                        <Loader2 className="animate-spin" size={16} />
+                                                                        Processing Appointment...
+                                                                    </>
+                                                                ) : (
+                                                                    'Confirm Appointment'
+                                                                )}
                                                             </button>
                                                         </div>
                                                     </form>
@@ -2403,9 +2422,13 @@ const Admin = () => {
                                                                 <td className="p-6 text-right">
                                                                     <button
                                                                         onClick={() => handleApproveDeletion(req.id)}
-                                                                        className="bg-red-500 text-white px-4 py-2 text-[8px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all"
+                                                                        disabled={isProcessing}
+                                                                        className="bg-red-500 text-white px-4 py-2 text-[8px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all flex items-center gap-2"
                                                                     >
-                                                                        Approve Deletion
+                                                                        {isProcessing ? (
+                                                                            <Loader2 className="animate-spin" size={10} />
+                                                                        ) : null}
+                                                                        {isProcessing ? 'Processing...' : 'Approve Deletion'}
                                                                     </button>
                                                                 </td>
                                                             </tr>
@@ -2436,9 +2459,11 @@ const Admin = () => {
                                                                 </div>
                                                                 <button
                                                                     onClick={() => handleApproveDeletion(req.id)}
-                                                                    className="w-full bg-red-600 text-white py-4 text-[10px] font-black uppercase tracking-[0.2em] shadow-lg active:scale-[0.98] transition-all"
+                                                                    disabled={isProcessing}
+                                                                    className="w-full bg-red-600 text-white py-4 text-[10px] font-black uppercase tracking-[0.2em] shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                                                                 >
-                                                                    Approve Deletion
+                                                                    {isProcessing && <Loader2 className="animate-spin" size={14} />}
+                                                                    {isProcessing ? 'Processing Deletion...' : 'Approve Deletion'}
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -3417,11 +3442,16 @@ const Admin = () => {
                                         )}
                                         <div className="md:col-span-2 pt-8">
                                             <button
-                                                disabled={uploading}
+                                                disabled={isProcessing}
                                                 type="submit"
-                                                className={`w-full py-6 text-[11px] font-black tracking-[0.5em] uppercase transition-all flex items-center justify-center ${uploading ? 'bg-zinc-800 text-white/60 cursor-wait' : 'bg-white text-black hover:bg-gold-500'}`}
+                                                className={`w-full py-6 text-[11px] font-black tracking-[0.5em] uppercase transition-all flex items-center justify-center ${isProcessing ? 'bg-zinc-800 text-white/60 cursor-wait' : 'bg-white text-black hover:bg-gold-500'}`}
                                             >
-                                                {uploading ? 'Processing Architecture...' : (
+                                                {isProcessing ? (
+                                                    <>
+                                                        <Loader2 className="animate-spin mr-4" size={18} />
+                                                        Processing Architecture...
+                                                    </>
+                                                ) : (
                                                     <><Save size={18} className="mr-4" /> {editingId ? 'Save Modifications' : 'Finalize Selection'}</>
                                                 )}
                                             </button>
