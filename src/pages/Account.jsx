@@ -133,8 +133,8 @@ const Account = () => {
           transition={{ duration: 1.2, ease: "easeOut" }}
           className="flex flex-col items-center"
         >
-          <p className="text-[9px] md:text-[10px] tracking-[0.6em] font-bold uppercase mb-8 text-black/30">Welcome</p>
-          <h1 className="text-base md:text-xl font-serif tracking-[0.5em] uppercase text-black font-light leading-none">{userName}</h1>
+          <p className="text-[9px] md:text-[10px] tracking-[0.6em] font-bold uppercase mb-8 text-black/30 mr-[-0.6em]">Welcome</p>
+          <h1 className="text-base md:text-xl font-serif tracking-[0.5em] uppercase text-black font-light leading-none mr-[-0.5em]">{userName}</h1>
         </motion.div>
       </section>
 
