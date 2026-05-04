@@ -28,13 +28,6 @@ const ActionLoader = ({ isLoading, message = "Processing" }) => {
                                 ease: "easeInOut" 
                             }}
                         />
-                        
-                        <div className="mt-12 flex flex-col items-center relative z-10">
-                            <div className="w-16 h-[1px] bg-gold-500/30 mb-4" />
-                            <p className="text-[10px] tracking-[0.6em] text-gold-500 uppercase font-black animate-pulse">
-                                {message}
-                            </p>
-                        </div>
                     </div>
                 </motion.div>
             )}

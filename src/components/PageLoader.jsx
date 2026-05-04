@@ -11,7 +11,6 @@ const PageLoader = () => {
                     alt="Kiks Loading" 
                     className="w-[100px] md:w-[130px] h-auto relative z-10 animate-luxury-pulse"
                 />
-                <div className="w-10 h-[1px] bg-gold-500/20 mt-8" />
             </div>
             </div>
         </div>
