@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, User, ArrowRight, Eye, EyeOff, Sparkles, LogIn, UserPlus, Phone, Calendar, Globe, ChevronDown, CheckCircle2, Loader2 } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { login } from '../store/authSlice';
 import { fetchWishlist, clearWishlist } from '../store/wishlistSlice';
@@ -50,10 +50,12 @@ const Auth = ({ isRegisterInitial = false }) => {
         return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
     };
     
+    const location = useLocation();
+
     // Sync state when navigating between /login and /register
     useEffect(() => {
-        // Direct path detection as a fail-safe
-        const path = window.location.pathname;
+        // Use proper location hook for reliable navigation on mobile
+        const path = location.pathname;
         if (path.includes('/register')) {
             setIsRegister(true);
         } else if (path.includes('/login')) {
@@ -67,13 +69,13 @@ const Auth = ({ isRegisterInitial = false }) => {
         setErrorMessage('');
         
         // Check for reset token in URL
-        const params = new URLSearchParams(window.location.search);
+        const params = new URLSearchParams(location.search);
         const token = params.get('token');
         if (token) {
             setResetToken(token);
             setIsResetPassword(true);
         }
-    }, [isRegisterInitial, window.location.pathname]);
+    }, [isRegisterInitial, location.pathname, location.search]);
     
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);

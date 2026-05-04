@@ -79,6 +79,8 @@ const Navbar = () => {
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setMobileMenuLevel('main');
+    // Ensure scroll is restored on route change as a fail-safe
+    document.body.style.overflow = 'unset';
   }, [location.pathname]);
 
   // Lock body scroll when mobile menu is open
