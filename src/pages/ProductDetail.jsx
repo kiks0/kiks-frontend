@@ -228,12 +228,20 @@ const ProductDetail = () => {
     };
 
     const [isAdded, setIsAdded] = useState(false);
+    const [isAdding, setIsAdding] = useState(false);
 
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         if (product) {
+            setIsAdding(true);
+            
+            // Artificial delay for premium "Processing" feel
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
             dispatch(addToCart({ ...product, quantity }));
+            setIsAdding(false);
             setIsAdded(true);
-            dispatch(openCart()); // AUTOMATICALLY OPEN CART DRAWER
+            dispatch(openCart()); 
+            
             setTimeout(() => setIsAdded(false), 2000);
         }
     };
@@ -481,10 +489,16 @@ const ProductDetail = () => {
                             <div className="flex flex-row gap-2 md:gap-4 w-full">
                                 <button
                                     onClick={handleAddToCart}
-                                    disabled={isAdded}
-                                    className={`flex-1 h-12 md:h-14 border border-white text-[9px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.4em] uppercase transition-all duration-500 active:scale-[0.98] ${isAdded ? 'bg-white text-black' : 'bg-black text-white hover:bg-white hover:text-black'}`}
+                                    disabled={isAdding || isAdded}
+                                    className={`flex-1 h-12 md:h-14 border border-white text-[9px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.4em] uppercase transition-all duration-500 active:scale-[0.98] flex items-center justify-center ${isAdded ? 'bg-white text-black' : 'bg-black text-white hover:bg-white hover:text-black'}`}
                                 >
-                                    {isAdded ? 'ADDED TO BAG' : 'ADD TO BAG'}
+                                    {isAdding ? (
+                                        <Loader2 size={16} className="animate-spin text-white" />
+                                    ) : isAdded ? (
+                                        'ADDED TO BAG'
+                                    ) : (
+                                        'ADD TO BAG'
+                                    )}
                                 </button>
                                 <button
                                     onClick={handleBuyNow}
