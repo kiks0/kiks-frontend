@@ -134,7 +134,7 @@ const PromoPopup = () => {
                                             {popupData?.title || 'Join The Inner Circle'}
                                         </h2>
                                         <p className="text-[11px] text-white/40 tracking-[0.15em] mb-8 leading-relaxed max-w-xs uppercase">
-                                            {popupData?.offer_text || 'Subscribe to receive a 10% privilege on your first curation.'}
+                                            {popupData?.offer_text || 'Join the elite circle of connoisseurs.'}
                                         </p>
 
                                         <form onSubmit={handleSubmit} className="w-full space-y-4">
@@ -175,13 +175,12 @@ const PromoPopup = () => {
                                             />
                                         </div>
                                         <h3 className="text-white text-lg tracking-[0.3em] uppercase font-serif italic mb-2">Welcome to KIKS</h3>
-                                        <p className="text-gold-500 text-[9px] tracking-[0.4em] uppercase font-black mb-8">You are now part of the circle.</p>
+                                        <p className="text-gold-500 text-[9px] tracking-[0.4em] uppercase font-black mb-4">You are now part of the circle.</p>
                                         
-                                        <div className="bg-white/5 border border-white/10 p-6 space-y-3">
-                                            <p className="text-[8px] tracking-[0.4em] text-white/40 uppercase">Your Private Invitation Code</p>
-                                            <p className="text-2xl text-white tracking-[0.5em] font-light uppercase">KIKS10</p>
+                                        <div className="bg-white/5 border border-white/10 p-6">
+                                            <p className="text-[8px] tracking-[0.4em] text-white/40 uppercase">Your subscription has been recorded in the registry.</p>
                                         </div>
-                                        <p className="mt-6 text-[9px] text-white/30 tracking-widest uppercase">Use at checkout for your 10% privilege</p>
+                                        <p className="mt-6 text-[9px] text-white/30 tracking-widest uppercase italic">The KIKS Manifesto will be delivered shortly.</p>
                                     </motion.div>
                                 )}
                             </div>
