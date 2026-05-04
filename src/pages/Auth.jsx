@@ -467,50 +467,28 @@ Marketing Consent: Granted
                     {status === 'success' ? (
                         <motion.div 
                             key="success"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="text-center py-24 flex flex-col items-center"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="text-center py-20"
                         >
-                            <motion.div 
-                                animate={{ 
-                                    scale: [1, 1.1, 1],
-                                    rotate: [0, 5, -5, 0],
-                                    opacity: [0.5, 1, 0.5]
-                                }}
-                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                className="mb-12 relative"
+                            <div className="w-24 h-24 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mb-8 mx-auto">
+                                <CheckCircle2 size={48} />
+                            </div>
+
+                            <h2 className="text-3xl font-serif tracking-widest uppercase mb-4">
+                                {isRegister ? 'Registry Complete' : 'Identity Authenticated'}
+                            </h2>
+
+                            <p className="text-gray-400 text-[10px] tracking-[0.4em] uppercase mb-8">
+                                {isRegister ? 'Welcome to the world of KIKS' : 'Accessing KIKS Ultra Luxury'}
+                            </p>
+
+                            <button 
+                                onClick={() => navigate('/', { replace: true })}
+                                className="text-[9px] tracking-[0.4em] text-white/20 hover:text-white uppercase font-bold transition-all border-b border-white/5 pb-1"
                             >
-                                <div className="absolute inset-0 bg-gold-500/20 blur-3xl rounded-full" />
-                                <Sparkles size={80} className="text-gold-500 relative z-10" strokeWidth={1} />
-                            </motion.div>
-                            
-                            <motion.h2 
-                                initial={{ y: 20, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                transition={{ delay: 0.1, duration: 0.5 }}
-                                className="text-4xl font-serif tracking-[0.2em] uppercase mb-6 font-light"
-                            >
-                                {isRegister ? 'Identity Verified' : 'Welcome Back'}
-                            </motion.h2>
-                            
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.3, duration: 0.5 }}
-                                className="flex flex-col items-center"
-                            >
-                                <p className="text-gold-500/40 text-[10px] tracking-[0.5em] uppercase mb-10">
-                                    {isRegister ? 'Entry granted to the vault' : 'Accessing your private portal'}
-                                </p>
-                                <div className="w-12 h-[1px] bg-gold-500/30 animate-pulse mb-8" />
-                                
-                                <button 
-                                    onClick={() => navigate('/', { replace: true })}
-                                    className="text-[9px] tracking-[0.4em] text-white/20 hover:text-white uppercase font-bold transition-all border-b border-white/5 pb-1"
-                                >
-                                    Enter Boutique
-                                </button>
-                            </motion.div>
+                                Enter Boutique
+                            </button>
                         </motion.div>
                     ) : status === 'reset_sent' ? (
                         <motion.div key="reset_sent" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
