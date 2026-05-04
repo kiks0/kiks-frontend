@@ -412,7 +412,7 @@ const Addresses = () => {
                                     <button type="button" onClick={cancelAction} className="kiks-cancel text-[10px] tracking-[0.3em] font-black uppercase underline underline-offset-8 text-white/40 hover:text-white transition-colors">CANCEL</button>
                                 </div>
                                 {(!formData.first_name || !formData.last_name || !formData.house_no || !formData.area || !formData.landmark || !formData.city || !formData.state || !formData.pincode || !formData.phone) && (
-                                    <p className="mt-6 text-[8px] tracking-[0.2em] text-red-500/60 uppercase italic">All fields must be completed to securely store this blueprint</p>
+                                    <p className="mt-6 text-[8px] tracking-[0.2em] text-red-500/60 uppercase italic">Please complete all address fields to save your identity</p>
                                 )}
                             </form>
                         </motion.div>
