@@ -2853,7 +2853,6 @@ const Admin = () => {
                                                         placeholder="/collection"
                                                     />
                                                 </div>
-                                                </div>
                                             </div>
                                         </div>
 
