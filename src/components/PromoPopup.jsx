@@ -131,10 +131,10 @@ const PromoPopup = () => {
                                     <>
                                         <span className="text-gold-500 text-[9px] tracking-[0.5em] uppercase font-black mb-4">Privileged Invitation</span>
                                         <h2 className="text-2xl md:text-4xl font-serif text-white tracking-widest uppercase italic mb-6 leading-tight">
-                                            {popupData?.title || 'Join The Inner Circle'}
+                                            {popupData?.title || 'Newsletter'}
                                         </h2>
                                         <p className="text-[11px] text-white/40 tracking-[0.15em] mb-8 leading-relaxed max-w-xs uppercase">
-                                            {popupData?.offer_text || 'Join the elite circle of connoisseurs.'}
+                                            {popupData?.offer_text || 'Subscribe for the latest updates.'}
                                         </p>
 
                                         <form onSubmit={handleSubmit} className="w-full space-y-4">
@@ -174,13 +174,13 @@ const PromoPopup = () => {
                                                 className="w-2 h-2 bg-gold-500 rounded-full"
                                             />
                                         </div>
-                                        <h3 className="text-white text-lg tracking-[0.3em] uppercase font-serif italic mb-2">Welcome to KIKS</h3>
-                                        <p className="text-gold-500 text-[9px] tracking-[0.4em] uppercase font-black mb-4">You are now part of the circle.</p>
+                                        <h3 className="text-white text-lg tracking-[0.3em] uppercase font-serif italic mb-2">Subscribed</h3>
+                                        <p className="text-gold-500 text-[9px] tracking-[0.4em] uppercase font-black mb-4">You are now part of the list.</p>
                                         
                                         <div className="bg-white/5 border border-white/10 p-6">
-                                            <p className="text-[8px] tracking-[0.4em] text-white/40 uppercase">Your subscription has been recorded in the registry.</p>
+                                            <p className="text-[8px] tracking-[0.4em] text-white/40 uppercase">Thank you for joining.</p>
                                         </div>
-                                        <p className="mt-6 text-[9px] text-white/30 tracking-widest uppercase italic">The KIKS Manifesto will be delivered shortly.</p>
+                                        <p className="mt-6 text-[9px] text-white/30 tracking-widest uppercase italic">Updates will be delivered to your inbox.</p>
                                     </motion.div>
                                 )}
                             </div>
