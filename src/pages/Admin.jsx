@@ -645,7 +645,11 @@ const Admin = () => {
 
             const res = await fetch(`${API_URL}/api/upload`, {
                 method: 'POST',
-                headers: { 'x-admin-secret': secret },
+                headers: {
+                    'x-admin-secret': import.meta.env.VITE_ADMIN_SECRET || 'KIKS-ELITE-SECRET-2026',
+                    'x-auth-token': token,
+                    'Authorization': `Bearer ${token}`
+                },
                 body: formData
             });
 
@@ -728,7 +732,11 @@ const Admin = () => {
 
             const res = await fetch(`${API_URL}/api/upload`, {
                 method: 'POST',
-                headers: { 'x-admin-secret': import.meta.env.VITE_ADMIN_SECRET },
+                headers: {
+                    'x-admin-secret': import.meta.env.VITE_ADMIN_SECRET || 'KIKS-ELITE-SECRET-2026',
+                    'x-auth-token': token,
+                    'Authorization': `Bearer ${token}`
+                },
                 body: formData
             });
             const data = await res.json();
@@ -1192,8 +1200,8 @@ const Admin = () => {
         );
     }
 
-    const inputClasses = "w-full bg-white/5 border border-white/10 p-3 md:p-4 text-[10px] md:text-xs text-white focus:outline-none focus:border-gold-500 transition-all font-light tracking-[0.1em] md:tracking-[0.2em] mb-4";
-    const labelClasses = "text-[9px] tracking-[0.3em] font-bold text-white/70 uppercase block mb-1 mt-2";
+    const inputClasses = "w-full bg-white/[0.07] border border-white/20 p-3 md:p-4 text-[11px] md:text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-gold-500 transition-all font-medium tracking-[0.1em] md:tracking-[0.2em] mb-4";
+    const labelClasses = "text-[10px] md:text-[11px] tracking-[0.3em] font-black text-gold-500 uppercase block mb-2 mt-4";
 
     return (
         <div className="bg-black min-h-screen text-white pt-24 md:pt-40 pb-20 px-4 md:px-10 lg:px-20 overflow-x-hidden relative">
@@ -2760,58 +2768,50 @@ const Admin = () => {
                         ) : (
                             <>
                                 {/* POPUP MANAGEMENT */}
-                                <section className="bg-white/5 border border-white/10 p-6 md:p-12">
-                                    <div className="flex items-center space-x-4 mb-10">
-                                        <Sparkles className="text-gold-500" size={24} />
-                                        <h2 className="text-2xl font-serif tracking-widest uppercase italic">"The Inner Circle" Popup</h2>
+                                <section className="space-y-8 bg-zinc-900/40 p-5 sm:p-8 md:p-12 border border-white/5 relative overflow-hidden group">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-gold-500/5 blur-[80px] rounded-full pointer-events-none" />
+                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-8">
+                                        <div className="space-y-2">
+                                            <h2 className="text-xl md:text-2xl font-serif tracking-[0.2em] uppercase italic">Offer of the Day</h2>
+                                            <p className="text-[10px] tracking-[0.3em] text-gold-500/80 uppercase">Strategic Acquisition Popup</p>
+                                        </div>
+                                        <div className="flex items-center gap-4 bg-black/40 p-2 border border-white/10">
+                                            <span className="text-[9px] uppercase tracking-widest text-white/60 ml-3">Visibility Status</span>
+                                            <button
+                                                type="button"
+                                                onClick={() => setPopupSettings({ ...popupSettings, is_active: !popupSettings.is_active })}
+                                                className={`px-6 py-2 text-[9px] font-black uppercase tracking-[0.2em] transition-all border ${popupSettings.is_active ? 'bg-gold-500 border-gold-500 text-black' : 'bg-transparent border-white/20 text-white/40'}`}
+                                            >
+                                                {popupSettings.is_active ? 'Live' : 'Dark'}
+                                            </button>
+                                        </div>
                                     </div>
 
-                                    <form onSubmit={handleUpdatePopup} className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                                    <form onSubmit={handleUpdatePopup} className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16">
                                         <div className="space-y-8">
-                                            <div className="flex items-center justify-between bg-zinc-900/80 p-6 md:p-8 border border-white/10 shadow-2xl">
-                                                <div>
-                                                    <p className="text-[11px] tracking-[0.3em] font-black uppercase text-white mb-2">Engagement Status</p>
-                                                    <div className="flex items-center space-x-3">
-                                                        <div className={`w-2 h-2 rounded-full animate-pulse ${popupSettings.is_active ? 'bg-gold-500' : 'bg-red-500'}`} />
-                                                        <p className={`text-[10px] tracking-[0.2em] uppercase font-bold ${popupSettings.is_active ? 'text-gold-500' : 'text-white/70'}`}>
-                                                            {popupSettings.is_active ? 'Registry Active' : 'Registry Paused'}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setPopupSettings(prev => ({ ...prev, is_active: !prev.is_active }))}
-                                                    className={`w-20 h-10 rounded-full relative transition-all duration-700 shadow-inner overflow-hidden ${popupSettings.is_active ? 'bg-gold-500' : 'bg-white/5 border border-white/10'}`}
-                                                >
-                                                    <div className={`absolute top-1.5 w-7 h-7 bg-white rounded-full transition-all duration-700 shadow-xl flex items-center justify-center ${popupSettings.is_active ? 'left-11' : 'left-1.5'}`}>
-                                                        {popupSettings.is_active ? <Sparkles size={12} className="text-gold-500" /> : <X size={12} className="text-zinc-400" />}
-                                                    </div>
-                                                </button>
-                                            </div>
-
                                             <div>
-                                                <label className={labelClasses}>Editorial Title</label>
+                                                <label className={labelClasses}>Primary Headline</label>
                                                 <input
-                                                    className={inputClasses}
-                                                    value={popupSettings.title}
-                                                    onChange={e => setPopupSettings({ ...popupSettings, title: e.target.value })}
-                                                    placeholder="Join The Inner Circle"
+                                                    className={`${inputClasses} !text-base md:!text-lg !font-serif !tracking-widest`}
+                                                    value={popupSettings.headline}
+                                                    onChange={e => setPopupSettings({ ...popupSettings, headline: e.target.value })}
+                                                    placeholder="e.g. EXCLUSIVE PRIVILEGE"
                                                 />
                                             </div>
 
                                             <div>
                                                 <label className={labelClasses}>Promotion Narrative</label>
                                                 <textarea
-                                                    className={`${inputClasses} h-24`}
+                                                    className={`${inputClasses} h-32 md:h-40 !text-sm leading-relaxed`}
                                                     value={popupSettings.offer_text}
                                                     onChange={e => setPopupSettings({ ...popupSettings, offer_text: e.target.value })}
                                                     placeholder="Describe the exclusive privilege..."
                                                 />
                                             </div>
 
-                                            <div className="grid grid-cols-2 gap-6">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                                 <div>
-                                                    <label className={labelClasses}>Delay (Seconds)</label>
+                                                    <label className={labelClasses}>Deployment Delay (s)</label>
                                                     <input
                                                         type="number"
                                                         className={inputClasses}
@@ -2820,24 +2820,24 @@ const Admin = () => {
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className={labelClasses}>Redirect URL (Optional)</label>
+                                                    <label className={labelClasses}>Redirection URL</label>
                                                     <input
                                                         className={inputClasses}
                                                         value={popupSettings.redirect_url || ''}
                                                         onChange={e => setPopupSettings({ ...popupSettings, redirect_url: e.target.value })}
-                                                        placeholder="/collection or https://..."
+                                                        placeholder="/collection"
                                                     />
                                                 </div>
-                                                <div className="flex items-end pb-4 col-span-2">
-                                                    <button type="submit" className="w-full bg-gold-500 text-black py-4 text-[10px] font-black tracking-widest uppercase hover:bg-white transition-all flex items-center justify-center gap-2">
-                                                        <Save size={14} /> Commit Changes
+                                                <div className="flex items-end col-span-1 sm:col-span-2">
+                                                    <button type="submit" className="w-full bg-white text-black py-5 text-[10px] font-black tracking-[0.4em] uppercase hover:bg-gold-500 transition-all flex items-center justify-center gap-3">
+                                                        <Save size={16} /> Update Boutique Strategy
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="space-y-4">
-                                            <label className={labelClasses}>Cinematic Visual</label>
+                                        <div className="space-y-6">
+                                            <label className={labelClasses}>Cinematic Lifestyle Visual</label>
                                             <div
                                                 onClick={() => {
                                                     const input = document.createElement('input');
@@ -2845,20 +2845,29 @@ const Admin = () => {
                                                     input.onchange = (e) => handleImageUpload(e, 'popup');
                                                     input.click();
                                                 }}
-                                                className="h-48 border border-dashed border-white/10 bg-zinc-900/50 flex flex-col items-center justify-center cursor-pointer group overflow-hidden relative"
+                                                className="aspect-[4/5] lg:aspect-auto lg:h-[450px] border border-dashed border-white/10 bg-zinc-900/50 flex flex-col items-center justify-center cursor-pointer group overflow-hidden relative"
                                             >
                                                 {popupSettings.image_url ? (
-                                                    <img src={getFullImageUrl(popupSettings.image_url)} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-1000" />
+                                                    <>
+                                                        <img src={getFullImageUrl(popupSettings.image_url)} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000" />
+                                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                            <span className="bg-black/80 px-6 py-3 border border-white/20 text-[9px] uppercase tracking-widest text-white">Replace Visual</span>
+                                                        </div>
+                                                    </>
                                                 ) : (
-                                                    <div className="text-center">
-                                                        <ImageIcon size={32} className="mx-auto mb-4 text-white/60 group-hover:text-gold-500" />
-                                                        <p className="text-[9px] tracking-widest text-white/80 uppercase">Upload Lifestyle Visual</p>
+                                                    <div className="text-center p-10">
+                                                        <ImageIcon size={40} className="mx-auto mb-6 text-white/20 group-hover:text-gold-500 transition-colors" />
+                                                        <p className="text-[10px] tracking-[0.4em] text-white/60 uppercase group-hover:text-white transition-colors">Upload Portrait Visual</p>
+                                                        <p className="text-[8px] text-white/30 uppercase mt-4 tracking-widest">Recommended: 800 x 1200px</p>
                                                     </div>
                                                 )}
 
                                                 {uploading && (
-                                                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center">
-                                                        <Loader2 className="animate-spin text-gold-500" size={32} />
+                                                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-10">
+                                                        <div className="flex flex-col items-center gap-4">
+                                                            <Loader2 className="animate-spin text-gold-500" size={32} />
+                                                            <span className="text-[8px] uppercase tracking-[0.3em] text-gold-500">Processing...</span>
+                                                        </div>
                                                     </div>
                                                 )}
                                             </div>
@@ -2867,11 +2876,11 @@ const Admin = () => {
                                 </section>
 
                                 {/* COMMUNITY GALLERY */}
-                                <section className="space-y-8">
-                                    <div className="flex justify-between items-center">
-                                        <div>
-                                            <h2 className="text-2xl font-serif tracking-widest uppercase">Seen In KIKS</h2>
-                                            <p className="text-[10px] tracking-[0.3em] text-white/80 uppercase mt-2">Community Gallery & Social Proof</p>
+                                <section className="space-y-10">
+                                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                                        <div className="space-y-2">
+                                            <h2 className="text-xl md:text-2xl font-serif tracking-[0.2em] uppercase italic">Seen In KIKS</h2>
+                                            <p className="text-[10px] tracking-[0.3em] text-gold-500/80 uppercase">Community Gallery & Social Proof</p>
                                         </div>
                                         <button
                                             onClick={() => {
@@ -2896,13 +2905,13 @@ const Admin = () => {
                                                 };
                                                 input.click();
                                             }}
-                                            className="bg-white text-black px-8 py-4 text-[10px] font-black uppercase tracking-widest hover:bg-gold-500 transition-all flex items-center gap-3"
+                                            className="w-full md:w-auto bg-white text-black px-10 py-5 text-[10px] font-black uppercase tracking-[0.3em] hover:bg-gold-500 transition-all flex items-center justify-center gap-3 border border-white/10"
                                         >
-                                            <Plus size={16} /> Append Lifestyle Visual
+                                            <Plus size={18} /> Append Lifestyle Visual
                                         </button>
                                     </div>
 
-                                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 md:gap-6">
                                         {communityGallery.map((img) => (
                                             <div key={img.id} className="aspect-square relative group bg-zinc-900 overflow-hidden">
                                                 <img src={getFullImageUrl(img.image_url)} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" />
@@ -2925,16 +2934,17 @@ const Admin = () => {
                                 </section>
 
                                 {/* NEWSLETTER REGISTRY */}
-                                <section className="space-y-8 bg-black/40 p-6 md:p-12 border border-white/5">
-                                    <div className="flex justify-between items-center">
-                                        <div>
-                                            <h2 className="text-2xl font-serif tracking-widest uppercase italic">The Inner Circle Registry</h2>
-                                            <p className="text-[10px] tracking-[0.3em] text-white/80 uppercase mt-2">Newsletter Subscriber Manifest</p>
+                                <section className="space-y-10 bg-black/40 p-5 sm:p-8 md:p-12 border border-white/5 relative overflow-hidden">
+                                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500/20 to-transparent" />
+                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-8">
+                                        <div className="space-y-2">
+                                            <h2 className="text-xl md:text-2xl font-serif tracking-[0.2em] uppercase italic">Inner Circle Registry</h2>
+                                            <p className="text-[10px] tracking-[0.3em] text-gold-500/80 uppercase">Newsletter Subscriber Manifest</p>
                                         </div>
-                                        <div className="flex items-center gap-4">
-                                            <div className="text-right">
-                                                <p className="text-[10px] text-white/80 uppercase tracking-widest">Total Members</p>
-                                                <p className="text-xl font-serif text-gold-500">{newsletterSubscribers.length}</p>
+                                        <div className="flex items-center gap-6 w-full sm:w-auto">
+                                            <div className="text-right flex-grow sm:flex-grow-0">
+                                                <p className="text-[9px] text-white/40 uppercase tracking-widest mb-1">Total Members</p>
+                                                <p className="text-2xl font-serif text-white">{newsletterSubscribers.length}</p>
                                             </div>
                                             <button
                                                 onClick={() => {
@@ -2947,9 +2957,10 @@ const Admin = () => {
                                                     XLSX.utils.book_append_sheet(wb, ws, "Subscribers");
                                                     XLSX.writeFile(wb, `Kiks_Subscribers_${new Date().toISOString().split('T')[0]}.xlsx`);
                                                 }}
-                                                className="bg-white/10 hover:bg-white/20 text-white px-6 py-4 text-[9px] uppercase tracking-[0.3em] transition-all border border-white/10 flex items-center gap-2"
+                                                className="bg-white/5 hover:bg-white/10 text-white p-5 md:px-8 md:py-4 text-[9px] uppercase tracking-[0.3em] transition-all border border-white/10 flex items-center justify-center gap-3"
+                                                title="Export Manifest"
                                             >
-                                                <Download size={14} /> Export Manifest
+                                                <Download size={16} /> <span className="hidden sm:inline">Export Manifest</span>
                                             </button>
                                         </div>
                                     </div>
@@ -3039,7 +3050,7 @@ const Admin = () => {
                                 className="w-full md:w-auto flex items-center justify-center space-x-4 bg-white/5 border border-white/10 px-8 md:px-10 py-4 md:py-5 hover:bg-gold-500 hover:text-black transition-all group"
                             >
                                 {isAdding ? <X size={18} /> : <Plus size={18} />}
-                                <span className="text-[9px] md:text-[10px] tracking-[0.3em] md:tracking-[0.4em] font-black uppercase">
+                                <span className="text-[10px] md:text-[11px] tracking-[0.3em] md:tracking-[0.4em] font-black uppercase text-white">
                                     {isAdding ? 'Discard Draft' : `Add New ${activeTab === 'collections' ? 'Collection' : activeTab === 'products' ? 'Product' : activeTab === 'blogs' ? 'Blog' : 'Promo Code'}`}
                                 </span>
                             </button>
@@ -3113,61 +3124,82 @@ const Admin = () => {
                                             </>
                                         ) : activeTab === 'blogs' ? (
                                             <>
-                                                <div className="md:col-span-2"><label className={labelClasses}>Blog Title</label><input required className={inputClasses} value={blogFormData.title} onChange={e => setBlogFormData({ ...blogFormData, title: e.target.value })} /></div>
-                                                <div><label className={labelClasses}>SEO Slug (URL)</label><input required className={inputClasses} value={blogFormData.slug} onChange={e => setBlogFormData({ ...blogFormData, slug: e.target.value.toLowerCase().replace(/ /g, '-') })} /></div>
-                                                <div><label className={labelClasses}>Keywords (Comma separated)</label><input className={inputClasses} value={blogFormData.keywords} onChange={e => setBlogFormData({ ...blogFormData, keywords: e.target.value })} /></div>
+                                                <div className="md:col-span-2"><label className={labelClasses}>Blog Title</label><input required className={inputClasses} value={blogFormData.title} onChange={e => setBlogFormData({ ...blogFormData, title: e.target.value })} placeholder="e.g. The Art of Oud" /></div>
+                                                <div><label className={labelClasses}>SEO Slug (URL)</label><input required className={inputClasses} value={blogFormData.slug} onChange={e => setBlogFormData({ ...blogFormData, slug: e.target.value.toLowerCase().replace(/ /g, '-') })} placeholder="the-art-of-oud" /></div>
+                                                <div><label className={labelClasses}>Keywords (Comma separated)</label><input className={inputClasses} value={blogFormData.keywords} onChange={e => setBlogFormData({ ...blogFormData, keywords: e.target.value })} placeholder="luxury, perfume, oud" /></div>
                                                 <div><label className={labelClasses}>Author</label><input className={inputClasses} value={blogFormData.author} onChange={e => setBlogFormData({ ...blogFormData, author: e.target.value })} /></div>
-                                                <div className="md:col-span-2"><label className={labelClasses}>Journal Content</label><textarea required className={`${inputClasses} h-64 font-sans !normal-case tracking-normal`} value={blogFormData.content} onChange={e => setBlogFormData({ ...blogFormData, content: e.target.value })} /></div>
+                                                <div className="md:col-span-2">
+                                                    <label className={labelClasses}>Journal Content</label>
+                                                    <div className="text-[10px] text-white/40 uppercase tracking-[0.2em] mb-3 italic">Rich text narrative support enabled</div>
+                                                    <textarea required className={`${inputClasses} h-80 md:h-[500px] font-sans !normal-case tracking-normal !leading-relaxed p-6 md:p-8 bg-white/[0.03] text-sm md:text-base`} value={blogFormData.content} onChange={e => setBlogFormData({ ...blogFormData, content: e.target.value })} />
+                                                </div>
                                             </>
                                         ) : activeTab === 'promo-codes' ? (
                                             <>
-                                                <div><label className={labelClasses}>Promo Code</label><input required className={inputClasses} value={promoFormData.code} onChange={e => setPromoFormData({ ...promoFormData, code: e.target.value })} placeholder="Summer2026" /></div>
-                                                <div>
-                                                    <label className={labelClasses}>Discount Type</label>
-                                                    <select required className={inputClasses} value={promoFormData.discount_type} onChange={e => setPromoFormData({ ...promoFormData, discount_type: e.target.value })}>
-                                                        <option value="percentage" className="bg-black">Percentage (%)</option>
-                                                        <option value="fixed" className="bg-black">Fixed Amount (₹)</option>
-                                                    </select>
+                                                <div className="md:col-span-2">
+                                                    <label className={labelClasses}>Promo Code Identity</label>
+                                                    <input required className={`${inputClasses} !text-lg !font-serif !tracking-[0.2em] uppercase text-gold-500`} value={promoFormData.code} onChange={e => setPromoFormData({ ...promoFormData, code: e.target.value.toUpperCase() })} placeholder="e.g. KIKS2026" />
                                                 </div>
-                                                <div>
-                                                    <label className={labelClasses}>Discount Value {promoFormData.discount_type === 'percentage' ? '(%)' : '(₹)'}</label>
-                                                    <div className="relative">
-                                                        <input required type="number" className={inputClasses} value={promoFormData.discount_value} onChange={e => setPromoFormData({ ...promoFormData, discount_value: e.target.value })} placeholder={promoFormData.discount_type === 'percentage' ? 'e.g. 10' : 'e.g. 500'} />
-                                                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 text-[10px] font-bold">
-                                                            {promoFormData.discount_type === 'percentage' ? '%' : '₹'}
-                                                        </span>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:col-span-2">
+                                                    <div>
+                                                        <label className={labelClasses}>Discount Type</label>
+                                                        <select required className={inputClasses} value={promoFormData.discount_type} onChange={e => setPromoFormData({ ...promoFormData, discount_type: e.target.value })}>
+                                                            <option value="percentage" className="bg-black">Percentage (%)</option>
+                                                            <option value="fixed" className="bg-black">Fixed Amount (₹)</option>
+                                                        </select>
                                                     </div>
-                                                </div>
-                                                <div>
-                                                    <label className={labelClasses}>Min Order Amount (₹ Required)</label>
-                                                    <input type="number" className={inputClasses} value={promoFormData.min_order_amount} onChange={e => setPromoFormData({ ...promoFormData, min_order_amount: e.target.value })} placeholder="e.g. 1000" />
-                                                </div>
-                                                <div>
-                                                    <label className={labelClasses}>Max Discount Cap {promoFormData.discount_type === 'percentage' ? '(₹)' : '(N/A)'}</label>
-                                                    <input
-                                                        type="number"
-                                                        disabled={promoFormData.discount_type === 'fixed'}
-                                                        className={`${inputClasses} ${promoFormData.discount_type === 'fixed' ? 'opacity-20 grayscale cursor-not-allowed' : ''}`}
-                                                        value={promoFormData.max_discount}
-                                                        onChange={e => setPromoFormData({ ...promoFormData, max_discount: e.target.value })}
-                                                        placeholder={promoFormData.discount_type === 'percentage' ? 'Max rupee limit' : 'Only for % type'}
-                                                    />
-                                                </div>
-                                                <div className="md:col-span-2 bg-white/[0.02] border border-white/5 p-6 space-y-4">
-                                                    <p className="text-[8px] tracking-[0.3em] font-black uppercase text-gold-500 italic">Calculation Manifest</p>
-                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-[10px] tracking-widest text-white/60 leading-relaxed">
-                                                        <div className="border-l border-white/10 pl-4">
-                                                            <p className="text-white font-bold mb-1 uppercase">Percentage Mode:</p>
-                                                            <p>Applies {promoFormData.discount_value || 'X'}% discount on Subtotal. {promoFormData.max_discount ? `Limit to ₹${promoFormData.max_discount}.` : ''}</p>
-                                                        </div>
-                                                        <div className="border-l border-white/10 pl-4">
-                                                            <p className="text-white font-bold mb-1 uppercase">Fixed Mode:</p>
-                                                            <p>Subtracts flat ₹{promoFormData.discount_value || 'X'} from Subtotal. Min order ₹{promoFormData.min_order_amount || '0'} required.</p>
+                                                    <div>
+                                                        <label className={labelClasses}>Discount Value {promoFormData.discount_type === 'percentage' ? '(%)' : '(₹)'}</label>
+                                                        <div className="relative">
+                                                            <input required type="number" className={inputClasses} value={promoFormData.discount_value} onChange={e => setPromoFormData({ ...promoFormData, discount_value: e.target.value })} placeholder={promoFormData.discount_type === 'percentage' ? 'e.g. 10' : 'e.g. 500'} />
+                                                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 text-[10px] font-bold">
+                                                                {promoFormData.discount_type === 'percentage' ? '%' : '₹'}
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div><label className={labelClasses}>Expiry Date</label><input type="date" className={inputClasses} value={promoFormData.expiry_date} onChange={e => setPromoFormData({ ...promoFormData, expiry_date: e.target.value })} /></div>
-                                                <div><label className={labelClasses}>Usage Limit (Total)</label><input type="number" className={inputClasses} value={promoFormData.usage_limit} onChange={e => setPromoFormData({ ...promoFormData, usage_limit: e.target.value })} placeholder="e.g. 100" /></div>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:col-span-2">
+                                                    <div>
+                                                        <label className={labelClasses}>Min Order Amount (₹ Required)</label>
+                                                        <input type="number" className={inputClasses} value={promoFormData.min_order_amount} onChange={e => setPromoFormData({ ...promoFormData, min_order_amount: e.target.value })} placeholder="e.g. 1000" />
+                                                    </div>
+                                                    <div>
+                                                        <label className={labelClasses}>Max Discount Cap {promoFormData.discount_type === 'percentage' ? '(₹)' : '(N/A)'}</label>
+                                                        <input
+                                                            type="number"
+                                                            disabled={promoFormData.discount_type === 'fixed'}
+                                                            className={`${inputClasses} ${promoFormData.discount_type === 'fixed' ? 'opacity-20 grayscale cursor-not-allowed' : ''}`}
+                                                            value={promoFormData.max_discount}
+                                                            onChange={e => setPromoFormData({ ...promoFormData, max_discount: e.target.value })}
+                                                            placeholder={promoFormData.discount_type === 'percentage' ? 'Max rupee limit' : 'Only for % type'}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="md:col-span-2 bg-white/[0.02] border border-white/5 p-6 md:p-10 space-y-6">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-10 h-10 rounded-full bg-gold-500/10 flex items-center justify-center border border-gold-500/20">
+                                                            <Ticket size={18} className="text-gold-500" />
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-[10px] tracking-[0.3em] font-black uppercase text-gold-500 italic">Calculation Logic Manifest</p>
+                                                            <p className="text-[8px] text-white/40 uppercase tracking-widest mt-1">Real-time discount application strategy</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-[11px] tracking-widest text-white/60 leading-relaxed">
+                                                        <div className={`p-4 border border-white/5 bg-black/20 ${promoFormData.discount_type === 'percentage' ? 'border-gold-500/30' : ''}`}>
+                                                            <p className={`font-black mb-2 uppercase ${promoFormData.discount_type === 'percentage' ? 'text-gold-500' : 'text-white/80'}`}>Percentage Mode:</p>
+                                                            <p>Reduces total by {promoFormData.discount_value || '0'}%. {promoFormData.max_discount ? `Discount capped at ₹${promoFormData.max_discount}.` : 'No upper limit cap.'}</p>
+                                                        </div>
+                                                        <div className={`p-4 border border-white/5 bg-black/20 ${promoFormData.discount_type === 'fixed' ? 'border-gold-500/30' : ''}`}>
+                                                            <p className={`font-black mb-2 uppercase ${promoFormData.discount_type === 'fixed' ? 'text-gold-500' : 'text-white/80'}`}>Fixed Amount Mode:</p>
+                                                            <p>Subtracts flat ₹{promoFormData.discount_value || '0'} from Subtotal. Requires minimum purchase of ₹{promoFormData.min_order_amount || '0'}.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:col-span-2">
+                                                    <div><label className={labelClasses}>Expiry Date</label><input type="date" className={inputClasses} value={promoFormData.expiry_date} onChange={e => setPromoFormData({ ...promoFormData, expiry_date: e.target.value })} /></div>
+                                                    <div><label className={labelClasses}>Usage Limit (Total)</label><input type="number" className={inputClasses} value={promoFormData.usage_limit} onChange={e => setPromoFormData({ ...promoFormData, usage_limit: e.target.value })} placeholder="e.g. 100" /></div>
+                                                </div>
                                             </>
                                         ) : (
                                             <>
@@ -3409,38 +3441,67 @@ const Admin = () => {
                                 (activeTab === 'collections' ? collections : activeTab === 'products' ? products : activeTab === 'promo-codes' ? promoCodes : blogs).length === 0 ? (
                                     <div className="text-center py-20 text-white/60 tracking-widest uppercase text-xs">No records found</div>
                                 ) : (
-                                    (activeTab === 'collections' ? collections : activeTab === 'products' ? products : activeTab === 'promo-codes' ? promoCodes : blogs).map(item => (
-                                        <div key={item.id} className="bg-white/[0.03] border border-white/5 p-5 md:p-8 hover:border-gold-500/30 transition-all">
-                                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-                                                <div className="w-20 h-20 md:w-24 md:h-24 overflow-hidden rounded bg-zinc-900 flex-shrink-0 border border-white/10 flex items-center justify-center group relative">
-                                                    {activeTab === 'promo-codes' ? (
-                                                        <Ticket size={24} className="text-gold-500/50" />
-                                                    ) : (
-                                                        <img src={getFullImageUrl(item.banner_url || item.image_url)} alt="" className="w-full h-full object-cover opacity-50 group-hover:opacity-80 transition-opacity" />
-                                                    )}
+                                (activeTab === 'collections' ? collections : activeTab === 'products' ? products : activeTab === 'promo-codes' ? promoCodes : blogs).map(item => (
+                                    <div key={item.id} className="bg-white/[0.03] border border-white/5 p-6 md:p-8 hover:border-gold-500/30 transition-all group">
+                                        <div className="flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-10">
+                                            <div className="w-full md:w-32 h-48 md:h-32 overflow-hidden rounded bg-zinc-900 flex-shrink-0 border border-white/10 flex items-center justify-center group relative">
+                                                {activeTab === 'promo-codes' ? (
+                                                    <Ticket size={32} className="text-gold-500/50" />
+                                                ) : (
+                                                    <img src={getFullImageUrl(item.banner_url || item.image_url)} alt="" className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" />
+                                                )}
+                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                    <span className="text-[8px] uppercase tracking-widest text-white border border-white/20 px-3 py-1 bg-black/60">Preview</span>
                                                 </div>
-                                                <div className="flex-grow space-y-2">
-                                                    <h3 className="text-sm md:text-base tracking-[0.2em] font-bold text-white uppercase line-clamp-1">{item.name || item.title || item.code}</h3>
-                                                    <p className="text-[9px] md:text-[10px] tracking-[0.15em] text-white/80 uppercase italic leading-relaxed">
-                                                        {activeTab === 'collections' ? item.slug :
-                                                            activeTab === 'products' ? `${item.collection_name} | ${item.price} | Stock: ${item.stock_count || 0}` :
-                                                                activeTab === 'promo-codes' ? `${item.discount_type === 'percentage' ? item.discount_value + '%' : '₹' + item.discount_value} OFF | Used: ${item.usage_count}/${item.usage_limit || '∞'}` :
-                                                                    `BY ${item.author} | ${new Date(item.created_at).toLocaleDateString()}`}
-                                                    </p>
-                                                    <div className="flex items-center space-x-6 pt-4 border-t border-white/5 sm:border-none sm:pt-0">
-                                                        <button onClick={() => handleEdit(activeTab, item)} className="text-white/70 hover:text-gold-500 transition-all flex items-center gap-2 uppercase text-[9px] font-black tracking-widest group">
-                                                            <Edit3 size={14} className="group-hover:scale-110 transition-transform" /> <span>Edit</span>
+                                            </div>
+                                            <div className="flex-grow space-y-4 w-full">
+                                                <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                                                    <div>
+                                                        <h3 className="text-base md:text-xl font-serif tracking-[0.1em] text-white uppercase italic mb-1">{item.name || item.title || item.code}</h3>
+                                                        <div className="flex flex-col">
+                                                            <div className="flex flex-wrap items-center gap-3">
+                                                                <p className="text-[10px] tracking-[0.15em] text-gold-500 font-bold uppercase">
+                                                                    {activeTab === 'collections' ? item.slug :
+                                                                        activeTab === 'products' ? `${item.collection_name}` :
+                                                                            activeTab === 'promo-codes' ? (new Date(item.expiry_date) < new Date() ? 'Expired' : 'Active') :
+                                                                                `BY ${item.author || 'Artisan'}`}
+                                                                </p>
+                                                                <span className="w-1 h-1 rounded-full bg-white/20" />
+                                                                <p className="text-[10px] tracking-[0.15em] text-white/50 uppercase">
+                                                                    {activeTab === 'collections' ? 'Primary Collection' :
+                                                                        activeTab === 'products' ? `₹${item.price} | Stock: ${item.stock_count || 0}` :
+                                                                            activeTab === 'promo-codes' ? `${item.discount_type === 'percentage' ? item.discount_value + '%' : '₹' + item.discount_value} OFF | Used: ${item.usage_count}/${item.usage_limit || '∞'}` :
+                                                                                `${new Date(item.created_at).toLocaleDateString()}`}
+                                                                </p>
+                                                            </div>
+                                                            {activeTab === 'promo-codes' && (
+                                                                <div className="flex gap-4 mt-3">
+                                                                    <p className="text-[8px] text-white/40 uppercase tracking-widest">Expires: {new Date(item.expiry_date).toLocaleDateString()}</p>
+                                                                    <p className="text-[8px] text-white/40 uppercase tracking-widest">Min Order: ₹{item.min_order_amount || 0}</p>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center gap-4 w-full sm:w-auto pt-4 sm:pt-0 border-t border-white/5 sm:border-none">
+                                                        <button onClick={() => handleEdit(activeTab, item)} className="flex-1 sm:flex-none bg-white/5 border border-white/10 px-5 py-3 text-[9px] font-black uppercase tracking-widest text-white hover:bg-gold-500 hover:text-black transition-all flex items-center justify-center gap-2">
+                                                            <Edit3 size={14} /> Edit
                                                         </button>
-                                                        <button onClick={() => handleDelete(activeTab === 'blogs' ? 'blogs' : activeTab, item.id)} className="text-white/70 hover:text-red-500 transition-all flex items-center gap-2 uppercase text-[9px] font-black tracking-widest group">
-                                                            <Trash2 size={14} className="group-hover:scale-110 transition-transform" /> <span>Remove</span>
+                                                        <button onClick={() => handleDelete(activeTab === 'blogs' ? 'blogs' : activeTab, item.id)} className="flex-1 sm:flex-none bg-red-500/5 border border-red-500/20 px-5 py-3 text-[9px] font-black uppercase tracking-widest text-red-500/70 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2">
+                                                            <Trash2 size={14} /> Remove
                                                         </button>
                                                     </div>
                                                 </div>
+                                                {activeTab === 'blogs' && (
+                                                    <p className="text-[11px] text-white/40 line-clamp-2 italic font-serif leading-relaxed max-w-3xl">
+                                                        {item.content?.replace(/<[^>]*>/g, '').substring(0, 180)}...
+                                                    </p>
+                                                )}
                                             </div>
                                         </div>
-                                    ))
-                                )
-                            )}
+                                    </div>
+                                ))
+                            )
+                        )}
                         </div>
                     </motion.div>
                 )}
