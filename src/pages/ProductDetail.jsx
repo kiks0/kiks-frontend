@@ -159,6 +159,7 @@ const ProductDetail = () => {
                 for (const file of selectedImages) {
                     const formData = new FormData();
                     formData.append('image', file);
+                    formData.append('folder', 'kiks_reviews');
                     const uploadRes = await fetch(`${API_URL}/api/upload`, {
                         method: 'POST',
                         headers: { 'Authorization': `Bearer ${localStorage.getItem('kiks_token')}` },

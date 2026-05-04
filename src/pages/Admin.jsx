@@ -634,8 +634,14 @@ const Admin = () => {
         formData.append('image', file);
 
         try {
-            // Use environment secret for authentication
-            const secret = import.meta.env.VITE_ADMIN_SECRET;
+            const folderMap = {
+                'collections': 'kiks_collections',
+                'products': 'kiks_products',
+                'blogs': 'kiks_blogs',
+                'marketing': 'kiks_marketing'
+            };
+            const folder = targetField === 'popup' ? 'kiks_marketing' : (folderMap[activeTab] || 'kiks_general');
+            formData.append('folder', folder);
 
             const res = await fetch(`${API_URL}/api/upload`, {
                 method: 'POST',
@@ -718,6 +724,7 @@ const Admin = () => {
         try {
             const formData = new FormData();
             formData.append('image', file);
+            formData.append('folder', 'kiks_products');
 
             const res = await fetch(`${API_URL}/api/upload`, {
                 method: 'POST',
