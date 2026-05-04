@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { addToCart } from '../store/cartSlice';
 import { toggleWishlistAndSync } from '../store/wishlistSlice';
-import { openAuthModal, openWishlistAuthPopup } from '../store/uiSlice';
+import { openAuthModal, openWishlistAuthPopup, openCart } from '../store/uiSlice';
 import { formatCurrency } from '../utils/currency';
 import SEO from '../components/SEO';
 import { getFullImageUrl } from '../utils/url';
@@ -227,9 +227,14 @@ const ProductDetail = () => {
         }
     };
 
+    const [isAdded, setIsAdded] = useState(false);
+
     const handleAddToCart = () => {
         if (product) {
             dispatch(addToCart({ ...product, quantity }));
+            setIsAdded(true);
+            dispatch(openCart()); // AUTOMATICALLY OPEN CART DRAWER
+            setTimeout(() => setIsAdded(false), 2000);
         }
     };
 
@@ -476,9 +481,10 @@ const ProductDetail = () => {
                             <div className="flex flex-row gap-2 md:gap-4 w-full">
                                 <button
                                     onClick={handleAddToCart}
-                                    className="flex-1 h-12 md:h-14 bg-black text-white border border-white text-[9px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.4em] uppercase hover:bg-white hover:text-black transition-all duration-500 active:scale-[0.98]"
+                                    disabled={isAdded}
+                                    className={`flex-1 h-12 md:h-14 border border-white text-[9px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.4em] uppercase transition-all duration-500 active:scale-[0.98] ${isAdded ? 'bg-white text-black' : 'bg-black text-white hover:bg-white hover:text-black'}`}
                                 >
-                                    ADD TO BAG
+                                    {isAdded ? 'ADDED TO BAG' : 'ADD TO BAG'}
                                 </button>
                                 <button
                                     onClick={handleBuyNow}

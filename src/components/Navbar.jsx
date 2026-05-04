@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Menu, X, ShoppingBag, Heart, User, UserPlus, ChevronDown, Shield, ChevronLeft, ArrowRight } from 'lucide-react';
 import { toggleWishlistAndSync } from '../store/wishlistSlice';
-import { openAuthModal, openWishlistAuthPopup } from '../store/uiSlice';
+import { openAuthModal, openWishlistAuthPopup, openCart, closeCart } from '../store/uiSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SearchOverlay from './SearchOverlay';
@@ -16,6 +16,7 @@ const Navbar = () => {
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const wishlistCount = wishlistItems.length;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const isAccountPage = location.pathname.startsWith('/account') || location.pathname === '/addresses' || location.pathname === '/orders' || location.pathname === '/wishlist';
   const [isScrolled, setIsScrolled] = useState(false);
@@ -23,7 +24,8 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = useState(true);
   const [isCollectionsHovered, setIsCollectionsHovered] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const isCartOpen = useSelector((state) => state.ui.isCartOpen);
+  const setIsCartOpen = (isOpen) => isOpen ? dispatch(openCart()) : dispatch(closeCart());
   const [navCollections, setNavCollections] = useState([]);
   const [mobileMenuLevel, setMobileMenuLevel] = useState('main'); // 'main' or 'collections'
 

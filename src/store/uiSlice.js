@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   isAuthModalOpen: false,
   isWishlistAuthPopupOpen: false,
+  isCartOpen: false,
 };
 
 export const uiSlice = createSlice({
@@ -21,6 +22,15 @@ export const uiSlice = createSlice({
     closeWishlistAuthPopup: (state) => {
       state.isWishlistAuthPopupOpen = false;
     },
+    openCart: (state) => {
+      state.isCartOpen = true;
+    },
+    closeCart: (state) => {
+      state.isCartOpen = false;
+    },
+    toggleCart: (state) => {
+      state.isCartOpen = !state.isCartOpen;
+    },
   },
 });
 
@@ -28,6 +38,9 @@ export const {
   openAuthModal, 
   closeAuthModal, 
   openWishlistAuthPopup, 
-  closeWishlistAuthPopup 
+  closeWishlistAuthPopup,
+  openCart,
+  closeCart,
+  toggleCart
 } = uiSlice.actions;
 export default uiSlice.reducer;
