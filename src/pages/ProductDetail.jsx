@@ -16,6 +16,8 @@ import PageLoader from '../components/PageLoader';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const ProductAccordion = ({ title, isOpen: externalIsOpen, onToggle, defaultOpen = false, children, extra }) => {
+    const [selectedReviewImage, setSelectedReviewImage] = useState(null);
+
     const [localIsOpen, setLocalIsOpen] = useState(defaultOpen);
     const isOpen = externalIsOpen !== undefined ? externalIsOpen : localIsOpen;
     const toggle = () => onToggle ? onToggle(!isOpen) : setLocalIsOpen(!isOpen);
@@ -65,6 +67,7 @@ const ProductDetail = () => {
     const [uploadingImages, setUploadingImages] = useState(false);
     const [submittingReview, setSubmittingReview] = useState(false);
     const [reviewMsg, setReviewMsg] = useState({ type: '', text: '' });
+    const [selectedReviewImage, setSelectedReviewImage] = useState(null);
     const [notifyEmail, setNotifyEmail] = useState('');
     const [notifyPhone, setNotifyPhone] = useState('');
     const [notifyName, setNotifyName] = useState('');
@@ -741,8 +744,16 @@ const ProductDetail = () => {
                                             {rev.image_urls && (Array.isArray(rev.image_urls) ? rev.image_urls : JSON.parse(rev.image_urls)).length > 0 && (
                                                 <div className="flex flex-wrap gap-6 mt-10">
                                                     {(Array.isArray(rev.image_urls) ? rev.image_urls : JSON.parse(rev.image_urls)).map((url, idx) => (
-                                                        <div key={idx} className="w-32 h-32 overflow-hidden border border-white/10 group/img cursor-zoom-in" onClick={() => window.open(getFullImageUrl(url), '_blank')}>
-                                                            <img src={getFullImageUrl(url)} alt={`Review ${idx}`} className="w-full h-full object-cover opacity-60 group-hover/img:opacity-100 group-hover/img:scale-110 transition-all duration-1000" />
+                                                        <div
+                                                            key={idx}
+                                                            className="w-32 h-32 overflow-hidden border border-white/10 group/img cursor-zoom-in relative"
+                                                            onClick={() => setSelectedReviewImage({ url, review: rev })}
+                                                        >
+                                                            <img
+                                                                src={getFullImageUrl(url)}
+                                                                alt={`Review ${idx}`}
+                                                                className="w-full h-full object-cover opacity-60 group-hover/img:opacity-100 group-hover/img:scale-110 transition-all duration-1000"
+                                                            />
                                                         </div>
                                                     ))}
                                                 </div>
@@ -933,6 +944,80 @@ const ProductDetail = () => {
                     </div>
                 </div>
             </div>
+            {/* Review Image Lightbox */}
+            <AnimatePresence>
+                {selectedReviewImage && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-black/95 backdrop-blur-sm"
+                        onClick={() => setSelectedReviewImage(null)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="relative max-w-5xl w-full bg-[#0a0a0a] border border-white/10 overflow-hidden flex flex-col md:flex-row shadow-2xl"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {/* Close Button */}
+                            <button
+                                onClick={() => setSelectedReviewImage(null)}
+                                className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center bg-black/50 hover:bg-white text-white hover:text-black transition-all rounded-full border border-white/10"
+                            >
+                                <X size={20} />
+                            </button>
+
+                            {/* Image Section */}
+                            <div className="w-full md:w-2/3 h-[50vh] md:h-[80vh] bg-black flex items-center justify-center overflow-hidden border-b md:border-b-0 md:border-r border-white/10">
+                                <img
+                                    src={getFullImageUrl(selectedReviewImage.url)}
+                                    alt="Review Large"
+                                    className="max-w-full max-h-full object-contain"
+                                />
+                            </div>
+
+                            {/* Info Section */}
+                            <div className="w-full md:w-1/3 p-8 flex flex-col justify-between bg-gradient-to-b from-[#0a0a0a] to-black">
+                                <div>
+                                    <div className="flex mb-6">
+                                        {[...Array(5)].map((_, i) => (
+                                            <Star
+                                                key={i}
+                                                size={14}
+                                                className={i < selectedReviewImage.review.rating ? "fill-gold-400 text-gold-400" : "text-[#333]"}
+                                            />
+                                        ))}
+                                    </div>
+                                    <h3 className="text-xl font-serif text-white mb-4 tracking-wide uppercase italic">
+                                        {selectedReviewImage.review.title}
+                                    </h3>
+                                    <p className="text-sm text-white/60 leading-relaxed font-sans tracking-wide">
+                                        {selectedReviewImage.review.comment}
+                                    </p>
+                                </div>
+
+                                <div className="mt-8 pt-8 border-t border-white/5">
+                                    <div className="flex items-center space-x-4">
+                                        <div className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center text-[12px] font-bold text-white uppercase italic">
+                                            {selectedReviewImage.review.first_name?.[0]}
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] text-white/80 uppercase tracking-[0.2em] font-bold">
+                                                {selectedReviewImage.review.first_name} {selectedReviewImage.review.last_name}
+                                            </p>
+                                            <p className="text-[9px] text-white/40 uppercase tracking-[0.1em] mt-1">
+                                                {new Date(selectedReviewImage.review.created_at).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
