@@ -226,15 +226,15 @@ const Account = () => {
               </Link>
 
 
-              <div className="flex items-center py-8 md:px-12 border-b border-white/5">
-                <button 
-                  onClick={handleLogout}
-                  className="text-[12px] font-bold tracking-wide text-white/80 hover:text-gold-400 border-b border-transparent hover:border-gold-400 pb-1 transition-all font-serif"
-                >
-                  Log out
-                </button>
+              <div 
+                onClick={handleLogout} 
+                className="flex items-center justify-between py-8 md:pr-12 group border-b border-white/5 hover:border-white/20 transition-all cursor-pointer"
+              >
+                <h4 className="text-[11px] font-medium tracking-wider text-white/80 group-hover:text-gold-400 transition-colors uppercase">Log out</h4>
+                <ChevronRight size={14} className="text-white/20 group-hover:text-gold-400 group-hover:translate-x-1 transition-all" />
               </div>
 
+              <div className="border-b border-white/5 hidden md:block"></div>
               <div className="border-b border-white/5 hidden md:block"></div>
             </div>
           </div>
