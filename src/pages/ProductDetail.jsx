@@ -473,16 +473,16 @@ const ProductDetail = () => {
                             transition={{ delay: 0.5 }}
                             className="w-full flex flex-col space-y-4 md:space-y-6"
                         >
-                            <div className="flex flex-col md:flex-row gap-4 w-full">
+                            <div className="flex flex-row gap-2 md:gap-4 w-full">
                                 <button
                                     onClick={handleAddToCart}
-                                    className="flex-1 h-12 md:h-14 bg-black text-white border border-white text-[11px] font-black tracking-[0.4em] uppercase hover:bg-white hover:text-black transition-all duration-500 active:scale-[0.98]"
+                                    className="flex-1 h-12 md:h-14 bg-black text-white border border-white text-[9px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.4em] uppercase hover:bg-white hover:text-black transition-all duration-500 active:scale-[0.98]"
                                 >
                                     ADD TO BAG
                                 </button>
                                 <button
                                     onClick={handleBuyNow}
-                                    className="flex-1 h-12 md:h-14 bg-white text-black border border-white text-[11px] font-black tracking-[0.4em] uppercase hover:bg-gold-500 hover:border-gold-500 transition-all duration-500 active:scale-[0.98]"
+                                    className="flex-1 h-12 md:h-14 bg-white text-black border border-white text-[9px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.4em] uppercase hover:bg-gold-500 hover:border-gold-500 transition-all duration-500 active:scale-[0.98]"
                                 >
                                     BUY NOW
                                 </button>
