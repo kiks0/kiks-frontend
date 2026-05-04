@@ -133,7 +133,7 @@ const Wishlist = () => {
                     {/* Mobile Only Add to Bag Button */}
                     <button 
                       onClick={() => handleAddToCart(product)}
-                      className="md:hidden w-full py-4 bg-white text-black text-[10px] tracking-[0.2em] font-bold uppercase flex items-center justify-center gap-2 active:bg-gold-500 transition-colors"
+                      className="md:hidden w-full py-4 bg-white text-black text-[10px] tracking-[0.2em] font-bold uppercase flex items-center justify-center gap-2 active:bg-gray-200 transition-colors"
                     >
                         {addedId === product.id ? <><Check size={14} /> ADDED TO BAG</> : <><ShoppingBag size={14} /> ADD TO BAG</>}
                     </button>

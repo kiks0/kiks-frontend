@@ -501,7 +501,7 @@ const ProductDetail = () => {
                                 </button>
                                 <button
                                     onClick={handleBuyNow}
-                                    className="flex-1 h-12 md:h-14 bg-white text-black border border-white text-[9px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.4em] uppercase hover:bg-gold-500 hover:border-gold-500 transition-all duration-500 active:scale-[0.98]"
+                                    className="flex-1 h-12 md:h-14 bg-white text-black border border-white text-[9px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.4em] uppercase hover:bg-gray-100 hover:border-gray-100 transition-all duration-500 active:scale-[0.98]"
                                 >
                                     BUY NOW
                                 </button>

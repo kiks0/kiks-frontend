@@ -219,7 +219,7 @@ const Collection = () => {
                                             </button>
                                             <button 
                                                 onClick={(e) => { e.preventDefault(); dispatch(addToCart({...product, quantity: 1})); }}
-                                                className="p-1.5 md:p-3 rounded-full backdrop-blur-md border border-white/10 bg-black/40 text-white hover:bg-gold-500 hover:text-black transition-all"
+                                                className="p-1.5 md:p-3 rounded-full backdrop-blur-md border border-white/10 bg-black/40 text-white hover:bg-white hover:text-black active:scale-90 transition-all duration-300"
                                             >
                                                 <ShoppingBag size={12} />
                                             </button>
