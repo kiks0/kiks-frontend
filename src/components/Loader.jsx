@@ -5,7 +5,7 @@ const Loader = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Match the user's requested 1.2s timeout before dismissing
+    // Match the 1.2s delay from your requested code
     const timer = setTimeout(() => {
       setIsLoaded(true);
     }, 1200);
@@ -18,24 +18,25 @@ const Loader = () => {
       {!isLoaded && (
         <motion.div 
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          exit={{ 
+            opacity: 0,
+            transition: { duration: 1.2, ease: [0.43, 0.13, 0.23, 0.96] } 
+          }}
           className="fixed inset-0 z-[9999999] bg-black flex items-center justify-center"
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ 
                 opacity: 1, 
                 scale: 1,
             }}
-            exit={{ opacity: 0, scale: 1.1 }}
             transition={{ duration: 1, ease: "easeOut" }}
             className="relative"
           >
              <img 
                 src="/logo-kiks.webp" 
                 alt="Kiks Loading" 
-                className="w-[100px] md:w-[130px] h-auto relative z-10 animate-luxury-pulse"
+                className="w-[110px] md:w-[140px] h-auto relative z-10 animate-luxury-fade"
               />
           </motion.div>
         </motion.div>
