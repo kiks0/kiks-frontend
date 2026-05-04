@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { ShoppingBag, Star, Smartphone, ChevronRight, X, Mail, MessageSquare, Phone } from 'lucide-react';
+import { ShoppingBag, Heart, Smartphone, ChevronRight, X, Mail, MessageSquare, Phone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { logout } from '../store/authSlice';
 import { clearWishlist } from '../store/wishlistSlice';
@@ -170,7 +170,7 @@ const Account = () => {
               
               <Link to="/wishlist" className="flex items-start space-x-5 group cursor-pointer">
                 <div className="mt-1 text-white/80 group-hover:text-gold-500 transition-all">
-                  <Star size={20} strokeWidth={1} fill={wishlistCount > 0 ? "currentColor" : "none"} />
+                  <Heart size={20} strokeWidth={1} fill={wishlistCount > 0 ? "currentColor" : "none"} />
                 </div>
                 <div>
                   <h4 className="text-[12px] font-bold tracking-wide mb-2 text-white group-hover:text-gold-400 transition-colors">Wishlist</h4>
