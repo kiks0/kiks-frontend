@@ -88,13 +88,7 @@ const Orders = () => {
         return 'text-white/40 border-white/10 bg-white/5';
     };
 
-    if (loading) {
-        return (
-            <div className="bg-black min-h-[60vh] flex items-center justify-center">
-                <PageLoader />
-            </div>
-        );
-    }
+    if (loading) return null;
 
     return (
         <div className="bg-[#050505] min-h-screen text-white pt-28 md:pt-48 pb-10 md:pb-40 px-4 md:px-8">

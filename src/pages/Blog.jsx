@@ -32,13 +32,7 @@ const Blog = () => {
         }
     };
 
-    if (loading) {
-        return (
-            <div className="bg-black min-h-[60vh] flex items-center justify-center">
-                <PageLoader />
-            </div>
-        );
-    }
+    if (loading) return null;
 
     return (
         <div className="bg-black min-h-screen text-white pt-24 md:pt-48 pb-12 md:pb-24 font-sans selection:bg-gold-500/30 selection:text-white">
