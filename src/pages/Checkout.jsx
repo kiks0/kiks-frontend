@@ -509,7 +509,7 @@ const Checkout = () => {
 
     return (
         <div className="bg-[#050505] min-h-screen text-white pt-24 md:pt-40 pb-24 px-6 md:px-10 lg:px-20 font-sans">
-            <ActionLoader isLoading={isLoading} message={isValidating ? "Validating Selection" : "Processing Acquisition"} />
+            <ActionLoader isLoading={isLoading} message={isValidating ? "Validating Selection" : "Processing with your order"} />
             <div className="container mx-auto max-w-7xl">
 
                 <div className="mb-12 md:mb-24 text-center">
