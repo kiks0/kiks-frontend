@@ -43,6 +43,24 @@ const Auth = ({ isRegisterInitial = false }) => {
         }
     }, [isAuthenticated, navigate, status]);
 
+    // Enhanced Success Navigation with Fail-Safe
+    useEffect(() => {
+        if (status === 'success') {
+            const timer = setTimeout(() => {
+                navigate('/');
+                
+                // Fallback: Force redirect if still on auth page after 1s
+                setTimeout(() => {
+                    const currentPath = window.location.pathname;
+                    if (currentPath.includes('/login') || currentPath.includes('/register')) {
+                        window.location.href = '/';
+                    }
+                }, 1000);
+            }, 2000);
+            return () => clearTimeout(timer);
+        }
+    }, [status, navigate]);
+
     // OTP Timer Logic
     useEffect(() => {
         let interval;
@@ -245,7 +263,6 @@ Marketing Consent: Granted
             dispatch(login({ user: data.user, token: data.token }));
             dispatch(fetchWishlist());
             setStatus('success');
-            setTimeout(() => navigate('/'), 2000);
             
         } catch (error) {
             console.error('Auth error:', error);
@@ -319,7 +336,6 @@ Marketing Consent: Granted
                 dispatch(fetchWishlist());
                 setShowOtpModal(false);
                 setStatus('success');
-                setTimeout(() => navigate('/'), 2000);
             } else {
                 setOtpError(data.message || 'Invalid verification code.');
             }
@@ -418,7 +434,6 @@ Marketing Consent: Granted
                     dispatch(login({ user: data.user, token: data.token }));
                     dispatch(fetchWishlist());
                     setStatus('success');
-                    setTimeout(() => navigate('/'), 2000);
                 } else {
                     setErrorMessage(data.message || 'Google Login failed.');
                 }
