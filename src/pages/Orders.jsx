@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, ArrowLeft, Loader2, Package, Truck, CheckCircle, ChevronDown, ChevronUp, MapPin, Calendar, CreditCard, FileText } from 'lucide-react';
+import { ShoppingBag, ArrowLeft, Loader2, Package, Truck, CheckCircle, ChevronDown, ChevronUp, MapPin, Calendar, CreditCard, FileText, XCircle, AlertCircle } from 'lucide-react';
 import PageLoader from '../components/PageLoader';
 import { generateInvoice } from '../utils/generateInvoice';
 import { formatCurrency } from '../utils/currency';
@@ -15,6 +15,7 @@ const Orders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [expandedOrder, setExpandedOrder] = useState(null);
+    const [cancellingId, setCancellingId] = useState(null);
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -41,10 +42,40 @@ const Orders = () => {
         }
     };
 
+    const handleCancelOrder = async (orderId) => {
+        if (!window.confirm('Are you certain you wish to cancel this acquisition? This action cannot be undone.')) return;
+        
+        setCancellingId(orderId);
+        try {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const res = await fetch(`${API_URL}/api/orders/${orderId}/cancel`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (res.ok) {
+                alert('Order cancelled successfully. Your refund (if applicable) will be processed shortly.');
+                fetchOrders();
+            } else {
+                const data = await res.json();
+                alert(data.msg || 'Failed to cancel order.');
+            }
+        } catch (err) {
+            console.error("Cancellation error:", err);
+            alert('A network error occurred. Please try again.');
+        } finally {
+            setCancellingId(null);
+        }
+    };
+
     const getStatusIcon = (status) => {
         const s = status?.toLowerCase() || 'pending';
         if (s.includes('deliver')) return <CheckCircle size={14} className="text-green-500" />;
         if (s.includes('transit') || s.includes('ship')) return <Truck size={14} className="text-gold-500" />;
+        if (s.includes('cancel')) return <XCircle size={14} className="text-red-500" />;
         return <Package size={14} className="text-neutral-500" />;
     };
 
@@ -52,6 +83,7 @@ const Orders = () => {
         const s = status?.toLowerCase() || 'pending';
         if (s.includes('deliver')) return 'text-green-500 border-green-500/20 bg-green-500/5';
         if (s.includes('transit') || s.includes('ship')) return 'text-gold-500 border-gold-500/20 bg-gold-500/5';
+        if (s.includes('cancel')) return 'text-red-500 border-red-500/20 bg-red-500/5';
         return 'text-white/40 border-white/10 bg-white/5';
     };
 
@@ -129,8 +161,8 @@ const Orders = () => {
                                             {getStatusIcon(order.status)}
                                             {order.status || 'Verified'}
                                         </div>
-                                        <div className="w-10 h-10 rounded-full border border-white/5 flex items-center justify-center text-white/20 group-hover:text-white transition-colors">
-                                            {expandedOrder === order.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                                        <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white bg-white/5 group-hover:bg-gold-500 group-hover:text-black transition-all duration-300">
+                                            {expandedOrder === order.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                                         </div>
                                     </div>
                                 </div>
@@ -215,6 +247,16 @@ const Orders = () => {
                                                         <span className="text-[9px] tracking-[0.4em] uppercase font-black">Secure Payment</span>
                                                     </div>
                                                     <div className="flex flex-col sm:flex-row gap-4 items-center">
+                                                        {(!order.status || order.status === 'Pending' || order.status === 'On Hold' || order.status === 'Processing') && (
+                                                            <button
+                                                                disabled={cancellingId === order.id}
+                                                                onClick={(e) => { e.stopPropagation(); handleCancelOrder(order.id); }}
+                                                                className="flex items-center gap-2 border border-red-500/20 px-8 py-4 text-[10px] font-black tracking-[0.4em] uppercase text-red-500/60 hover:text-red-500 hover:bg-red-500/5 transition-all disabled:opacity-50"
+                                                            >
+                                                                {cancellingId === order.id ? <Loader2 size={12} className="animate-spin" /> : <XCircle size={12} />}
+                                                                Cancel Acquisition
+                                                            </button>
+                                                        )}
                                                         <div className="flex items-center gap-2 border border-white/20 px-8 py-4 text-[10px] font-black tracking-[0.4em] uppercase text-white/60">
                                                             <span>Payment:</span>
                                                             <span className="text-white">{order.payment_method || 'Prepaid'}</span>

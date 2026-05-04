@@ -737,11 +737,11 @@ const ProductDetail = () => {
                                             <p className="text-white font-black text-sm tracking-[0.1em] mb-6 uppercase">{rev.title}</p>
                                             <p className="text-white/60 leading-relaxed text-sm max-w-2xl">{rev.comment}</p>
 
-                                            {rev.image_urls && rev.image_urls.length > 0 && (
+                                            {rev.image_urls && (Array.isArray(rev.image_urls) ? rev.image_urls : JSON.parse(rev.image_urls)).length > 0 && (
                                                 <div className="flex flex-wrap gap-6 mt-10">
-                                                    {rev.image_urls.map((url, idx) => (
-                                                        <div key={idx} className="w-32 h-32 overflow-hidden border border-white/10 group/img cursor-zoom-in" onClick={() => window.open(url, '_blank')}>
-                                                            <img src={url} alt={`Review ${idx}`} className="w-full h-full object-cover opacity-60 group-hover/img:opacity-100 group-hover/img:scale-110 transition-all duration-1000" />
+                                                    {(Array.isArray(rev.image_urls) ? rev.image_urls : JSON.parse(rev.image_urls)).map((url, idx) => (
+                                                        <div key={idx} className="w-32 h-32 overflow-hidden border border-white/10 group/img cursor-zoom-in" onClick={() => window.open(getFullImageUrl(url), '_blank')}>
+                                                            <img src={getFullImageUrl(url)} alt={`Review ${idx}`} className="w-full h-full object-cover opacity-60 group-hover/img:opacity-100 group-hover/img:scale-110 transition-all duration-1000" />
                                                         </div>
                                                     ))}
                                                 </div>
@@ -751,7 +751,7 @@ const ProductDetail = () => {
                                                     {rev.first_name?.[0]}
                                                 </div>
                                                 <p className="text-[10px] text-white/40 uppercase tracking-[0.2em]">
-                                                    {rev.first_name} {rev.last_name} • <span className="text-gold-500/40">Verified Client</span>
+                                                    {rev.first_name} {rev.last_name}
                                                 </p>
                                             </div>
                                         </div>
@@ -777,7 +777,7 @@ const ProductDetail = () => {
                         >
                             {product.story_banner?.toLowerCase().match(/\.(mp4|webm|mov|ogg)$/) ? (
                                 <video
-                                    src={product.story_banner}
+                                    src={getFullImageUrl(product.story_banner)}
                                     className="w-full h-full object-cover"
                                     autoPlay
                                     muted
@@ -786,7 +786,7 @@ const ProductDetail = () => {
                                 />
                             ) : (
                                 <img
-                                    src={product.story_banner}
+                                    src={getFullImageUrl(product.story_banner)}
                                     className="w-full h-full object-cover scale-110 hover:scale-100 transition-transform duration-[3000ms] ease-in-out"
                                     alt="Story Banner"
                                 />
@@ -805,7 +805,7 @@ const ProductDetail = () => {
                                     <div className="flex flex-col items-center space-y-6 group">
                                         <div className="w-20 h-20 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center group-hover:border-white/40 group-hover:bg-white/5 transition-all duration-700">
                                             <img
-                                                src={product.top_note_icon || "https://cdn-icons-png.flaticon.com/512/3503/3503792.png"}
+                                                src={getFullImageUrl(product.top_note_icon) || "https://cdn-icons-png.flaticon.com/512/3503/3503792.png"}
                                                 className={`w-full h-full rounded-full object-cover ${!product.top_note_icon ? 'invert opacity-40' : ''} group-hover:opacity-100 group-hover:scale-110 transition-all duration-700`}
                                                 alt="Top Note"
                                             />
@@ -830,7 +830,7 @@ const ProductDetail = () => {
                                     <div className="flex flex-col items-center space-y-6 group">
                                         <div className="w-20 h-20 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center group-hover:border-white/40 group-hover:bg-white/5 transition-all duration-700">
                                             <img
-                                                src={product.heart_note_icon || "https://cdn-icons-png.flaticon.com/512/2926/2926330.png"}
+                                                src={getFullImageUrl(product.heart_note_icon) || "https://cdn-icons-png.flaticon.com/512/2926/2926330.png"}
                                                 className={`w-full h-full rounded-full object-cover ${!product.heart_note_icon ? 'invert opacity-40' : ''} group-hover:opacity-100 group-hover:scale-110 transition-all duration-700`}
                                                 alt="Heart Note"
                                             />
@@ -855,7 +855,7 @@ const ProductDetail = () => {
                                     <div className="flex flex-col items-center space-y-6 group">
                                         <div className="w-20 h-20 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center group-hover:border-white/40 group-hover:bg-white/5 transition-all duration-700">
                                             <img
-                                                src={product.base_note_icon || "https://cdn-icons-png.flaticon.com/512/3503/3503792.png"}
+                                                src={getFullImageUrl(product.base_note_icon) || "https://cdn-icons-png.flaticon.com/512/3503/3503792.png"}
                                                 className={`w-full h-full rounded-full object-cover ${!product.base_note_icon ? 'invert opacity-40' : ''} group-hover:opacity-100 group-hover:scale-110 transition-all duration-700`}
                                                 alt="Base Note"
                                             />
@@ -893,7 +893,7 @@ const ProductDetail = () => {
                             >
                                 {product.muse_image?.toLowerCase().match(/\.(mp4|webm|mov|ogg)$/) ? (
                                     <video
-                                        src={product.muse_image}
+                                        src={getFullImageUrl(product.muse_image)}
                                         className="w-full h-full object-cover rounded-t-full"
                                         autoPlay
                                         muted
@@ -902,7 +902,7 @@ const ProductDetail = () => {
                                     />
                                 ) : (
                                     <img
-                                        src={product.muse_image || "https://images.unsplash.com/photo-1615485290382-441e4d019cb5?q=80&w=2000&auto=format&fit=crop"}
+                                        src={getFullImageUrl(product.muse_image) || "https://images.unsplash.com/photo-1615485290382-441e4d019cb5?q=80&w=2000&auto=format&fit=crop"}
                                         className="w-full h-full object-cover rounded-t-full"
                                         alt="Muse"
                                     />

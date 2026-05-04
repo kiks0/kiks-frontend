@@ -42,6 +42,7 @@ const Admin = () => {
     const [reportType, setReportType] = useState('selling'); // selling, return
     const [selectedOrders, setSelectedOrders] = useState([]);
     const [selectedUsers, setSelectedUsers] = useState([]);
+    const [trashData, setTrashData] = useState({ orders: [], products: [], reviews: [], blogs: [], gallery: [] });
     const [reviews, setReviews] = useState([]);
     const [blogs, setBlogs] = useState([]);
     const [users, setUsers] = useState([]);
@@ -74,7 +75,8 @@ const Admin = () => {
         'promo-codes': false,
         marketing: false,
         admins: false,
-        carts: false
+        carts: false,
+        trash: false
     });
 
     // Form states
@@ -134,8 +136,8 @@ const Admin = () => {
             case 'products': fetchProductsData(); break;
             case 'blogs': fetchBlogsData(); break;
             case 'reviews': fetchReviewsData(); break;
-            case 'users': 
-                fetchUsersData(); 
+            case 'users':
+                fetchUsersData();
                 fetchAdminsData();
                 fetchDeletionRequests();
                 break;
@@ -143,6 +145,7 @@ const Admin = () => {
             case 'promo-codes': fetchPromoCodesData(); break;
             case 'marketing': fetchMarketingData(); break;
             case 'carts': fetchCartsData(); break;
+            case 'trash': fetchTrashData(); break;
             default: fetchDashboardData();
         }
     }, [activeTab, isAuthenticated]);
@@ -159,6 +162,37 @@ const Admin = () => {
     const showErrorToast = (msg) => {
         setErrorMessage(msg);
         setTimeout(() => setErrorMessage(''), 5000);
+    };
+
+    const fetchTrashData = async () => {
+        setTabsLoading(prev => ({ ...prev, trash: true }));
+        try {
+            const res = await fetch(`${API_URL}/api/trash`, { headers: getAdminHeaders() });
+            if (res.ok) {
+                const data = await res.json();
+                setTrashData(data);
+            }
+        } catch (e) {
+            console.error("Trash retrieval failure:", e);
+        } finally {
+            setTabsLoading(prev => ({ ...prev, trash: false }));
+        }
+    };
+
+    const handleRestoreItem = async (entity, id) => {
+        try {
+            const res = await fetch(`${API_URL}/api/trash/restore/${entity}/${id}`, {
+                method: 'POST',
+                headers: getAdminHeaders()
+            });
+            if (res.ok) {
+                showSuccessToast('Item restored to active registry.');
+                fetchTrashData();
+                fetchData(); // Refresh main data too
+            }
+        } catch (e) {
+            showErrorToast('Restoration failed.');
+        }
     };
 
     const fetchBaseData = async () => {
@@ -283,7 +317,7 @@ const Admin = () => {
     const handleBulkRemoveCarts = async () => {
         if (!selectedCarts.length) return;
         if (!window.confirm(`Permanently clear ${selectedCarts.length} selected vault sessions?`)) return;
-        
+
         try {
             const res = await fetch(`${API_URL}/api/carts/bulk-delete`, {
                 method: 'POST',
@@ -554,7 +588,7 @@ const Admin = () => {
         if (!targetIds || targetIds.length === 0) return;
 
         if (!window.confirm(`Are you sure you want to deactivate ${targetIds.length} selected user(s)? They will no longer appear in the registry.`)) return;
-        
+
         try {
             const res = await fetch(`${API_URL}/api/users/bulk-delete`, {
                 method: 'POST',
@@ -587,6 +621,7 @@ const Admin = () => {
         else if (tab === 'reviews') fetchReviewsData();
         else if (tab === 'waitlist') fetchWaitlistData();
         else if (tab === 'promo-codes') fetchPromoCodesData();
+        else if (tab === 'trash') fetchTrashData();
     };
 
     const handleImageUpload = async (e, targetField = null) => {
@@ -1209,7 +1244,7 @@ const Admin = () => {
                             onChange={(e) => { setActiveTab(e.target.value); setIsAdding(false); setEditingId(null); }}
                             className="w-full bg-zinc-900 border border-white/20 p-4 text-[10px] tracking-[0.3em] uppercase text-gold-400 focus:outline-none appearance-none"
                         >
-                            {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing', 'carts'].map(tab => {
+                            {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing', 'carts', 'trash'].map(tab => {
                                 const callbackCount = tab === 'waitlist' ? waitlist.filter(e => e.request_type === 'callback').length : 0;
                                 return (
                                     <option key={tab} value={tab}>
@@ -1219,13 +1254,13 @@ const Admin = () => {
                             })}
                         </select>
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                            <ChevronDown size={14} className="text-gold-500" />
+                            <ChevronDown size={18} className="text-white" />
                         </div>
                     </div>
 
                     {/* Desktop Tab Links */}
                     <div className="hidden md:flex space-x-8 overflow-x-auto scrollbar-hide">
-                        {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing', 'carts'].map(tab => {
+                        {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing', 'carts', 'trash'].map(tab => {
                             const callbackCount = tab === 'waitlist' ? waitlist.filter(e => e.request_type === 'callback').length : 0;
                             return (
                                 <button
@@ -1831,6 +1866,158 @@ const Admin = () => {
                     </motion.div>
                 )}
 
+                {/* TAB CONTENT: TRASH (ARCHIVE) */}
+                {activeTab === 'trash' && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                        <div className="mb-12">
+                            <h2 className="text-2xl font-serif tracking-widest uppercase text-red-500 mb-4">Decommissioned Assets</h2>
+                            <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase font-black">Restore previously removed items to the active registry.</p>
+                        </div>
+
+                        {tabsLoading.trash ? (
+                            <div className="flex items-center justify-center py-20">
+                                <Loader2 className="animate-spin text-gold-500" size={32} />
+                            </div>
+                        ) : (
+                            <div className="space-y-16">
+                                {/* Deleted Orders */}
+                                {trashData.orders.length > 0 && (
+                                    <section>
+                                        <h3 className="text-[11px] tracking-[0.4em] text-white font-black uppercase mb-8 flex items-center gap-4">
+                                            <Package size={14} className="text-red-500" /> Deleted Orders
+                                        </h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            {trashData.orders.map(order => (
+                                                <div key={order.id} className="bg-white/5 border border-red-500/20 p-6 flex justify-between items-center group">
+                                                    <div>
+                                                        <p className="text-gold-500 font-serif">#{order.id.toString().padStart(4, '0')}</p>
+                                                        <p className="text-[10px] uppercase font-bold text-white/80">{order.customer_name}</p>
+                                                        <p className="text-[8px] text-white/40 uppercase">Deleted on {new Date(order.deleted_at).toLocaleDateString()}</p>
+                                                    </div>
+                                                    <button onClick={() => handleRestoreItem('orders', order.id)} className="bg-white/5 hover:bg-white text-white hover:text-black border border-white/10 px-4 py-2 text-[9px] font-black uppercase tracking-widest transition-all">
+                                                        Restore
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </section>
+                                )}
+
+                                {/* Deleted Products */}
+                                {trashData.products.length > 0 && (
+                                    <section>
+                                        <h3 className="text-[11px] tracking-[0.4em] text-white font-black uppercase mb-8 flex items-center gap-4">
+                                            <Layers size={14} className="text-red-500" /> Deleted Products
+                                        </h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            {trashData.products.map(p => (
+                                                <div key={p.id} className="bg-white/5 border border-red-500/20 p-6 flex justify-between items-center">
+                                                    <div className="flex items-center gap-4">
+                                                        <img src={getFullImageUrl(p.image_url)} alt="" className="w-10 h-10 object-cover opacity-50" />
+                                                        <div>
+                                                            <p className="text-[10px] uppercase font-bold text-white/80">{p.name}</p>
+                                                            <p className="text-[8px] text-white/40 uppercase">{p.collection_name}</p>
+                                                        </div>
+                                                    </div>
+                                                    <button onClick={() => handleRestoreItem('products', p.id)} className="bg-white/5 hover:bg-white text-white hover:text-black border border-white/10 px-4 py-2 text-[9px] font-black uppercase tracking-widest transition-all">
+                                                        Restore
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </section>
+                                )}
+
+                                {/* Deleted Blogs */}
+                                {trashData.blogs.length > 0 && (
+                                    <section>
+                                        <h3 className="text-[11px] tracking-[0.4em] text-white font-black uppercase mb-8 flex items-center gap-4">
+                                            <FileText size={14} className="text-red-500" /> Deleted Blogs
+                                        </h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            {trashData.blogs.map(blog => (
+                                                <div key={blog.id} className="bg-white/5 border border-red-500/20 p-6 flex justify-between items-center">
+                                                    <div>
+                                                        <p className="text-[10px] uppercase font-bold text-white/80 truncate max-w-[150px]">{blog.title}</p>
+                                                        <p className="text-[8px] text-white/40 uppercase">By {blog.author}</p>
+                                                    </div>
+                                                    <button onClick={() => handleRestoreItem('blogs', blog.id)} className="bg-white/5 hover:bg-white text-white hover:text-black border border-white/10 px-4 py-2 text-[9px] font-black uppercase tracking-widest transition-all">
+                                                        Restore
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </section>
+                                )}
+
+                                {/* Deleted Reviews */}
+                                {trashData.reviews.length > 0 && (
+                                    <section>
+                                        <h3 className="text-[11px] tracking-[0.4em] text-white font-black uppercase mb-8 flex items-center gap-4">
+                                            <Star size={14} className="text-red-500" /> Deleted Reviews
+                                        </h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            {trashData.reviews.map(rev => (
+                                                <div key={rev.id} className="bg-white/5 border border-red-500/20 p-6 flex justify-between items-center group">
+                                                    <div>
+                                                        <p className="text-[10px] uppercase font-bold text-white/80">{rev.first_name} {rev.last_name}</p>
+                                                        <p className="text-[8px] text-gold-500 uppercase tracking-widest mb-1 italic">{rev.product_name}</p>
+                                                        <p className="text-[8px] text-white/40 uppercase mb-3">Deleted on {new Date(rev.deleted_at).toLocaleDateString()}</p>
+                                                        {rev.image_urls && (Array.isArray(rev.image_urls) ? rev.image_urls : JSON.parse(rev.image_urls)).length > 0 && (
+                                                            <div className="flex gap-2">
+                                                                {(Array.isArray(rev.image_urls) ? rev.image_urls : JSON.parse(rev.image_urls)).map((url, idx) => (
+                                                                    <img 
+                                                                        key={idx} 
+                                                                        src={getFullImageUrl(url)} 
+                                                                        alt="" 
+                                                                        className="w-8 h-8 object-cover border border-white/10"
+                                                                    />
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <button onClick={() => handleRestoreItem('reviews', rev.id)} className="bg-white/5 hover:bg-white text-white hover:text-black border border-white/10 px-4 py-2 text-[9px] font-black uppercase tracking-widest transition-all">
+                                                        Restore
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </section>
+                                )}
+
+                                {/* Deleted Gallery Images */}
+                                {trashData.gallery.length > 0 && (
+                                    <section>
+                                        <h3 className="text-[11px] tracking-[0.4em] text-white font-black uppercase mb-8 flex items-center gap-4">
+                                            <ImageIcon size={14} className="text-red-500" /> Deleted Gallery Assets
+                                        </h3>
+                                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                                            {trashData.gallery.map(img => (
+                                                <div key={img.id} className="relative aspect-square group overflow-hidden border border-red-500/20">
+                                                    <img src={getFullImageUrl(img.image_url)} alt="" className="w-full h-full object-cover opacity-40" />
+                                                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <button onClick={() => handleRestoreItem('community_gallery', img.id)} className="bg-white text-black px-3 py-1.5 text-[8px] font-black uppercase tracking-widest">
+                                                            Restore
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </section>
+                                )}
+
+                                {/* Empty State */}
+                                {trashData.orders.length === 0 && trashData.products.length === 0 && trashData.blogs.length === 0 && trashData.reviews.length === 0 && trashData.gallery.length === 0 && (
+                                    <div className="text-center py-32 border border-dashed border-white/10">
+                                        <Trash2 className="mx-auto text-white/10 mb-8" size={64} strokeWidth={0.5} />
+                                        <p className="text-[11px] tracking-[0.4em] text-white/20 uppercase font-black italic">The Archive is currently empty.</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </motion.div>
+                )}
+
                 {/* TAB CONTENT: USERS */}
                 {activeTab === 'users' && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -1875,7 +2062,7 @@ const Admin = () => {
                                                 />
                                             </div>
                                             {selectedUsers.length > 0 && (
-                                                <button 
+                                                <button
                                                     onClick={() => handleBulkDeleteUsers()}
                                                     className="bg-red-500/10 border border-red-500/30 text-red-500 px-8 py-4 text-[10px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-3"
                                                 >
@@ -1890,8 +2077,8 @@ const Admin = () => {
                                                     <thead className="bg-black text-[9px] uppercase tracking-[0.3em] font-bold text-white/80 border-b border-white/10">
                                                         <tr>
                                                             <th className="p-6 w-12">
-                                                                <input 
-                                                                    type="checkbox" 
+                                                                <input
+                                                                    type="checkbox"
                                                                     className="w-4 h-4 cursor-pointer accent-gold-500"
                                                                     checked={users.length > 0 && users.every(u => selectedUsers.includes(u.id))}
                                                                     onChange={(e) => {
@@ -1924,8 +2111,8 @@ const Admin = () => {
                                                             ).map(u => (
                                                                 <tr key={u.id} className="border-b border-white/5 hover:bg-white/[0.02]">
                                                                     <td className="p-6">
-                                                                        <input 
-                                                                            type="checkbox" 
+                                                                        <input
+                                                                            type="checkbox"
                                                                             className="w-4 h-4 cursor-pointer accent-gold-500"
                                                                             checked={selectedUsers.includes(u.id)}
                                                                             onChange={(e) => {
@@ -1976,23 +2163,23 @@ const Admin = () => {
                                                 ).map(u => (
                                                     <div key={u.id} className="bg-white/[0.03] border border-white/10 p-6 space-y-6 relative group overflow-hidden">
                                                         <div className="flex justify-between items-start border-b border-white/5 pb-5">
-                                                                 <div className="flex items-center gap-5">
-                                                                    <input 
-                                                                        type="checkbox" 
-                                                                        className="w-4 h-4 cursor-pointer accent-gold-500"
-                                                                        checked={selectedUsers.includes(u.id)}
-                                                                        onChange={(e) => {
-                                                                            if (e.target.checked) setSelectedUsers([...selectedUsers, u.id]);
-                                                                            else setSelectedUsers(selectedUsers.filter(id => id !== u.id));
-                                                                        }}
-                                                                    />
-                                                                    <div className="w-14 h-14 rounded bg-gold-400/5 border border-gold-500/10 flex items-center justify-center text-gold-500 font-serif text-2xl">
-                                                                        {u.first_name[0]}
-                                                                    </div>
-                                                                    <div>
-                                                                        <p className="font-black uppercase tracking-[0.15em] text-white text-[14px] leading-tight mb-1">{u.first_name} {u.last_name}</p>
-                                                                        <div className="flex items-center gap-3">
-                                                                            <span className="font-serif text-gold-500/50 text-[10px]">#{u.id.toString().padStart(4, '0')}</span>
+                                                            <div className="flex items-center gap-5">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    className="w-4 h-4 cursor-pointer accent-gold-500"
+                                                                    checked={selectedUsers.includes(u.id)}
+                                                                    onChange={(e) => {
+                                                                        if (e.target.checked) setSelectedUsers([...selectedUsers, u.id]);
+                                                                        else setSelectedUsers(selectedUsers.filter(id => id !== u.id));
+                                                                    }}
+                                                                />
+                                                                <div className="w-14 h-14 rounded bg-gold-400/5 border border-gold-500/10 flex items-center justify-center text-gold-500 font-serif text-2xl">
+                                                                    {u.first_name[0]}
+                                                                </div>
+                                                                <div>
+                                                                    <p className="font-black uppercase tracking-[0.15em] text-white text-[14px] leading-tight mb-1">{u.first_name} {u.last_name}</p>
+                                                                    <div className="flex items-center gap-3">
+                                                                        <span className="font-serif text-gold-500/50 text-[10px]">#{u.id.toString().padStart(4, '0')}</span>
                                                                         <span className={`text-[9px] uppercase tracking-widest font-black px-2 py-0.5 border ${u.role === 'admin' ? 'border-gold-500/30 text-gold-500' : 'border-white/10 text-white/60'}`}>
                                                                             {u.role || 'User'}
                                                                         </span>
@@ -2199,7 +2386,7 @@ const Admin = () => {
                                                                     <p className="text-[8px] text-white/40 uppercase mt-1">{new Date(req.deletion_requested_at).toLocaleTimeString()}</p>
                                                                 </td>
                                                                 <td className="p-6 text-right">
-                                                                    <button 
+                                                                    <button
                                                                         onClick={() => handleApproveDeletion(req.id)}
                                                                         className="bg-red-500 text-white px-4 py-2 text-[8px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all"
                                                                     >
@@ -2232,7 +2419,7 @@ const Admin = () => {
                                                                     <span>Telephone</span>
                                                                     <span className="text-white font-bold">{req.telephone || 'RESTRICTED'}</span>
                                                                 </div>
-                                                                <button 
+                                                                <button
                                                                     onClick={() => handleApproveDeletion(req.id)}
                                                                     className="w-full bg-red-600 text-white py-4 text-[10px] font-black uppercase tracking-[0.2em] shadow-lg active:scale-[0.98] transition-all"
                                                                 >
@@ -2291,7 +2478,20 @@ const Admin = () => {
                                                         </td>
                                                         <td className="p-6">
                                                             <p className="font-bold text-white mb-1 uppercase tracking-widest">{rev.title}</p>
-                                                            <p className="text-white/50 max-w-sm line-clamp-2 italic">{rev.comment}</p>
+                                                            <p className="text-white/50 max-w-sm line-clamp-2 italic mb-3">{rev.comment}</p>
+                                                            {rev.image_urls && (Array.isArray(rev.image_urls) ? rev.image_urls : JSON.parse(rev.image_urls)).length > 0 && (
+                                                                <div className="flex gap-2">
+                                                                    {(Array.isArray(rev.image_urls) ? rev.image_urls : JSON.parse(rev.image_urls)).map((url, idx) => (
+                                                                        <img 
+                                                                            key={idx} 
+                                                                            src={getFullImageUrl(url)} 
+                                                                            alt="" 
+                                                                            className="w-10 h-10 object-cover border border-white/10 cursor-zoom-in"
+                                                                            onClick={() => window.open(getFullImageUrl(url), '_blank')}
+                                                                        />
+                                                                    ))}
+                                                                </div>
+                                                            )}
                                                         </td>
                                                         <td className="p-6 text-right">
                                                             <button onClick={() => handleDeleteReview(rev.id)} className="text-red-500/30 hover:text-red-500 transition-colors p-2">
@@ -2331,7 +2531,20 @@ const Admin = () => {
                                                 </div>
                                                 <div className="bg-black/20 p-4 border border-white/5">
                                                     <p className="font-bold text-white text-[10px] uppercase tracking-widest mb-2 border-b border-white/10 pb-2">{rev.title}</p>
-                                                    <p className="text-[10px] text-white/50 italic leading-relaxed">"{rev.comment}"</p>
+                                                    <p className="text-[10px] text-white/50 italic leading-relaxed mb-4">"{rev.comment}"</p>
+                                                    {rev.image_urls && (Array.isArray(rev.image_urls) ? rev.image_urls : JSON.parse(rev.image_urls)).length > 0 && (
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {(Array.isArray(rev.image_urls) ? rev.image_urls : JSON.parse(rev.image_urls)).map((url, idx) => (
+                                                                <img 
+                                                                    key={idx} 
+                                                                    src={getFullImageUrl(url)} 
+                                                                    alt="" 
+                                                                    className="w-12 h-12 object-cover border border-white/10"
+                                                                    onClick={() => window.open(getFullImageUrl(url), '_blank')}
+                                                                />
+                                                            ))}
+                                                        </div>
+                                                    )}
                                                 </div>
                                                 <div className="flex items-center space-x-3 pt-2">
                                                     <div className="w-8 h-8 rounded bg-white/5 border border-white/10 flex items-center justify-center text-[10px] font-serif text-white/80">
@@ -2924,12 +3137,12 @@ const Admin = () => {
                                                 </div>
                                                 <div>
                                                     <label className={labelClasses}>Max Discount Cap {promoFormData.discount_type === 'percentage' ? '(₹)' : '(N/A)'}</label>
-                                                    <input 
-                                                        type="number" 
+                                                    <input
+                                                        type="number"
                                                         disabled={promoFormData.discount_type === 'fixed'}
-                                                        className={`${inputClasses} ${promoFormData.discount_type === 'fixed' ? 'opacity-20 grayscale cursor-not-allowed' : ''}`} 
-                                                        value={promoFormData.max_discount} 
-                                                        onChange={e => setPromoFormData({ ...promoFormData, max_discount: e.target.value })} 
+                                                        className={`${inputClasses} ${promoFormData.discount_type === 'fixed' ? 'opacity-20 grayscale cursor-not-allowed' : ''}`}
+                                                        value={promoFormData.max_discount}
+                                                        onChange={e => setPromoFormData({ ...promoFormData, max_discount: e.target.value })}
                                                         placeholder={promoFormData.discount_type === 'percentage' ? 'Max rupee limit' : 'Only for % type'}
                                                     />
                                                 </div>
@@ -3234,37 +3447,37 @@ const Admin = () => {
                             </div>
                         ) : (
                             <div className="space-y-8">
-                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white/5 border border-white/10 p-6 md:p-10 gap-6">
-                                        <div className="flex items-center gap-6">
-                                            <input 
-                                                type="checkbox" 
-                                                className="w-5 h-5 accent-gold-500 cursor-pointer"
-                                                checked={carts.length > 0 && carts.every(c => selectedCarts.includes(c.id))}
-                                                onChange={(e) => {
-                                                    if (e.target.checked) setSelectedCarts(carts.map(c => c.id));
-                                                    else setSelectedCarts([]);
-                                                }}
-                                            />
-                                            <div>
-                                                <h2 className="text-xl font-serif tracking-[0.2em] uppercase italic">Vault Manifest</h2>
-                                                <p className="text-[10px] tracking-[0.3em] text-white/80 uppercase mt-2">Monitoring active acquisitions & abandoned intent</p>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center gap-8">
-                                            {selectedCarts.length > 0 && (
-                                                <button 
-                                                    onClick={handleBulkRemoveCarts}
-                                                    className="bg-red-500/10 border border-red-500/30 text-red-500 px-6 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center gap-3"
-                                                >
-                                                    <Trash2 size={14} /> Clear {selectedCarts.length} Selected
-                                                </button>
-                                            )}
-                                            <div className="text-left sm:text-right">
-                                                <p className="text-[9px] text-white/80 uppercase tracking-widest mb-1">Active Vaults</p>
-                                                <p className="text-2xl font-serif text-gold-500">{carts.length}</p>
-                                            </div>
+                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white/5 border border-white/10 p-6 md:p-10 gap-6">
+                                    <div className="flex items-center gap-6">
+                                        <input
+                                            type="checkbox"
+                                            className="w-5 h-5 accent-gold-500 cursor-pointer"
+                                            checked={carts.length > 0 && carts.every(c => selectedCarts.includes(c.id))}
+                                            onChange={(e) => {
+                                                if (e.target.checked) setSelectedCarts(carts.map(c => c.id));
+                                                else setSelectedCarts([]);
+                                            }}
+                                        />
+                                        <div>
+                                            <h2 className="text-xl font-serif tracking-[0.2em] uppercase italic">Vault Manifest</h2>
+                                            <p className="text-[10px] tracking-[0.3em] text-white/80 uppercase mt-2">Monitoring active acquisitions & abandoned intent</p>
                                         </div>
                                     </div>
+                                    <div className="flex items-center gap-8">
+                                        {selectedCarts.length > 0 && (
+                                            <button
+                                                onClick={handleBulkRemoveCarts}
+                                                className="bg-red-500/10 border border-red-500/30 text-red-500 px-6 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center gap-3"
+                                            >
+                                                <Trash2 size={14} /> Clear {selectedCarts.length} Selected
+                                            </button>
+                                        )}
+                                        <div className="text-left sm:text-right">
+                                            <p className="text-[9px] text-white/80 uppercase tracking-widest mb-1">Active Vaults</p>
+                                            <p className="text-2xl font-serif text-gold-500">{carts.length}</p>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div className="grid grid-cols-1 gap-6">
                                     {carts.length === 0 ? (
@@ -3275,8 +3488,8 @@ const Admin = () => {
                                                 <div className="flex flex-col md:flex-row justify-between gap-6 p-6 md:p-8">
                                                     <div className="space-y-4 flex-1">
                                                         <div className="flex items-center gap-4 border-b border-white/5 pb-4">
-                                                            <input 
-                                                                type="checkbox" 
+                                                            <input
+                                                                type="checkbox"
                                                                 className="w-4 h-4 accent-gold-500 cursor-pointer mr-2"
                                                                 checked={selectedCarts.includes(cart.id)}
                                                                 onChange={(e) => {
@@ -3301,13 +3514,13 @@ const Admin = () => {
                                                             {cart.items?.map((item, i) => (
                                                                 <div key={i} className="flex items-center gap-4 bg-black/40 p-3 border border-white/5 group-hover:border-white/10 transition-colors relative group/item">
                                                                     <div className="w-12 h-16 bg-zinc-900 flex-shrink-0">
-                                                                        <img src={item.image_url || item.product_image} alt="" className="w-full h-full object-cover opacity-60" />
+                                                                        <img src={getFullImageUrl(item.image_url || item.product_image)} alt="" className="w-full h-full object-cover opacity-60" />
                                                                     </div>
                                                                     <div className="min-w-0 pr-8">
                                                                         <p className="text-[10px] font-bold uppercase truncate text-white/80">{item.name || item.product_name}</p>
                                                                         <p className="text-[9px] text-gold-500/60 mt-1 uppercase tracking-widest">{item.quantity} Unit(s)</p>
                                                                     </div>
-                                                                    <button 
+                                                                    <button
                                                                         onClick={() => handleRemoveCartItem(cart.id, item.id || item.product_id)}
                                                                         className="absolute right-2 top-1/2 -translate-y-1/2 text-red-500/20 hover:text-red-500 transition-all p-2 opacity-0 group-hover/item:opacity-100"
                                                                         title="Remove Item"
@@ -3340,7 +3553,7 @@ const Admin = () => {
                                                                     )}
                                                                 </p>
                                                             </div>
-                                                            <button 
+                                                            <button
                                                                 onClick={() => handleRemoveCart(cart.id)}
                                                                 className="flex items-center gap-3 bg-red-500/10 border border-red-500/30 text-red-500 px-6 py-3 text-[8px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all w-full sm:w-auto justify-center"
                                                             >

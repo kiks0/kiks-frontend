@@ -31,7 +31,7 @@ const CancellationPolicy = () => {
                                 "To maintain our rapid delivery standards, orders are processed immediately upon confirmation."
                             </p>
                             <p className="text-gold-500/80 text-[13px] md:text-[15px] tracking-[0.5em] font-black uppercase">
-                                Cancellations must be made within 1 hour
+                                Cancellations strictly restricted to "On Hold" & "Processing" stages
                             </p>
                         </div>
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-px bg-gold-500/30"></div>
@@ -45,7 +45,7 @@ const CancellationPolicy = () => {
                                     <XCircle size={18} className="text-gold-500" /> How to Cancel
                                 </h3>
                                 <p className="text-white/40 text-[13px] leading-relaxed tracking-wide">
-                                    If you wish to cancel your order, please contact our concierge immediately at <span className="text-gold-500 underline font-bold">kiksultraluxury@gmail.com</span> with your Order Number and cancellation request.
+                                    You can cancel your order directly from your <span className="text-white font-bold uppercase">Order History</span> page while the status is <span className="text-gold-500 font-bold italic">On Hold</span> or <span className="text-gold-500 font-bold italic">Processing</span>. Once an order reaches <span className="text-red-500 font-bold italic">Dispatch</span> or <span className="text-red-500 font-bold italic">In Transit</span>, cancellation is no longer possible. For assistance, contact our concierge at <span className="text-gold-500 underline font-bold">kiksultraluxury@gmail.com</span>.
                                 </p>
                             </div>
                             <div className="border-l border-gold-500 pl-6 md:pl-8 space-y-4">
@@ -63,11 +63,11 @@ const CancellationPolicy = () => {
                             <h3 className="text-[11px] font-black tracking-[0.4em] uppercase text-white mb-8 border-b border-white/10 pb-4 flex items-center gap-4">
                                 <AlertCircle size={14} className="text-red-500" /> Late Requests
                             </h3>
-                            <p className="text-[10px] tracking-[0.2em] text-white/30 uppercase mb-8 leading-loose">If your order has already been dispatched from our atelier:</p>
+                            <p className="text-[10px] tracking-[0.2em] text-white/30 uppercase mb-8 leading-loose">Once your order reaches the following stages, cancellation is no longer possible:</p>
                             <ul className="space-y-4 text-xs font-medium uppercase tracking-[0.2em] text-white/60">
-                                <li className="flex items-center gap-4">The order can no longer be cancelled</li>
-                                <li className="flex items-center gap-4">You must refuse delivery or return the item</li>
-                                <li className="flex items-center gap-4 text-red-400">Return shipping costs will apply</li>
+                                <li className="flex items-center gap-4 border-l border-red-500/30 pl-4">Dispatch / Dispatched</li>
+                                <li className="flex items-center gap-4 border-l border-red-500/30 pl-4">In Transit / Delivered</li>
+                                <li className="flex items-center gap-4 text-red-400">Return shipping costs will apply for refused deliveries</li>
                             </ul>
                         </div>
                     </section>

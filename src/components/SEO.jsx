@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
+import { getFullImageUrl } from '../utils/url';
+
 const SEO = ({ title, description, keywords, image }) => {
     const location = useLocation();
 
@@ -30,7 +32,7 @@ const SEO = ({ title, description, keywords, image }) => {
         // 5. Update OG Image
         const ogImage = document.querySelector('meta[property="og:image"]');
         if (ogImage && image) {
-            ogImage.setAttribute('content', image);
+            ogImage.setAttribute('content', getFullImageUrl(image));
         }
 
         // 6. Canonical Link
