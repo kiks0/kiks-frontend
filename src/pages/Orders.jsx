@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, ArrowLeft, Loader2, Package, Truck, CheckCircle, ChevronDown, ChevronUp, MapPin, Calendar, CreditCard, FileText, XCircle, AlertCircle } from 'lucide-react';
 import PageLoader from '../components/PageLoader';
+import ActionLoader from '../components/ActionLoader';
 import { generateInvoice } from '../utils/generateInvoice';
 import { formatCurrency } from '../utils/currency';
 
@@ -97,6 +98,7 @@ const Orders = () => {
 
     return (
         <div className="bg-[#050505] min-h-screen text-white pt-28 md:pt-48 pb-10 md:pb-40 px-4 md:px-8">
+            <ActionLoader isLoading={!!cancellingId} message="Finalizing Cancellation" />
             <div className="max-w-6xl mx-auto">
 
                 {/* Header */}

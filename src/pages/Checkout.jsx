@@ -30,6 +30,7 @@ import {
 import { getFullImageUrl } from '../utils/url';
 import { clearCart } from '../store/cartSlice';
 import { formatCurrency } from '../utils/currency';
+import ActionLoader from '../components/ActionLoader';
 
 const Checkout = () => {
     const navigate = useNavigate();
@@ -508,6 +509,7 @@ const Checkout = () => {
 
     return (
         <div className="bg-[#050505] min-h-screen text-white pt-24 md:pt-40 pb-24 px-6 md:px-10 lg:px-20 font-sans">
+            <ActionLoader isLoading={isLoading} message={isValidating ? "Validating Selection" : "Processing Acquisition"} />
             <div className="container mx-auto max-w-7xl">
 
                 <div className="mb-12 md:mb-24 text-center">

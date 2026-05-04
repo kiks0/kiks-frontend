@@ -18,11 +18,22 @@ const Loader = () => {
         isLoaded ? 'opacity-0 invisible pointer-events-none' : 'opacity-100 visible'
       }`}
     >
-      <img 
-        src="/logo-kiks.webp" 
-        alt="Kiksultraluxury" 
-        className="w-[120px] md:w-[160px] h-auto animate-luxury-fade invert"
-      />
+      <div className="relative flex flex-col items-center">
+        {/* Subtle Glow */}
+        <div className="absolute inset-0 bg-gold-500/10 blur-[40px] rounded-full animate-pulse" />
+        
+        <img 
+            src="/logo-kiks.webp" 
+            alt="Kiks Loading" 
+            className="w-[100px] md:w-[130px] h-auto relative z-10 animate-luxury-pulse"
+        />
+        <div className="w-10 h-[1px] bg-gold-500/20 mt-8" />
+        
+        <div className="mt-8 flex flex-col items-center">
+          <div className="w-12 h-[1px] bg-gold-500/30 mb-2" />
+          <p className="text-[8px] tracking-[0.5em] text-gold-500/50 uppercase font-light">The Atelier is Preparing</p>
+        </div>
+      </div>
     </div>
   );
 };
