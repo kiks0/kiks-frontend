@@ -39,28 +39,20 @@ const Auth = ({ isRegisterInitial = false }) => {
     // Redirect if already authenticated (but not if showing success)
     useEffect(() => {
         if (isAuthenticated && status !== 'success') {
-            navigate('/', { replace: true });
+            window.location.href = '/';
         }
-    }, [isAuthenticated, navigate, status]);
+    }, [isAuthenticated, status]);
 
-    // Robust Success Navigation
+    // Robust Success Navigation with Absolute Redirect
     useEffect(() => {
         if (status === 'success') {
             const timer = setTimeout(() => {
-                // First try standard navigation
-                navigate('/', { replace: true });
-
-                // Fallback: If still here after 1s, force a reload to home
-                setTimeout(() => {
-                    const path = window.location.pathname;
-                    if (path.includes('/login') || path.includes('/register')) {
-                        window.location.href = '/';
-                    }
-                }, 1000);
-            }, 1500);
+                // Direct browser redirect - the most forceful way to move
+                window.location.href = '/';
+            }, 1000);
             return () => clearTimeout(timer);
         }
-    }, [status, navigate]);
+    }, [status]);
 
     // OTP Timer Logic
     useEffect(() => {
@@ -264,7 +256,7 @@ Marketing Consent: Granted
             dispatch(login({ user: data.user, token: data.token }));
             dispatch(fetchWishlist());
             setStatus('success');
-            setTimeout(() => navigate('/', { replace: true }), 1500);
+            setTimeout(() => { window.location.href = '/'; }, 1000);
 
         } catch (error) {
             console.error('Auth error:', error);
@@ -338,7 +330,7 @@ Marketing Consent: Granted
                 dispatch(fetchWishlist());
                 setShowOtpModal(false);
                 setStatus('success');
-                setTimeout(() => navigate('/', { replace: true }), 1500);
+                setTimeout(() => { window.location.href = '/'; }, 1000);
             } else {
                 setOtpError(data.message || 'Invalid verification code.');
             }
@@ -437,7 +429,7 @@ Marketing Consent: Granted
                     dispatch(login({ user: data.user, token: data.token }));
                     dispatch(fetchWishlist());
                     setStatus('success');
-                    setTimeout(() => navigate('/', { replace: true }), 1500);
+                    setTimeout(() => { window.location.href = '/'; }, 1000);
                 } else {
                     setErrorMessage(data.message || 'Google Login failed.');
                 }
