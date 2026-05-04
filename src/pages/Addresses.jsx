@@ -273,7 +273,8 @@ const Addresses = () => {
                                 )}
                             </h2>
 
-                            <form onSubmit={saveAddress} className="kiks-pure-form px-4 sm:px-0">
+                            <div className="max-w-xl mx-auto">
+                                <form onSubmit={saveAddress} className="kiks-pure-form px-4 sm:px-0">
                                 <div className="kiks-f-row gap-6 md:gap-[30px]">
                                     <div>
                                         <label className="text-[8px] tracking-[0.4em] text-white/40 uppercase mb-2 block">First Name</label>
@@ -412,9 +413,10 @@ const Addresses = () => {
                                     <button type="button" onClick={cancelAction} className="kiks-cancel text-[10px] tracking-[0.3em] font-black uppercase underline underline-offset-8 text-white/40 hover:text-white transition-colors">CANCEL</button>
                                 </div>
                                 {(!formData.first_name || !formData.last_name || !formData.house_no || !formData.area || !formData.landmark || !formData.city || !formData.state || !formData.pincode || !formData.phone) && (
-                                    <p className="mt-6 text-[8px] tracking-[0.2em] text-red-500/60 uppercase italic">Please complete all address fields to save your identity</p>
+                                    <p className="mt-6 text-[8px] tracking-[0.2em] text-red-500/60 uppercase italic">Please complete all address fields to save your address</p>
                                 )}
                             </form>
+                        </div>
                         </motion.div>
                     )
                 }</AnimatePresence>
