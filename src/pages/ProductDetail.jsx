@@ -240,7 +240,6 @@ const ProductDetail = () => {
             dispatch(addToCart({ ...product, quantity }));
             setIsAdding(false);
             setIsAdded(true);
-            dispatch(openCart()); 
             
             setTimeout(() => setIsAdded(false), 2000);
         }
