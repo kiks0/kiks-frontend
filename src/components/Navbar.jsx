@@ -354,6 +354,13 @@ const Navbar = () => {
                             >
                               <User size={16} className="mr-4" strokeWidth={1} /> LOGIN
                             </Link>
+                            <Link
+                              to="/register"
+                              onClick={() => { setIsMobileMenuOpen(false); setMobileMenuLevel('main'); }}
+                              className="flex items-center text-[10px] tracking-[0.3em] text-white/80 uppercase hover:text-white font-sans mt-6"
+                            >
+                              <UserPlus size={16} className="mr-4" strokeWidth={1} /> REGISTER
+                            </Link>
                           </div>
                         ) : (
 

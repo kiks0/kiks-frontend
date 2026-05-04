@@ -98,8 +98,8 @@ function App() {
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPostDetail />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/login" element={<Auth />} />
-              <Route path="/register" element={<Auth isRegisterInitial={true} />} />
+              <Route path="/login" element={<Auth key="login" />} />
+              <Route path="/register" element={<Auth isRegisterInitial={true} key="register" />} />
               <Route path="/collection/:slug" element={<Collection />} />
               <Route path="/collection/:collectionSlug/:productSlug" element={<ProductDetail />} />
               <Route path="/product/:slug" element={<ProductDetail />} />
