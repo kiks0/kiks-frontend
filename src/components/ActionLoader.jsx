@@ -18,13 +18,14 @@ const ActionLoader = ({ isLoading, message = "Processing" }) => {
                             src="/logo-kiks.webp" 
                             alt="KIKS Logo" 
                             className="w-[120px] md:w-[180px] h-auto relative z-10"
+                            initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ 
                                 scale: [1, 1.05, 1],
-                                opacity: [0.8, 1, 0.8]
+                                opacity: 1
                             }}
+                            exit={{ opacity: 0, scale: 1.2 }}
                             transition={{ 
-                                duration: 2, 
-                                repeat: Infinity, 
+                                duration: 1.5, 
                                 ease: "easeInOut" 
                             }}
                         />
