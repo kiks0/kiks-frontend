@@ -196,7 +196,7 @@ const Account = () => {
                 <div>
                   <h4 className="text-[11px] font-bold tracking-wide mb-2 text-white group-hover:text-gold-400 transition-colors uppercase">Care & services</h4>
                   <p className="text-[11px] text-neutral-500 font-medium leading-relaxed max-w-[280px]">
-                    Get support via callback, WhatsApp, or email, and manage your account privacy.
+                    Get support via callback, WhatsApp, or email, and request account deletion.
                   </p>
                 </div>
               </div>
