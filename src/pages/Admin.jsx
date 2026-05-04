@@ -2898,16 +2898,16 @@ const Admin = () => {
                                             <button 
                                                 type="submit" 
                                                 disabled={isProcessing}
-                                                className={`w-full py-6 text-[11px] font-black tracking-[0.5em] uppercase transition-all flex items-center justify-center gap-4 ${isProcessing ? 'bg-zinc-800 text-white/40 cursor-wait' : 'bg-white text-black hover:bg-gold-500 shadow-[0_0_50px_rgba(255,255,255,0.05)]'}`}
+                                                className={`w-full py-5 text-[10px] font-black tracking-[0.4em] uppercase transition-all flex items-center justify-center gap-3 ${isProcessing ? 'bg-zinc-800 text-white/40 cursor-wait' : 'bg-gold-500 text-black hover:bg-white shadow-[0_0_50px_rgba(212,175,55,0.1)]'}`}
                                             >
                                                 {isProcessing ? (
                                                     <>
-                                                        <Loader2 className="animate-spin" size={18} />
-                                                        Processing Acquisition...
+                                                        <Loader2 className="animate-spin" size={16} />
+                                                        Saving...
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <Save size={18} /> Update Boutique Strategy
+                                                        <Save size={16} /> Save Settings
                                                     </>
                                                 )}
                                             </button>
