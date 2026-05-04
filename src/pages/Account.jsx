@@ -125,8 +125,8 @@ const Account = () => {
   return (
     <div className="min-h-screen font-sans">
       
-      {/* SECTION 1: ABSOLUTE VERTICAL CENTER (EQUAL PADDING) */}
-      <section className="bg-white pt-[150px] md:pt-[350px] pb-[150px] md:pb-[350px] flex flex-col items-center justify-center animate-fade-in text-center px-6 w-full">
+      {/* SECTION 1: LOWERED WELCOME POSITION (DEEP CENTER) */}
+      <section className="bg-white pt-[220px] md:pt-[450px] pb-[150px] md:pb-[350px] flex flex-col items-center justify-center animate-fade-in text-center px-6 w-full">
         <motion.div 
           initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
