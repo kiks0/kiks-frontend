@@ -3630,8 +3630,8 @@ const Admin = () => {
                                                         </div>
                                                     </div>
 
-                                                    <div className="md:w-64 flex flex-col justify-between items-end text-right border-t md:border-t-0 md:border-l border-white/5 pt-6 md:pt-0 md:pl-8">
-                                                        <div className="space-y-4">
+                                                    <div className="md:w-64 flex flex-col justify-between items-start md:items-end text-left md:text-right border-t md:border-t-0 md:border-l border-white/5 pt-6 md:pt-0 md:pl-8">
+                                                        <div className="space-y-4 w-full">
                                                             <div>
                                                                 <p className="text-[8px] uppercase tracking-[0.3em] text-white/60 mb-1">Status</p>
                                                                 <span className="px-3 py-1 bg-gold-500/5 border border-gold-500/20 text-gold-500 text-[8px] font-black uppercase tracking-widest">Active</span>
@@ -3641,10 +3641,10 @@ const Admin = () => {
                                                                 <p className="text-[10px] text-white/60 font-sans">{new Date(cart.last_sync).toLocaleString()}</p>
                                                             </div>
                                                         </div>
-                                                        <div className="mt-6 flex flex-col items-end gap-4 w-full">
-                                                            <div className="text-right">
+                                                        <div className="mt-8 flex flex-col items-start md:items-end gap-6 w-full">
+                                                            <div className="w-full">
                                                                 <p className="text-[8px] uppercase tracking-[0.3em] text-white/60 mb-1">Approx. Value</p>
-                                                                <p className="text-lg font-serif text-white">
+                                                                <p className="text-xl md:text-lg font-serif text-white">
                                                                     {formatCurrency(
                                                                         cart.items?.reduce((acc, item) => acc + (item.price * item.quantity), 0) || 0,
                                                                         activeCurrency, rates, symbols
@@ -3653,9 +3653,9 @@ const Admin = () => {
                                                             </div>
                                                             <button
                                                                 onClick={() => handleRemoveCart(cart.id)}
-                                                                className="flex items-center gap-3 bg-red-500/10 border border-red-500/30 text-red-500 px-6 py-3 text-[8px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all w-full sm:w-auto justify-center"
+                                                                className="flex items-center gap-3 bg-red-500/10 border border-red-500/30 text-red-500 px-8 py-4 text-[9px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all w-full md:w-auto justify-center"
                                                             >
-                                                                <Trash2 size={12} />
+                                                                <Trash2 size={14} />
                                                                 Clear Vault
                                                             </button>
                                                         </div>
