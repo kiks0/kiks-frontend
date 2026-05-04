@@ -98,7 +98,7 @@ const Wishlist = () => {
                     <div className="hidden md:flex absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 items-center justify-center pointer-events-none group-hover:pointer-events-auto">
                         <button 
                           onClick={() => handleAddToCart(product)}
-                          className="px-8 py-3 bg-black text-white border border-white text-[10px] tracking-[0.2em] font-bold uppercase transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 hover:bg-white hover:text-black flex items-center gap-2"
+                          className={`px-8 py-3 border border-white text-[10px] tracking-[0.2em] font-bold uppercase transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 flex items-center gap-2 pointer-events-auto ${glowingId === product.id ? 'bg-white text-black' : 'bg-black text-white hover:bg-white hover:text-black'}`}
                         >
                            {addedId === product.id ? <><Check size={14} /> ADDED</> : 'ADD TO BAG'}
                         </button>
@@ -133,7 +133,7 @@ const Wishlist = () => {
                     {/* Mobile Only Add to Bag Button */}
                     <button 
                       onClick={() => handleAddToCart(product)}
-                      className="md:hidden w-full py-4 bg-white text-black text-[10px] tracking-[0.2em] font-bold uppercase flex items-center justify-center gap-2 active:bg-gray-200 transition-colors"
+                      className={`md:hidden w-full py-4 text-[10px] tracking-[0.2em] font-bold uppercase flex items-center justify-center gap-2 transition-all duration-300 ${glowingId === product.id ? 'bg-white text-black' : 'bg-black text-white hover:bg-white hover:text-black'}`}
                     >
                         {addedId === product.id ? <><Check size={14} /> ADDED TO BAG</> : <><ShoppingBag size={14} /> ADD TO BAG</>}
                     </button>

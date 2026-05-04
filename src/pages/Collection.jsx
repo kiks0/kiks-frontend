@@ -56,8 +56,17 @@ const Collection = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [category, view]); // Re-run when view changes
 
+    const [cartFlashId, setCartFlashId] = useState(null);
+
     const handleOpenProducts = () => {
         navigate(`?category=${category}&view=products`);
+    };
+
+    const handleAddToCart = (e, product) => {
+        e.preventDefault();
+        dispatch(addToCart({...product, quantity: 1}));
+        setCartFlashId(product.id);
+        setTimeout(() => setCartFlashId(null), 800);
     };
 
     if (loading) {
@@ -218,8 +227,8 @@ const Collection = () => {
                                                 <Heart size={12} fill={wishlistItems.some(i => i.id === product.id) ? "currentColor" : "none"} />
                                             </button>
                                             <button 
-                                                onClick={(e) => { e.preventDefault(); dispatch(addToCart({...product, quantity: 1})); }}
-                                                className="p-1.5 md:p-3 rounded-full backdrop-blur-md border border-white/10 bg-black/40 text-white hover:bg-white hover:text-black active:scale-90 transition-all duration-300"
+                                                onClick={(e) => handleAddToCart(e, product)}
+                                                className={`p-1.5 md:p-3 rounded-full backdrop-blur-md border border-white/10 transition-all duration-300 ${cartFlashId === product.id ? 'bg-white text-black' : 'bg-black/40 text-white hover:bg-white hover:text-black'}`}
                                             >
                                                 <ShoppingBag size={12} />
                                             </button>
