@@ -31,7 +31,7 @@ const CancellationPolicy = () => {
                                 "To maintain our rapid delivery standards, orders are processed immediately upon confirmation."
                             </p>
                             <p className="text-gold-500/80 text-[13px] md:text-[15px] tracking-[0.5em] font-black uppercase">
-                                Cancellations strictly restricted to "On Hold" & "Processing" stages
+                                Cancellations are only possible if the order is "On Hold" or "Processing"
                             </p>
                         </div>
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-px bg-gold-500/30"></div>
@@ -45,7 +45,7 @@ const CancellationPolicy = () => {
                                     <XCircle size={18} className="text-gold-500" /> How to Cancel
                                 </h3>
                                 <p className="text-white/40 text-[13px] leading-relaxed tracking-wide">
-                                    You can cancel your order directly from your <span className="text-white font-bold uppercase">Order History</span> page while the status is <span className="text-gold-500 font-bold italic">On Hold</span> or <span className="text-gold-500 font-bold italic">Processing</span>. Once an order reaches <span className="text-red-500 font-bold italic">Dispatch</span> or <span className="text-red-500 font-bold italic">In Transit</span>, cancellation is no longer possible. For assistance, contact our concierge at <span className="text-gold-500 underline font-bold">kiksultraluxury@gmail.com</span>.
+                                    If your order is currently <span className="text-gold-500 font-bold italic">On Hold</span> or <span className="text-gold-500 font-bold italic">Processing</span>, it can be canceled directly from your <span className="text-white font-bold uppercase">Order History</span> page. Once an order reaches <span className="text-red-500 font-bold italic">Dispatch</span> or <span className="text-red-500 font-bold italic">In Transit</span>, cancellation is no longer possible. For assistance, contact our concierge at <span className="text-gold-500 underline font-bold">kiksultraluxury@gmail.com</span>.
                                 </p>
                             </div>
                             <div className="border-l border-gold-500 pl-6 md:pl-8 space-y-4">
