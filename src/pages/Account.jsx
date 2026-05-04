@@ -125,8 +125,8 @@ const Account = () => {
   return (
     <div className="min-h-screen font-sans">
       
-      {/* SECTION 1: PRECISE CHANEL PROPORTIONS (259PX MOBILE HEIGHT / CINEMATIC DESKTOP) */}
-      <section className="bg-white pt-[110px] md:pt-[320px] pb-[80px] md:pb-[260px] flex flex-col items-center justify-center animate-fade-in text-center px-6">
+      {/* SECTION 1: EXACT CHANEL MIN-HEIGHT LOGIC (259PX MOBILE / 600PX DESKTOP) */}
+      <section className="bg-white min-h-[259px] md:min-h-[600px] flex flex-col items-center justify-center animate-fade-in text-center px-6">
         <motion.div 
           initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
