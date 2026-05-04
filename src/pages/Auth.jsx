@@ -264,6 +264,7 @@ Marketing Consent: Granted
             dispatch(login({ user: data.user, token: data.token }));
             dispatch(fetchWishlist());
             setStatus('success');
+            setTimeout(() => navigate('/', { replace: true }), 1500);
             
         } catch (error) {
             console.error('Auth error:', error);
@@ -337,6 +338,7 @@ Marketing Consent: Granted
                 dispatch(fetchWishlist());
                 setShowOtpModal(false);
                 setStatus('success');
+                setTimeout(() => navigate('/', { replace: true }), 1500);
             } else {
                 setOtpError(data.message || 'Invalid verification code.');
             }
@@ -435,6 +437,7 @@ Marketing Consent: Granted
                     dispatch(login({ user: data.user, token: data.token }));
                     dispatch(fetchWishlist());
                     setStatus('success');
+                    setTimeout(() => navigate('/', { replace: true }), 1500);
                 } else {
                     setErrorMessage(data.message || 'Google Login failed.');
                 }
@@ -499,7 +502,14 @@ Marketing Consent: Granted
                                 <p className="text-gold-500/40 text-[10px] tracking-[0.5em] uppercase mb-10">
                                     {isRegister ? 'Entry granted to the vault' : 'Accessing your private portal'}
                                 </p>
-                                <div className="w-12 h-[1px] bg-gold-500/30 animate-pulse" />
+                                <div className="w-12 h-[1px] bg-gold-500/30 animate-pulse mb-8" />
+                                
+                                <button 
+                                    onClick={() => navigate('/', { replace: true })}
+                                    className="text-[9px] tracking-[0.4em] text-white/20 hover:text-white uppercase font-bold transition-all border-b border-white/5 pb-1"
+                                >
+                                    Enter Boutique
+                                </button>
                             </motion.div>
                         </motion.div>
                     ) : status === 'reset_sent' ? (
