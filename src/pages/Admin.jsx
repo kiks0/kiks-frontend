@@ -1282,7 +1282,7 @@ const Admin = () => {
                     </div>
 
                     {/* Desktop Tab Links */}
-                    <div className="hidden md:flex space-x-8 overflow-x-auto scrollbar-hide">
+                    <div className="hidden md:flex flex-wrap gap-x-8 gap-y-6">
                         {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing', 'carts', 'trash'].map(tab => {
                             const callbackCount = tab === 'waitlist' ? waitlist.filter(e => e.request_type === 'callback').length : 0;
                             return (
