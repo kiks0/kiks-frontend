@@ -194,9 +194,9 @@ const Account = () => {
                   <Smartphone size={20} strokeWidth={1} />
                 </div>
                 <div>
-                  <h4 className="text-[11px] font-bold tracking-wide mb-2 text-white group-hover:text-gold-400 transition-colors">Client services</h4>
+                  <h4 className="text-[11px] font-bold tracking-wide mb-2 text-white group-hover:text-gold-400 transition-colors uppercase">Care & services</h4>
                   <p className="text-[11px] text-neutral-500 font-medium leading-relaxed max-w-[280px]">
-                    Access your dedicated KIKS advisor for priority assistance, bespoke requests, and expert guidance.
+                    KIKS offers specialized care and maintenance services. Your piece will be entrusted to expert craftsmen within our ateliers to ensure it remains absolute.
                   </p>
                 </div>
               </div>
