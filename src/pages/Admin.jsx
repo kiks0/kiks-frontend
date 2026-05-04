@@ -2853,10 +2853,6 @@ const Admin = () => {
                                                         placeholder="/collection"
                                                     />
                                                 </div>
-                                                <div className="flex items-end col-span-1 sm:col-span-2">
-                                                    <button type="submit" className="w-full bg-white text-black py-5 text-[10px] font-black tracking-[0.4em] uppercase hover:bg-gold-500 transition-all flex items-center justify-center gap-3">
-                                                        <Save size={16} /> Update Boutique Strategy
-                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -2896,6 +2892,26 @@ const Admin = () => {
                                                     </div>
                                                 )}
                                             </div>
+                                        </div>
+
+                                        {/* Bottom Full-Width Save Button */}
+                                        <div className="lg:col-span-2 pt-10 border-t border-white/5">
+                                            <button 
+                                                type="submit" 
+                                                disabled={isProcessing}
+                                                className={`w-full py-6 text-[11px] font-black tracking-[0.5em] uppercase transition-all flex items-center justify-center gap-4 ${isProcessing ? 'bg-zinc-800 text-white/40 cursor-wait' : 'bg-white text-black hover:bg-gold-500 shadow-[0_0_50px_rgba(255,255,255,0.05)]'}`}
+                                            >
+                                                {isProcessing ? (
+                                                    <>
+                                                        <Loader2 className="animate-spin" size={18} />
+                                                        Processing Acquisition...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Save size={18} /> Update Boutique Strategy
+                                                    </>
+                                                )}
+                                            </button>
                                         </div>
                                     </form>
                                 </section>
