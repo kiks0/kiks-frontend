@@ -125,15 +125,17 @@ const Account = () => {
   return (
     <div className="min-h-screen font-sans">
       
-      {/* SECTION 1: WHITE WELCOME */}
-      <section className="bg-white pt-[90px] md:pt-[160px] pb-12 flex flex-col items-center justify-center animate-fade-in text-center px-6">
+      {/* SECTION 1: CINEMATIC WELCOME (CHANEL SCALE) */}
+      <section className="bg-black pt-[120px] md:pt-[240px] pb-[80px] md:pb-[180px] flex flex-col items-center justify-center animate-fade-in text-center px-6 border-b border-white/5">
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="flex flex-col items-center"
         >
-          <p className="text-[10px] md:text-[11px] tracking-[0.3em] font-medium uppercase mb-4 text-black/60">Welcome</p>
-          <h1 className="text-xl md:text-2xl font-serif tracking-[0.2em] uppercase text-black font-normal">{userName}</h1>
+          <p className="text-[10px] md:text-[12px] tracking-[0.5em] font-bold uppercase mb-6 text-white/40">Welcome</p>
+          <h1 className="text-3xl md:text-5xl font-serif tracking-[0.25em] uppercase text-white font-light leading-tight">{userName}</h1>
+          <div className="w-12 h-[1px] bg-gold-500/30 mt-12 animate-pulse" />
         </motion.div>
       </section>
 
