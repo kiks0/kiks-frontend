@@ -134,8 +134,7 @@ const Account = () => {
           className="flex flex-col items-center"
         >
           <p className="text-[10px] md:text-[12px] tracking-[0.5em] font-bold uppercase mb-6 text-black/40">Welcome</p>
-          <h1 className="text-3xl md:text-5xl font-serif tracking-[0.25em] uppercase text-black font-light leading-tight">{userName}</h1>
-          <div className="w-12 h-[1px] bg-black/10 mt-12" />
+          <h1 className="text-2xl md:text-3xl font-serif tracking-[0.25em] uppercase text-black font-light leading-tight">{userName}</h1>
         </motion.div>
       </section>
 
