@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, User, ArrowRight, Eye, EyeOff, Sparkles, LogIn, UserPlus, Phone, Calendar, Globe, ChevronDown, CheckCircle2, Loader2 } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../store/authSlice';
 import { fetchWishlist, clearWishlist } from '../store/wishlistSlice';
 import { useGoogleLogin } from '@react-oauth/google';
@@ -30,6 +30,14 @@ const Auth = ({ isRegisterInitial = false }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
+    const { isAuthenticated } = useSelector((state) => state.auth);
+
+    // Redirect if already authenticated
+    useEffect(() => {
+        if (isAuthenticated && status !== 'success') {
+            navigate('/');
+        }
+    }, [isAuthenticated, navigate, status]);
 
     // OTP Timer Logic
     useEffect(() => {
@@ -238,7 +246,7 @@ Marketing Consent: Granted
             dispatch(login({ user: data.user, token: data.token }));
             dispatch(fetchWishlist());
             setStatus('success');
-            setTimeout(() => navigate('/'), 500);
+            setTimeout(() => navigate('/'), 2000);
             
         } catch (error) {
             console.error('Auth error:', error);
@@ -312,7 +320,7 @@ Marketing Consent: Granted
                 dispatch(fetchWishlist());
                 setShowOtpModal(false);
                 setStatus('success');
-                setTimeout(() => navigate('/'), 500);
+                setTimeout(() => navigate('/'), 2000);
             } else {
                 setOtpError(data.message || 'Invalid verification code.');
             }
@@ -411,7 +419,7 @@ Marketing Consent: Granted
                     dispatch(login({ user: data.user, token: data.token }));
                     dispatch(fetchWishlist());
                     setStatus('success');
-                    setTimeout(() => navigate('/'), 500);
+                    setTimeout(() => navigate('/'), 2000);
                 } else {
                     setErrorMessage(data.message || 'Google Login failed.');
                 }
