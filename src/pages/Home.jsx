@@ -22,6 +22,14 @@ const Home = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
+  // High-Performance Mobile Stabilization
+  useEffect(() => {
+    ScrollTrigger.config({ 
+      ignoreMobileResize: true,
+      autoRefreshEvents: "visibilitychange,DOMContentLoaded,load,resize" 
+    });
+  }, []);
+
   // Animations logic (Keeping GSAP/ScrollTrigger as they are part of the original design)
   useEffect(() => {
     // Reveal animations...
@@ -275,7 +283,7 @@ const Home = () => {
           end: "bottom bottom",
           scrub: true,
           pin: wrapper,
-          pinSpacing: false,
+          pinSpacing: true, // PREVENT OVERLAP
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
@@ -595,7 +603,7 @@ const Home = () => {
       </section>
 
       {/* Immersive Parallax Story Section with GSAP */}
-      <section ref={storyRef} className="relative min-h-[80vh] md:h-screen bg-[#f9f9f9] overflow-hidden">
+      <section ref={storyRef} className="relative py-16 md:h-screen bg-[#f9f9f9] overflow-hidden">
         <div className="relative z-20 h-full flex flex-col items-center justify-center px-6">
           <div className="text-center max-w-4xl mx-auto flex flex-col items-center w-full">
             <span className="text-black text-[10px] tracking-[0.6em] uppercase font-black block mb-6">{t('home.art_creation')}</span>
@@ -637,7 +645,7 @@ const Home = () => {
       </section>
 
       {/* SECTION 5: THE EDITORIAL REVEAL (INTERACTIVE & LAYERED) */}
-      <section className="relative min-h-screen bg-white overflow-hidden py-12 md:py-24 px-6 md:px-20 lg:px-32 flex flex-col justify-center">
+      <section className="relative min-h-screen bg-white overflow-hidden py-8 md:py-24 px-6 md:px-20 lg:px-32 flex flex-col justify-center">
 
         {/* Mouse Follow Glow */}
         <motion.div

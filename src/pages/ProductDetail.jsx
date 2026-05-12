@@ -236,6 +236,9 @@ const ProductDetail = () => {
     const [isAdded, setIsAdded] = useState(false);
     const [isAdding, setIsAdding] = useState(false);
 
+    const cartItems = useSelector(state => state.cart.items);
+    const totalItems = cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0);
+
     const handleAddToCart = async () => {
         if (!isAuthenticated) {
             dispatch(openWishlistAuthPopup('cart'));
@@ -244,13 +247,15 @@ const ProductDetail = () => {
         if (product) {
             setIsAdding(true);
             
-            // Artificial delay for premium "Processing" feel
-            await new Promise(resolve => setTimeout(resolve, 800));
+            // Reduced delay for "Snappy" premium feel
+            await new Promise(resolve => setTimeout(resolve, 300));
             
             dispatch(addToCart({ ...product, quantity }));
             setIsAdding(false);
             setIsAdded(true);
-            showNotification(`${product.name} added to cart.`);
+            
+            const newTotal = totalItems + quantity;
+            showNotification(`${product.name} added to cart. (Total: ${newTotal})`);
             
             setTimeout(() => setIsAdded(false), 2000);
         }

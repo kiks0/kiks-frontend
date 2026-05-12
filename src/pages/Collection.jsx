@@ -74,6 +74,9 @@ const Collection = () => {
         navigate(`?category=${category}&view=products`);
     };
 
+    const cartItems = useSelector(state => state.cart.items);
+    const totalItems = cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0);
+
     const handleAddToCart = (e, product) => {
         e.preventDefault();
         if (!isAuthenticated) {
@@ -82,7 +85,11 @@ const Collection = () => {
         }
         dispatch(addToCart({...product, quantity: 1}));
         setCartFlashId(product.id);
-        showNotification(`${product.name} added to cart.`);
+        
+        // Calculate new total for immediate feedback
+        const newTotal = totalItems + 1;
+        showNotification(`${product.name} added to cart. (Total: ${newTotal})`);
+        
         setTimeout(() => setCartFlashId(null), 800);
     };
 
