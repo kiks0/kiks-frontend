@@ -1,0 +1,39 @@
+import { motion, AnimatePresence } from 'framer-motion';
+
+const ActionLoader = ({ isLoading, message = "Processing" }) => {
+    return (
+        <AnimatePresence>
+            {isLoading && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 z-[9999999] bg-white/90 backdrop-blur-md flex items-center justify-center"
+                >
+                    <div className="relative flex flex-col items-center">
+                        {/* Luxury Gold Glow */}
+                        <div className="absolute inset-0 bg-black/5 blur-[80px] rounded-full animate-pulse" />
+                        
+                        <motion.img 
+                            src="/logo-kiks.png" 
+                            alt="KIKS Logo" 
+                            className="w-[120px] md:w-[180px] h-auto relative z-10"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ 
+                                scale: [1, 1.05, 1],
+                                opacity: 1
+                            }}
+                            exit={{ opacity: 0, scale: 1.2 }}
+                            transition={{ 
+                                duration: 1.5, 
+                                ease: "easeInOut" 
+                            }}
+                        />
+                    </div>
+                </motion.div>
+            )}
+        </AnimatePresence>
+    );
+};
+
+export default ActionLoader;

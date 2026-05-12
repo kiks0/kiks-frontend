@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/webp" href="/logo-kiks.webp" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="KIKS Ultra Luxury - Experience the essence of elegance with our exclusive collection of premium fragrances." />
+  <meta name="keywords" content="Luxury Perfume, Extrait de Parfum, KIKS, Premium Fragrance, Luxury Scents" />
+  <meta property="og:title" content="KIKS Ultra Luxury" />
+  <meta property="og:description" content="Experience the essence of elegance." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/og-image.jpg" />
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Outfit:wght@100..900&family=Playfair+Display:ital,wght@0,300..900;1,300..900&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Outfit:wght@100..900&family=Playfair+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="/logo-kiks.png" fetchpriority="high">
+  <link rel="icon" type="image/webp" href="/logo-kiks.webp" />
+  <title>KIKS Ultra Luxury</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=%VITE_GA_MEASUREMENT_ID%"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', '%VITE_GA_MEASUREMENT_ID%');
+  </script>
+</head>
+
+<body style="background-color: #ffffff; margin: 0; padding: 0;">
+  <div id="root">
+    <!-- Instant Pre-loader to avoid blank white flash -->
+    <div id="pre-loader"
+      style="position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #ffffff; z-index: 9999;">
+      <img src="/logo-kiks.png" alt="KIKS" width="120" height="40"
+        style="width: 120px; height: auto; opacity: 0.5; animation: pulse 2s infinite ease-in-out;">
+      <style>
+        @keyframes pulse {
+          0% {
+            opacity: 0.3;
+            transform: scale(0.95);
+          }
+
+          50% {
+            opacity: 0.7;
+            transform: scale(1);
+          }
+
+          100% {
+            opacity: 0.3;
+            transform: scale(0.95);
+          }
+        }
+      </style>
+    </div>
+  </div>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
+</html>

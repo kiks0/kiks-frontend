@@ -1,0 +1,372 @@
+                            {isAdding && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="bg-neutral-50 border border-black/10 p-4 sm:p-6 md:p-12 mb-10 md:mb-20 overflow-hidden"
+                                >
+                                    <form onSubmit={activeTab === 'collections' ? handleAddCollection : activeTab === 'products' ? handleAddProduct : activeTab === 'blogs' ? handleAddBlog : handleAddPromoCode} className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 md:gap-10">
+
+                                        <div className="md:col-span-2 text-center pb-4 md:pb-6 border-b border-black/10 mb-2 md:mb-4">
+                                            <h3 className="text-base md:text-lg tracking-[0.3em] md:tracking-[0.4em] text-black font-serif uppercase italic">
+                                                {editingId ? `Editing ${activeTab === 'collections' ? 'Collection' : activeTab === 'products' ? 'Product' : activeTab === 'blogs' ? 'Blog' : 'Promo Code'}` : `New ${activeTab === 'collections' ? 'Collection' : activeTab === 'products' ? 'Product' : activeTab === 'blogs' ? 'Blog' : 'Promo Code'}`}
+                                            </h3>
+                                        </div>
+
+                                        {activeTab !== 'promo-codes' && (
+                                            <div className="md:col-span-2">
+                                                <label className={labelClasses}>Visual Essence (Image)</label>
+                                                <div
+                                                    onClick={() => fileInputRef.current.click()}
+                                                    className="relative w-full h-40 sm:h-56 md:h-72 bg-white border border-dashed border-black/10 flex flex-col items-center justify-center cursor-pointer hover:border-black hover:bg-neutral-50 transition-all group overflow-hidden"
+                                                >
+                                                    <input
+                                                        type="file"
+                                                        ref={fileInputRef}
+                                                        onChange={handleImageUpload}
+                                                        className="hidden"
+                                                        accept="image/*,video/mp4,video/webm,video/quicktime,video/ogg,.mp4,.webm,.mov,.ogg"
+                                                    />
+
+                                                    {(activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url) ? (
+                                                        <div className="relative w-full h-full">
+                                                            {isVideo(activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url) ? (
+                                                                <video src={getFullImageUrl(activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url)} className="w-full h-full object-cover opacity-90" muted loop autoPlay />
+                                                            ) : (
+                                                                <img
+                                                                    src={getFullImageUrl(activeTab === 'collections' ? colFormData.banner_url : activeTab === 'products' ? prodFormData.image_url : blogFormData.image_url)}
+                                                                    className="w-full h-full object-cover opacity-90 transition-all group-hover:opacity-100"
+                                                                />
+                                                            )}
+                                                            <div className="absolute inset-0 flex items-center justify-center bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                <span className="text-[8px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.4em] font-black uppercase text-white bg-black px-4 sm:px-6 py-2 sm:py-3 border border-black/10 text-center mx-2">Replace Content</span>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex flex-col items-center p-8">
+                                                            {uploading ? (
+                                                                <Loader2 className="animate-spin text-black mb-6" size={32} />
+                                                            ) : (
+                                                                <Upload className="text-black/10 group-hover:text-black mb-6 transition-colors" size={32} />
+                                                            )}
+                                                            <span className="text-[11px] tracking-[0.4em] uppercase text-black/40 text-center">{uploading ? 'Analyzing Structure...' : 'Upload Cinematic Visual'}</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {activeTab === 'collections' ? (
+                                            <React.Fragment>
+                                                <div><label className={labelClasses}>Collection Name</label><input required className={inputClasses} value={colFormData.name} onChange={e => setColFormData({ ...colFormData, name: e.target.value })} /></div>
+                                                <div><label className={labelClasses}>Slug (URL part)</label><input required className={inputClasses} value={colFormData.slug} onChange={e => setColFormData({ ...colFormData, slug: e.target.value })} /></div>
+                                                <div className="md:col-span-2"><label className={labelClasses}>Description</label><textarea required className={`${inputClasses} h-32`} value={colFormData.description} onChange={e => setColFormData({ ...colFormData, description: e.target.value })} /></div>
+                                            </React.Fragment>
+                                        ) : activeTab === 'blogs' ? (
+                                            <React.Fragment>
+                                                <div className="md:col-span-2"><label className={labelClasses}>Blog Title</label><input required className={inputClasses} value={blogFormData.title} onChange={e => setBlogFormData({ ...blogFormData, title: e.target.value })} placeholder="e.g. The Art of Oud" /></div>
+                                                <div><label className={labelClasses}>SEO Slug (URL)</label><input required className={inputClasses} value={blogFormData.slug} onChange={e => setBlogFormData({ ...blogFormData, slug: e.target.value.toLowerCase().replace(/ /g, '-') })} placeholder="the-art-of-oud" /></div>
+                                                <div><label className={labelClasses}>Keywords (Comma separated)</label><input className={inputClasses} value={blogFormData.keywords} onChange={e => setBlogFormData({ ...blogFormData, keywords: e.target.value })} placeholder="luxury, perfume, oud" /></div>
+                                                <div><label className={labelClasses}>Author</label><input className={inputClasses} value={blogFormData.author} onChange={e => setBlogFormData({ ...blogFormData, author: e.target.value })} /></div>
+                                                <div className="md:col-span-2">
+                                                    <label className={labelClasses}>Journal Content</label>
+                                                    <div className="text-[10px] text-white/40 uppercase tracking-[0.2em] mb-3 italic">Rich text narrative support enabled</div>
+                                                    <textarea required className={`${inputClasses} h-80 md:h-[500px] font-sans !normal-case tracking-normal !leading-relaxed p-6 md:p-8 bg-white/[0.03] text-sm md:text-base`} value={blogFormData.content} onChange={e => setBlogFormData({ ...blogFormData, content: e.target.value })} />
+                                                </div>
+                                            </React.Fragment>
+                                        ) : activeTab === 'promo-codes' ? (
+                                            <React.Fragment>
+                                                <div className="md:col-span-2">
+                                                    <label className={labelClasses}>Promo Code Identity</label>
+                                                    <input required className={`${inputClasses} !text-lg !font-serif !tracking-[0.2em] uppercase text-black`} value={promoFormData.code} onChange={e => setPromoFormData({ ...promoFormData, code: e.target.value.toUpperCase() })} placeholder="e.g. KIKS2026" />
+                                                </div>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:col-span-2">
+                                                    <div>
+                                                        <label className={labelClasses}>Discount Type</label>
+                                                        <select required className={inputClasses} value={promoFormData.discount_type} onChange={e => setPromoFormData({ ...promoFormData, discount_type: e.target.value })}>
+                                                            <option value="percentage" className="bg-white">Percentage (%)</option>
+                                                            <option value="fixed" className="bg-white">Fixed Amount (₹)</option>
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label className={labelClasses}>Discount Value {promoFormData.discount_type === 'percentage' ? '(%)' : '(₹)'}</label>
+                                                        <div className="relative">
+                                                            <input required type="number" className={inputClasses} value={promoFormData.discount_value} onChange={e => setPromoFormData({ ...promoFormData, discount_value: e.target.value })} placeholder={promoFormData.discount_type === 'percentage' ? 'e.g. 10' : 'e.g. 500'} />
+                                                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-black/40 text-[10px] font-bold">
+                                                                {promoFormData.discount_type === 'percentage' ? '%' : '₹'}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:col-span-2">
+                                                    <div>
+                                                        <label className={labelClasses}>Min Order Amount (₹ Required)</label>
+                                                        <input type="number" className={inputClasses} value={promoFormData.min_order_amount} onChange={e => setPromoFormData({ ...promoFormData, min_order_amount: e.target.value })} placeholder="e.g. 1000" />
+                                                    </div>
+                                                    <div>
+                                                        <label className={labelClasses}>Max Discount Cap {promoFormData.discount_type === 'percentage' ? '(₹)' : '(N/A)'}</label>
+                                                        <input
+                                                            type="number"
+                                                            disabled={promoFormData.discount_type === 'fixed'}
+                                                            className={`${inputClasses} ${promoFormData.discount_type === 'fixed' ? 'opacity-20 grayscale cursor-not-allowed' : ''}`}
+                                                            value={promoFormData.max_discount}
+                                                            onChange={e => setPromoFormData({ ...promoFormData, max_discount: e.target.value })}
+                                                            placeholder={promoFormData.discount_type === 'percentage' ? 'Max rupee limit' : 'Only for % type'}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="md:col-span-2 bg-white border border-black/5 p-6 md:p-10 space-y-6">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center border border-black/10">
+                                                            <Ticket size={18} className="text-black" />
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-[10px] tracking-[0.3em] font-black uppercase text-black italic">Calculation Logic Manifest</p>
+                                                            <p className="text-[8px] text-black/40 uppercase tracking-widest mt-1">Real-time discount application strategy</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-[11px] tracking-widest text-black/60 leading-relaxed">
+                                                        <div className={`p-4 border border-black/5 bg-neutral-50 ${promoFormData.discount_type === 'percentage' ? 'border-black' : ''}`}>
+                                                            <p className={`font-black mb-2 uppercase ${promoFormData.discount_type === 'percentage' ? 'text-black' : 'text-black/40'}`}>Percentage Mode:</p>
+                                                            <p>Reduces total by {promoFormData.discount_value || '0'}%. {promoFormData.max_discount ? `Discount capped at ₹${promoFormData.max_discount}.` : 'No upper limit cap.'}</p>
+                                                        </div>
+                                                        <div className={`p-4 border border-black/5 bg-neutral-50 ${promoFormData.discount_type === 'fixed' ? 'border-black' : ''}`}>
+                                                            <p className={`font-black mb-2 uppercase ${promoFormData.discount_type === 'fixed' ? 'text-black' : 'text-black/40'}`}>Fixed Amount Mode:</p>
+                                                            <p>Subtracts flat ₹{promoFormData.discount_value || '0'} from Subtotal. Requires minimum purchase of ₹{promoFormData.min_order_amount || '0'}.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:col-span-2">
+                                                    <div><label className={labelClasses}>Expiry Date</label><input type="date" className={inputClasses} value={promoFormData.expiry_date} onChange={e => setPromoFormData({ ...promoFormData, expiry_date: e.target.value })} /></div>
+                                                    <div><label className={labelClasses}>Usage Limit (Total)</label><input type="number" className={inputClasses} value={promoFormData.usage_limit} onChange={e => setPromoFormData({ ...promoFormData, usage_limit: e.target.value })} placeholder="e.g. 100" /></div>
+                                                </div>
+                                            </React.Fragment>
+                                        ) : (
+                                            <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-10">
+                                                <div className="md:col-span-2 mb-8">
+                                                    <ImageUploadZone
+                                                        label="Primary Product Essence (Main Image)"
+                                                        value={prodFormData.image_url}
+                                                        onUpload={(e) => handleImageUpload(e)}
+                                                        height="h-80 md:h-[500px]"
+                                                    />
+                                                </div>
+                                                <div className="md:col-span-1">
+                                                    <label className={labelClasses}>Collection Registry</label>
+                                                    <select required className={inputClasses} value={prodFormData.collection_id} onChange={e => setProdFormData({ ...prodFormData, collection_id: e.target.value })}>
+                                                        <option value="" className="bg-white">Select Collection</option>
+                                                        {collections.map(c => <option className="bg-white" key={c.id} value={c.id}>{c.name}</option>)}
+                                                    </select>
+                                                </div>
+                                                <div className="md:col-span-1">
+                                                    <label className={labelClasses}>Essence Name</label>
+                                                    <input required className={inputClasses} value={prodFormData.name} onChange={e => {
+                                                        const name = e.target.value;
+                                                        setProdFormData({ ...prodFormData, name, slug: name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') });
+                                                    }} placeholder="Noble Oud..." />
+                                                </div>
+                                                <div className="md:col-span-1">
+                                                    <label className={labelClasses}>Price (₹)</label>
+                                                    <input required className={inputClasses} value={prodFormData.price} onChange={e => setProdFormData({ ...prodFormData, price: e.target.value })} placeholder="18,500" />
+                                                </div>
+                                                <div className="md:col-span-1">
+                                                    <label className={labelClasses}>Boutique Sale Price (₹ - Optional)</label>
+                                                    <input className={`${inputClasses} !border-black/20 text-black placeholder:text-black/20`} value={prodFormData.sale_price} onChange={e => setProdFormData({ ...prodFormData, sale_price: e.target.value })} placeholder="15,000" />
+                                                </div>
+                                                <div className="md:col-span-1">
+                                                    <label className={labelClasses}>Stock Registry</label>
+                                                    <input type="number" className={inputClasses} value={prodFormData.stock_count} onChange={e => setProdFormData({ ...prodFormData, stock_count: e.target.value })} />
+                                                </div>
+                                                <div className="md:col-span-1">
+                                                    <label className={labelClasses}>Concentration Type</label>
+                                                    <input className={inputClasses} value={prodFormData.product_type} onChange={e => setProdFormData({ ...prodFormData, product_type: e.target.value })} placeholder="EXTRAIT DE PARFUM SPRAY" />
+                                                </div>
+                                                <div className="md:col-span-2">
+                                                    <label className={labelClasses}>Slug (URL Architecture)</label>
+                                                    <input required className={inputClasses} value={prodFormData.slug} onChange={e => setProdFormData({ ...prodFormData, slug: e.target.value })} />
+                                                </div>
+                                                <div className="md:col-span-2">
+                                                    <label className={labelClasses}>Narrative Description</label>
+                                                    <textarea required className={`${inputClasses} h-32 text-xs md:text-sm p-4`} value={prodFormData.description} onChange={e => setProdFormData({ ...prodFormData, description: e.target.value })} />
+                                                </div>
+                                                <div className="md:col-span-2">
+                                                    <label className={labelClasses}>Additional Information (Product Details Tab)</label>
+                                                    <textarea className={`${inputClasses} h-32 text-xs md:text-sm p-4`} value={prodFormData.additional_info} onChange={e => setProdFormData({ ...prodFormData, additional_info: e.target.value })} placeholder="Enter detailed boutique information, care guidelines, or technical specifications..." />
+                                                </div>
+
+                                                <div className="md:col-span-2 mt-8 border-t border-black/10 pt-8">
+                                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                                                        <h4 className="text-[10px] tracking-[0.3em] font-black uppercase text-black italic">Volume Variations (Optional)</h4>
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleAddVariantField}
+                                                            className="w-full sm:w-auto text-[9px] tracking-[0.2em] uppercase font-bold border border-black/30 px-6 py-3 hover:bg-black hover:text-white transition-all flex items-center justify-center gap-3"
+                                                        >
+                                                            <Plus size={14} /> Add Variant
+                                                        </button>
+                                                    </div>
+
+                                                    <div className="space-y-6">
+                                                        {(prodFormData.variants || []).map((v, idx) => (
+                                                            <div key={idx} className="grid grid-cols-2 md:grid-cols-4 gap-4 items-end bg-white p-5 md:p-6 border border-black/5 relative">
+                                                                <div>
+                                                                    <label className={labelClasses}>Size</label>
+                                                                    <input placeholder="50ML" className={inputClasses + " mb-0 text-[10px]"} value={v.size} onChange={(e) => handleUpdateVariant(idx, 'size', e.target.value)} />
+                                                                </div>
+                                                                <div>
+                                                                    <label className={labelClasses}>Price</label>
+                                                                    <input placeholder="12,500" className={inputClasses + " mb-0 text-[10px]"} value={v.price} onChange={(e) => handleUpdateVariant(idx, 'price', e.target.value)} />
+                                                                </div>
+                                                                <div>
+                                                                    <label className={labelClasses}>Stock</label>
+                                                                    <input type="number" placeholder="20" className={inputClasses + " mb-0 text-[10px]"} value={v.stock} onChange={(e) => handleUpdateVariant(idx, 'stock', e.target.value)} />
+                                                                </div>
+                                                                <div className="col-span-2 md:col-span-1">
+                                                                    <button type="button" onClick={() => handleRemoveVariant(idx)} className="w-full bg-red-600/5 border border-red-600/10 text-red-600 py-3 md:py-4 hover:bg-red-600 hover:text-white transition-all text-[9px] font-black uppercase tracking-widest">Remove</button>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                        {(!prodFormData.variants || prodFormData.variants.length === 0) && (
+                                                            <div className="py-10 text-center border border-dashed border-black/10 bg-neutral-50">
+                                                                <p className="text-[10px] tracking-[0.3em] text-black/20 uppercase font-black italic">Standard baseline defined. No additional variants.</p>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                <div className="md:col-span-2 mt-12 border-t border-black/10 pt-12">
+                                                    <div className="md:col-span-2 mb-8">
+                                                        <h4 className="text-[10px] tracking-[0.3em] font-black uppercase text-black mb-8 italic border-b border-black/5 pb-4">Olfactory Composition</h4>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                                                            <div><label className={labelClasses}>Top Notes (Registry)</label><input className={inputClasses} value={prodFormData.top_notes} onChange={e => setProdFormData({ ...prodFormData, top_notes: e.target.value })} placeholder="e.g. Bergamot, Saffron" /></div>
+                                                            <div><label className={labelClasses}>Heart Notes (Registry)</label><input className={inputClasses} value={prodFormData.heart_notes} onChange={e => setProdFormData({ ...prodFormData, heart_notes: e.target.value })} placeholder="e.g. Oud, Rose" /></div>
+                                                            <div><label className={labelClasses}>Base Notes (Registry)</label><input className={inputClasses} value={prodFormData.base_notes} onChange={e => setProdFormData({ ...prodFormData, base_notes: e.target.value })} placeholder="e.g. Amber, Musk" /></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="md:col-span-2 bg-white p-8 border border-black/5 mb-8">
+                                                        <label className={labelClasses}>Detailed Ingredient Narrative</label>
+                                                        <div className="grid grid-cols-1 gap-8 mt-6">
+                                                            <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+                                                                <span className="text-[10px] text-black font-black w-24 tracking-[0.2em] uppercase bg-neutral-50 p-2 text-center">Top</span>
+                                                                <input className={inputClasses + " !mb-0 flex-1"} value={prodFormData.top_note_label} placeholder="Cinematic description for Top Notes" onChange={e => setProdFormData({ ...prodFormData, top_note_label: e.target.value })} />
+                                                            </div>
+                                                            <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+                                                                <span className="text-[10px] text-black font-black w-24 tracking-[0.2em] uppercase bg-neutral-50 p-2 text-center">Heart</span>
+                                                                <input className={inputClasses + " !mb-0 flex-1"} value={prodFormData.heart_note_label} placeholder="Cinematic description for Heart Notes" onChange={e => setProdFormData({ ...prodFormData, heart_note_label: e.target.value })} />
+                                                            </div>
+                                                            <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+                                                                <span className="text-[10px] text-black font-black w-24 tracking-[0.2em] uppercase bg-neutral-50 p-2 text-center">Base</span>
+                                                                <input className={inputClasses + " !mb-0 flex-1"} value={prodFormData.base_note_label} placeholder="Cinematic description for Base Notes" onChange={e => setProdFormData({ ...prodFormData, base_note_label: e.target.value })} />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="md:col-span-2 bg-neutral-50 p-10 border border-black/5">
+                                                        <label className={labelClasses + " mb-8"}>Olfactory Icons (Visual Manifest)</label>
+                                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-10">
+                                                            {['top_note_icon', 'heart_note_icon', 'base_note_icon'].map((field) => (
+                                                                <div key={field} className="flex flex-col items-center">
+                                                                    <div
+                                                                        onClick={() => {
+                                                                            const input = document.createElement('input');
+                                                                            input.type = 'file';
+                                                                            input.accept = 'image/*';
+                                                                            input.onchange = (e) => handleImageUpload(e, field);
+                                                                            input.click();
+                                                                        }}
+                                                                        className="w-24 h-24 rounded-full bg-white border-2 border-dashed border-black/10 flex items-center justify-center cursor-pointer hover:border-black group relative shadow-md"
+                                                                    >
+                                                                        {prodFormData[field] ? (
+                                                                            <img src={getFullImageUrl(prodFormData[field])} className="w-12 h-12 object-contain" />
+                                                                        ) : (
+                                                                            <Plus className="text-black/20 group-hover:text-black" size={24} />
+                                                                        )}
+                                                                        {prodFormData[field] && (
+                                                                            <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                                                                <span className="text-[7px] text-white font-black uppercase tracking-widest">Replace</span>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                    <p className="text-[9px] text-black font-black mt-4 uppercase tracking-[0.2em]">{field.split('_')[0]}</p>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="md:col-span-2 mt-12 border-t border-black/10 pt-12">
+                                                    <div className="md:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-12">
+                                                        <div className="lg:col-span-2">
+                                                            <ImageUploadZone
+                                                                label="Cinematic Banner (Narrative Header)"
+                                                                value={prodFormData.story_banner}
+                                                                onUpload={(e) => handleImageUpload(e, 'story_banner')}
+                                                                height="h-56 md:h-80"
+                                                            />
+                                                        </div>
+                                                        <div className="lg:col-span-1">
+                                                            <ImageUploadZone
+                                                                label="The Muse (Vertical Narrative)"
+                                                                value={prodFormData.muse_image}
+                                                                onUpload={(e) => handleImageUpload(e, 'muse_image')}
+                                                                height="h-[400px] md:h-[600px]"
+                                                            />
+                                                        </div>
+                                                        <div className="lg:col-span-1">
+                                                            <label className={labelClasses}>The Cinematic Muse Story</label>
+                                                            <textarea className={`${inputClasses} h-full min-h-[400px] text-xs leading-relaxed p-8`} value={prodFormData.muse_story} onChange={e => setProdFormData({ ...prodFormData, muse_story: e.target.value })} placeholder="Compose the narrative soul of this essence..." />
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="md:col-span-2 mt-12 border-t border-black/10 pt-12">
+                                                        <label className={labelClasses + " mb-6"}>Cinematic Gallery (Supplementary Visuals)</label>
+                                                        <div className="flex flex-wrap gap-6 mb-8">
+                                                            {(prodFormData.gallery_urls || []).map((url, i) => (
+                                                                <div key={i} className="relative w-32 h-32 border-2 border-black/10 group bg-white shadow-sm overflow-hidden">
+                                                                    {isVideo(url) ? (
+                                                                        <video src={getFullImageUrl(url)} className="w-full h-full object-cover opacity-90" muted />
+                                                                    ) : (
+                                                                        <img src={getFullImageUrl(url)} className="w-full h-full object-cover opacity-90" />
+                                                                    )}
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => setProdFormData(prev => ({ ...prev, gallery_urls: prev.gallery_urls.filter((_, idx) => idx !== i) }))}
+                                                                        className="absolute top-2 right-2 bg-black text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0"
+                                                                    ><X size={14} /></button>
+                                                                </div>
+                                                            ))}
+
+                                                            <div
+                                                                onClick={() => galleryInputRef.current.click()}
+                                                                className="w-32 h-32 border-2 border-dashed border-black/10 flex flex-col items-center justify-center cursor-pointer hover:border-black hover:bg-neutral-50 transition-all group"
+                                                            >
+                                                                <input type="file" ref={galleryInputRef} onChange={handleGalleryUpload} className="hidden" accept="image/*,video/mp4,video/webm,video/quicktime,video/ogg,.mp4,.webm,.mov,.ogg" />
+                                                                {uploadingGallery ? <Loader2 size={28} className="animate-spin text-black" /> : <Plus size={28} className="text-black/20 group-hover:text-black transition-colors" />}
+                                                                <span className="text-[8px] tracking-widest uppercase text-black/20 group-hover:text-black mt-2">Add Asset</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        <div className="md:col-span-2 pt-8">
+                                            <button
+                                                disabled={isProcessing}
+                                                type="submit"
+                                                className={`w-full py-6 text-[11px] font-black tracking-[0.5em] uppercase transition-all flex items-center justify-center ${isProcessing ? 'bg-neutral-100 text-black/40 cursor-wait' : 'bg-black text-white hover:bg-neutral-800'}`}
+                                            >
+                                                {isProcessing ? (
+                                                    <React.Fragment>
+                                                        <Loader2 className="animate-spin mr-4" size={18} />
+                                                        Processing Architecture...
+                                                    </React.Fragment>
+                                                ) : (
+                                                    <React.Fragment><Save size={18} className="mr-4" /> {editingId ? 'Save Modifications' : 'Finalize Selection'}</React.Fragment>
+                                                )}
+                                            </button>
+                                        </div>
+                                    </form>
+                                </motion.div>
+                            )}

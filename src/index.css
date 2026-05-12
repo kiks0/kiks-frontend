@@ -1,0 +1,618 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-dark-900: #FFFFFF;
+  --color-dark-800: #F9F9F9;
+  --color-dark-700: #F0F0F0;
+  --color-dark-600: #E5E5E5;
+
+  --color-gold-500: #000000;
+  --color-gold-400: #333333;
+  --color-gold-300: #666666;
+
+  --font-family-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-family-serif: "Cormorant Garamond", serif;
+
+  --animate-fade-in: fadeIn 0.5s ease-out;
+  --animate-fade-up: fadeUp 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes luxuryFade {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes luxuryPulse {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.6;
+    filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+    filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.1));
+  }
+  100% {
+    transform: scale(0.92);
+    opacity: 0.6;
+    filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
+  }
+}
+
+.animate-scroll-line {
+  animation: scrollLine 2s linear infinite;
+}
+
+.animate-luxury-fade {
+  animation: luxuryFade 1.8s ease-in-out infinite alternate;
+}
+
+.animate-luxury-pulse {
+  animation: luxuryPulse 3s ease-in-out infinite;
+}
+
+:root {
+  --color-dark-900: #FFFFFF;
+  --color-dark-800: #F9F9F9;
+  --color-dark-700: #F0F0F0;
+  --color-dark-600: #E5E5E5;
+  --color-gold-500: #000000;
+  --color-gold-400: #333333;
+  --color-gold-300: #666666;
+
+  --bg-color: #FFFFFF;
+  --text-color: #1A1A1A;
+  --heading-color: #000000;
+  --accent-color: #000000;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --muted-text: #666666;
+  --deep-bg: #F5F5F5;
+
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif: "Cormorant Garamond", serif;
+}
+
+@layer base {
+  .high-contrast {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --heading-color: #000000;
+    --accent-color: #000000;
+    --border-color: #000000;
+    --muted-text: #000000;
+    --deep-bg: #ffffff;
+  }
+
+  .high-contrast * {
+    text-shadow: none !important;
+    box-shadow: none !important;
+    border-color: var(--border-color) !important;
+  }
+
+  .high-contrast .text-gold-500,
+  .high-contrast .text-gold-400 {
+    color: var(--accent-color) !important;
+  }
+
+  .high-contrast .bg-gold-500 {
+    background-color: var(--accent-color) !important;
+  }
+
+  .high-contrast select {
+    background-color: black !important;
+    color: white !important;
+    border: 1px solid white !important;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  * {
+    font-family: var(--font-sans) !important;
+    /* Hide scrollbar globally for a cinematic experience */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
+
+  *::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari and Opera */
+  }
+
+  body {
+    background-color: var(--bg-color) !important;
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 400; /* Chanel Corpo Book equivalent */
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    margin: 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Paragraphs/Body - Chanel Corpo Book */
+  p, .body-text {
+    font-size: 14px;
+    font-weight: 400 !important;
+    color: rgba(0, 0, 0, 0.95) !important;
+    text-transform: none !important; /* Mixed case for body */
+    letter-spacing: 0.02em;
+    line-height: 1.7;
+  }
+
+  /* Headings H1, H2 - Chanel Corpo Light */
+  h1, h2 {
+    color: #000000 !important;
+    font-weight: 300 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.25em !important;
+    line-height: 1.1;
+  }
+
+  /* Headings H3-H6 - Chanel Corpo Regular */
+  h3, h4, h5, h6 {
+    color: #000000 !important;
+    font-weight: 400 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.15em !important;
+    line-height: 1.2;
+  }
+
+  /* Navigation & Buttons - Chanel Corpo Light */
+  button, 
+  .btn,
+  nav a,
+  .nav-item,
+  .navbar-link {
+    font-weight: 300 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.2em !important;
+  }
+
+  /* Small Labels/Captions - Chanel Corpo Medium */
+  .kiks-label,
+  .caption-text,
+  .small-label {
+    font-weight: 500 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.15em !important;
+    font-size: 10px;
+  }
+
+  /* Strong Emphasis - Chanel Corpo Bold */
+  strong, b, .font-black {
+    font-weight: 700 !important;
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+  }
+
+  h2 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+  }
+
+  h3 {
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  }
+
+  h4 {
+    font-size: 1.1rem;
+  }
+
+  h5, h6 {
+    font-size: 0.9rem;
+  }
+
+  ::selection {
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+  }
+
+  .high-contrast :focus {
+    outline: 3px solid var(--accent-color) !important;
+    outline-offset: 4px !important;
+  }
+}
+
+@layer components {
+  /* -- KIKS Global Typography Utilities ------------------------------ */
+
+  /* Big section headings — Chanel editorial */
+  .kiks-title {
+    font-family: var(--font-sans);
+    font-size: clamp(1.4rem, 3vw, 2.5rem);
+    font-weight: 300;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #000000;
+    line-height: 1.2;
+  }
+
+  .kiks-label {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  .kiks-body {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    line-height: 1.85;
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  .kiks-caption {
+    font-family: var(--font-sans);
+    font-size: 9px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  /* -- Existing components ------------------------------------------ */
+  .btn-primary {
+    @apply px-8 py-3 bg-black text-white font-medium tracking-wide transition-all duration-300 hover:bg-gold-400 hover:text-white;
+  }
+
+  .btn-secondary {
+    @apply px-8 py-3 border border-gray-300 text-black font-medium tracking-wide transition-all duration-300 hover:border-black hover:bg-black hover:text-white;
+  }
+
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-md border border-black/10;
+  }
+}
+
+/* Custom Luxury Scrollbar - Floating Ghost Edition */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Chrome, Safari, and Edge */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* For browsers that support overlay */
+@supports (overflow: overlay) {
+  body {
+    overflow-y: overlay;
+  }
+}
+
+/* Autofill Fix for Light Theme */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: black !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input:-internal-autofill-selected {
+  background-color: #ffffff !important;
+  color: black !important;
+}
+
+/* Custom Luxury Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ============================================================ */
+/* KIKS LUXURY ADDRESSES - CHANEL INSPIRED DESIGN */
+/* ============================================================ */
+
+.kiks-chanel-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  background: transparent;
+  color: #000;
+}
+
+.kiks-main-title {
+  text-align: center;
+  font-size: clamp(24px, 5vw, 36px);
+  letter-spacing: 0.35em;
+  margin-bottom: clamp(40px, 10vw, 80px);
+  font-weight: 300;
+  color: #000;
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+}
+
+.kiks-dual-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 32px;
+}
+
+.kiks-addr-col {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 32px;
+  background: rgba(0, 0, 0, 0.01);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kiks-addr-col:hover {
+  border-color: rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+  background: #fff;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.04);
+}
+
+.kiks-addr-col h3 {
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  font-weight: 700;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+  color: #000000;
+}
+
+.kiks-section-line {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding-bottom: 20px;
+  margin-bottom: 50px;
+  text-transform: uppercase;
+  color: #000;
+  text-align: center;
+  font-size: 16px;
+  letter-spacing: 0.4em;
+  font-weight: 300;
+  font-family: var(--font-sans);
+}
+
+.kiks-addr-col p {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  line-height: 1.8;
+  margin-bottom: 6px;
+}
+
+.kiks-addr-col strong {
+  color: #000;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 12px;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+
+.kiks-addr-links {
+  margin-top: 28px;
+  display: flex;
+  gap: 24px;
+}
+
+.kiks-addr-links a,
+.kiks-addr-links button {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.35);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  background: none;
+  cursor: pointer;
+  padding: 0 0 2px 0;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.kiks-addr-links a:hover,
+.kiks-addr-links button:hover {
+  color: #000000;
+  border-bottom-color: #000;
+}
+
+.kiks-pure-form {
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.kiks-pure-form label {
+  color: rgba(0, 0, 0, 0.4);
+  transition: color 0.3s ease;
+}
+
+.kiks-pure-form div:hover > label {
+  color: #000000;
+}
+
+.kiks-pure-form input {
+  font-size: 14px !important;
+  letter-spacing: 0.15em !important;
+  padding: 20px 0 !important;
+}
+
+.kiks-f-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.kiks-f-btns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 60px;
+}
+
+.kiks-btn-black {
+  background: #000;
+  color: #fff;
+  padding: 22px 70px;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kiks-btn-black:hover {
+  background: #333;
+  letter-spacing: 0.45em;
+}
+
+.kiks-cancel {
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.kiks-cancel:hover {
+  color: #000;
+}
+
+@media (max-width: 768px) {
+  .kiks-chanel-container {
+    padding: 32px 20px;
+  }
+
+  .kiks-dual-grid,
+  .kiks-f-row {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .kiks-f-btns {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .kiks-btn-black {
+    width: 100%;
+    padding: 20px 32px;
+  }
+
+  .kiks-addr-col {
+    padding: 28px;
+  }
+
+  .kiks-section-line {
+    margin-bottom: 30px;
+    font-size: 14px;
+    letter-spacing: 0.3em;
+  }
+}
+
+/* -- LUXURY SMOOTHNESS OPTIMIZATIONS -- */
+img, video, canvas {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.smooth-render {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Optimize Framer Motion & GSAP container performance */
+.motion-safe-gpu {
+  transform: translate3d(0, 0, 0);
+  perspective: 1000px;
+}
