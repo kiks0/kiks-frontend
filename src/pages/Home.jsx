@@ -125,64 +125,65 @@ const Home = () => {
   useEffect(() => {
     if (!storyRef.current || !storyTextRef.current) return;
 
-    const mm = gsap.matchMedia();
+    const ctx = gsap.context(() => {
+      const spans = storyTextRef.current.querySelectorAll(".reveal-word");
 
-    mm.add({
-      isDesktop: "(min-width: 800px)",
-      isMobile: "(max-width: 799px)"
-    }, (context) => {
-      const { isMobile } = context.conditions;
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: storyRef.current,
-          start: "top top",
-          end: isMobile ? "+=100%" : "+=200%",
-          scrub: isMobile ? 0.5 : 1,
-          pin: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true
+      // IMPORTANT:
+      // kill existing animations only for this section
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.trigger === storyRef.current) {
+          trigger.kill();
         }
       });
 
-      // Background Image Zoom
-      if (storyImgRef.current) {
-        tl.to(storyImgRef.current, {
-          scale: isMobile ? 1.15 : 1.3,
-          filter: isMobile ? "brightness(0.4)" : "blur(4px) brightness(0.4)",
-          duration: 1
-        }, 0);
-      }
+      // Initial state
+      gsap.set(spans, {
+        opacity: 0,
+        y: 80,
+        rotateX: 20,
+        transformOrigin: "top center",
+        force3D: true,
+      });
 
-      // Text Reveal - FORCE SPLIT
-      const textToSplit = t('home.symphony_notes');
-      storyTextRef.current.innerHTML = textToSplit.split(' ').map(word => 
-        `<span class="reveal-word" style="display:inline-block; opacity:0; transform:translateY(30px); margin-right:0.25em; will-change:transform, opacity;">${word}</span>`
-      ).join(' ');
-
-      const spans = storyTextRef.current.querySelectorAll('.reveal-word');
-      tl.to(spans, {
+      // Reveal animation
+      gsap.to(spans, {
         opacity: 1,
         y: 0,
-        stagger: isMobile ? 0.05 : 0.1,
-        duration: 0.8,
-        ease: "power2.out"
-      }, 0.2);
+        rotateX: 0,
 
-      // Floating Muse
-      const muse = document.querySelector(".floating-muse");
-      if (!isMobile && muse) {
-        tl.from(muse, {
-          x: 100,
-          opacity: 0,
-          duration: 1.5,
-          ease: "power3.out"
-        }, 0.3);
+        stagger: 0.06,
+        duration: 1.2,
+
+        ease: "power4.out",
+
+        scrollTrigger: {
+          trigger: storyRef.current,
+          start: "top 75%",
+          toggleActions: "play none none reverse",
+          invalidateOnRefresh: true,
+        },
+      });
+
+      // Background image animation
+      if (storyImgRef.current) {
+        gsap.to(storyImgRef.current, {
+          scale: 1.12,
+          ease: "none",
+
+          scrollTrigger: {
+            trigger: storyRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
       }
-    });
 
-    return () => mm.revert();
-  }, []);
+      ScrollTrigger.refresh();
+    }, storyRef);
+
+    return () => ctx.revert();
+  }, [t]);
 
   // New Perfume Showcase Logic (GSAP Sticky Reveal)
   useEffect(() => {
@@ -308,9 +309,8 @@ const Home = () => {
     }, 2000);
 
     return () => {
-        clearTimeout(refreshTimer);
-        mm.revert();
-        ScrollTrigger.getAll().forEach(t => t.kill());
+      clearTimeout(refreshTimer);
+      mm.revert();
     };
   }, [showcaseProducts]);
 
@@ -600,12 +600,21 @@ const Home = () => {
           <div className="text-center max-w-4xl mx-auto flex flex-col items-center w-full">
             <span className="text-black text-[10px] tracking-[0.6em] uppercase font-black block mb-6">{t('home.art_creation')}</span>
 
-            <div className="overflow-hidden mb-8 w-full">
+            <div className="overflow-hidden mb-8 w-full text-center">
               <h2
                 ref={storyTextRef}
-                className="text-4xl md:text-6xl font-serif font-light text-black tracking-widest leading-tight mb-8"
+                className="text-3xl md:text-6xl lg:text-7xl font-serif text-white tracking-[0.1em] leading-[1.3] md:leading-[1.2] uppercase font-light text-center"
               >
-                {t('home.symphony_notes')}
+                {t('home.symphony_notes')
+                  .split(' ')
+                  .map((word, index) => (
+                    <span
+                      key={index}
+                      className="reveal-word inline-block will-change-transform mr-[0.25em]"
+                    >
+                      {word}
+                    </span>
+                  ))}
               </h2>
             </div>
 
