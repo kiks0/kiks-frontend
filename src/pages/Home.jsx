@@ -22,6 +22,17 @@ const Home = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
+  const [heroVideoUrl, setHeroVideoUrl] = useState('https://res.cloudinary.com/dprxiz6os/video/upload/v1778044738/hero-video_webm_vlvq4g.webm');
+  const [signatureProduct, setSignatureProduct] = useState({
+    image_url: 'https://res.cloudinary.com/dprxiz6os/image/upload/v1778050809/IMG-20260506-WA0002.jpg_cqlvdx.webp',
+    name: 'Elite',
+    description: 'A powerful blend of rare woods and midnight spices, designed for the individual who commands presence without speaking a word.',
+    strength: 'Extrait de Parfum',
+    notes: 'Aoud, Midnight Spices, Rare Woods',
+    link: '/collection/arambh/elite'
+  });
+  const [galleryImages, setGalleryImages] = useState([]);
+
   // High-Performance Mobile Stabilization
   useEffect(() => {
     ScrollTrigger.config({ 
