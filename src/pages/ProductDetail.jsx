@@ -172,7 +172,7 @@ const ProductDetail = () => {
         setReviewMsg({ type: '', text: '' });
 
         if (reviewForm.rating === 0) {
-            setReviewMsg({ type: 'error', text: 'Please select a rating for your critique.' });
+            setReviewMsg({ type: 'error', text: 'Please select a rating for your review.' });
             setSubmittingReview(false);
             return;
         }
@@ -758,7 +758,7 @@ const ProductDetail = () => {
                             {isAuthenticated ? (
                                 canReview ? (
                                     <div className="mb-20 bg-black/[0.02] p-5 md:p-10 border border-black/5">
-                                        <h4 className="text-[10px] md:text-[11px] tracking-[0.2em] md:tracking-[0.4em] font-black uppercase text-black mb-8 md:mb-10">{t('product.share_critique')}</h4>
+                                        <h4 className="text-[10px] md:text-[11px] tracking-[0.2em] md:tracking-[0.4em] font-black uppercase text-black mb-8 md:mb-10">Share your review</h4>
                                         <form onSubmit={handleAddReview} className="space-y-6 md:space-y-8">
                                             <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 mb-6">
                                                 <p className="text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/40">{t('product.rating')}</p>
@@ -827,7 +827,7 @@ const ProductDetail = () => {
                                                 disabled={submittingReview || uploadingImages}
                                                 className="w-full h-14 bg-black text-white text-[11px] font-black tracking-[0.5em] uppercase hover:bg-black/90 transition-all"
                                             >
-                                                {submittingReview ? 'SENDING...' : uploadingImages ? 'UPLOADING...' : t('product.log_critique')}
+                                                {submittingReview ? 'SENDING...' : uploadingImages ? 'UPLOADING...' : 'SUBMIT REVIEW'}
                                             </button>
                                             <AnimatePresence>
                                                 {reviewMsg.text && (
@@ -849,28 +849,28 @@ const ProductDetail = () => {
                                 ) : (
                                     <div className="mb-20 p-10 text-center border border-black/5 bg-black/[0.01]">
                                         <p className="text-[10px] tracking-[0.5em] text-black uppercase font-black mb-4">
-                                            {reviewEligibilityReason === 'already_reviewed' ? 'Critique Recorded' : 'Verified Purchase Required'}
+                                            {reviewEligibilityReason === 'already_reviewed' ? 'Review Submitted' : 'Purchase Required'}
                                         </p>
                                         <p className="text-[9px] tracking-[0.3em] text-black/30 uppercase leading-relaxed max-w-xs mx-auto">
                                             {reviewEligibilityReason === 'already_reviewed' 
-                                                ? 'Your perspective on this essence has been successfully logged in our registry.' 
-                                                : 'Critiques are reserved for patrons who have acquired and confirmed their purchase of this essence.'}
+                                                ? 'Your review for this product has been saved.' 
+                                                : 'Reviews are only for customers who have bought and confirmed their order for this product.'}
                                         </p>
                                     </div>
                                 )
                             ) : (
                                 <div className="mb-20 p-10 text-center border border-black/5 bg-black/[0.01]">
                                     <p className="text-[10px] tracking-[0.5em] text-black uppercase font-black mb-4">
-                                        Verified Purchase Required
+                                        Purchase Required
                                     </p>
                                     <p className="text-[9px] tracking-[0.3em] text-black/30 uppercase leading-relaxed max-w-xs mx-auto mb-10">
-                                        Critiques are reserved for patrons who have acquired this essence through the official boutique.
+                                        Reviews are only for customers who have bought this product from our store.
                                     </p>
                                     <Link 
                                         to="/login" 
                                         className="inline-block text-[9px] tracking-[0.4em] text-black font-black border-b border-black/30 pb-2 hover:text-black/60 hover:border-black/60 transition-all uppercase"
                                     >
-                                        Access Account
+                                        Login
                                     </Link>
                                 </div>
                             )}
