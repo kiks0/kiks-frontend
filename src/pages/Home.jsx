@@ -663,7 +663,7 @@ const Home = () => {
               </h2>
             </div>
 
-            <p className="text-black/70 text-sm md:text-lg leading-relaxed max-w-2xl mx-auto tracking-widest font-light">
+            <p className="text-black/70 text-[12px] md:text-[14px] leading-relaxed max-w-2xl mx-auto tracking-[0.15em] font-medium uppercase text-center opacity-80">
               {t('home.creation_desc')}
             </p>
           </div>
