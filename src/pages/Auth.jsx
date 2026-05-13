@@ -240,7 +240,7 @@ const Auth = ({ isRegisterInitial = false }) => {
         const requiredFields = ['email', 'password'];
         
         if (isRegister) {
-            requiredFields.push('firstName', 'lastName');
+            requiredFields.push('title', 'firstName', 'lastName');
         }
 
         requiredFields.forEach(field => {
@@ -863,13 +863,16 @@ Marketing Consent: Granted
                                         <>
                                             {/* Title Selection */}
                                             <div className="relative group">
-                                                <label className={labelClasses}>Title</label>
+                                                <label className={`${labelClasses} ${fieldErrors.title ? 'text-red-500' : ''}`}>Title <span className={formData.title ? 'text-green-600' : 'text-red-500'}>*</span></label>
                                                 <select
-                                                    className={inputClasses}
+                                                    className={`${inputClasses} ${fieldErrors.title ? 'border-red-500' : ''}`}
                                                     value={formData.title}
-                                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                                    onChange={(e) => {
+                                                        setFormData({ ...formData, title: e.target.value });
+                                                        if (fieldErrors.title) setFieldErrors(prev => { const n = {...prev}; delete n.title; return n; });
+                                                    }}
                                                 >
-                                                    <option className="bg-white text-black" value="">Select Title (Optional)</option>
+                                                    <option className="bg-white text-black" value="">Select Title</option>
                                                     <option className="bg-white text-black" value="Mr">Mr</option>
                                                     <option className="bg-white text-black" value="Mrs">Mrs</option>
                                                     <option className="bg-white text-black" value="Miss">Miss</option>
