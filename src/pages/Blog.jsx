@@ -98,11 +98,7 @@ const Blog = () => {
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700" />
 
-                                    <div className="absolute top-6 left-6 z-20">
-                                        <span className="bg-white/40 backdrop-blur-md px-4 py-2 border border-black/10 rounded-full text-[8px] tracking-[0.3em] font-black uppercase text-black/90 whitespace-nowrap">
-                                            {post.author || 'Kiks Artisan'} • Editorial
-                                        </span>
-                                    </div>
+
 
                                     <div className="absolute bottom-6 left-6 z-20 flex items-center md:translate-y-2 md:opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                                         <span className="flex items-center text-white/80 md:text-white/60 text-[9px] md:text-[8px] tracking-[0.3em] font-bold uppercase">
@@ -115,9 +111,7 @@ const Blog = () => {
                                     <h2 className="text-xl md:text-2xl font-serif text-black group-hover:text-black/60 transition-colors duration-500 tracking-[0.03em] uppercase font-light mb-3 md:mb-4 leading-tight">
                                         {post.title}
                                     </h2>
-                                    <p className="text-black/60 text-[9px] md:text-xs leading-relaxed mb-4 md:mb-8 line-clamp-2 uppercase tracking-[0.1em] font-light">
-                                        {post.content.substring(0, 150)}...
-                                    </p>
+
                                     <div className="flex items-center space-x-3 text-black text-[10px] md:text-[9px] tracking-[0.4em] font-black uppercase group/btn">
                                         <span className="relative">Read Narrative</span>
                                         <ArrowRight size={14} className="transform group-hover/btn:translate-x-2 transition-transform duration-500" />

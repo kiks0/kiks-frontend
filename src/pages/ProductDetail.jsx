@@ -44,7 +44,7 @@ const ProductAccordion = ({ title, isOpen: externalIsOpen, onToggle, defaultOpen
                         exit={{ height: 0, opacity: 0 }}
                         className="overflow-hidden bg-white"
                     >
-                        <div className="pb-8 pt-4 px-2 text-black/70 text-[11px] md:text-[12px] tracking-[0.05em] leading-relaxed font-sans">
+                        <div className="pb-8 pt-4 px-2 text-black/70 text-[10px] md:text-[11px] tracking-[0.05em] leading-relaxed font-sans">
                             {children}
                         </div>
                     </motion.div>
@@ -155,6 +155,18 @@ const ProductDetail = () => {
         fetchProductData();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [slug, productSlug]);
+ 
+    const formatNotes = (notes) => {
+        if (!notes) return '';
+        return notes.split(',')
+            .map(note => note.trim())
+            .filter(note => note.length > 0)
+            .map(note => note.split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                .join(' ')
+            )
+            .join(', ');
+    };
 
     const handleMoreDetails = () => {
         setIsDescriptionOpen(true);
@@ -716,20 +728,20 @@ const ProductDetail = () => {
                         <div className="grid grid-cols-1 gap-8">
                             <div>
                                 <span className="text-[8px] tracking-[0.3em] uppercase text-black/40 font-black block mb-2">Top Notes</span>
-                                <p className="text-[10px] md:text-[11px] leading-relaxed text-black/60 font-sans tracking-wide">
-                                    {product.top_notes}
+                                <p className="text-[10px] md:text-[11px] leading-relaxed text-black font-sans tracking-wide">
+                                    {formatNotes(product.top_notes)}
                                 </p>
                             </div>
                             <div>
                                 <span className="text-[8px] tracking-[0.3em] uppercase text-black/40 font-black block mb-2">Heart Notes</span>
-                                <p className="text-[10px] md:text-[11px] leading-relaxed text-black/60 font-sans tracking-wide">
-                                    {product.heart_notes}
+                                <p className="text-[10px] md:text-[11px] leading-relaxed text-black font-sans tracking-wide">
+                                    {formatNotes(product.heart_notes)}
                                 </p>
                             </div>
                             <div>
                                 <span className="text-[8px] tracking-[0.3em] uppercase text-black/40 font-black block mb-2">Base Notes</span>
-                                <p className="text-[10px] md:text-[11px] leading-relaxed text-black/60 font-sans tracking-wide">
-                                    {product.base_notes}
+                                <p className="text-[10px] md:text-[11px] leading-relaxed text-black font-sans tracking-wide">
+                                    {formatNotes(product.base_notes)}
                                 </p>
                             </div>
                         </div>

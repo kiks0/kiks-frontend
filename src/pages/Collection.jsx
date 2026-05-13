@@ -193,7 +193,7 @@ const Collection = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="py-12 md:py-24 px-6 lg:px-20 container mx-auto"
+                        className="pt-28 md:pt-40 pb-12 md:pb-24 px-6 lg:px-20 container mx-auto"
                     >
                         {/* Elegant Minimal Header */}
                         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 md:mb-32 border-b border-black/10 pb-8 md:pb-16 relative">

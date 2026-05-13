@@ -36,8 +36,8 @@ const Home = () => {
   // High-Performance Mobile Stabilization
   useEffect(() => {
     ScrollTrigger.config({ 
-      ignoreMobileResize: true,
-      autoRefreshEvents: "visibilitychange,DOMContentLoaded,load,resize" 
+      ignoreMobileResize: false,
+      autoRefreshEvents: "visibilitychange,DOMContentLoaded,load,resize,scroll" 
     });
   }, []);
 
@@ -115,6 +115,9 @@ const Home = () => {
   const storyTextRef = useRef(null);
   const storyImgRef = useRef(null);
   const showcaseContainerRef = useRef(null);
+  const heroTitleRef = useRef(null);
+  const heroDescRef = useRef(null);
+  const heroSectionRef = useRef(null);
 
   useEffect(() => {
     if (!storyRef.current || !storyTextRef.current) return;
@@ -278,16 +281,19 @@ const Home = () => {
       slides.forEach((slide, index) => {
         if (index === 0) return;
 
-        tl.to(
-          slide,
-          {
+        // Crossfade: Previous slide fades out while current fades in
+        tl.to(slides[index-1], {
+            autoAlpha: 0,
+            scale: 0.9,
+            duration: 0.5,
+            ease: "power2.inOut"
+        }, index - 0.2)
+        .to(slide, {
             autoAlpha: 1,
             scale: 1,
             duration: 1,
-            ease: "power2.inOut",
-          },
-          index
-        );
+            ease: "power2.inOut"
+        }, index - 0.1);
       });
 
       return () => {
@@ -319,11 +325,41 @@ const Home = () => {
   });
   const xTranslate = useTransform(carouselProgress, [0, 1], ["0%", "-66.666%"]);
 
-  // Hero Text Scroll Animations (Vanishing in Center)
+  // Hero Scroll Animation with GSAP
+  useEffect(() => {
+    if (!heroTitleRef.current || !heroDescRef.current || !heroSectionRef.current) return;
+
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: heroSectionRef.current,
+          start: "top top",
+          end: "+=100%",
+          scrub: 1.5,
+          pin: true,
+          invalidateOnRefresh: true,
+        }
+      });
+
+      tl.to(heroTitleRef.current, {
+        scale: 2.5,
+        opacity: 0,
+        y: -150,
+        ease: "power2.inOut"
+      }, 0);
+
+      tl.to(heroDescRef.current, {
+        opacity: 0,
+        scale: 0.8,
+        y: 100,
+        ease: "power2.inOut"
+      }, 0);
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   const { scrollY } = useScroll();
-  const heroScale = useTransform(scrollY, [0, 600], [1, 1.2]);
-  const heroOpacity = useTransform(scrollY, [0, 800], [1, 0]);
-  const heroY = useTransform(scrollY, [0, 600], [0, -50]);
 
   return (
     <div className="bg-white min-h-screen text-black relative">
@@ -335,7 +371,7 @@ const Home = () => {
 
 
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section ref={heroSectionRef} className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-x-4 bottom-4 top-[100px] sm:inset-x-6 sm:bottom-6 sm:top-[120px] md:inset-x-10 md:bottom-10 md:top-[180px] border border-transparent z-30 pointer-events-none" />
 
         {/* Video Background */}
@@ -357,25 +393,38 @@ const Home = () => {
 
         {/* Text Overlay Content */}
         <div className="relative z-20 text-center px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            style={{ scale: heroScale, opacity: heroOpacity, y: heroY, willChange: 'transform, opacity' }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            className="flex flex-col items-center"
-          >
-            <h1 className="text-5xl md:text-8xl font-serif tracking-[0.2em] text-white uppercase mb-8">
-              {['K', 'I', 'K', 'S'].map((char, index) => (
-                <span key={index} className="inline-block">{char}</span>
-              ))}
-            </h1>
-            
-            <div className="max-w-2xl">
-              <p className="text-[11px] md:text-base tracking-[0.2em] text-white/90 uppercase font-light leading-relaxed">
-                Handcrafted with rare ingredients to define your signature presence.
-              </p>
+          <div className="flex flex-col items-center">
+            <div ref={heroTitleRef} className="will-change-transform">
+              <h1 className="text-5xl md:text-8xl font-serif tracking-[0.2em] text-white uppercase mb-8">
+                {['K', 'I', 'K', 'S'].map((char, index) => (
+                  <motion.span 
+                    key={index} 
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ 
+                      duration: 1.2, 
+                      delay: index * 0.15, 
+                      ease: [0.215, 0.61, 0.355, 1] 
+                    }}
+                    className="inline-block"
+                  >
+                    {char}
+                  </motion.span>
+                ))}
+              </h1>
             </div>
-          </motion.div>
+              
+            <div ref={heroDescRef} className="max-w-2xl">
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1, duration: 1.2 }}
+                className="text-[11px] md:text-base tracking-[0.2em] text-white/90 uppercase font-light leading-relaxed"
+              >
+                Handcrafted with rare ingredients to define your signature presence.
+              </motion.p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -401,7 +450,7 @@ const Home = () => {
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, ease: "easeOut" }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.2 }}
               className="w-full md:w-[48%] relative group"
             >
               {/* Desktop Only Frame */}
@@ -438,7 +487,7 @@ const Home = () => {
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.2 }}
               className="w-full md:w-[45%] flex flex-col items-center md:items-start justify-center text-center md:text-left relative"
             >
               {/* Large Background Ghost Text (Desktop Only) */}
@@ -678,6 +727,7 @@ const Home = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.3 }}
+              viewport={{ once: true, amount: 0.2 }}
               className="space-y-6"
             >
 
@@ -693,6 +743,7 @@ const Home = () => {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.5, delay: 0.6 }}
+              viewport={{ once: true, amount: 0.2 }}
               className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16"
             >
               <div className="space-y-4">
@@ -713,6 +764,7 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.8 }}
+              viewport={{ once: true, amount: 0.2 }}
               className="pt-4 flex justify-center lg:justify-start w-full"
             >
               <Link to="/collection/arambh" className="inline-block group/link">
@@ -743,7 +795,7 @@ const Home = () => {
                   key={img.id || idx}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.8, delay: (idx % 4) * 0.1 }}
                   className="relative group overflow-hidden break-inside-avoid"
                 >

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, HelpCircle, X, Check } from 'lucide-react';
+import { ArrowLeft, HelpCircle, X, Check, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateProfile } from '../store/authSlice';
@@ -61,7 +61,7 @@ const PersonalDetails = () => {
     const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
 
     const [formData, setFormData] = useState({
-        title: user?.title || 'Mr',
+        title: user?.title || '',
         firstName: user?.first_name || '',
         lastName: user?.last_name || '',
         dobDay: user?.dob_day?.toString() || '',
@@ -113,7 +113,7 @@ const PersonalDetails = () => {
                 if (res.ok) {
                     const data = await res.json();
                     setFormData({
-                        title: data.title || 'Mr',
+                        title: data.title || '',
                         firstName: data.first_name || '',
                         lastName: data.last_name || '',
                         dobDay: data.dob_day?.toString() || '',
@@ -193,7 +193,7 @@ const PersonalDetails = () => {
 
     const validateForm = () => {
         const errors = {};
-        const requiredFields = ['firstName', 'lastName'];
+        const requiredFields = ['title', 'firstName', 'lastName'];
 
         requiredFields.forEach(field => {
             if (!formData[field] || formData[field].toString().trim() === '') {
@@ -390,12 +390,16 @@ const PersonalDetails = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
                             {/* Title Dropdown */}
                             <div className="space-y-2">
-                                <label className="text-[11px] text-black/50 uppercase tracking-widest font-bold">Title</label>
+                                <label className={`text-[11px] uppercase tracking-widest font-bold ${fieldErrors.title ? 'text-red-500' : 'text-black/50'}`}>Title <span className={formData.title ? 'text-green-600' : 'text-red-500'}>*</span></label>
                                 <select 
-                                    className="w-full border-b border-black/10 py-3 text-[15px] focus:border-gold-500 outline-none transition-colors bg-transparent cursor-pointer text-black appearance-none"
+                                    className={`w-full border-b py-3 text-[15px] focus:border-gold-500 outline-none transition-colors bg-transparent cursor-pointer text-black appearance-none ${fieldErrors.title ? 'border-red-500' : 'border-black/10'}`}
                                     value={formData.title}
-                                    onChange={(e) => setFormData({...formData, title: e.target.value})}
+                                    onChange={(e) => {
+                                        setFormData({...formData, title: e.target.value});
+                                        if (fieldErrors.title) setFieldErrors(prev => { const n = {...prev}; delete n.title; return n; });
+                                    }}
                                 >
+                                    <option className="bg-white" value="">Select Title</option>
                                     <option className="bg-white" value="Mr">Mr</option>
                                     <option className="bg-white" value="Ms">Ms</option>
                                     <option className="bg-white" value="Mrs">Mrs</option>

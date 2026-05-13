@@ -784,7 +784,7 @@ const Admin = () => {
         headers: getAdminHeaders()
       });
       if (res.ok) {
-        showSuccessToast('Deletion request declined. Patron notified.');
+        showSuccessToast('Deletion request declined. User notified.');
         fetchUsersData();
         fetchDeletionRequests();
       } else {

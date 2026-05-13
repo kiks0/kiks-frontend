@@ -199,7 +199,7 @@ const Auth = ({ isRegisterInitial = false }) => {
     // Form data with the extended fields from the luxury reference
     const [formData, setFormData] = useState({
         email: '',
-        title: 'Title',
+        title: '',
         firstName: '',
         lastName: '',
         countryCode: '', // Will be set by useEffect
@@ -240,7 +240,7 @@ const Auth = ({ isRegisterInitial = false }) => {
         const requiredFields = ['email', 'password'];
         
         if (isRegister) {
-            requiredFields.push('firstName', 'lastName');
+            requiredFields.push('title', 'firstName', 'lastName');
         }
 
         requiredFields.forEach(field => {
@@ -608,8 +608,8 @@ Marketing Consent: Granted
                                     </motion.div>
                                 </div>
 
-                                <h2 className="text-3xl md:text-5xl font-serif tracking-widest uppercase mb-6 text-black">
-                                    Verify Your Identity
+                                <h2 className="text-2xl md:text-5xl font-serif tracking-widest uppercase mb-6 text-black leading-tight">
+                                    Verify <br className="md:hidden" /> Your Identity
                                 </h2>
 
                                 <p className="text-neutral-500 text-[11px] md:text-xs tracking-[0.4em] uppercase mb-16 leading-relaxed max-w-md mx-auto font-medium">
@@ -644,12 +644,12 @@ Marketing Consent: Granted
                                     <CheckCircle2 size={40} strokeWidth={1} />
                                 </div>
 
-                                <h2 className="text-3xl font-serif tracking-widest uppercase mb-4 text-black">
+                                <h2 className="text-2xl md:text-3xl font-serif tracking-widest uppercase mb-4 text-black">
                                     Identity Verified
                                 </h2>
 
                                 <p className="text-neutral-500 text-[10px] tracking-[0.4em] uppercase mb-12">
-                                    Your Maison KIKS portal is now fully active.
+                                    Your account is now fully active.
                                 </p>
 
                                 <button
@@ -674,7 +674,7 @@ Marketing Consent: Granted
                                     <Sparkles size={40} strokeWidth={1} />
                                 </div>
 
-                                <h2 className="text-3xl font-serif tracking-widest uppercase mb-4 text-black">
+                                <h2 className="text-2xl md:text-3xl font-serif tracking-widest uppercase mb-4 text-black">
                                     Already Verified
                                 </h2>
 
@@ -720,8 +720,8 @@ Marketing Consent: Granted
                                 </button>
                             </motion.div>
                         ) : status === 'reset_sent' ? (
-                            <motion.div key="reset_sent" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
-                                <h2 className="text-3xl font-serif tracking-widest uppercase mb-4 text-black">Instructions Sent</h2>
+                            <motion.div key="reset_sent" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20 px-4">
+                                <h2 className="text-[22px] md:text-3xl font-serif tracking-widest uppercase mb-4 text-black leading-relaxed">Instructions <br className="md:hidden" /> Sent</h2>
                                 <p className="text-neutral-500 text-[10px] tracking-[0.4em] uppercase mb-8">If the email exists, we have sent reset instructions.</p>
                                 <button onClick={() => { setStatus('idle'); setIsForgotPassword(false); }} className="text-black text-[10px] tracking-widest uppercase border-b border-black/30 pb-1">Return to Login</button>
                             </motion.div>
@@ -863,13 +863,16 @@ Marketing Consent: Granted
                                         <>
                                             {/* Title Selection */}
                                             <div className="relative group">
-                                                <label className={labelClasses}>Title</label>
+                                                <label className={`${labelClasses} ${fieldErrors.title ? 'text-red-500' : ''}`}>Title <span className={formData.title ? 'text-green-600' : 'text-red-500'}>*</span></label>
                                                 <select
-                                                    className={inputClasses}
+                                                    className={`${inputClasses} ${fieldErrors.title ? 'border-red-500' : ''}`}
                                                     value={formData.title}
-                                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                                    onChange={(e) => {
+                                                        setFormData({ ...formData, title: e.target.value });
+                                                        if (fieldErrors.title) setFieldErrors(prev => { const n = {...prev}; delete n.title; return n; });
+                                                    }}
                                                 >
-                                                    <option className="bg-white text-black" value="Title">Title</option>
+                                                    <option className="bg-white text-black" value="">Select Title</option>
                                                     <option className="bg-white text-black" value="Mr">Mr</option>
                                                     <option className="bg-white text-black" value="Mrs">Mrs</option>
                                                     <option className="bg-white text-black" value="Miss">Miss</option>
