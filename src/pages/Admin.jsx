@@ -123,6 +123,7 @@ const Admin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [productFormTab, setProductFormTab] = useState('general'); // general, olfactory, cinematic, additional
 
+  const fileInputRef = useRef(null);
   const galleryInputRef = useRef(null);
   const formRef = useRef(null);
   const [uploadingGallery, setUploadingGallery] = useState(false);
