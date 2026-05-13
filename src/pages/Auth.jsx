@@ -13,6 +13,50 @@ import { applyLocationSettings } from '../utils/i18nUtils';
 
 import PageLoader from '../components/PageLoader';
 
+// Comprehensive Country data (Synchronized with PersonalDetails)
+const countryList = [
+    { name: 'India', code: '+91', iso: 'IN', length: 10, pattern: /^[0-9]{10}$/ },
+    { name: 'UAE', code: '+971', iso: 'AE', length: 9, pattern: /^[0-9]{9}$/ },
+    { name: 'Saudi Arabia', code: '+966', iso: 'SA', length: 9, pattern: /^[0-9]{9}$/ },
+    { name: 'Qatar', code: '+974', iso: 'QA', length: 8, pattern: /^[0-9]{8}$/ },
+    { name: 'Kuwait', code: '+965', iso: 'KW', length: 8, pattern: /^[0-9]{8}$/ },
+    { name: 'Oman', code: '+968', iso: 'OM', length: 8, pattern: /^[0-9]{8}$/ },
+    { name: 'Bahrain', code: '+973', iso: 'BH', length: 8, pattern: /^[0-9]{8}$/ },
+    { name: 'United Kingdom', code: '+44', iso: 'GB', length: 10, pattern: /^[0-9]{10}$/ },
+    { name: 'United States', code: '+1', iso: 'US', length: 10, pattern: /^[0-9]{10}$/ },
+    { name: 'France', code: '+33', iso: 'FR', length: 9, pattern: /^[0-9]{9}$/ },
+    { name: 'Germany', code: '+49', iso: 'DE', length: 11, pattern: /^[0-9]{11}$/ },
+    { name: 'Italy', code: '+39', iso: 'IT', length: 10, pattern: /^[0-9]{10}$/ },
+    { name: 'Spain', code: '+34', iso: 'ES', length: 9, pattern: /^[0-9]{9}$/ },
+    { name: 'Switzerland', code: '+41', iso: 'CH', length: 9, pattern: /^[0-9]{9}$/ },
+    { name: 'Singapore', code: '+65', iso: 'SG', length: 8, pattern: /^[0-9]{8}$/ },
+    { name: 'Canada', code: '+1', iso: 'CA', length: 10, pattern: /^[0-9]{10}$/ },
+    { name: 'Australia', code: '+61', iso: 'AU', length: 9, pattern: /^[0-9]{9}$/ },
+    { name: 'Japan', code: '+81', iso: 'JP', length: 10, pattern: /^[0-9]{10}$/ },
+    { name: 'Korea', code: '+82', iso: 'KR', length: 10, pattern: /^[0-9]{10}$/ },
+    { name: 'Mainland China', code: '+86', iso: 'CN', length: 11, pattern: /^[0-9]{11}$/ },
+    { name: 'Hong Kong S.A.R.', code: '+852', iso: 'HK', length: 8, pattern: /^[0-9]{8}$/ },
+    { name: 'Malaysia', code: '+60', iso: 'MY', length: 9, pattern: /^[0-9]{9,10}$/ },
+    { name: 'Thailand', code: '+66', iso: 'TH', length: 9, pattern: /^[0-9]{9}$/ },
+    { name: 'Vietnam', code: '+84', iso: 'VN', length: 9, pattern: /^[0-9]{9,10}$/ },
+    { name: 'Indonesia', code: '+62', iso: 'ID', length: 10, pattern: /^[0-9]{10,12}$/ },
+    { name: 'Netherlands', code: '+31', iso: 'NL', length: 9, pattern: /^[0-9]{9}$/ },
+    { name: 'Belgium', code: '+32', iso: 'BE', length: 9, pattern: /^[0-9]{9}$/ },
+    { name: 'Sweden', code: '+46', iso: 'SE', length: 9, pattern: /^[0-9]{9,10}$/ },
+    { name: 'Norway', code: '+47', iso: 'NO', length: 8, pattern: /^[0-9]{8}$/ },
+    { name: 'Denmark', code: '+45', iso: 'DK', length: 8, pattern: /^[0-9]{8}$/ },
+    { name: 'Portugal', code: '+351', iso: 'PT', length: 9, pattern: /^[0-9]{9}$/ },
+    { name: 'Austria', code: '+43', iso: 'AT', length: 10, pattern: /^[0-9]{10,11}$/ },
+    { name: 'Greece', code: '+30', iso: 'GR', length: 10, pattern: /^[0-9]{10}$/ },
+    { name: 'Türkiye', code: '+90', iso: 'TR', length: 10, pattern: /^[0-9]{10}$/ },
+    { name: 'Mexico', code: '+52', iso: 'MX', length: 10, pattern: /^[0-9]{10}$/ },
+    { name: 'Brazil', code: '+55', iso: 'BR', length: 11, pattern: /^[0-9]{11}$/ },
+    { name: 'Argentina', code: '+54', iso: 'AR', length: 10, pattern: /^[0-9]{10}$/ },
+    { name: 'South Africa', code: '+27', iso: 'ZA', length: 9, pattern: /^[0-9]{9}$/ },
+    { name: 'Russia', code: '+7', iso: 'RU', length: 10, pattern: /^[0-9]{10}$/ },
+    { name: 'Israel', code: '+972', iso: 'IL', length: 9, pattern: /^[0-9]{9}$/ }
+];
+
 const Auth = ({ isRegisterInitial = false }) => {
     const [isRegister, setIsRegister] = useState(isRegisterInitial);
     const [isForgotPassword, setIsForgotPassword] = useState(false);
@@ -152,49 +196,7 @@ const Auth = ({ isRegisterInitial = false }) => {
         }
     }, [isRegisterInitial, location.pathname, location.search]);
 
-    // Comprehensive Country data (Synchronized with PersonalDetails)
-    const countryList = [
-        { name: 'India', code: '+91', iso: 'IN', length: 10, pattern: /^[0-9]{10}$/ },
-        { name: 'UAE', code: '+971', iso: 'AE', length: 9, pattern: /^[0-9]{9}$/ },
-        { name: 'Saudi Arabia', code: '+966', iso: 'SA', length: 9, pattern: /^[0-9]{9}$/ },
-        { name: 'Qatar', code: '+974', iso: 'QA', length: 8, pattern: /^[0-9]{8}$/ },
-        { name: 'Kuwait', code: '+965', iso: 'KW', length: 8, pattern: /^[0-9]{8}$/ },
-        { name: 'Oman', code: '+968', iso: 'OM', length: 8, pattern: /^[0-9]{8}$/ },
-        { name: 'Bahrain', code: '+973', iso: 'BH', length: 8, pattern: /^[0-9]{8}$/ },
-        { name: 'United Kingdom', code: '+44', iso: 'GB', length: 10, pattern: /^[0-9]{10}$/ },
-        { name: 'United States', code: '+1', iso: 'US', length: 10, pattern: /^[0-9]{10}$/ },
-        { name: 'France', code: '+33', iso: 'FR', length: 9, pattern: /^[0-9]{9}$/ },
-        { name: 'Germany', code: '+49', iso: 'DE', length: 11, pattern: /^[0-9]{11}$/ },
-        { name: 'Italy', code: '+39', iso: 'IT', length: 10, pattern: /^[0-9]{10}$/ },
-        { name: 'Spain', code: '+34', iso: 'ES', length: 9, pattern: /^[0-9]{9}$/ },
-        { name: 'Switzerland', code: '+41', iso: 'CH', length: 9, pattern: /^[0-9]{9}$/ },
-        { name: 'Singapore', code: '+65', iso: 'SG', length: 8, pattern: /^[0-9]{8}$/ },
-        { name: 'Canada', code: '+1', iso: 'CA', length: 10, pattern: /^[0-9]{10}$/ },
-        { name: 'Australia', code: '+61', iso: 'AU', length: 9, pattern: /^[0-9]{9}$/ },
-        { name: 'Japan', code: '+81', iso: 'JP', length: 10, pattern: /^[0-9]{10}$/ },
-        { name: 'Korea', code: '+82', iso: 'KR', length: 10, pattern: /^[0-9]{10}$/ },
-        { name: 'Mainland China', code: '+86', iso: 'CN', length: 11, pattern: /^[0-9]{11}$/ },
-        { name: 'Hong Kong S.A.R.', code: '+852', iso: 'HK', length: 8, pattern: /^[0-9]{8}$/ },
-        { name: 'Malaysia', code: '+60', iso: 'MY', length: 9, pattern: /^[0-9]{9,10}$/ },
-        { name: 'Thailand', code: '+66', iso: 'TH', length: 9, pattern: /^[0-9]{9}$/ },
-        { name: 'Vietnam', code: '+84', iso: 'VN', length: 9, pattern: /^[0-9]{9,10}$/ },
-        { name: 'Indonesia', code: '+62', iso: 'ID', length: 10, pattern: /^[0-9]{10,12}$/ },
-        { name: 'Netherlands', code: '+31', iso: 'NL', length: 9, pattern: /^[0-9]{9}$/ },
-        { name: 'Belgium', code: '+32', iso: 'BE', length: 9, pattern: /^[0-9]{9}$/ },
-        { name: 'Sweden', code: '+46', iso: 'SE', length: 9, pattern: /^[0-9]{9,10}$/ },
-        { name: 'Norway', code: '+47', iso: 'NO', length: 8, pattern: /^[0-9]{8}$/ },
-        { name: 'Denmark', code: '+45', iso: 'DK', length: 8, pattern: /^[0-9]{8}$/ },
-        { name: 'Portugal', code: '+351', iso: 'PT', length: 9, pattern: /^[0-9]{9}$/ },
-        { name: 'Austria', code: '+43', iso: 'AT', length: 10, pattern: /^[0-9]{10,11}$/ },
-        { name: 'Greece', code: '+30', iso: 'GR', length: 10, pattern: /^[0-9]{10}$/ },
-        { name: 'Türkiye', code: '+90', iso: 'TR', length: 10, pattern: /^[0-9]{10}$/ },
-        { name: 'Mexico', code: '+52', iso: 'MX', length: 10, pattern: /^[0-9]{10}$/ },
-        { name: 'Brazil', code: '+55', iso: 'BR', length: 11, pattern: /^[0-9]{11}$/ },
-        { name: 'Argentina', code: '+54', iso: 'AR', length: 10, pattern: /^[0-9]{10}$/ },
-        { name: 'South Africa', code: '+27', iso: 'ZA', length: 9, pattern: /^[0-9]{9}$/ },
-        { name: 'Russia', code: '+7', iso: 'RU', length: 10, pattern: /^[0-9]{10}$/ },
-        { name: 'Israel', code: '+972', iso: 'IL', length: 9, pattern: /^[0-9]{9}$/ }
-    ];
+
 
     // Form data with the extended fields from the luxury reference
     const [formData, setFormData] = useState({
@@ -222,7 +224,7 @@ const Auth = ({ isRegisterInitial = false }) => {
                 countryCode: `${country.code} (${country.iso})`
             }));
         }
-    }, [countryList]);
+    }, []);
 
     const validatePhone = (code, number) => {
         // Extract code part if it's in format "+91 (IN)"
