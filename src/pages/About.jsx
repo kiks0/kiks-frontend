@@ -96,7 +96,7 @@ const About = () => {
             <section className="container mx-auto max-w-7xl mb-24 md:mb-32">
                 <div className="grid grid-cols-1 2xl:grid-cols-12 gap-12 lg:gap-24 items-center">
                     <div className="2xl:col-span-6 border-l border-black/10 pl-8 md:pl-12 py-6 md:py-10">
-                        <h2 className="text-3xl md:text-5xl font-serif tracking-tight mb-6 md:mb-8 leading-[1.1]">The Pillars <br /> of Excellence</h2>
+                        <h2 className="text-[26px] xs:text-3xl md:text-5xl font-serif tracking-tighter md:tracking-tight mb-6 md:mb-8 leading-[1.1] break-words">The Pillars <br /> of Excellence</h2>
                         <p className="text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-black/40 font-bold leading-loose max-w-sm">
                             Every bottle is a testament to our commitment to artisanal integrity and technical mastery.
                         </p>
