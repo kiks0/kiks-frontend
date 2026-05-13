@@ -726,9 +726,9 @@ const Home = () => {
         </div>
 
         {/* Social Proof: The Community Gallery (Tight Masonry Grid) */}
-        <section className="pt-24 pb-12 md:py-32 border-t border-black/5 bg-white">
+        <section className="pt-12 pb-8 md:pt-20 md:pb-12 border-t border-black/5 bg-white">
           <div className="container mx-auto px-6 max-w-[1400px]">
-            <div className="text-center mb-16 md:mb-24">
+            <div className="text-center mb-10 md:mb-16">
                 <h2 className="text-4xl md:text-6xl font-serif font-light text-black tracking-[0.2em] leading-tight mb-8 uppercase">
                   {t('home.house_kiks')}
                 </h2>
