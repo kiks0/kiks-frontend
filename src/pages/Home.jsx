@@ -42,39 +42,22 @@ const Home = () => {
   ]);
 
   useEffect(() => {
-    const fetchShowcase = async () => {
+    const fetchData = async () => {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketing/showcase`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data && data.length > 0) {
-            setShowcaseProducts(data);
-          }
+        const [showcaseRes, settingsRes, galleryRes] = await Promise.all([
+          fetch(`${apiUrl}/api/marketing/showcase`),
+          fetch(`${apiUrl}/api/settings`),
+          fetch(`${apiUrl}/api/marketing/gallery`)
+        ]);
+
+        if (showcaseRes.ok) {
+          const data = await showcaseRes.json();
+          if (data && data.length > 0) setShowcaseProducts(data);
         }
-      } catch (err) {
-        console.error("Showcase fetch failed:", err);
-      }
-    };
-    fetchShowcase();
-  }, []);
 
-  const [galleryImages, setGalleryImages] = useState([]);
-  const [heroVideoUrl, setHeroVideoUrl] = useState("https://res.cloudinary.com/dprxiz6os/video/upload/v1777903387/PinDown.io__luxstudiolondon_1769882901_enya91.webm");
-  const [signatureProduct, setSignatureProduct] = useState({
-    image_url: '',
-    name: '',
-    description: '',
-    strength: '',
-    notes: '',
-    link: ''
-  });
-
-  useEffect(() => {
-    const fetchSettings = async () => {
-      try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/settings`);
-        if (res.ok) {
-          const data = await res.json();
+        if (settingsRes.ok) {
+          const data = await settingsRes.json();
           if (data) {
             if (data.hero_video_url) setHeroVideoUrl(data.hero_video_url);
             setSignatureProduct({
@@ -87,24 +70,16 @@ const Home = () => {
             });
           }
         }
-      } catch (err) {
-        console.error("Settings fetch failed:", err);
-      }
-    };
-    fetchSettings();
-  }, []);
 
-  useEffect(() => {
-    const fetchGallery = async () => {
-      try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketing/gallery`);
-        const data = await res.json();
-        setGalleryImages(data);
+        if (galleryRes.ok) {
+          const data = await galleryRes.json();
+          setGalleryImages(data);
+        }
       } catch (err) {
-        console.error("Gallery fetch failed:", err);
+        console.error("Consolidated fetch failed:", err);
       }
     };
-    fetchGallery();
+    fetchData();
   }, []);
 
   // Parallax Scroll Hooks For "The Art of Creation" Section
@@ -335,8 +310,9 @@ const Home = () => {
 
   // Hero Text Scroll Animations (Vanishing in Center)
   const { scrollY } = useScroll();
-  const heroScale = useTransform(scrollY, [0, 600], [1, 5]);
+  const heroScale = useTransform(scrollY, [0, 600], [1, 1.5]);
   const heroOpacity = useTransform(scrollY, [0, 500], [1, 0]);
+  const heroY = useTransform(scrollY, [0, 600], [0, -100]);
 
   return (
     <div className="bg-white min-h-screen text-black relative">
@@ -359,9 +335,8 @@ const Home = () => {
             loop
             muted
             playsInline
-            preload="auto"
-            fetchpriority="high"
-            className="w-full h-full object-cover object-center scale-100 opacity-100"
+            preload="metadata"
+            className="w-full h-full object-cover object-center scale-100 opacity-100 will-change-transform"
           >
             <source src={heroVideoUrl.startsWith('http') || heroVideoUrl.startsWith('/assets') ? heroVideoUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${heroVideoUrl}`} />
           </video>
@@ -374,7 +349,7 @@ const Home = () => {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            style={{ scale: heroScale, opacity: heroOpacity }}
+            style={{ scale: heroScale, opacity: heroOpacity, y: heroY, willChange: 'transform, opacity' }}
             transition={{ duration: 1.5, ease: "easeOut" }}
             className="flex flex-col items-center"
           >

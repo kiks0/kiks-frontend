@@ -688,11 +688,9 @@ const ProductDetail = () => {
 
 
                     {product.additional_info && (
-                        <div className="mb-14 border-l border-black/10 pl-6 py-2">
-                            <p className="text-[10px] md:text-[11px] leading-relaxed text-black/70 whitespace-pre-wrap font-serif italic tracking-wide">
-                                {product.additional_info}
-                            </p>
-                        </div>
+                        <p className="whitespace-pre-wrap leading-relaxed mb-14">
+                            {product.additional_info}
+                        </p>
                     )}
 
                     {/* Consolidated Olfactory Pyramid */}
@@ -1008,7 +1006,6 @@ const ProductDetail = () => {
                             <h3 className="text-lg md:text-2xl font-serif tracking-[0.2em] text-black mb-4 md:mb-8 leading-tight uppercase">
                                 {product.name ? `The Fragrance Signature of ${product.name}` : 'The Fragrance Signature of KIKS'}
                             </h3>
-                            <div className="w-12 h-px bg-black mb-4 md:mb-8" />
                             <p className="text-[12px] md:text-[15px] text-black/50 leading-relaxed tracking-wider font-light">
                                 {product.muse_story || "Each creation is a study in captivating contrasts. Like a silent authority that rules with a serene, clarifying focus, yet possesses a soul that blossoms with the intoxicating warmth of a hidden garden. This fragrance is the essence of perfect equilibrium."}
                             </p>
