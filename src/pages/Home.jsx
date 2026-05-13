@@ -407,11 +407,11 @@ const Home = () => {
               {/* Desktop Only Frame */}
               <div className="hidden md:block absolute -inset-4 border border-black/5 pointer-events-none group-hover:border-black/10 transition-colors duration-1000" />
               
-              <Link to={signatureProduct.link || "#"} className="relative block overflow-hidden rounded-sm aspect-[3/4] md:aspect-[4/5] md:bg-[#f9f9f9] md:border md:border-black/5 md:p-4">
+              <Link to={signatureProduct.link || "#"} className="relative block overflow-hidden rounded-sm md:bg-[#f9f9f9] md:border md:border-black/5 md:p-4">
                 {isVideo(signatureProduct.image_url) ? (
                   <video
                     src={getFullImageUrl(signatureProduct.image_url)}
-                    className="w-full h-full md:h-auto object-cover md:object-contain"
+                    className="w-full h-auto object-cover md:object-contain"
                     autoPlay
                     muted
                     loop
@@ -427,7 +427,7 @@ const Home = () => {
                     height="1000"
                     decoding="async"
                     style={{ willChange: 'transform' }}
-                    className="w-full h-full md:h-auto object-cover md:object-contain transition-transform duration-[2000ms] ease-out group-hover:scale-105"
+                    className="w-full h-auto object-cover md:object-contain transition-transform duration-[2000ms] ease-out group-hover:scale-105"
                   />
                 )}
               </Link>
