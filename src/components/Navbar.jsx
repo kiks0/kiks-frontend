@@ -458,7 +458,7 @@ const Navbar = () => {
                         </Link>
                       ))}
                       {navCollections.length === 0 && (
-                        <p className="text-[10px] text-black/20 uppercase tracking-widest text-center py-20 italic">The vault is closed</p>
+                        <p className="text-[10px] text-black/20 uppercase tracking-widest text-center py-20 italic">Collection closed</p>
                       )}
                     </motion.div>
                   )}

@@ -24,9 +24,9 @@ const Home = () => {
 
   const [heroVideoUrl, setHeroVideoUrl] = useState('https://res.cloudinary.com/dprxiz6os/video/upload/v1778044738/hero-video_webm_vlvq4g.webm');
   const [signatureProduct, setSignatureProduct] = useState({
-    image_url: 'https://res.cloudinary.com/dprxiz6os/image/upload/v1778050809/IMG-20260506-WA0002.jpg_cqlvdx.webp',
+    image_url: 'https://res.cloudinary.com/dprxiz6os/image/upload/v1778429911/kiks_general/kiks-1778429909414-168768629_meinpk.png',
     name: 'Elite',
-    description: 'A powerful blend of rare woods and midnight spices, designed for the individual who commands presence without speaking a word.',
+    description: 'Handcrafted with rare ingredients to define your signature presence.',
     strength: 'Extrait de Parfum',
     notes: 'Aoud, Midnight Spices, Rare Woods',
     link: '/collection/arambh/elite'
@@ -321,15 +321,15 @@ const Home = () => {
 
   // Hero Text Scroll Animations (Vanishing in Center)
   const { scrollY } = useScroll();
-  const heroScale = useTransform(scrollY, [0, 600], [1, 1.5]);
-  const heroOpacity = useTransform(scrollY, [0, 500], [1, 0]);
-  const heroY = useTransform(scrollY, [0, 600], [0, -100]);
+  const heroScale = useTransform(scrollY, [0, 600], [1, 1.2]);
+  const heroOpacity = useTransform(scrollY, [0, 800], [1, 0]);
+  const heroY = useTransform(scrollY, [0, 600], [0, -50]);
 
   return (
     <div className="bg-white min-h-screen text-black relative">
       <SEO
-        title="The Essence of Elegance"
-        description="KIKS Ultra Luxury: A symphony of rare notes and artisanal craftsmanship. Explore our exclusive collection of Extrait de Parfum."
+        title="KIKS Luxury Perfumes"
+        description="High quality perfumes handcrafted with rare ingredients. Explore our exclusive collection of Extrait de Parfum."
         keywords="Luxury Perfume, Extrait de Parfum, KIKS, Premium Fragrance, Elite Collection"
       />
 
@@ -472,7 +472,7 @@ const Home = () => {
                   {signatureProduct.link && (
                     <Link to={signatureProduct.link} className="inline-block group/link">
                       <span className="text-[10px] tracking-[0.4em] text-black uppercase font-bold border-b border-black/20 pb-1 group-hover/link:border-black transition-colors">
-                        EXPLORE THE SIGNATURE
+                        SHOP NOW
                       </span>
                     </Link>
                   )}
@@ -594,7 +594,7 @@ const Home = () => {
       <section ref={storyRef} className="relative py-16 md:h-screen bg-[#f9f9f9] overflow-hidden">
         <div className="relative z-20 h-full flex flex-col items-center justify-center px-6">
           <div className="text-center max-w-4xl mx-auto flex flex-col items-center w-full">
-            <span className="text-black text-[10px] tracking-[0.6em] uppercase font-black block mb-6">{t('home.art_creation')}</span>
+            <span className="text-black text-[10px] tracking-[0.6em] uppercase font-black block mb-6">OUR PROCESS</span>
 
             <div className="overflow-hidden mb-8 w-full text-center">
               <h2
@@ -682,10 +682,10 @@ const Home = () => {
             >
 
               <h2 className="text-4xl md:text-6xl font-serif font-light text-black tracking-widest leading-tight mb-8">
-                {t('home.alchemy_scent')}
+                OUR STORY
               </h2>
               <p className="text-black/60 text-[10px] tracking-[0.3em] uppercase font-bold mb-4 md:mb-12">
-                {t('home.tradition_modernity')}
+                QUALITY & TRADITION
               </p>
             </motion.div>
 

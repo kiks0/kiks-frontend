@@ -226,7 +226,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                <div className="mt-12 flex-grow overflow-y-auto pr-4 custom-scrollbar w-full max-w-4xl">
                   {loading && (
                     <div className="py-10 text-center">
-                       <p className="text-black text-[10px] tracking-[0.4em] uppercase animate-pulse">Searching the vault...</p>
+                       <p className="text-black text-[10px] tracking-[0.4em] uppercase animate-pulse">Searching...</p>
                     </div>
                   )}
 

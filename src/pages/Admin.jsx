@@ -25,7 +25,7 @@ const Admin = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Standardized Auth Headers for the Palace Vault
+  // Standardized Administrative Database Headers
   const getAdminHeaders = () => ({
     'Content-Type': 'application/json',
     'x-admin-secret': import.meta.env.VITE_ADMIN_SECRET,
@@ -373,23 +373,23 @@ const Admin = () => {
   };
 
   const handleRemoveCart = async (cartId) => {
-    if (!window.confirm('Are you certain you want to permanently clear this user\'s entire vault session? This cannot be undone.')) return;
+    if (!window.confirm('Are you certain you want to permanently clear this user\'s entire database session? This cannot be undone.')) return;
     try {
       const res = await fetch(`${API_URL}/api/carts/${cartId}`, {
         method: 'DELETE',
         headers: getAdminHeaders()
       });
       if (res.ok) {
-        showSuccessToast('Vault session cleared.');
+        showSuccessToast('Database session cleared.');
         fetchCartsData();
       } else {
-        showErrorToast('Failed to clear vault.');
+        showErrorToast('Failed to clear database.');
       }
     } catch (e) { showErrorToast('Network error during removal.'); }
   };
 
   const handleRemoveCartItem = async (cartId, productId) => {
-    if (!window.confirm('Surgically remove this specific item from the user\'s vault?')) return;
+    if (!window.confirm('Remove this specific item from the user\'s session?')) return;
     try {
       const res = await fetch(`${API_URL}/api/carts/${cartId}/remove-item`, {
         method: 'POST',
@@ -407,7 +407,7 @@ const Admin = () => {
 
   const handleBulkRemoveCarts = async () => {
     if (!selectedCarts.length) return;
-    if (!window.confirm(`Permanently clear ${selectedCarts.length} selected vault sessions?`)) return;
+    if (!window.confirm(`Permanently clear ${selectedCarts.length} selected database sessions?`)) return;
 
     try {
       const res = await fetch(`${API_URL}/api/carts/bulk-delete`, {
@@ -416,7 +416,7 @@ const Admin = () => {
         body: JSON.stringify({ ids: selectedCarts })
       });
       if (res.ok) {
-        showSuccessToast(`${selectedCarts.length} vaults cleared.`);
+        showSuccessToast(`${selectedCarts.length} sessions cleared.`);
         setSelectedCarts([]);
         fetchCartsData();
       } else {
@@ -434,7 +434,7 @@ const Admin = () => {
       if (res.ok) {
         setWaitlist(await res.json());
       } else {
-        showErrorToast('Waitlist vault access denied.');
+        showErrorToast('Waitlist access denied.');
       }
     } catch (e) {
       console.error("Waitlist fetch failed", e);
@@ -939,7 +939,7 @@ const Admin = () => {
 
       if (!res.ok) {
         const errorData = await res.json();
-        showErrorToast(errorData.msg || 'Palace vault rejected the asset.');
+        showErrorToast(errorData.msg || 'Server rejected the asset.');
         return;
       }
 
@@ -964,7 +964,7 @@ const Admin = () => {
       }
     } catch (error) {
       console.error("Critical Visual Sync Fault:", error);
-      showErrorToast('Network Fault: Ensure the Palace Vault (Backend) is active.');
+      showErrorToast('Network Fault: Ensure the Backend server is active.');
     } finally {
       setUploading(false);
     }
@@ -1008,7 +1008,7 @@ const Admin = () => {
                 <Upload size={28} className="text-black/20 group-hover:text-black transition-colors" />
               )}
             </div>
-            <span className="text-[10px] tracking-[0.3em] uppercase text-black/40 group-hover:text-black  font-black">Upload Content</span>
+            <span className="text-[10px] tracking-[0.3em] uppercase text-black/40 group-hover:text-black  font-black">Upload Asset</span>
           </>
         )}
       </div>
@@ -1075,7 +1075,7 @@ const Admin = () => {
 
       const data = await res.json();
       if (res.ok) {
-        showSuccessToast(`Mansion Collection ${editingId ? 'Updated' : 'Registered'} Successfully.`);
+        showSuccessToast(`Collection ${editingId ? 'Updated' : 'Registered'} Successfully.`);
         setIsAdding(false);
         setEditingId(null);
         setColFormData({ name: '', slug: '', banner_url: '', description: '', video_url: '' });
@@ -1123,7 +1123,7 @@ const Admin = () => {
       });
       const data = await res.json();
       if (res.ok) {
-        showSuccessToast(`Product ${editingId ? 'Modified in' : 'Manifested into'} the Vault.`);
+        showSuccessToast(`Product ${editingId ? 'Updated' : 'Added'} Successfully.`);
         setIsAdding(false);
         setEditingId(null);
         setProdFormData({
@@ -1169,10 +1169,10 @@ const Admin = () => {
       });
       const data = await res.json();
       if (res.ok) {
-        showSuccessToast(`Blog ${editingId ? 'Modified' : 'Published'} in the Journal.`);
+        showSuccessToast(`Blog ${editingId ? 'Updated' : 'Published'} Successfully.`);
         setIsAdding(false);
         setEditingId(null);
-        setBlogFormData({ title: '', slug: '', content: '', image_url: '', keywords: '', author: 'Kiks Artisan' });
+        setBlogFormData({ title: '', slug: '', content: '', image_url: '', keywords: '', author: 'KIKS' });
         fetchData();
       } else {
         showErrorToast(data.msg || 'Blog publication failed.');
@@ -1360,6 +1360,53 @@ const Admin = () => {
     }
   };
 
+  const handleOrderExcelExport = (order) => {
+    const data = [
+      {
+        'Order ID': `#${order.id.toString().padStart(4, '0')}`,
+        'Customer Name': order.customer_name,
+        'Mobile Number': order.customer_phone || 'N/A',
+        'Address': order.shipping_address,
+        'Products': order.items?.map(it => `${it.product_name} (x${it.quantity})`).join(', '),
+        'Payment Method': order.payment_method,
+        'Amount (INR)': order.total_amount,
+        'Status': order.status === 'Payment Pending' || order.status === 'Abandoned' ? 'PAYMENT NOT COMPLETED' : (order.status || 'On Hold'),
+        'Date': new Date(order.created_at).toLocaleString()
+      }
+    ];
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Order Manifest');
+    XLSX.writeFile(workbook, `Kiks_Order_${order.id}_Manifest.xlsx`);
+    showSuccessToast(`Order #${order.id} Manifest Exported.`);
+  };
+
+  const handleBulkExcelExport = (idsToExport) => {
+    const targetIds = Array.isArray(idsToExport) ? idsToExport : selectedOrders;
+    const selected = orders.filter(o => targetIds.includes(o.id));
+    if (selected.length === 0) return showErrorToast('No orders selected for export.');
+
+    const data = selected.map(order => ({
+      'Order ID': `#${order.id.toString().padStart(4, '0')}`,
+      'Customer Name': order.customer_name,
+      'Mobile Number': order.customer_phone || 'N/A',
+      'Address': order.shipping_address,
+      'Products': order.items?.map(it => `${it.product_name} (x${it.quantity})`).join(', '),
+      'Payment Method': order.payment_method,
+      'Amount (INR)': order.total_amount,
+      'Status': order.status === 'Payment Pending' || order.status === 'Abandoned' ? 'PAYMENT NOT COMPLETED' : (order.status || 'On Hold'),
+      'Date': new Date(order.created_at).toLocaleString()
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Orders Manifest');
+    XLSX.writeFile(workbook, `Kiks_Bulk_Orders_Manifest.xlsx`);
+    showSuccessToast(`${selected.length} Orders Exported.`);
+  };
+
+
   const handleDeleteReview = async (id) => {
     if (!window.confirm('Are you sure you want to delete this review?')) return;
     try {
@@ -1393,11 +1440,11 @@ const Admin = () => {
         fetchData();
       } else {
         const data = await res.json();
-        showErrorToast(data.msg || 'Vault update rejected.');
+        showErrorToast(data.msg || 'Update rejected by server.');
       }
     } catch (error) {
       console.error("Stock update network error:", error);
-      showErrorToast('Network Fault: Unable to reach the vault.');
+      showErrorToast('Network Fault: Unable to reach the server.');
     }
   };
 
@@ -1634,7 +1681,7 @@ const Admin = () => {
                     <p className="text-4xl font-serif tracking-widest text-black">
                       {formatCurrency(analytics.totalRevenue, activeCurrency, rates, symbols)}
                     </p>
-                    <p className="text-[12px] tracking-wider text-black/50 mt-4 font-medium">Real-time Vault Total</p>
+                    <p className="text-[12px] tracking-wider text-black/50 mt-4 font-medium">Real-time Database Total</p>
                   </div>
                   <div className="bg-neutral-50 border border-black/5 p-8 hover:border-black/20 transition-all">
                     <div className="flex items-center justify-between mb-4">
@@ -1685,7 +1732,7 @@ const Admin = () => {
                             className={`w-24 bg-white border border-black/10 text-center text-[11px] py-2 focus:outline-none focus:border-black transition-colors ${p.stock_count <= 10 ? 'text-red-600' : 'text-black'}`}
                           />
                           <div className="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover/input:opacity-100 transition-opacity whitespace-nowrap">
-                            <span className="text-[7px] tracking-widest text-black/40 uppercase font-black">Press Enter to Vault</span>
+                            <span className="text-[7px] tracking-widest text-black/40 uppercase font-black">Press Enter to Save</span>
                           </div>
                         </div>
                       </div>
@@ -1821,6 +1868,11 @@ const Admin = () => {
                               <Package size={12} /> Bulk Packing Slips
                             </button>
                           </>
+                        )}
+                        {orderSubTab === 'abandoned' && (
+                          <button onClick={() => handleBulkExcelExport(visibleSelected)} className="bg-green-700 border border-green-600 text-white px-5 py-2 text-[10px] tracking-widest uppercase hover:bg-green-600 transition-all font-bold flex items-center gap-2">
+                            <FileSpreadsheet size={12} /> Bulk Excel Export
+                          </button>
                         )}
                         <button onClick={() => handleBulkDelete(visibleSelected)} className="bg-red-600/5 border border-red-600/10 text-red-600 px-5 py-2 text-[10px] tracking-widest uppercase hover:bg-red-600 hover:text-white transition-all font-bold flex items-center gap-2">
                           <Trash2 size={12} /> Delete Selected
@@ -2036,6 +2088,14 @@ const Admin = () => {
                                       </button>
                                     </>
                                   )}
+                                  {orderSubTab === 'abandoned' && (
+                                    <button
+                                      onClick={() => handleOrderExcelExport(order)}
+                                      className="flex-1 flex items-center justify-center gap-1 border border-green-600/20 px-2 py-2 text-[8px] tracking-widest uppercase hover:bg-green-600 hover:text-white transition-all text-green-600 font-black"
+                                    >
+                                      <FileSpreadsheet size={11} /> Excel
+                                    </button>
+                                  )}
                                   <button onClick={() => handleDeleteOrder(order.id)} className="flex items-center justify-center gap-1 border border-red-500/20 px-2 py-2 text-[8px] tracking-widest uppercase hover:bg-red-500 hover:text-white transition-all text-red-500">
                                     <Trash2 size={11} />
                                   </button>
@@ -2207,6 +2267,14 @@ v>
                                     <Package size={14} /> {downloadedHistory.labels.includes(order.id) ? 'RE-LABEL' : 'Label'}
                                   </button>
                                 </>
+                              )}
+                              {orderSubTab === 'abandoned' && (
+                                <button
+                                  onClick={() => handleOrderExcelExport(order)}
+                                  className="flex-1 flex items-center justify-center gap-2 border border-green-600/20 p-3 text-[10px] tracking-widest uppercase hover:bg-green-600 hover:text-white transition-all text-green-600 font-black"
+                                >
+                                  <FileSpreadsheet size={14} /> Excel
+                                </button>
                               )}
                               <button onClick={() => handleDeleteOrder(order.id)} className="flex items-center justify-center gap-2 border border-red-500/20 p-3 text-[10px] tracking-widest uppercase hover:bg-red-500 hover:text-white transition-all text-red-500">
                                 <Trash2 size={14} />
@@ -4125,18 +4193,18 @@ v>
                         </div>
 
                         <div className="md:col-span-1">
-                          <label className={labelClasses}>Collection Registry</label>
+                          <label className={labelClasses}>Collection</label>
                           <select required className={inputClasses} value={prodFormData.collection_id} onChange={e => setProdFormData({ ...prodFormData, collection_id: e.target.value })}>
                             <option value="" className="bg-white">Select Collection</option>
                             {collections.map(c => <option className="bg-white" key={c.id} value={c.id}>{c.name}</option>)}
                           </select>
                         </div>
                         <div className="md:col-span-1">
-                          <label className={labelClasses}>Essence Name</label>
+                          <label className={labelClasses}>Product Name</label>
                           <input required className={inputClasses} value={prodFormData.name} onChange={e => {
                             const name = e.target.value;
                             setProdFormData({ ...prodFormData, name, slug: name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') });
-                          }} placeholder="Noble Oud..." />
+                          }} placeholder="Product Name..." />
                         </div>
                         <div className="md:col-span-1">
                           <label className={labelClasses}>Price (₹)</label>
@@ -4249,8 +4317,8 @@ v>
                                 <Layers size={18} />
                               </div>
                               <div>
-                                <h4 className="text-[11px] tracking-[0.3em] uppercase text-black font-black">Fragrantica Visual Architecture</h4>
-                                <p className="text-[8px] text-black/40 uppercase tracking-widest mt-1 font-black">Compose multi-layered olfactory profiles with custom iconography</p>
+                                <h4 className="text-[11px] tracking-[0.3em] uppercase text-black font-black">Olfactory Note Icons</h4>
+                                <p className="text-[8px] text-black/40 uppercase tracking-widest mt-1 font-black">Manage olfactory icons for product notes</p>
                               </div>
                             </div>
 
@@ -4360,7 +4428,7 @@ v>
                           <div className="md:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-12">
                             <div className="lg:col-span-2">
                               <ImageUploadZone
-                                label="Cinematic Banner (Narrative Header)"
+                                label="Product Banner"
                                 value={prodFormData.story_banner}
                                 onUpload={(e) => handleImageUpload(e, 'story_banner')}
                                 height="h-56 md:h-80"
@@ -4368,15 +4436,15 @@ v>
                             </div>
                             <div className="lg:col-span-1">
                               <ImageUploadZone
-                                label="The Muse (Vertical Narrative)"
+                                label="Vertical Lifestyle Image"
                                 value={prodFormData.muse_image}
                                 onUpload={(e) => handleImageUpload(e, 'muse_image')}
                                 height="h-[400px] md:h-[600px]"
                               />
                             </div>
                             <div className="lg:col-span-1">
-                              <label className={labelClasses}>The Cinematic Muse Story</label>
-                              <textarea className={`${inputClasses} h-full min-h-[400px] text-xs leading-relaxed p-8`} value={prodFormData.muse_story} onChange={e => setProdFormData({ ...prodFormData, muse_story: e.target.value })} placeholder="Compose the narrative soul of this essence..." />
+                              <label className={labelClasses}>Product Narrative</label>
+                              <textarea className={`${inputClasses} h-full min-h-[400px] text-xs leading-relaxed p-8`} value={prodFormData.muse_story} onChange={e => setProdFormData({ ...prodFormData, muse_story: e.target.value })} placeholder="Enter the product story..." />
                             </div>
                           </div>
                         </div>
@@ -4498,8 +4566,8 @@ v>
                       }}
                     />
                     <div>
-                      <h2 className="text-xl md:text-2xl font-serif tracking-[0.1em] uppercase text-black">Vault Manifest</h2>
-                      <p className="text-xs tracking-[0.2em] text-black/50 uppercase mt-1">Monitoring active acquisitions & abandoned intent</p>
+                      <h2 className="text-xl md:text-2xl font-serif tracking-[0.1em] uppercase text-black">Carts List</h2>
+                      <p className="text-xs tracking-[0.2em] text-black/50 uppercase mt-1">Monitoring active & abandoned carts</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-8">
@@ -4512,7 +4580,7 @@ v>
                       </button>
                     )}
                     <div className="text-left sm:text-right">
-                      <p className="text-[10px] text-black/40 uppercase tracking-widest mb-1 font-bold">Active Vaults</p>
+                      <p className="text-[10px] text-black/40 uppercase tracking-widest mb-1 font-bold">Active Sessions</p>
                       <p className="text-3xl font-serif text-black">{carts.length}</p>
                     </div>
                   </div>
@@ -4557,11 +4625,11 @@ v>
                           </div>
                           <div className="lg:w-80 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-black/5 pt-8 lg:pt-0 lg:pl-10">
                             <div className="space-y-6">
-                              <div className="flex justify-between lg:block"><p className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2 font-bold">Status</p><span className="inline-flex items-center gap-2 px-3 py-1.5 bg-neutral-100 text-black text-[9px] uppercase tracking-widest font-bold"><span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>Active Vault</span></div>
+                              <div className="flex justify-between lg:block"><p className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2 font-bold">Status</p><span className="inline-flex items-center gap-2 px-3 py-1.5 bg-neutral-100 text-black text-[9px] uppercase tracking-widest font-bold"><span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>Active Session</span></div>
                               <div className="flex justify-between lg:block"><p className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2 font-bold">Last Synchronized</p><p className="text-[11px] text-black/60 tracking-wider">{new Date(cart.last_sync).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</p></div>
                             </div>
                             <div className="mt-10 md:mt-12 space-y-8 md:space-y-10"><div><p className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2 font-bold">Total Valuation</p><p className="text-2xl md:text-3xl font-serif text-black leading-none">{formatCurrency(cart.items?.reduce((acc, item) => acc + (item.price * item.quantity), 0) || 0, activeCurrency, rates, symbols)}</p></div>
-                              <button onClick={() => handleRemoveCart(cart.id)} className="w-full flex items-center justify-center gap-2 bg-red-600 text-white px-3 py-2.5 text-[8px] uppercase tracking-widest hover:bg-red-700 transition-all font-bold shadow-lg shadow-red-600/10 mt-2"><LogOut size={12} />Clear Vault</button>
+                              <button onClick={() => handleRemoveCart(cart.id)} className="w-full flex items-center justify-center gap-2 bg-red-600 text-white px-3 py-2.5 text-[8px] uppercase tracking-widest hover:bg-red-700 transition-all font-bold shadow-lg shadow-red-600/10 mt-2"><LogOut size={12} />Clear Session</button>
                             </div>
                           </div>
                         </div>
@@ -4578,12 +4646,56 @@ v>
             <div className="fixed inset-0 z-[99999] flex items-center justify-center p-6 md:p-12">
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsAddingShowcase(false)} className="absolute inset-0 bg-black/80 backdrop-blur-md" />
               <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="bg-white w-full max-w-2xl relative z-10 shadow-2xl overflow-hidden flex flex-col max-h-[95vh] md:max-h-[90vh]">
-                <div className="p-5 md:p-10 border-b border-black/5 flex justify-between items-center bg-neutral-50"><div><h3 className="text-xl md:text-2xl font-serif tracking-widest uppercase ">{editingId ? 'Modify' : 'Manifest'} Showcase</h3><p className="text-[10px] tracking-[0.3em] text-black/40 uppercase mt-1 font-black">Cinematic Product Presentation</p></div><button onClick={() => setIsAddingShowcase(false)} className="hover:rotate-90 transition-transform duration-500"><X size={20} className="md:w-[24px] md:h-[24px]" /></button></div>
+                <div className="p-5 md:p-10 border-b border-black/5 flex justify-between items-center bg-neutral-50"><div><h3 className="text-xl md:text-2xl font-serif tracking-widest uppercase ">{editingId ? 'Edit' : 'Add'} Showcase</h3><p className="text-[10px] tracking-[0.3em] text-black/40 uppercase mt-1 font-black">Product Presentation Showcase</p></div><button onClick={() => setIsAddingShowcase(false)} className="hover:rotate-90 transition-transform duration-500"><X size={20} className="md:w-[24px] md:h-[24px]" /></button></div>
                 <form onSubmit={handleSaveShowcase} className="flex-grow overflow-y-auto p-5 md:p-10 space-y-6 md:space-y-8 scrollbar-hide text-left">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8"><div className="space-y-6 text-left"><div><label className={labelClasses}>Product Identity (Name)</label><input className={inputClasses} value={showcaseFormData.name} onChange={e => setShowcaseFormData({ ...showcaseFormData, name: e.target.value })} placeholder="e.g. ELITE" required /></div><div><label className={labelClasses}>Registry Link (URL)</label><input className={inputClasses} value={showcaseFormData.product_link} onChange={e => setShowcaseFormData({ ...showcaseFormData, product_link: e.target.value })} placeholder="/collection/arambh/elite" required /><p className="text-[8px] tracking-widest text-black/30 uppercase mt-2 leading-relaxed font-black">Points to the product detail page. If the product isn't added yet, use <span className="text-black font-bold">/collection/arambh</span> and update later.</p></div><div><label className={labelClasses}>Display Priority (Order)</label><input type="number" className={inputClasses} value={showcaseFormData.display_order} onChange={e => setShowcaseFormData({ ...showcaseFormData, display_order: parseInt(e.target.value) || 0 })} /></div></div>
-                    <div className="space-y-6 text-left"><label className={labelClasses}>Cinematic Visual</label><div onClick={() => { const input = document.createElement('input'); input.type = 'file'; input.onchange = (e) => handleImageUpload(e, 'showcase'); input.click(); }} className="aspect-[3/4] border border-dashed border-black/10 bg-neutral-50 flex flex-col items-center justify-center cursor-pointer group relative overflow-hidden">{showcaseFormData.image_url ? (<><img src={getFullImageUrl(showcaseFormData.image_url)} className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-1000" /><div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><span className="text-[9px] text-white uppercase tracking-[0.3em] border border-white/20 px-6 py-3 backdrop-blur-sm font-black">Replace Visual</span></div></>) : (<div className="text-center p-6"><Upload className="mx-auto mb-4 text-black/20 group-hover:text-black transition-colors" size={32} /><p className="text-[9px] uppercase tracking-[0.3em] text-black/40 group-hover:text-black transition-colors font-black">Upload Portrait Visual</p></div>)}{uploading && (<div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center"><Loader2 className="animate-spin text-black" size={24} /></div>)}</div></div></div>
-                  <div className="text-left"><label className={labelClasses}>Cinematic Narrative (Description)</label><textarea className={`${inputClasses} h-32 md:h-40 leading-relaxed`} value={showcaseFormData.description} onChange={e => setShowcaseFormData({ ...showcaseFormData, description: e.target.value })} placeholder="Describe the essence of this luxury creation..." required /></div>
-                  <button type="submit" disabled={isProcessing} className="w-full bg-black text-white py-5 text-[10px] uppercase tracking-[0.4em] hover:bg-neutral-800 transition-all flex items-center justify-center gap-3 font-black">{isProcessing ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}{editingId ? 'Modify Registry' : 'Confirm Manifestation'}</button>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-6 text-left">
+                      <div>
+                        <label className={labelClasses}>Product Name</label>
+                        <input className={inputClasses} value={showcaseFormData.name} onChange={e => setShowcaseFormData({ ...showcaseFormData, name: e.target.value })} placeholder="e.g. ELITE" required />
+                      </div>
+                      <div>
+                        <label className={labelClasses}>Link (URL)</label>
+                        <input className={inputClasses} value={showcaseFormData.product_link} onChange={e => setShowcaseFormData({ ...showcaseFormData, product_link: e.target.value })} placeholder="/collection/arambh/elite" required />
+                        <p className="text-[8px] tracking-widest text-black/30 uppercase mt-2 leading-relaxed font-black">Points to the product detail page.</p>
+                      </div>
+                      <div>
+                        <label className={labelClasses}>Order</label>
+                        <input type="number" className={inputClasses} value={showcaseFormData.display_order} onChange={e => setShowcaseFormData({ ...showcaseFormData, display_order: parseInt(e.target.value) || 0 })} />
+                      </div>
+                    </div>
+                    <div className="space-y-6 text-left">
+                      <label className={labelClasses}>Product Visual</label>
+                      <div onClick={() => { const input = document.createElement('input'); input.type = 'file'; input.onchange = (e) => handleImageUpload(e, 'showcase'); input.click(); }} className="aspect-[3/4] border border-dashed border-black/10 bg-neutral-50 flex flex-col items-center justify-center cursor-pointer group relative overflow-hidden">
+                        {showcaseFormData.image_url ? (
+                          <>
+                            <img src={getFullImageUrl(showcaseFormData.image_url)} className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-1000" />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                              <span className="text-[9px] text-white uppercase tracking-[0.3em] border border-white/20 px-6 py-3 backdrop-blur-sm font-black">Replace Image</span>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="text-center p-6">
+                            <Upload className="mx-auto mb-4 text-black/20 group-hover:text-black transition-colors" size={32} />
+                            <p className="text-[9px] uppercase tracking-[0.3em] text-black/40 group-hover:text-black transition-colors font-black">Upload Product Image</p>
+                          </div>
+                        )}
+                        {uploading && (
+                          <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center">
+                            <Loader2 className="animate-spin text-black" size={24} />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-left">
+                    <label className={labelClasses}>Product Description</label>
+                    <textarea className={`${inputClasses} h-32 md:h-40 leading-relaxed`} value={showcaseFormData.description} onChange={e => setShowcaseFormData({ ...showcaseFormData, description: e.target.value })} placeholder="Enter product description..." required />
+                  </div>
+                  <button type="submit" disabled={isProcessing} className="w-full bg-black text-white py-5 text-[10px] uppercase tracking-[0.4em] hover:bg-neutral-800 transition-all flex items-center justify-center gap-3 font-black">
+                    {isProcessing ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
+                    {editingId ? 'Update Product' : 'Register Product'}
+                  </button>
                 </form>
               </motion.div>
             </div>

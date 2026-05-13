@@ -125,8 +125,8 @@ const Footer = () => {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M20 6L9 17l-5-5"/></svg>
               </div>
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em]">Welcome to KIKS</p>
-                <p className="text-[10px] text-black/60 uppercase tracking-widest mt-1">You are now part of the circle</p>
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em]">Subscription Confirmed</p>
+                <p className="text-[10px] text-black/60 uppercase tracking-widest mt-1">Thank you for joining our newsletter.</p>
               </div>
             </motion.div>
           )}
@@ -179,7 +179,6 @@ const Footer = () => {
               </button>
 
               <div className="text-center mb-16 md:mb-24 px-4">
-                <p className="text-[10px] md:text-[11px] tracking-[0.6em] text-black/60 uppercase font-black mb-6">Global Boutique</p>
                 <h2 className="text-2xl md:text-5xl font-serif tracking-[0.2em] uppercase mb-8 text-black font-black leading-tight">Select Your Region</h2>
                 <div className="w-20 h-[2px] bg-black mx-auto"></div>
               </div>

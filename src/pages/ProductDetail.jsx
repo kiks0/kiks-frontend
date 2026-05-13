@@ -330,7 +330,7 @@ const ProductDetail = () => {
             }
         } catch (err) {
             console.error('Waitlist submission error:', err);
-            setNotifyStatus({ type: 'error', msg: 'Palace Vault connection failed. Please ensure the server is active.' });
+            setNotifyStatus({ type: 'error', msg: 'Database connection failed. Please ensure the server is active.' });
         }
     };
 

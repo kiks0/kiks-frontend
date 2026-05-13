@@ -187,7 +187,7 @@ const Collection = () => {
 
                     </motion.section>
                 ) : (
-                    /* CONCENTRATED PRODUCT VAULT */
+                    /* PRODUCT COLLECTION */
                     <motion.section 
                         key="products"
                         initial={{ opacity: 0 }}

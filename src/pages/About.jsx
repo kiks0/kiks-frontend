@@ -16,18 +16,10 @@ const About = () => {
                         animate={{ opacity: 1, x: 0 }}
                         className="absolute -left-4 md:-left-12 top-0 vertical-text hidden xl:block"
                     >
-                        <span className="text-[9px] tracking-[1em] uppercase font-black text-black/10">ESTABLISHED 2026 — INDIA</span>
+                        <span className="text-[9px] tracking-[1em] uppercase font-black text-black/40">ESTABLISHED 2026 — INDIA</span>
                     </motion.div>
 
                     <div className="w-full lg:w-[50%] z-10">
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="flex flex-col mb-8 md:mb-16"
-                        >
-                            <span className="text-[10px] md:text-[11px] tracking-[0.6em] text-gold-600 uppercase font-black mb-4">Maison KIKS</span>
-                            <div className="w-12 h-px bg-black/10" />
-                        </motion.div>
 
                         <motion.h1 
                             initial={{ opacity: 0, y: 20 }}
@@ -37,19 +29,13 @@ const About = () => {
                                 transition: { duration: 0.4, ease: "easeOut" }
                             }}
                             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                            className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-serif leading-[1.2] md:leading-[0.95] tracking-tight mb-8 md:mb-16 italic-serif"
+                            className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-serif leading-[1.2] md:leading-[0.95] tracking-tight mt-12 md:mt-20 mb-8 md:mb-16 italic-serif"
                         >
                             Defining <br className="hidden md:block" />
                             <span className="text-gold-600">The New</span> <br className="hidden md:block" />
                             Presence
                         </motion.h1>
 
-                        <motion.div 
-                            initial={{ width: 0 }}
-                            animate={{ width: "80px" }}
-                            transition={{ delay: 0.8, duration: 1 }}
-                            className="h-px bg-black mb-8 md:mb-16 hidden md:block"
-                        />
 
                         <motion.p 
                             initial={{ opacity: 0 }}
@@ -96,7 +82,7 @@ const About = () => {
             <section className="container mx-auto max-w-7xl mb-24 md:mb-32">
                 <div className="grid grid-cols-1 2xl:grid-cols-12 gap-12 lg:gap-24 items-center">
                     <div className="2xl:col-span-6 border-l border-black/10 pl-8 md:pl-12 py-6 md:py-10">
-                        <h2 className="text-[26px] xs:text-3xl md:text-5xl font-serif tracking-tighter md:tracking-tight mb-6 md:mb-8 leading-[1.1] break-words">The Pillars <br /> of Excellence</h2>
+                        <h2 className="text-[26px] xs:text-3xl md:text-5xl font-serif tracking-tighter md:tracking-tight mb-6 md:mb-8 leading-[1.1] break-words">Our <br /> Standards</h2>
                         <p className="text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-black/40 font-bold leading-loose max-w-sm">
                             Every bottle is a testament to our commitment to artisanal integrity and technical mastery.
                         </p>
@@ -104,10 +90,10 @@ const About = () => {
                     
                     <div className="2xl:col-span-6 grid grid-cols-1 md:grid-cols-2 gap-px bg-black/10 border border-black/10 overflow-hidden shadow-2xl">
                         {[
-                            { title: "Pure Concentration", desc: "Our extraits de parfum contain over 30% fragrance oils, ensuring a presence that lasts well into the night." },
-                            { title: "Rare Sourcing", desc: "We travel from the iris fields of Tuscany to the oud forests of Assam to find nature's most elusive treasures." },
-                            { title: "Small Batch", desc: "We limit our production to maintain the soul of each blend, ensuring your signature scent remains exclusive." },
-                            { title: "Sustainably Crafted", desc: "Our commitment to the future is as deep as our scents. Ethical sourcing and conscious packaging define our path." }
+                            { title: "Pure Concentration", desc: "Premium oil concentrations ensuring long-lasting performance throughout the day." },
+                            { title: "Rare Sourcing", desc: "Directly sourcing premium ingredients from key global regions to ensure unmatched quality." },
+                            { title: "Small Batch", desc: "Limited production runs to ensure quality control and product exclusivity." },
+                            { title: "Sustainably Crafted", desc: "Commitment to ethical sourcing and responsible packaging practices." }
                         ].map((pillar, i) => (
                             <div key={i} className="bg-white p-10 md:p-16 hover:bg-zinc-50 transition-all duration-700 group border-b md:border-b-0 border-black/5 last:border-0">
                                 <div className="text-[9px] text-gold-600 font-black tracking-widest mb-6 block uppercase">0{i+1} —</div>
@@ -141,7 +127,7 @@ const About = () => {
                             whileInView={{ opacity: 1, x: 0 }}
                             className="w-full lg:w-1/2 space-y-8 md:space-y-12"
                          >
-                            <h3 className="text-3xl md:text-6xl font-serif tracking-tight leading-tight">Artisanal <br /> Alchemists</h3>
+                            <h3 className="text-3xl md:text-6xl font-serif tracking-tight leading-tight">OUR <br /> CRAFT</h3>
                             <div className="w-12 md:w-16 h-px bg-gold-600" />
                             <p className="text-black/60 text-base md:text-lg leading-relaxed max-w-lg">
                                 We treat perfume as a high art. Each blend is matured in darkness for months, allowing the molecular structure to evolve into its final, perfect form.
@@ -169,7 +155,7 @@ const About = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     className="space-y-10 md:space-y-12"
                 >
-                    <p className="text-[9px] md:text-[10px] tracking-[0.8em] uppercase text-gold-600 font-black">Join The Legacy</p>
+                    <p className="text-[9px] md:text-[10px] tracking-[0.8em] uppercase text-black/60 font-black">SHOP THE COLLECTION</p>
                     <h2 className="text-3xl md:text-6xl lg:text-7xl font-serif leading-tight italic-serif">
                         Presence is not seen. <br />
                         It is felt.

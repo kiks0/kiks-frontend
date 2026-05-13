@@ -143,7 +143,7 @@ const resources = {
   },
   hi: {
     translation: {
-      "nav": { "collections": "संग्रह", "blog": "ब्लॉग", "contact": "संपर्क", "login": "लॉगइन", "register": "पंजीकरण", "admin": "एडमिन", "profile": "प्रोफ़ाइल", "wishlist": "विशलिस्ट", "vault_empty": "वॉल्ट खाली है" },
+      "nav": { "collections": "संग्रह", "blog": "ब्लॉग", "contact": "संपर्क", "login": "लॉगइन", "register": "पंजीकरण", "admin": "एडमिन", "profile": "प्रोफ़ाइल", "wishlist": "विشलिस्ट", "vault_empty": "कोई आइटम नहीं मिला" },
       "common": { "scroll": "स्क्रॉल" },
       "footer": {
         "explore": "अन्वेषण", "services": "सेवाएं", "boutique": "बुटिक", "house": "KIKS हाउस", "detect": "स्थान बदलें", "high_contrast": "कंट्रास्ट", "validate": "पुष्टि",
@@ -185,16 +185,16 @@ const resources = {
         "global_elite": "वैश्विक अभिजात वर्ग के हाथों में हमारी रचनाएँ।",
         "exclusive_parfums": "विशेष परफ्यूम",
         "experience_eternal": "शाश्वत सार का अनुभव करें",
-        "enter_vault": "तिजोरी में प्रवेश करें"
+        "enter_vault": "संग्रह देखें"
       },
-      "collection": { "not_found": "संग्रह नहीं मिला", "mastery": "हर स्वर में महारत", "open_vault": "तिजोरी खोलें", "view_composition": "रचना देखें" },
+      "collection": { "not_found": "संग्रह नहीं मिला", "mastery": "हर स्वर में महारत", "open_vault": "संग्रह देखें", "view_composition": "विवरण देखें" },
       "product": { "masterpiece": "घ्राण उत्कृष्ट कृति", "not_found": "उत्पाद नहीं मिला", "back_to": "वापस", "acquire": "सार प्राप्त करें", "info": "उत्पाद जानकारी", "description": "विवरण", "reviews": "समीक्षाएं" },
       "cart": { "your_bag": "आपका झोला", "empty": "आपका झोला खाली है", "subtotal": "कुल योग", "checkout": "चेकआउट" }
     }
   },
   zh: {
     translation: {
-      "nav": { "collections": "系列", "blog": "博客", "contact": "联系我们", "login": "登录", "register": "注册", "admin": "管理员", "profile": "个人资料", "wishlist": "心愿单", "vault_empty": "金库已空" },
+      "nav": { "collections": "系列", "blog": "博客", "contact": "联系我们", "login": "登录", "register": "注册", "admin": "管理员", "profile": "个人资料", "wishlist": "心愿单", "vault_empty": "未找到项目" },
       "common": { "scroll": "滚动" },
       "footer": {
         "explore": "探索 KIKS.COM", "services": "在线服务", "boutique": "精品店服务", "house": "KIKS 之家", "detect": "更改位置和语言", "high_contrast": "开启高对比度", "validate": "验证",
@@ -236,9 +236,9 @@ const resources = {
         "global_elite": "我们的作品掌握在全球精英手中。",
         "exclusive_parfums": "独家香水",
         "experience_eternal": "体验永恒的境界",
-        "enter_vault": "进入金库"
+        "enter_vault": "查看系列"
       },
-      "collection": { "not_found": "未找到系列", "mastery": "每一个音符都精通", "open_vault": "开启金库", "view_composition": "查看构成" },
+      "collection": { "not_found": "未找到系列", "mastery": "每一个音符都精通", "open_vault": "探索系列", "view_composition": "查看详情" },
       "product": { "masterpiece": "嗅觉杰作", "not_found": "产品未找到", "back_to": "返回", "acquire": "获取精华", "info": "产品信息", "description": "描述", "reviews": "评论" },
       "cart": { "your_bag": "您的购物袋", "empty": "您的购物袋是空的", "subtotal": "小计", "checkout": "结账" }
     }
@@ -287,9 +287,9 @@ const resources = {
         "global_elite": "Nuestras creaciones en manos de la élite mundial.",
         "exclusive_parfums": "Perfumes Exclusivos",
         "experience_eternal": "Experimenta la esencia eterna",
-        "enter_vault": "Entrar en la bóveda"
+        "enter_vault": "Ver Colección"
       },
-      "collection": { "not_found": "Colección no encontrada", "mastery": "Maestría en cada nota", "open_vault": "Abrir la bóveda", "view_composition": "Ver Composición" },
+      "collection": { "not_found": "Colección no encontrada", "mastery": "Maestría en cada nota", "open_vault": "Explorar Colección", "view_composition": "Ver Detalles" },
       "product": { "masterpiece": "Obra maestra olfativa", "not_found": "Producto no encontrado", "back_to": "Volver a", "acquire": "Adquirir Esencia", "info": "Información del producto", "description": "Descripción", "reviews": "Opiniones" },
       "cart": { "your_bag": "Tu Bolsa", "empty": "Tu bolsa está vacía", "subtotal": "Subtotal", "checkout": "Pagar" }
     }
@@ -338,9 +338,9 @@ const resources = {
         "global_elite": "Unsere Kreationen in den Händen der globalen Elite.",
         "exclusive_parfums": "Exklusive Parfums",
         "experience_eternal": "Erlebe die ewige Essenz",
-        "enter_vault": "Betritt das Gewölbe"
+        "enter_vault": "Kollektion ansehen"
       },
-      "collection": { "not_found": "Kollektion nicht gefunden", "mastery": "Meisterschaft in jeder Note", "open_vault": "Gewölbe öffnen", "view_composition": "Komposition ansehen" },
+      "collection": { "not_found": "Kollektion nicht gefunden", "mastery": "Meisterschaft in jeder Note", "open_vault": "Kollektion entdecken", "view_composition": "Details ansehen" },
       "product": { "masterpiece": "Olfaktorisches Meisterwerk", "not_found": "Produkt nicht gefunden", "back_to": "Zurück zu", "acquire": "Essenz erwerben", "info": "Produktinformationen", "description": "Beschreibung", "reviews": "Bewertungen" },
       "cart": { "your_bag": "Warenkorb", "empty": "Dein Warenkorb ist leer", "subtotal": "Zwischensumme", "checkout": "Zur Kasse" }
     }
@@ -389,9 +389,9 @@ const resources = {
         "global_elite": "Le nostre creazioni nelle mani dell'élite mondiale.",
         "exclusive_parfums": "Parfums Exclusifs",
         "experience_eternal": "Vivi l'essenza eterna",
-        "enter_vault": "Entra nel caveau"
+        "enter_vault": "Vedi collezione"
       },
-      "collection": { "not_found": "Collezione non trovata", "mastery": "Maestria in ogni nota", "open_vault": "Apri il caveau", "view_composition": "Vedi Composizione" },
+      "collection": { "not_found": "Collezione non trovata", "mastery": "Maestria in ogni nota", "open_vault": "Esplora collezione", "view_composition": "Vedi dettagli" },
       "product": { "masterpiece": "Capolavoro olfattivo", "not_found": "Prodotto non trovato", "back_to": "Torna a", "acquire": "Acquista Essenza", "info": "Informazioni prodotto", "description": "Descrizione", "reviews": "Recensioni" },
       "cart": { "your_bag": "Il tuo Sacco", "empty": "Il tuo sacco è vuoto", "subtotal": "Subtotale", "checkout": "Acquista" }
     }
@@ -440,9 +440,9 @@ const resources = {
         "global_elite": "Наши творения в руках мировой элиты.",
         "exclusive_parfums": "Эксклюзивные парфюмы",
         "experience_eternal": "Почувствуйте вечную сущность",
-        "enter_vault": "Войти в хранилище"
+        "enter_vault": "Посмотреть коллекцию"
       },
-      "collection": { "not_found": "Коллекция не найдена", "mastery": "Мастерство в каждой ноте", "open_vault": "Открыть хранилище", "view_composition": "Посмотреть состав" },
+      "collection": { "not_found": "Коллекция не найдена", "mastery": "Мастерство в каждой ноте", "open_vault": "Изучить коллекцию", "view_composition": "Посмотреть детали" },
       "product": { "masterpiece": "Ольфакторный шедевр", "not_found": "Товар не найден", "back_to": "Назад к", "acquire": "Приобрести эссенцию", "info": "Информация о продукте", "description": "Описание", "reviews": "Отзывы" },
       "cart": { "your_bag": "Ваша сумка", "empty": "Ваша сумка пуста", "subtotal": "Итого", "checkout": "Оформить" }
     }

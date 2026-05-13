@@ -476,7 +476,7 @@ Marketing Consent: Granted
             if (res.ok) {
                 setStatus('reset_sent');
             } else {
-                setErrorMessage(data.message || 'The vault was unable to process this request. Please verify your details.');
+                setErrorMessage(data.message || 'The system was unable to process this request. Please verify your details.');
             }
         } catch (err) {
             console.error(`[FRONTEND ERROR] Forgot password:`, err);
