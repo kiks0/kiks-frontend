@@ -3056,7 +3056,7 @@ v>
                       <div>
                         <h2 className="text-base md:text-lg tracking-[0.2em] uppercase text-black">Waitlist Manifest</h2>
                         <div className="flex flex-wrap items-center gap-3 md:gap-4 mt-1 md:mt-2">
-                          <p className="text-[9px] md:text-[10px] tracking-[0.2em] md:tracking-[0.3em] text-black/40 uppercase font-black">Managing prospective acquisitions</p>
+                          <p className="text-[9px] md:text-[10px] tracking-[0.2em] md:tracking-[0.3em] text-black/40 uppercase font-black">Waitlist Registry</p>
                           {callbackRequests.filter(e => (e.status || 'Pending').toLowerCase() === 'pending').length > 0 && (
                             <span className="bg-black text-white px-2 py-0.5 text-[8px] uppercase tracking-widest animate-pulse font-black">
                               {callbackRequests.filter(e => (e.status || 'Pending').toLowerCase() === 'pending').length} Priority Callbacks
@@ -3080,11 +3080,11 @@ v>
                           <thead className="bg-neutral-50 text-[9px] uppercase tracking-[0.3em] font-bold text-black/60 border-b border-black/10">
                             <tr>
                               <th className="p-6">Type</th>
-                              <th className="p-6">Client Identity</th>
+                              <th className="p-6">Client Name</th>
                               <th className="p-6">Contact Details</th>
-                              <th className="p-6">Request Interest</th>
+                              <th className="p-6">Requested Product</th>
                               <th className="p-6">Status</th>
-                              <th className="p-6 text-right">Management</th>
+                              <th className="p-6 text-right">Actions</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -3179,7 +3179,7 @@ v>
                                   <p className="text-[10px] mt-1 font-bold text-black">{entry.phone || 'N/A'}</p>
                                 </div>
                                 <div className="p-3 border bg-neutral-50 border-black/5">
-                                  <p className="text-[9px] uppercase tracking-widest mb-2 text-black/60  font-black">Interest</p>
+                                  <p className="text-[9px] uppercase tracking-widest mb-2 text-black/60  font-black">Requested Product</p>
                                   <p className="text-black font-bold uppercase tracking-widest text-[10px] font-black">{entry.product_name || 'Restock'}</p>
                                 </div>
                               </div>
