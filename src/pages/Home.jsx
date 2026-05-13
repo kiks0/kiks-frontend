@@ -33,12 +33,24 @@ const Home = () => {
   });
   const [galleryImages, setGalleryImages] = useState([]);
 
-  // High-Performance Mobile Stabilization
+  // Indestructible Mobile & Refresh Stabilization
   useEffect(() => {
+    if (history.scrollRestoration) {
+      history.scrollRestoration = 'manual';
+    }
+    
     ScrollTrigger.config({ 
-      ignoreMobileResize: false,
-      autoRefreshEvents: "visibilitychange,DOMContentLoaded,load,resize,scroll" 
+      ignoreMobileResize: true, // PREVENT JITTER ON ADDRESS BAR TOGGLE
+      limitCallbacks: true,
+      autoRefreshEvents: "visibilitychange,DOMContentLoaded,load,resize" 
     });
+
+    // Forced Refresh Sequence
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 500);
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Animations logic (Keeping GSAP/ScrollTrigger as they are part of the original design)
@@ -272,7 +284,7 @@ const Home = () => {
           end: "bottom bottom",
           scrub: true,
           pin: wrapper,
-          pinSpacing: true, // PREVENT OVERLAP
+          pinSpacing: true, // RESTORE STABILITY
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
@@ -281,19 +293,13 @@ const Home = () => {
       slides.forEach((slide, index) => {
         if (index === 0) return;
 
-        // Crossfade: Previous slide fades out while current fades in
-        tl.to(slides[index-1], {
-            autoAlpha: 0,
-            scale: 0.9,
-            duration: 0.5,
-            ease: "power2.inOut"
-        }, index - 0.2)
-        .to(slide, {
+        // Stealth Stack Reveal: Faithful to 'old thing' - fade in over previous essence
+        tl.to(slide, {
             autoAlpha: 1,
             scale: 1,
             duration: 1,
             ease: "power2.inOut"
-        }, index - 0.1);
+        }, index);
       });
 
       return () => {
