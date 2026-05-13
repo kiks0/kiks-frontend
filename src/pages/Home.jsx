@@ -364,8 +364,10 @@ const Home = () => {
             transition={{ duration: 1.5, ease: "easeOut" }}
             className="flex flex-col items-center"
           >
-            <h1 className="text-5xl md:text-8xl font-serif tracking-[0.2em] text-white uppercase mb-8 drop-shadow-2xl">
-              KIKS
+            <h1 className="text-5xl md:text-8xl font-serif tracking-[0.2em] text-white uppercase mb-8">
+              {['K', 'I', 'K', 'S'].map((char, index) => (
+                <span key={index} className="inline-block">{char}</span>
+              ))}
             </h1>
             
             <div className="max-w-2xl">
@@ -655,7 +657,7 @@ const Home = () => {
               className="relative block aspect-[3/4] overflow-hidden border border-black/10 p-2 bg-black/[0.02]"
             >
               <img
-                src="https://res.cloudinary.com/dprxiz6os/image/upload/v1778344390/kiks_general/kiks-1778344377590-672029241_lbuygk.png"
+                src="https://res.cloudinary.com/dprxiz6os/image/upload/v1778429911/kiks_general/kiks-1778429909414-168768629_meinpk.png"
                 loading="lazy"
                 width="600"
                 height="800"
