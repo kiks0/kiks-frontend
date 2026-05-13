@@ -61,7 +61,7 @@ const PersonalDetails = () => {
     const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
 
     const [formData, setFormData] = useState({
-        title: user?.title || 'Mr',
+        title: user?.title || '',
         firstName: user?.first_name || '',
         lastName: user?.last_name || '',
         dobDay: user?.dob_day?.toString() || '',
@@ -113,7 +113,7 @@ const PersonalDetails = () => {
                 if (res.ok) {
                     const data = await res.json();
                     setFormData({
-                        title: data.title || 'Mr',
+                        title: data.title || '',
                         firstName: data.first_name || '',
                         lastName: data.last_name || '',
                         dobDay: data.dob_day?.toString() || '',
@@ -396,6 +396,7 @@ const PersonalDetails = () => {
                                     value={formData.title}
                                     onChange={(e) => setFormData({...formData, title: e.target.value})}
                                 >
+                                    <option className="bg-white" value="">Select Title (Optional)</option>
                                     <option className="bg-white" value="Mr">Mr</option>
                                     <option className="bg-white" value="Ms">Ms</option>
                                     <option className="bg-white" value="Mrs">Mrs</option>

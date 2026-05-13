@@ -199,7 +199,7 @@ const Auth = ({ isRegisterInitial = false }) => {
     // Form data with the extended fields from the luxury reference
     const [formData, setFormData] = useState({
         email: '',
-        title: 'Title',
+        title: '',
         firstName: '',
         lastName: '',
         countryCode: '', // Will be set by useEffect
@@ -869,7 +869,7 @@ Marketing Consent: Granted
                                                     value={formData.title}
                                                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                                                 >
-                                                    <option className="bg-white text-black" value="Title">Title</option>
+                                                    <option className="bg-white text-black" value="">Select Title (Optional)</option>
                                                     <option className="bg-white text-black" value="Mr">Mr</option>
                                                     <option className="bg-white text-black" value="Mrs">Mrs</option>
                                                     <option className="bg-white text-black" value="Miss">Miss</option>
