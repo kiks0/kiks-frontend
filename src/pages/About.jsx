@@ -4,10 +4,10 @@ import { Zap, Globe, Shield, Wind, Droplets, Sparkles } from 'lucide-react';
 
 const About = () => {
     return (
-        <div className="bg-white min-h-screen text-black pt-[100px] md:pt-[180px] pb-20 md:pb-40 px-5 md:px-12 font-sans overflow-hidden selection:bg-black selection:text-white">
+        <div className="bg-white min-h-screen text-black pt-28 md:pt-32 pb-20 md:pb-32 px-5 md:px-12 font-sans overflow-hidden selection:bg-black selection:text-white">
             
             {/* HERO: THE MAISON SECTION */}
-            <section className="container mx-auto max-w-7xl relative mb-24 md:mb-60">
+            <section className="container mx-auto max-w-7xl relative mb-20 md:mb-32">
                 <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-24 relative">
                     
                     {/* Floating Brand Label - Fixed Positioning */}
@@ -93,7 +93,7 @@ const About = () => {
             </section>
 
             {/* PHILOSOPHY: THE THREE PILLARS (EDITORIAL GRID) */}
-            <section className="container mx-auto max-w-7xl mb-24 md:mb-60">
+            <section className="container mx-auto max-w-7xl mb-24 md:mb-32">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center">
                     <div className="lg:col-span-4 border-l border-black/10 pl-8 md:pl-12 py-6 md:py-10">
                         <h2 className="text-3xl md:text-5xl font-serif tracking-tight mb-6 md:mb-8">The Pillars <br /> of Excellence</h2>
@@ -120,7 +120,7 @@ const About = () => {
             </section>
 
             {/* ARTISTRY SECTION: IMAGE HEAVY EDITORIAL */}
-            <section className="bg-zinc-50 py-24 md:py-60 mb-24 md:mb-60">
+            <section className="bg-zinc-50 py-24 md:py-32 mb-24 md:mb-32">
                 <div className="container mx-auto max-w-7xl px-5">
                     <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-center">
                          <motion.div 
@@ -163,7 +163,7 @@ const About = () => {
             </section>
 
             {/* FINAL LUXURY CALLOUT */}
-            <section className="container mx-auto max-w-5xl text-center py-20 md:py-40">
+            <section className="container mx-auto max-w-5xl text-center py-20 md:py-24">
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
