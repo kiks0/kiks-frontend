@@ -91,8 +91,9 @@ const Security = () => {
         setUpdatingPass(true);
         setPassStatus({ type: '', msg: '' });
 
-        if (passForm.newPassword.length < 8) {
-            setPassStatus({ type: 'error', msg: 'New password must be at least 8 characters.' });
+        const passwordRegex = /^(?=.*[A-Z]).{8,}$/;
+        if (!passwordRegex.test(passForm.newPassword)) {
+            setPassStatus({ type: 'error', msg: 'Min 8 characters and at least one uppercase letter required.' });
             setUpdatingPass(false);
             return;
         }
@@ -283,7 +284,7 @@ const Security = () => {
                                         </button>
                                     </div>
                                     <p className="text-[9px] text-black/20 leading-relaxed max-w-xs uppercase tracking-wider">
-                                        Min 8 characters • Uppercase • Lowercase • Numbers
+                                        Min 8 characters • At least one uppercase letter
                                     </p>
                                 </div>
                             </div>

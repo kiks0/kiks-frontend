@@ -254,6 +254,13 @@ const Auth = ({ isRegisterInitial = false }) => {
             errors.email = 'Invalid email';
         }
 
+        // Password complexity validation
+        const passwordRegex = /^(?=.*[A-Z]).{8,}$/;
+        if (isRegister && formData.password && !passwordRegex.test(formData.password)) {
+            errors.password = 'Min 8 chars, 1 uppercase letter';
+            setErrorMessage('Password must be at least 8 characters long and contain at least one uppercase letter.');
+        }
+
         setFieldErrors(errors);
 
         if (Object.keys(errors).length > 0) {
@@ -481,6 +488,14 @@ Marketing Consent: Granted
 
     const handleResetPassword = async (e) => {
         e.preventDefault();
+        
+        // Password complexity validation
+        const passwordRegex = /^(?=.*[A-Z]).{8,}$/;
+        if (!passwordRegex.test(newPassword)) {
+            setErrorMessage('Password must be at least 8 characters long and contain at least one uppercase letter.');
+            return;
+        }
+
         if (newPassword !== confirmPassword) {
             setErrorMessage('Passwords do not match.');
             return;
