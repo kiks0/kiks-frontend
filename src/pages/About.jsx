@@ -4,10 +4,10 @@ import { Zap, Globe, Shield, Wind, Droplets, Sparkles } from 'lucide-react';
 
 const About = () => {
     return (
-        <div className="bg-white min-h-screen text-black pt-28 md:pt-32 pb-20 md:pb-32 px-5 md:px-12 font-sans overflow-hidden selection:bg-black selection:text-white">
+        <div className="bg-white min-h-screen text-black pt-20 md:pt-32 pb-20 md:pb-32 px-5 md:px-12 font-sans overflow-hidden selection:bg-black selection:text-white">
             
-            {/* HERO: THE MAISON SECTION */}
-            <section className="container mx-auto max-w-7xl relative mb-20 md:mb-32">
+            {/* HERO: THE BRAND SECTION */}
+            <section className="container mx-auto max-w-7xl relative mb-12 md:mb-32">
                 <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-24 relative">
                     
                     {/* Floating Brand Label - Fixed Positioning */}
@@ -29,7 +29,7 @@ const About = () => {
                                 transition: { duration: 0.4, ease: "easeOut" }
                             }}
                             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                            className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-serif leading-[1.2] md:leading-[0.95] tracking-tight mt-12 md:mt-20 mb-8 md:mb-16 italic-serif"
+                            className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-serif leading-[1.2] md:leading-[0.95] tracking-tight mt-6 md:mt-20 mb-6 md:mb-16 italic-serif"
                         >
                             Defining <br className="hidden md:block" />
                             <span className="text-gold-600">The New</span> <br className="hidden md:block" />
@@ -43,7 +43,7 @@ const About = () => {
                             transition={{ delay: 1 }}
                             className="text-black/60 text-sm md:text-lg leading-[1.8] font-normal max-w-lg mb-10 md:mb-0"
                         >
-                            KIKS is an independent perfume Maison born from a singular obsession: to create fragrances that don't just linger, but command the space around them.
+                            KIKS is an independent perfume brand born from a singular obsession: to create fragrances that don't just linger, but command the space around them.
                         </motion.p>
                     </div>
 
@@ -79,7 +79,7 @@ const About = () => {
             </section>
 
             {/* PHILOSOPHY: THE THREE PILLARS (EDITORIAL GRID) */}
-            <section className="container mx-auto max-w-7xl mb-24 md:mb-32">
+            <section className="container mx-auto max-w-7xl mb-12 md:mb-32">
                 <div className="grid grid-cols-1 2xl:grid-cols-12 gap-12 lg:gap-24 items-center">
                     <div className="2xl:col-span-6 border-l border-black/10 pl-8 md:pl-12 py-6 md:py-10">
                         <h2 className="text-[26px] xs:text-3xl md:text-5xl font-serif tracking-tighter md:tracking-tight mb-6 md:mb-8 leading-[1.1] break-words">Our <br /> Standards</h2>
@@ -106,7 +106,7 @@ const About = () => {
             </section>
 
             {/* ARTISTRY SECTION: IMAGE HEAVY EDITORIAL */}
-            <section className="bg-zinc-50 py-24 md:py-32 mb-24 md:mb-32">
+            <section className="bg-zinc-50 py-12 md:py-32 mb-12 md:mb-32">
                 <div className="container mx-auto max-w-7xl px-5">
                     <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-center">
                          <motion.div 

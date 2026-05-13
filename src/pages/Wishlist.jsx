@@ -23,14 +23,21 @@ const Wishlist = () => {
   }, [isAuthenticated, dispatch]);
 
   const [addedId, setAddedId] = useState(null);
+  const [notification, setNotification] = useState({ show: false, message: '', type: 'success' });
+
+  const showNotification = (message, type = 'success') => {
+    setNotification({ show: true, message, type });
+    setTimeout(() => setNotification({ show: false, message: '', type: 'success' }), 3000);
+  };
 
   const handleAddToCart = (product) => {
     if (!isAuthenticated) {
-      dispatch(openWishlistAuthPopup('cart'));
+      dispatch(openAuthModal());
       return;
     }
     dispatch(addToCart({ ...product, quantity: 1 }));
     setAddedId(product.id);
+    showNotification(`${product.name} added to bag.`);
     setTimeout(() => setAddedId(null), 2000);
   };
 
@@ -45,9 +52,7 @@ const Wishlist = () => {
               <ArrowLeft size={14} className="mr-3 group-hover:-translate-x-1 transition-transform" /> BACK TO ACCOUNT
             </Link>
           </motion.div>
-          <p className="text-[10px] md:text-[11px] tracking-[0.4em] font-medium uppercase mb-4 opacity-50 text-black/40">Private Selection</p>
-          <h1 className="text-3xl md:text-5xl font-serif tracking-[0.15em] uppercase text-black mb-6">Wishlist</h1>
-          <div className="w-16 h-[1px] bg-gold-500/50"></div>
+          <h1 className="text-3xl md:text-5xl font-serif tracking-[0.15em] uppercase text-black mb-8">Wishlist</h1>
         </header>
 
         <AnimatePresence mode="popLayout">
@@ -98,13 +103,13 @@ const Wishlist = () => {
                       />
                     </Link>
                     
-                    {/* Hover Overlay Actions (Desktop Only) */}
-                    <div className="hidden md:flex absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 items-center justify-center pointer-events-none group-hover:pointer-events-auto">
+                    {/* Hover Overlay Actions (Desktop Only) - Re-engineered for Absolute Readability */}
+                    <div className="hidden md:flex absolute inset-x-0 bottom-0 bg-white/90 backdrop-blur-md opacity-0 group-hover:opacity-100 translate-y-full group-hover:translate-y-0 transition-all duration-500 items-center justify-center pointer-events-none group-hover:pointer-events-auto p-4 border-t border-black/5 z-20">
                         <button 
                           onClick={() => handleAddToCart(product)}
-                          className={`px-8 py-3 border border-black text-[10px] tracking-[0.2em] font-bold uppercase transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 flex items-center gap-2 pointer-events-auto ${addedId === product.id ? 'bg-black text-white' : 'bg-transparent text-black hover:bg-black hover:text-white'}`}
+                          className={`w-full py-3 text-[10px] tracking-[0.2em] font-black uppercase transition-all duration-500 flex items-center justify-center gap-2 pointer-events-auto ${addedId === product.id ? 'bg-gold-600 text-white border border-gold-600' : 'bg-black text-white border border-black hover:bg-black/80'}`}
                         >
-                           {addedId === product.id ? <><Check size={14} /> ADDED</> : 'ADD TO BAG'}
+                           {addedId === product.id ? <><Check size={14} strokeWidth={3} /> ADDED</> : 'ADD TO BAG'}
                         </button>
                     </div>
                   </div>
@@ -137,15 +142,42 @@ const Wishlist = () => {
                     {/* Mobile Only Add to Bag Button */}
                     <button 
                       onClick={() => handleAddToCart(product)}
-                      className={`md:hidden w-full py-4 text-[10px] tracking-[0.2em] font-bold uppercase flex items-center justify-center gap-2 transition-all duration-300 border border-black ${addedId === product.id ? 'bg-black text-white' : 'bg-transparent text-black hover:bg-black hover:text-white'}`}
+                      className={`md:hidden w-full py-4 text-[10px] tracking-[0.2em] font-black uppercase flex items-center justify-center gap-2 transition-all duration-300 border border-black ${addedId === product.id ? 'bg-gold-600 text-white border-gold-600' : 'bg-black text-white hover:bg-black/90'}`}
                     >
-                        {addedId === product.id ? <><Check size={14} /> ADDED TO BAG</> : <><ShoppingBag size={14} /> ADD TO BAG</>}
+                        {addedId === product.id ? <><Check size={14} strokeWidth={3} /> ADDED TO BAG</> : <><ShoppingBag size={14} /> ADD TO BAG</>}
                     </button>
                   </div>
                 </motion.div>
               ))}
             </div>
           )}
+        </AnimatePresence>
+        
+        {/* LUXURY TOAST NOTIFICATION - REDESIGNED FOR ELEGANCE & RESPONSIVENESS */}
+        <AnimatePresence>
+            {notification.show && (
+                <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    className="fixed bottom-10 md:bottom-12 left-1/2 -translate-x-1/2 z-[1000000] w-[90%] max-w-[400px]"
+                >
+                    <div className="bg-white/95 backdrop-blur-2xl border border-black/10 px-6 py-4 shadow-[0_20px_50px_rgba(0,0,0,0.1)] flex items-center justify-between group">
+                        <div className="flex items-center space-x-5">
+                            <div className="w-1 h-1 bg-black rounded-full flex-shrink-0" />
+                            <span className="text-[9px] tracking-[0.4em] uppercase font-bold text-black leading-relaxed">
+                                {notification.message}
+                            </span>
+                        </div>
+                        <button 
+                            onClick={() => setNotification({ ...notification, show: false })} 
+                            className="text-black/20 hover:text-black transition-all duration-300"
+                        >
+                            <X size={14} strokeWidth={1.5} />
+                        </button>
+                    </div>
+                </motion.div>
+            )}
         </AnimatePresence>
 
       </div>

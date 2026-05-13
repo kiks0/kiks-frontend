@@ -347,7 +347,7 @@ const Account = () => {
                         <div className="flex flex-col space-y-4">
                           <input 
                             type="tel"
-                            placeholder="+91 00000 00000"
+                            placeholder="+91"
                             value={callbackPhone}
                             onChange={(e) => {
                               const val = e.target.value.replace(/\D/g, '').slice(0, 10);
@@ -379,7 +379,7 @@ const Account = () => {
                                 setCallbackStatus('idle');
                               }
                             }}
-                            className="w-full bg-white text-black py-4 text-[10px] tracking-[0.4em] uppercase font-bold hover:bg-black hover:text-white border border-black transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                            className="w-full bg-black text-white py-4 text-[10px] tracking-[0.4em] uppercase font-black hover:bg-black/90 border border-black transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-xl"
                           >
                             {callbackStatus === 'loading' ? 'Processing...' : 'Confirm Request'}
                           </button>

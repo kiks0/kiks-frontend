@@ -1108,7 +1108,7 @@ const Checkout = () => {
                                             setFormData({ ...formData, paymentMethod: 'Partial COD (30% Prepaid)' });
                                             setShowPartialCodPopup(false);
                                         }}
-                                        className="w-full h-16 border border-black text-black text-[11px] font-bold tracking-[0.5em] uppercase hover:bg-black hover:text-white transition-all"
+                                        className="w-full h-16 bg-black text-white text-[11px] font-black tracking-[0.5em] uppercase border border-black hover:bg-black/90 transition-all shadow-xl"
                                     >
                                         I Understand & Accept
                                     </button>

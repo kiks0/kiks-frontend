@@ -649,7 +649,7 @@ Marketing Consent: Granted
                                 </h2>
 
                                 <p className="text-neutral-500 text-[10px] tracking-[0.4em] uppercase mb-12">
-                                    Your Maison KIKS portal is now fully active.
+                                    Your account is now fully active.
                                 </p>
 
                                 <button
