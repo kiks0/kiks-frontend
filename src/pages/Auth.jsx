@@ -570,14 +570,14 @@ Marketing Consent: Granted
         onError: () => setErrorMessage('Google Login was cancelled or failed.'),
     });
 
-    const inputClasses = "w-full bg-transparent border-b border-black/10 py-4 text-[15px] text-black focus:outline-none focus:border-black transition-all font-light tracking-widest placeholder:text-black/20 appearance-none";
+    const inputClasses = "w-full bg-transparent border-b border-black/10 py-3 md:py-4 text-[15px] text-black focus:outline-none focus:border-black transition-all font-light tracking-widest placeholder:text-black/20 appearance-none";
     const labelClasses = "text-[11px] tracking-[0.2em] font-bold text-black/50 uppercase block mb-1 mt-4";
 
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     return (
-        <div className="bg-white min-h-screen text-black pt-24 md:pt-40 pb-12 md:pb-20 font-sans selection:bg-black/10 selection:text-black relative z-0">
+        <div className="bg-white min-h-screen text-black pt-16 md:pt-40 pb-12 md:pb-20 font-sans selection:bg-black/10 selection:text-black relative z-0">
 
             {/* Ambient Background */}
             <div className="absolute top-[20%] right-[-10%] w-[800px] h-[800px] bg-black/5 blur-[150px] rounded-full pointer-events-none" />
@@ -824,7 +824,7 @@ Marketing Consent: Granted
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}
                             >
-                                <div className="text-center mb-6">
+                                <div className="text-center mb-12 md:mb-20">
                                     <h1 className="text-3xl md:text-4xl font-serif tracking-[0.1em] uppercase font-light text-black">
                                         {isRegister ? 'User Registry' : 'User Login'}
                                     </h1>
@@ -843,7 +843,7 @@ Marketing Consent: Granted
                                     )}
                                 </div>
 
-                                <form onSubmit={handleSubmit} className="space-y-4">
+                                <form onSubmit={handleSubmit} className="space-y-8 md:space-y-12">
 
                                     {/* Email Field */}
                                     <div className="relative">
@@ -1056,9 +1056,9 @@ Marketing Consent: Granted
                                     )}
 
                                     {/* Action Button */}
-                                    <div className="pt-12">
+                                    <div className="pt-8 md:pt-12">
                                         <button
-                                            className="w-full h-16 bg-black text-white text-[13px] font-black tracking-[0.4em] uppercase hover:bg-black/90 transition-all duration-700 shadow-xl relative overflow-hidden group"
+                                            className="w-full h-14 md:h-16 bg-black text-white text-[13px] font-black tracking-[0.4em] uppercase hover:bg-black/90 transition-all duration-700 shadow-xl relative overflow-hidden group"
                                         >
                                             <span className="relative z-10 flex items-center justify-center">
                                                 {isRegister ? 'Complete Registry' : 'Access Profile'}
@@ -1079,7 +1079,7 @@ Marketing Consent: Granted
                                 </form>
 
                                 {/* Social Login Separator */}
-                                <div className="relative flex items-center justify-center my-12">
+                                <div className="relative flex items-center justify-center my-8 md:my-12">
                                     <div className="absolute inset-0 flex items-center">
                                         <div className="w-full border-t border-black/5"></div>
                                     </div>
