@@ -94,15 +94,15 @@ const About = () => {
 
             {/* PHILOSOPHY: THE THREE PILLARS (EDITORIAL GRID) */}
             <section className="container mx-auto max-w-7xl mb-24 md:mb-32">
-                <div className="grid grid-cols-1 xl:grid-cols-12 gap-12 lg:gap-24 items-center">
-                    <div className="xl:col-span-5 border-l border-black/10 pl-8 md:pl-12 py-6 md:py-10">
-                        <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif tracking-tight mb-6 md:mb-8 leading-[1.1]">The Pillars <br /> of Excellence</h2>
+                <div className="grid grid-cols-1 2xl:grid-cols-12 gap-12 lg:gap-24 items-center">
+                    <div className="2xl:col-span-6 border-l border-black/10 pl-8 md:pl-12 py-6 md:py-10">
+                        <h2 className="text-3xl md:text-5xl font-serif tracking-tight mb-6 md:mb-8 leading-[1.1]">The Pillars <br /> of Excellence</h2>
                         <p className="text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-black/40 font-bold leading-loose max-w-sm">
                             Every bottle is a testament to our commitment to artisanal integrity and technical mastery.
                         </p>
                     </div>
                     
-                    <div className="xl:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-px bg-black/10 border border-black/10 overflow-hidden shadow-2xl">
+                    <div className="2xl:col-span-6 grid grid-cols-1 md:grid-cols-2 gap-px bg-black/10 border border-black/10 overflow-hidden shadow-2xl">
                         {[
                             { title: "Pure Concentration", desc: "Our extraits de parfum contain over 30% fragrance oils, ensuring a presence that lasts well into the night." },
                             { title: "Rare Sourcing", desc: "We travel from the iris fields of Tuscany to the oud forests of Assam to find nature's most elusive treasures." },
