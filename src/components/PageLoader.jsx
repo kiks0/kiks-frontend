@@ -11,7 +11,7 @@ const PageLoader = ({ fullScreen = false }) => {
             animate={{ opacity: 1 }}
             exit={{
                 opacity: 0,
-                transition: { duration: 1.2, ease: [0.43, 0.13, 0.23, 0.96] }
+                transition: { duration: 0.4, ease: "easeOut" }
             }}
             className={containerClasses}
         >

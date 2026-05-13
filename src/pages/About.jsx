@@ -32,11 +32,15 @@ const About = () => {
                         <motion.h1 
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
+                            exit={{
+                                opacity: 0,
+                                transition: { duration: 0.4, ease: "easeOut" }
+                            }}
                             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                            className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif leading-[1.1] md:leading-[0.95] tracking-tight mb-8 md:mb-16 italic-serif"
+                            className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-serif leading-[1.2] md:leading-[0.95] tracking-tight mb-8 md:mb-16 italic-serif"
                         >
-                            Defining <br />
-                            <span className="text-gold-600">The New</span> <br />
+                            Defining <br className="hidden md:block" />
+                            <span className="text-gold-600">The New</span> <br className="hidden md:block" />
                             Presence
                         </motion.h1>
 
@@ -77,11 +81,11 @@ const About = () => {
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5, duration: 1 }}
-                            className="absolute -bottom-6 -left-4 md:-bottom-10 md:-left-20 bg-white p-8 md:p-12 border border-black/5 shadow-2xl max-w-[280px] md:max-w-xs z-20"
+                            className="absolute -bottom-10 left-1/2 -translate-x-1/2 md:translate-x-0 md:-bottom-10 md:-left-20 bg-white p-6 md:p-12 border border-black/5 shadow-2xl w-[90%] md:max-w-xs z-20"
                         >
                              <h4 className="text-[10px] tracking-[0.4em] font-black uppercase mb-4 text-gold-600">Our Manifesto</h4>
-                             <p className="text-[11px] md:text-[12px] leading-loose tracking-widest text-black/60 uppercase italic">
-                                "We do not craft perfumes for the masses. We craft them for the individual who seeks to be unforgettable."
+                             <p className="text-[10px] md:text-[12px] leading-loose tracking-widest text-black/60 uppercase italic">
+                                 "We do not craft perfumes for the masses. We craft them for the individual who seeks to be unforgettable."
                              </p>
                         </motion.div>
                     </div>
@@ -98,17 +102,17 @@ const About = () => {
                         </p>
                     </div>
                     
-                    <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-px bg-black/5 border border-black/5 overflow-hidden shadow-xl">
+                    <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-px bg-black/10 border border-black/10 overflow-hidden shadow-2xl">
                         {[
                             { title: "Pure Concentration", desc: "Our extraits de parfum contain over 30% fragrance oils, ensuring a presence that lasts well into the night." },
                             { title: "Rare Sourcing", desc: "We travel from the iris fields of Tuscany to the oud forests of Assam to find nature's most elusive treasures." },
                             { title: "Small Batch", desc: "We limit our production to maintain the soul of each blend, ensuring your signature scent remains exclusive." },
                             { title: "Sustainably Crafted", desc: "Our commitment to the future is as deep as our scents. Ethical sourcing and conscious packaging define our path." }
                         ].map((pillar, i) => (
-                            <div key={i} className="bg-white p-8 md:p-12 hover:bg-zinc-50 transition-colors group">
-                                <div className="text-[8px] md:text-[9px] text-gold-600 font-black tracking-widest mb-4 md:mb-6 block uppercase">0{i+1} —</div>
-                                <h3 className="text-base md:text-lg font-serif tracking-widest uppercase mb-4 md:mb-6 group-hover:text-gold-700 transition-colors">{pillar.title}</h3>
-                                <p className="text-[10px] md:text-[11px] tracking-widest text-black/50 leading-loose uppercase font-medium">{pillar.desc}</p>
+                            <div key={i} className="bg-white p-10 md:p-16 hover:bg-zinc-50 transition-all duration-700 group border-b md:border-b-0 border-black/5 last:border-0">
+                                <div className="text-[9px] text-gold-600 font-black tracking-widest mb-6 block uppercase">0{i+1} —</div>
+                                <h3 className="text-lg md:text-xl font-serif tracking-widest uppercase mb-6 group-hover:text-gold-700 transition-colors leading-relaxed">{pillar.title}</h3>
+                                <p className="text-[11px] md:text-[12px] tracking-widest text-black/50 leading-relaxed uppercase font-medium">{pillar.desc}</p>
                             </div>
                         ))}
                     </div>
