@@ -733,7 +733,7 @@ const Home = () => {
                   {t('home.house_kiks')}
                 </h2>
                 <p className="text-black/70 text-sm md:text-base leading-relaxed max-w-2xl mx-auto tracking-widest font-light">
-                  {t('home.global_elite')}
+                  Our community around the world.
                 </p>
             </div>
 

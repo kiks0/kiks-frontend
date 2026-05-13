@@ -111,9 +111,9 @@ const Collection = () => {
     if (!collection) {
         return (
             <div className="bg-white min-h-screen flex flex-col items-center justify-center text-black px-6 text-center">
-                <h2 className="font-serif text-3xl md:text-5xl tracking-[0.2em] uppercase mb-8">Selection Reserved</h2>
-                <p className="text-[10px] tracking-[0.4em] uppercase text-black/40 mb-12">This essence collection is currently being curated in our vault.</p>
-                <Link to="/" className="text-[10px] tracking-[0.5em] font-black uppercase border-b border-black/20 pb-2 hover:border-black transition-all">Return to Palace</Link>
+                <h2 className="font-serif text-3xl md:text-5xl tracking-[0.2em] uppercase mb-8">Coming Soon</h2>
+                <p className="text-[10px] tracking-[0.4em] uppercase text-black/40 mb-12">We are currently preparing this collection.</p>
+                <Link to="/" className="text-[10px] tracking-[0.5em] font-black uppercase border-b border-black/20 pb-2 hover:border-black transition-all">Back to Home</Link>
             </div>
         );
     }
@@ -210,7 +210,7 @@ const Collection = () => {
                                     {collection?.name}
                                 </h2>
                                 <p className="text-black/40 text-[10px] tracking-[0.4em] md:tracking-[0.6em] uppercase mt-4 md:mt-6 max-w-md leading-relaxed">
-                                    A curated selection of {(collection?.name || '').toLowerCase()} essences.
+                                    Explore our {(collection?.name || '').toLowerCase()} collection.
                                 </p>
                             </div>
 
