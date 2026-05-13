@@ -81,8 +81,13 @@ const ProductDetail = () => {
 
     // Accordion visibility states
     const [isDescriptionOpen, setIsDescriptionOpen] = useState(true);
-    const [isReviewsOpen, setIsReviewsOpen] = useState(false);
     const [isAdditionalOpen, setIsAdditionalOpen] = useState(false);
+    const [isReviewsOpen, setIsReviewsOpen] = useState(false);
+    
+    // Verified Review Eligibility
+    const [canReview, setCanReview] = useState(false);
+    const [reviewEligibilityReason, setReviewEligibilityReason] = useState(null); // 'purchase_required', 'already_reviewed'
+    const [checkingEligibility, setCheckingEligibility] = useState(false);
 
     // Scroll Refs
     const descriptionRef = useRef(null);
@@ -115,6 +120,18 @@ const ProductDetail = () => {
                     const revRes = await fetch(`${API_URL}/api/reviews/product/${data.id}`);
                     const revData = await revRes.json();
                     setReviews(revData);
+
+                    // Verified Review Eligibility
+                    if (isAuthenticated) {
+                        const eligRes = await fetch(`${API_URL}/api/reviews/check/${data.id}`, {
+                            headers: { 'Authorization': `Bearer ${localStorage.getItem('kiks_token')}` }
+                        });
+                        if (eligRes.ok) {
+                            const eligData = await eligRes.json();
+                            setCanReview(eligData.canReview);
+                            setReviewEligibilityReason(eligData.reason);
+                        }
+                    }
                 }
 
                 // Initialize Gallery
@@ -737,97 +754,110 @@ const ProductDetail = () => {
                         }
                     >
                         <div className="space-y-16">
-                            {/* REVIEW SUBMISSION FORM */}
+                            {/* REVIEW SUBMISSION FORM - SECURED BY VERIFIED PURCHASE PROTOCOL */}
                             {isAuthenticated ? (
-                                <div className="mb-20 bg-black/[0.02] p-5 md:p-10 border border-black/5">
-                                    <h4 className="text-[10px] md:text-[11px] tracking-[0.2em] md:tracking-[0.4em] font-black uppercase text-black mb-8 md:mb-10">{t('product.share_critique')}</h4>
-                                    <form onSubmit={handleAddReview} className="space-y-6 md:space-y-8">
-                                        <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 mb-6">
-                                            <p className="text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/40">{t('product.rating')}</p>
-                                            <div className="flex space-x-2 md:space-x-3">
-                                                {[1, 2, 3, 4, 5].map(star => (
-                                                    <button
-                                                        key={star}
-                                                        type="button"
-                                                        onClick={() => setReviewForm({ ...reviewForm, rating: star })}
-                                                        className={`transition-all duration-300 ${star <= reviewForm.rating ? 'text-black' : 'text-black/20 hover:text-black/40'}`}
-                                                    >
-                                                        <Star
-                                                            className="w-4 h-4 md:w-5 md:h-5"
-                                                            fill={star <= reviewForm.rating ? "black" : "none"}
-                                                            stroke="currentColor"
-                                                            strokeWidth={1.5}
-                                                        />
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                        <input
-                                            placeholder={t('product.headline')}
-                                            required
-                                            className="w-full bg-transparent border-b border-black/10 py-4 text-xs tracking-widest focus:border-black outline-none transition-colors text-black"
-                                            value={reviewForm.title}
-                                            onChange={e => setReviewForm({ ...reviewForm, title: e.target.value })}
-                                        />
-                                        <textarea
-                                            placeholder={t('product.experience_placeholder')}
-                                            required
-                                            className="w-full bg-transparent border border-black/10 p-5 text-xs tracking-widest leading-relaxed focus:border-black outline-none h-32 transition-colors text-black"
-                                            value={reviewForm.comment}
-                                            onChange={e => setReviewForm({ ...reviewForm, comment: e.target.value })}
-                                        />
-
-                                        {/* Image Upload */}
-                                        <div className="space-y-8 md:space-y-20">
-                                            <p className="text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-black/40">Visual Verification</p>
-                                            <div className="flex flex-wrap gap-4 md:gap-6">
-                                                {selectedImages.map((file, idx) => (
-                                                    <div key={idx} className="relative w-24 h-24 border border-black/10 p-1">
-                                                        <img src={URL.createObjectURL(file)} alt="preview" className="w-full h-full object-cover" />
+                                canReview ? (
+                                    <div className="mb-20 bg-black/[0.02] p-5 md:p-10 border border-black/5">
+                                        <h4 className="text-[10px] md:text-[11px] tracking-[0.2em] md:tracking-[0.4em] font-black uppercase text-black mb-8 md:mb-10">{t('product.share_critique')}</h4>
+                                        <form onSubmit={handleAddReview} className="space-y-6 md:space-y-8">
+                                            <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 mb-6">
+                                                <p className="text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/40">{t('product.rating')}</p>
+                                                <div className="flex space-x-2 md:space-x-3">
+                                                    {[1, 2, 3, 4, 5].map(star => (
                                                         <button
-                                                            onClick={() => setSelectedImages(selectedImages.filter((_, i) => i !== idx))}
-                                                            className="absolute -top-2 -right-2 bg-black text-white rounded-full p-1 shadow-xl"
+                                                            key={star}
+                                                            type="button"
+                                                            onClick={() => setReviewForm({ ...reviewForm, rating: star })}
+                                                            className={`transition-all duration-300 ${star <= reviewForm.rating ? 'text-black' : 'text-black/20 hover:text-black/40'}`}
                                                         >
-                                                            <X size={10} />
+                                                            <Star
+                                                                className="w-4 h-4 md:w-5 md:h-5"
+                                                                fill={star <= reviewForm.rating ? "black" : "none"}
+                                                                stroke="currentColor"
+                                                                strokeWidth={1.5}
+                                                            />
                                                         </button>
-                                                    </div>
-                                                ))}
-                                                <label className="w-24 h-24 border border-black/10 flex flex-col items-center justify-center cursor-pointer hover:bg-black/5 transition-all">
-                                                    <Camera size={24} className="text-black/20" strokeWidth={1.5} />
-                                                    <input
-                                                        type="file"
-                                                        multiple
-                                                        accept="image/*"
-                                                        className="hidden"
-                                                        onChange={(e) => setSelectedImages([...selectedImages, ...Array.from(e.target.files)])}
-                                                    />
-                                                </label>
+                                                    ))}
+                                                </div>
                                             </div>
-                                        </div>
+                                            <input
+                                                placeholder={t('product.headline')}
+                                                required
+                                                className="w-full bg-transparent border-b border-black/10 py-4 text-xs tracking-widest focus:border-black outline-none transition-colors text-black"
+                                                value={reviewForm.title}
+                                                onChange={e => setReviewForm({ ...reviewForm, title: e.target.value })}
+                                            />
+                                            <textarea
+                                                placeholder={t('product.experience_placeholder')}
+                                                required
+                                                className="w-full bg-transparent border border-black/10 p-5 text-xs tracking-widest leading-relaxed focus:border-black outline-none h-32 transition-colors text-black"
+                                                value={reviewForm.comment}
+                                                onChange={e => setReviewForm({ ...reviewForm, comment: e.target.value })}
+                                            />
 
-                                        <button
-                                            disabled={submittingReview || uploadingImages}
-                                            className="w-full h-14 bg-black text-white text-[11px] font-black tracking-[0.5em] uppercase hover:bg-black/90 transition-all"
-                                        >
-                                            {submittingReview ? 'SENDING...' : uploadingImages ? 'UPLOADING...' : t('product.log_critique')}
-                                        </button>
-                                        <AnimatePresence>
-                                            {reviewMsg.text && (
-                                                <motion.div
-                                                    initial={{ opacity: 0, height: 0 }}
-                                                    animate={{ opacity: 1, height: 'auto' }}
-                                                    exit={{ opacity: 0, height: 0 }}
-                                                    className={`mt-6 p-4 text-[10px] tracking-[0.2em] uppercase text-center border ${reviewMsg.type === 'success'
-                                                            ? 'border-gold-500/30 bg-gold-500/5 text-gold-500'
-                                                            : 'border-red-500/30 bg-red-500/5 text-red-400'
-                                                        }`}
-                                                >
-                                                    {reviewMsg.text}
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
-                                    </form>
-                                </div>
+                                            {/* Image Upload */}
+                                            <div className="space-y-8 md:space-y-20">
+                                                <p className="text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-black/40">Visual Verification</p>
+                                                <div className="flex flex-wrap gap-4 md:gap-6">
+                                                    {selectedImages.map((file, idx) => (
+                                                        <div key={idx} className="relative w-24 h-24 border border-black/10 p-1">
+                                                            <img src={URL.createObjectURL(file)} alt="preview" className="w-full h-full object-cover" />
+                                                            <button
+                                                                onClick={() => setSelectedImages(selectedImages.filter((_, i) => i !== idx))}
+                                                                className="absolute -top-2 -right-2 bg-black text-white rounded-full p-1 shadow-xl"
+                                                            >
+                                                                <X size={10} />
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                    <label className="w-24 h-24 border border-black/10 flex flex-col items-center justify-center cursor-pointer hover:bg-black/5 transition-all">
+                                                        <Camera size={24} className="text-black/20" strokeWidth={1.5} />
+                                                        <input
+                                                            type="file"
+                                                            multiple
+                                                            accept="image/*"
+                                                            className="hidden"
+                                                            onChange={(e) => setSelectedImages([...selectedImages, ...Array.from(e.target.files)])}
+                                                        />
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <button
+                                                disabled={submittingReview || uploadingImages}
+                                                className="w-full h-14 bg-black text-white text-[11px] font-black tracking-[0.5em] uppercase hover:bg-black/90 transition-all"
+                                            >
+                                                {submittingReview ? 'SENDING...' : uploadingImages ? 'UPLOADING...' : t('product.log_critique')}
+                                            </button>
+                                            <AnimatePresence>
+                                                {reviewMsg.text && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, height: 0 }}
+                                                        animate={{ opacity: 1, height: 'auto' }}
+                                                        exit={{ opacity: 0, height: 0 }}
+                                                        className={`mt-6 p-4 text-[10px] tracking-[0.2em] uppercase text-center border ${reviewMsg.type === 'success'
+                                                                ? 'border-gold-500/30 bg-gold-500/5 text-gold-500'
+                                                                : 'border-red-500/30 bg-red-500/5 text-red-400'
+                                                            }`}
+                                                    >
+                                                        {reviewMsg.text}
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </form>
+                                    </div>
+                                ) : (
+                                    <div className="mb-20 p-10 text-center border border-black/5 bg-black/[0.01]">
+                                        <p className="text-[10px] tracking-[0.5em] text-black uppercase font-black mb-4">
+                                            {reviewEligibilityReason === 'already_reviewed' ? 'Critique Recorded' : 'Verified Purchase Required'}
+                                        </p>
+                                        <p className="text-[9px] tracking-[0.3em] text-black/30 uppercase leading-relaxed max-w-xs mx-auto">
+                                            {reviewEligibilityReason === 'already_reviewed' 
+                                                ? 'Your perspective on this essence has been successfully logged in our registry.' 
+                                                : 'Critiques are reserved for patrons who have acquired and confirmed their purchase of this essence.'}
+                                        </p>
+                                    </div>
+                                )
                             ) : (
                                 <div className="mb-20 p-10 text-center border border-black/5 bg-black/[0.01]">
                                     <p className="text-[10px] tracking-[0.5em] text-black uppercase font-black mb-4">
