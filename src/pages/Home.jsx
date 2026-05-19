@@ -677,10 +677,10 @@ const Home = () => {
           {/* Floating Secondary Image (Muse) */}
           <div className="floating-muse absolute right-[10%] top-[20%] w-32 md:w-48 aspect-[3/4] z-30 hidden md:block border border-black/10 shadow-2xl overflow-hidden group">
             <img
-              src="/alchemy.webp"
+              src="https://res.cloudinary.com/dprxiz6os/image/upload/v1779191418/Gemini_Generated_Image_6kx4eu6kx4eu6kx4_xsm3qk.webp"
               loading="lazy"
               decoding="async"
-              className="w-full h-full object-cover brightness-90 transition-all duration-1000"
+              className="w-full h-full object-cover transition-all duration-1000"
               alt="Muse"
             />
           </div>
@@ -712,12 +712,12 @@ const Home = () => {
               className="relative block aspect-[3/4] overflow-hidden border border-black/10 p-2 bg-black/[0.02]"
             >
               <img
-                src="https://res.cloudinary.com/dprxiz6os/image/upload/v1778429911/kiks_general/kiks-1778429909414-168768629_meinpk.png"
+                src="https://res.cloudinary.com/dprxiz6os/image/upload/v1779191419/araambh_1_mh8uqw.webp"
                 loading="lazy"
                 width="600"
                 height="800"
                 decoding="async"
-                className="w-full h-full object-cover transition-all duration-[2000ms] smooth-render"
+                className="w-full h-full object-cover transition-all duration-[2000ms]"
                 alt="Alchemy Muse"
               />
               <div className="absolute inset-0 border border-gold-500/20 m-4 pointer-events-none" />
