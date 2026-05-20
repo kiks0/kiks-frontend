@@ -401,7 +401,7 @@ const Home = () => {
         <div className="relative z-20 text-center px-6">
           <div className="flex flex-col items-center">
             <div ref={heroTitleRef} className="will-change-transform">
-              <h1 className="text-5xl md:text-8xl font-serif tracking-[0.2em] text-white uppercase mb-8">
+              <h1 className="text-6xl md:text-8xl font-serif font-bold tracking-[0.2em] text-white uppercase mb-8">
                 {['K', 'I', 'K', 'S'].map((char, index) => (
                   <motion.span 
                     key={index} 
