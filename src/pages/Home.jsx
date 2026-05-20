@@ -741,7 +741,7 @@ const Home = () => {
                 OUR STORY
               </h2>
               <p className="text-black/60 text-[10px] tracking-[0.3em] uppercase font-bold mb-4 md:mb-12">
-                QUALITY & TRADITION
+                THE ART OF ALCHEMY
               </p>
             </motion.div>
 
