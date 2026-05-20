@@ -121,8 +121,8 @@ const Collection = () => {
     return (
         <div className="bg-white min-h-screen text-black overflow-x-hidden pt-0">
             <SEO 
-                title={`${collection?.name || 'Luxury'} Collection`}
-                description={collection?.description || `Explore our exclusive ${collection?.name} collection of premium fragrances.`}
+                title={collection?.name ? (collection.name.toLowerCase().endsWith('collection') ? collection.name : `${collection.name} Collection`) : 'Luxury Collection'}
+                description={collection?.description || `Explore our exclusive ${collection?.name ? (collection.name.toLowerCase().endsWith('collection') ? collection.name : `${collection.name} collection`) : 'luxury collection'} of premium fragrances.`}
                 keywords={`${collection?.name}, Luxury Perfume Collection, KIKS`}
                 image={collection?.banner_url}
             />
@@ -210,7 +210,7 @@ const Collection = () => {
                                     {collection?.name}
                                 </h2>
                                 <p className="text-black/40 text-[10px] tracking-[0.4em] md:tracking-[0.6em] uppercase mt-4 md:mt-6 max-w-md leading-relaxed">
-                                    Explore our {(collection?.name || '').toLowerCase()} collection.
+                                    Explore our {collection?.name?.toLowerCase().endsWith('collection') ? collection?.name?.toLowerCase() : `${collection?.name?.toLowerCase()} collection`}.
                                 </p>
                             </div>
 

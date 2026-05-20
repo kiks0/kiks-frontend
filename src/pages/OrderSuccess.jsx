@@ -115,7 +115,7 @@ const OrderSuccess = () => {
 
                     <div className="pt-16 pb-12 flex flex-col items-center">
                         <div className="flex space-x-12 mb-8 text-black/40">
-                             <a href="https://instagram.com/kiksultraluxury" target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors flex items-center space-x-3 text-[9px] uppercase tracking-[0.4em] font-bold">
+                             <a href="https://www.instagram.com/kiksultraluxury?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors flex items-center space-x-3 text-[9px] uppercase tracking-[0.4em] font-bold">
                                 <Globe size={14} strokeWidth={1.5} /> <span>Social</span>
                              </a>
                              <Link to="/blog" className="hover:text-black transition-colors flex items-center space-x-3 text-[9px] uppercase tracking-[0.4em] font-bold">

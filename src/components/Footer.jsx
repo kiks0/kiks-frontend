@@ -148,7 +148,7 @@ const Footer = () => {
             </button>
           </div>
           <div className="flex justify-center mt-8 md:mt-0 text-black/60">
-            <a href="https://www.instagram.com/kultraluxe?igsh=YXl6YW52ZjQ5dDBq" target="_blank" rel="noreferrer" className="hover:text-black transition-colors p-1"><IconInsta /></a>
+            <a href="https://www.instagram.com/kiksultraluxury?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noreferrer" className="hover:text-black transition-colors p-1"><IconInsta /></a>
           </div>
         </div>
         <div className="text-center md:text-left mt-4 border-t border-black/5 pt-6">
