@@ -27,7 +27,7 @@ const getBase64ImageFromUrl = async (imgUrl) => {
             var ctx = canvas.getContext("2d");
             ctx.drawImage(img, 0, 0);
             var dataURL = canvas.toDataURL("image/png");
-            resolve(dataURL);
+            resolve({ dataURL, width: img.width, height: img.height });
         };
         img.onerror = error => reject(error);
         img.src = imgUrl;
@@ -43,9 +43,12 @@ export const generateShippingLabel = async (orderInput) => {
         const doc = new jsPDF({ format: [100, 150] });
 
         let base64Logo = null;
+        let logoProps = null;
         try {
             // Attempt to load the logo once for all slips
-            base64Logo = await getBase64ImageFromUrl('/logo.webp');
+            const logoData = await getBase64ImageFromUrl('/logo-kiks.png');
+            base64Logo = logoData.dataURL;
+            logoProps = { w: logoData.width, h: logoData.height };
         } catch (e) {
             console.warn("Could not load logo image, using text fallback.");
         }
@@ -60,9 +63,11 @@ export const generateShippingLabel = async (orderInput) => {
             doc.rect(2, 2, 96, 146);
 
             // Section 1: Top Header (Logo Only)
-            if (base64Logo) {
-                // Centered logo: (100 - 35) / 2 = 32.5
-                doc.addImage(base64Logo, 'PNG', 32.5, 3, 35, 8);
+            if (base64Logo && logoProps) {
+                const targetHeight = 8;
+                const targetWidth = (logoProps.w / logoProps.h) * targetHeight;
+                const xPos = (100 - targetWidth) / 2;
+                doc.addImage(base64Logo, 'PNG', xPos, 2.5, targetWidth, targetHeight);
             } else {
                 doc.setFont("helvetica", "bold");
                 doc.setFontSize(10);

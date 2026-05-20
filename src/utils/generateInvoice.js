@@ -1,12 +1,41 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-export const generateInvoice = (orderInput) => {
+// Convert image from path to PNG base64 for jsPDF
+const getBase64ImageFromUrl = async (imgUrl) => {
+    return new Promise((resolve, reject) => {
+        var img = new Image();
+        img.setAttribute('crossOrigin', 'anonymous');
+        img.onload = () => {
+            var canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            var dataURL = canvas.toDataURL("image/png");
+            resolve({ dataURL, width: img.width, height: img.height });
+        };
+        img.onerror = error => reject(error);
+        img.src = imgUrl;
+    });
+};
+
+export const generateInvoice = async (orderInput) => {
     try {
         const orders = Array.isArray(orderInput) ? orderInput : [orderInput];
         if (orders.length === 0) return;
 
         const doc = new jsPDF();
+
+        let base64Logo = null;
+        let logoProps = null;
+        try {
+            const logoData = await getBase64ImageFromUrl('/logo-kiks.png');
+            base64Logo = logoData.dataURL;
+            logoProps = { w: logoData.width, h: logoData.height };
+        } catch (e) {
+            console.warn("Could not load logo image, using text fallback.");
+        }
 
         for (let i = 0; i < orders.length; i++) {
             const order = orders[i];
@@ -14,13 +43,20 @@ export const generateInvoice = (orderInput) => {
             if (i > 0) doc.addPage();
 
             // Brand Header
-            doc.setFontSize(22);
-            doc.setFont("times", "bold");
-            doc.text("KIKS ULTRA LUXURY", 105, 20, { align: "center" });
+            if (base64Logo && logoProps) {
+                const targetHeight = 16;
+                const targetWidth = (logoProps.w / logoProps.h) * targetHeight;
+                const xPos = (210 - targetWidth) / 2; // A4 width is 210mm
+                doc.addImage(base64Logo, 'PNG', xPos, 10, targetWidth, targetHeight);
+            } else {
+                doc.setFontSize(22);
+                doc.setFont("times", "bold");
+                doc.text("KIKS ULTRA LUXURY", 105, 20, { align: "center" });
+            }
 
             doc.setFontSize(10);
             doc.setFont("helvetica", "normal");
-            doc.text("Invoice / Bill of Supply", 105, 28, { align: "center" });
+            doc.text("Invoice / Bill of Supply", 105, 30, { align: "center" });
 
             doc.setLineWidth(0.2);
             doc.line(14, 32, 196, 32);
@@ -52,7 +88,9 @@ export const generateInvoice = (orderInput) => {
             doc.setFont("helvetica", "bold");
             doc.text("Payment Mode:", 130, 54);
             doc.setFont("helvetica", "normal");
-            doc.text(order?.payment_method?.toUpperCase() || "PREPAID", 155, 54);
+            const pmText = order?.payment_method?.toUpperCase() || "PREPAID";
+            const splitPm = doc.splitTextToSize(pmText, 45); // Wrap long text like UPI IDs
+            doc.text(splitPm, 155, 54);
 
             // Address Section
             doc.setFont("helvetica", "bold");
