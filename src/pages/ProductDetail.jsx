@@ -430,7 +430,7 @@ const ProductDetail = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1.2, ease: "easeOut" }}
-                        className="relative w-full max-w-[360px] lg:sticky lg:top-40 aspect-[3/4] overflow-hidden bg-[#f9f9f9] border border-black/5 shadow-2xl group cursor-grab active:cursor-grabbing touch-none"
+                        className="relative w-full max-w-[360px] lg:sticky lg:top-40 aspect-[3/4] overflow-hidden bg-[#f9f9f9] border border-black/5 shadow-2xl group cursor-grab active:cursor-grabbing touch-pan-y"
                     >
                         <AnimatePresence mode="wait">
                             <motion.div
