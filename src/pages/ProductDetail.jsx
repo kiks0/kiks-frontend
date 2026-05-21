@@ -705,6 +705,39 @@ const ProductDetail = () => {
                         onToggle={setIsDescriptionOpen}
                     >
                         <p className="whitespace-pre-wrap leading-relaxed">{product.description}</p>
+
+                        {(product.top_notes?.trim() || product.heart_notes?.trim() || product.base_notes?.trim()) && (
+                            <div className="mt-14 space-y-10 border-t border-black/5 pt-10">
+                                {/* Consolidated Olfactory Pyramid */}
+                                <h4 className="text-[11px] md:text-[12px] tracking-[0.4em] uppercase text-black mb-8 font-black">Fragrance Notes</h4>
+                                <div className="grid grid-cols-1 gap-8">
+                                    {product.top_notes?.trim() && (
+                                        <div>
+                                            <span className="text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-black/40 font-black block mb-2">Top Notes</span>
+                                            <p className="text-sm leading-relaxed text-black font-sans tracking-wide">
+                                                {formatNotes(product.top_notes)}
+                                            </p>
+                                        </div>
+                                    )}
+                                    {product.heart_notes?.trim() && (
+                                        <div>
+                                            <span className="text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-black/40 font-black block mb-2">Heart Notes</span>
+                                            <p className="text-sm leading-relaxed text-black font-sans tracking-wide">
+                                                {formatNotes(product.heart_notes)}
+                                            </p>
+                                        </div>
+                                    )}
+                                    {product.base_notes?.trim() && (
+                                        <div>
+                                            <span className="text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-black/40 font-black block mb-2">Base Notes</span>
+                                            <p className="text-sm leading-relaxed text-black font-sans tracking-wide">
+                                                {formatNotes(product.base_notes)}
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
                     </ProductAccordion>
                 </div>
 
@@ -713,39 +746,11 @@ const ProductDetail = () => {
                     isOpen={isAdditionalOpen}
                     onToggle={setIsAdditionalOpen}
                 >
-
-
-
                     {product.additional_info && (
-                        <p className="whitespace-pre-wrap leading-relaxed mb-14">
+                        <p className="whitespace-pre-wrap leading-relaxed">
                             {product.additional_info}
                         </p>
                     )}
-
-                    {/* Consolidated Olfactory Pyramid */}
-                    <div className="mt-14 space-y-10 border-t border-black/5 pt-10">
-                        <h4 className="text-[10px] tracking-[0.4em] uppercase text-black mb-8 font-black">Fragrance Notes</h4>
-                        <div className="grid grid-cols-1 gap-8">
-                            <div>
-                                <span className="text-[8px] tracking-[0.3em] uppercase text-black/40 font-black block mb-2">Top Notes</span>
-                                <p className="text-[10px] md:text-[11px] leading-relaxed text-black font-sans tracking-wide">
-                                    {formatNotes(product.top_notes)}
-                                </p>
-                            </div>
-                            <div>
-                                <span className="text-[8px] tracking-[0.3em] uppercase text-black/40 font-black block mb-2">Heart Notes</span>
-                                <p className="text-[10px] md:text-[11px] leading-relaxed text-black font-sans tracking-wide">
-                                    {formatNotes(product.heart_notes)}
-                                </p>
-                            </div>
-                            <div>
-                                <span className="text-[8px] tracking-[0.3em] uppercase text-black/40 font-black block mb-2">Base Notes</span>
-                                <p className="text-[10px] md:text-[11px] leading-relaxed text-black font-sans tracking-wide">
-                                    {formatNotes(product.base_notes)}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
                 </ProductAccordion>
 
                 <div ref={reviewsRef}>
