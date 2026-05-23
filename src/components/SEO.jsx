@@ -9,8 +9,7 @@ const SEO = ({ title, description, keywords, image }) => {
     useEffect(() => {
         // 1. Update Title
         const baseTitle = "KIKS Ultra Luxury";
-        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        document.title = isLocalhost ? baseTitle : (title ? `${title} | ${baseTitle}` : baseTitle);
+        document.title = title ? `${title} | ${baseTitle}` : baseTitle;
 
         // 2. Update Description
         const metaDescription = document.querySelector('meta[name="description"]');
