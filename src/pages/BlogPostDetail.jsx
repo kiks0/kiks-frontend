@@ -89,17 +89,6 @@ const BlogPostDetail = () => {
                         {post.title}
                     </motion.h1>
 
-                    {post.keywords && (
-                        <div className="flex flex-wrap gap-3 mb-8">
-                            {post.keywords.split(',')
-                                .filter(tag => tag.trim().toUpperCase() !== 'FEMALE PERFUME')
-                                .map((tag, i) => (
-                                <span key={i} className="flex items-center text-[8px] tracking-[0.3em] uppercase text-black/40 border border-black/5 px-3 py-1.5 rounded-full">
-                                    <Tag size={9} className="mr-2" /> {tag.trim()}
-                                </span>
-                            ))}
-                        </div>
-                    )}
                 </header>
 
                 {/* Featured Image */}
