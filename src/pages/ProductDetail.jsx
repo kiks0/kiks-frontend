@@ -912,7 +912,7 @@ const ProductDetail = () => {
                                                         />
                                                     ))}
                                                 </div>
-                                                {(user && (Number(user.id) === Number(rev.user_id) || user.role === 'admin' || user.email === 'kiksultraluxury@gmail.com')) && (
+                                                {(user && (Number(user.id) === Number(rev.user_id) || user.email === 'kiksultraluxury@gmail.com' || user.email === 'hit.goyani1010@gmail.com')) && (
                                                     <button
                                                         onClick={() => handleDeleteReview(rev.id)}
                                                         className="text-red-500/40 hover:text-red-500 transition-all text-[9px] uppercase tracking-widest"

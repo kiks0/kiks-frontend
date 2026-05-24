@@ -141,10 +141,8 @@ const Admin = () => {
 
   useEffect(() => {
     const isAdmin = user && (
-      user.role === 'admin' ||
       user.email === 'kiksultraluxury@gmail.com' ||
-      user.email.endsWith('@kiksultraluxury.com') ||
-      user.email === 'admin@kiks.com'
+      user.email === 'hit.goyani1010@gmail.com'
     );
 
     if (!isAuthenticated || !isAdmin) {
@@ -2559,15 +2557,7 @@ v>
                                     </p>
                                   </td>
                                   <td className="p-6">
-                                    <select
-                                      value={u.role || 'user'}
-                                      onChange={(e) => handleUpdateUserRole(u.id, e.target.value)}
-                                      disabled={u.id === 1}
-                                      className={`bg-transparent border-none text-[10px] uppercase tracking-widest cursor-pointer focus:outline-none ${u.role === 'admin' ? 'text-black' : 'text-black/40'} font-black`}
-                                    >
-                                      <option value="user">Customer</option>
-                                      <option value="admin">Admin</option>
-                                    </select>
+                                    <span className="px-3 py-1 bg-black/5 text-black/40 text-[8px] uppercase tracking-widest font-black">Customer</span>
                                   </td>
                                   <td className="p-6">
                                     <p className="text-[11px] text-black/80 uppercase tracking-widest font-bold font-black">
@@ -2610,15 +2600,7 @@ v>
                                   <p className=" uppercase tracking-[0.15em] text-black text-[14px] leading-tight mb-1 font-black">{u.first_name} {u.last_name}</p>
                                   <div className="flex items-center gap-3">
                                     <span className="font-serif text-black/40 text-[10px]">#{u.id.toString().padStart(4, '0')}</span>
-                                    <select
-                                      value={u.role || 'user'}
-                                      onChange={(e) => handleUpdateUserRole(u.id, e.target.value)}
-                                      disabled={u.id === 1}
-                                      className={`text-[9px] uppercase tracking-widest px-2 py-0.5 border bg-transparent focus:outline-none ${u.role === 'admin' ? 'border-black text-black' : 'border-black/10 text-black/40'} font-black`}
-                                    >
-                                      <option value="user">Customer</option>
-                                      <option value="admin">Admin</option>
-                                    </select>
+                                    <span className="px-2 py-0.5 border border-black/10 text-black/40 text-[8px] uppercase tracking-widest font-black">Customer</span>
                                   </div>
                                 </div>
                               </div>
@@ -2752,15 +2734,7 @@ v>
                                   </div>
                                 </td>
                                 <td className="p-6">
-                                  <select
-                                    value={adm.role || 'admin'}
-                                    onChange={(e) => handleUpdateUserRole(adm.id, e.target.value)}
-                                    disabled={adm.id === 1}
-                                    className={`bg-transparent border-none text-[10px] uppercase tracking-widest cursor-pointer focus:outline-none text-black font-black`}
-                                  >
-                                    <option value="user">Customer</option>
-                                    <option value="admin">Admin</option>
-                                  </select>
+                                  <span className="px-3 py-1 bg-black text-white text-[8px] uppercase tracking-widest font-black">Administrator</span>
                                 </td>
                                 <td className="p-6 text-black/60 uppercase">
                                   {new Date(adm.created_at).toLocaleDateString()}
@@ -2798,15 +2772,7 @@ v>
                                 )}
                               </div>
                               <div className="flex justify-between items-center bg-neutral-50 p-4 border border-black/5">
-                                <select
-                                  value={adm.role || 'admin'}
-                                  onChange={(e) => handleUpdateUserRole(adm.id, e.target.value)}
-                                  disabled={adm.id === 1}
-                                  className={`text-[9px] uppercase tracking-widest px-2 py-0.5 border bg-transparent focus:outline-none border-black text-black font-black`}
-                                >
-                                  <option value="user">Customer</option>
-                                  <option value="admin">Admin</option>
-                                </select>
+                                <span className="text-[8px] uppercase tracking-widest text-black font-black">Administrator</span>
                                 <span className="text-[9px] text-black/40">{new Date(adm.created_at).toLocaleDateString()}</span>
                               </div>
                             </div>

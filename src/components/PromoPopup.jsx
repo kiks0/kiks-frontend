@@ -12,8 +12,7 @@ const PromoPopup = () => {
 
     const isAdmin = user && (
         user.email === 'kiksultraluxury@gmail.com' ||
-        user.email.endsWith('@kiksultraluxury.com') ||
-        user.email === 'admin@kiks.com'
+        user.email === 'hit.goyani1010@gmail.com'
     );
 
     useEffect(() => {
