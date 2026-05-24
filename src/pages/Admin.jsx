@@ -424,6 +424,51 @@ const Admin = () => {
     } catch (e) { showErrorToast('Network error.'); }
   };
 
+  const handleSendRecoveryEmail = async (cartId) => {
+    setIsProcessing(true);
+    try {
+      const res = await fetch(`${API_URL}/api/carts/recover/${cartId}`, {
+        method: 'POST',
+        headers: getAdminHeaders()
+      });
+      const data = await res.json();
+      if (res.ok) {
+        showSuccessToast(data.msg || 'Recovery email dispatched.');
+        fetchCartsData();
+      } else {
+        showErrorToast(data.msg || 'Failed to send recovery email.');
+      }
+    } catch (e) {
+      showErrorToast('Network error during recovery email dispatch.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleBulkSendRecoveryEmails = async () => {
+    if (!selectedCarts.length) return;
+    setIsProcessing(true);
+    try {
+      const res = await fetch(`${API_URL}/api/carts/bulk-recover`, {
+        method: 'POST',
+        headers: getAdminHeaders(),
+        body: JSON.stringify({ ids: selectedCarts })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        showSuccessToast(data.msg || 'Recovery campaign completed.');
+        setSelectedCarts([]);
+        fetchCartsData();
+      } else {
+        showErrorToast(data.msg || 'Bulk recovery failed.');
+      }
+    } catch (e) {
+      showErrorToast('Network error during bulk recovery.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const fetchWaitlistData = async () => {
     setTabsLoading(prev => ({ ...prev, waitlist: true }));
     try {
@@ -4551,14 +4596,23 @@ v>
                       <p className="text-xs tracking-[0.2em] text-black/50 uppercase mt-1">Monitoring active & abandoned carts</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-8">
+                  <div className="flex items-center gap-4">
                     {selectedCarts.length > 0 && (
-                      <button
-                        onClick={handleBulkRemoveCarts}
-                        className="bg-red-600 text-white px-4 py-2 text-[8px] uppercase tracking-widest hover:bg-red-700 transition-all flex items-center gap-2 font-bold shadow-lg"
-                      >
-                        <Trash2 size={12} /> Clear Selected ({selectedCarts.length})
-                      </button>
+                      <>
+                        <button
+                          onClick={handleBulkSendRecoveryEmails}
+                          disabled={isProcessing}
+                          className="bg-gold-500 hover:bg-gold-600 text-white px-4 py-2 text-[8px] uppercase tracking-widest transition-all flex items-center gap-2 font-bold shadow-lg disabled:opacity-50"
+                        >
+                          <Mail size={12} /> Recover Selected ({selectedCarts.length})
+                        </button>
+                        <button
+                          onClick={handleBulkRemoveCarts}
+                          className="bg-red-600 text-white px-4 py-2 text-[8px] uppercase tracking-widest hover:bg-red-700 transition-all flex items-center gap-2 font-bold shadow-lg"
+                        >
+                          <Trash2 size={12} /> Clear Selected ({selectedCarts.length})
+                        </button>
+                      </>
                     )}
                     <div className="text-left sm:text-right">
                       <p className="text-[10px] text-black/40 uppercase tracking-widest mb-1 font-bold">Active Sessions</p>
@@ -4606,11 +4660,45 @@ v>
                           </div>
                           <div className="lg:w-80 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-black/5 pt-8 lg:pt-0 lg:pl-10">
                             <div className="space-y-6">
-                              <div className="flex justify-between lg:block"><p className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2 font-bold">Status</p><span className="inline-flex items-center gap-2 px-3 py-1.5 bg-neutral-100 text-black text-[9px] uppercase tracking-widest font-bold"><span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>Active Session</span></div>
+                              <div className="flex justify-between lg:block">
+                                <p className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2 font-bold">Status</p>
+                                <div className="flex flex-wrap gap-2">
+                                  <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-neutral-100 text-black text-[9px] uppercase tracking-widest font-bold">
+                                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                                    Active Session
+                                  </span>
+                                  {cart.recovery_sent_count > 0 && (
+                                    <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-gold-500/10 text-gold-600 border border-gold-500/20 text-[9px] uppercase tracking-widest font-bold">
+                                      <Mail size={10} className="text-gold-600" />
+                                      Recovery Sent ({cart.recovery_sent_count})
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
                               <div className="flex justify-between lg:block"><p className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2 font-bold">Last Synchronized</p><p className="text-[11px] text-black/60 tracking-wider">{new Date(cart.last_sync).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</p></div>
                             </div>
-                            <div className="mt-10 md:mt-12 space-y-8 md:space-y-10"><div><p className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2 font-bold">Total Valuation</p><p className="text-2xl md:text-3xl font-serif text-black leading-none">{formatCurrency(cart.items?.reduce((acc, item) => acc + (item.price * item.quantity), 0) || 0, activeCurrency, rates, symbols)}</p></div>
-                              <button onClick={() => handleRemoveCart(cart.id)} className="w-full flex items-center justify-center gap-2 bg-red-600 text-white px-3 py-2.5 text-[8px] uppercase tracking-widest hover:bg-red-700 transition-all font-bold shadow-lg shadow-red-600/10 mt-2"><LogOut size={12} />Clear Session</button>
+                            <div className="mt-10 md:mt-12 space-y-8 md:space-y-10">
+                              <div>
+                                <p className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2 font-bold">Total Valuation</p>
+                                <p className="text-2xl md:text-3xl font-serif text-black leading-none">
+                                  {formatCurrency(cart.items?.reduce((acc, item) => acc + (item.price * item.quantity), 0) || 0, activeCurrency, rates, symbols)}
+                                </p>
+                              </div>
+                              <div className="space-y-2">
+                                <button
+                                  onClick={() => handleSendRecoveryEmail(cart.id)}
+                                  disabled={isProcessing}
+                                  className="w-full flex items-center justify-center gap-2 bg-black text-white px-3 py-2.5 text-[8px] uppercase tracking-widest hover:bg-neutral-800 transition-all font-bold shadow-lg disabled:opacity-50"
+                                >
+                                  <Mail size={12} /> Send Recovery
+                                </button>
+                                <button
+                                  onClick={() => handleRemoveCart(cart.id)}
+                                  className="w-full flex items-center justify-center gap-2 bg-red-600 text-white px-3 py-2.5 text-[8px] uppercase tracking-widest hover:bg-red-700 transition-all font-bold shadow-lg shadow-red-600/10 mt-2"
+                                >
+                                  <LogOut size={12} /> Clear Session
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>

@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { fetchExchangeRates, setCurrency } from './store/currencySlice';
 import { logout, updateProfile } from './store/authSlice';
 import { fetchWishlist } from './store/wishlistSlice';
+import { openCart } from './store/uiSlice';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -54,6 +55,15 @@ function App() {
   useEffect(() => {
     dispatch(fetchExchangeRates());
     dispatch(fetchWishlist());
+    
+    // Check for cart recovery redirect
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('recover_cart') === 'true') {
+      dispatch(openCart());
+      urlParams.delete('recover_cart');
+      const newPath = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+      window.history.replaceState(null, '', newPath);
+    }
     
     // Global session validator for real-time security (e.g. instant logout on deletion)
     const checkSession = async () => {
