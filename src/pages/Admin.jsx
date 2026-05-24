@@ -1606,11 +1606,9 @@ const Admin = () => {
             <h1 className="text-2xl md:text-5xl font-serif tracking-[0.2em] md:tracking-[0.3em] uppercase mb-4 text-black">Admin Panel</h1>
             <p className="text-black text-[10px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] mb-4 md:mb-14 flex flex-wrap items-center gap-3 md:gap-6 font-bold">
               <span>Management Console</span>
-              {waitlist.filter(e => e.request_type === "callback").length > 0 && (
-                <span className="border-l border-black/20 pl-3 md:pl-6">
-                  {waitlist.filter(e => e.request_type === "callback").length} Pending Callbacks
-                </span>
-              )}
+              <span className="border-l border-black/20 pl-3 md:pl-6">
+                {orders.filter(o => !o.status || o.status === 'On Hold' || o.status === 'Pending').length} Pending Orders
+              </span>
             </p>
           </div>
         </div>
@@ -1625,7 +1623,7 @@ const Admin = () => {
               className="w-full bg-white border border-black/10 p-4 text-[10px] tracking-[0.3em] uppercase text-black focus:outline-none appearance-none"
             >
               {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing', 'homepage', 'carts', 'trash'].map(tab => {
-                const callbackCount = tab === 'waitlist' ? waitlist.filter(e => e.request_type === 'callback').length : 0;
+                const callbackCount = tab === 'waitlist' ? waitlist.filter(e => e.request_type === 'callback' && (e.status || 'Pending').toLowerCase() === 'pending').length : 0;
                 return (
                   <option key={tab} value={tab}>
                     {tab.toUpperCase()} {callbackCount > 0 ? `(${callbackCount})` : ''}
@@ -1641,7 +1639,7 @@ const Admin = () => {
           {/* Desktop Tab Links */}
           <div className="hidden md:flex flex-wrap gap-x-8 gap-y-6">
             {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing', 'homepage', 'carts', 'trash'].map(tab => {
-              const callbackCount = tab === 'waitlist' ? waitlist.filter(e => e.request_type === 'callback').length : 0;
+              const callbackCount = tab === 'waitlist' ? waitlist.filter(e => e.request_type === 'callback' && (e.status || 'Pending').toLowerCase() === 'pending').length : 0;
               return (
                 <button
                   key={tab}
