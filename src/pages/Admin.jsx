@@ -2746,13 +2746,21 @@ v>
                                       {adm.first_name?.[0] || 'A'}
                                     </div>
                                     <div>
-                                      <p className="font-bold text-black uppercase tracking-widest font-black">{adm.first_name} {adm.last_name}</p>
-                                      <p className="text-[9px] text-black/60 lowercase">{adm.email}</p>
+                                      <p className="font-bold text-black uppercase tracking-widest text-[11px] font-black">{adm.first_name} {adm.last_name}</p>
+                                      <p className="text-[9px] text-black/60 lowercase font-sans">{adm.email}</p>
                                     </div>
                                   </div>
                                 </td>
                                 <td className="p-6">
-                                  <span className="px-3 py-1 bg-black text-white text-[8px] uppercase tracking-widest font-black">Administrator</span>
+                                  <select
+                                    value={adm.role || 'admin'}
+                                    onChange={(e) => handleUpdateUserRole(adm.id, e.target.value)}
+                                    disabled={adm.id === 1}
+                                    className={`bg-transparent border-none text-[10px] uppercase tracking-widest cursor-pointer focus:outline-none text-black font-black`}
+                                  >
+                                    <option value="user">Customer</option>
+                                    <option value="admin">Admin</option>
+                                  </select>
                                 </td>
                                 <td className="p-6 text-black/60 uppercase">
                                   {new Date(adm.created_at).toLocaleDateString()}
@@ -2790,7 +2798,15 @@ v>
                                 )}
                               </div>
                               <div className="flex justify-between items-center bg-neutral-50 p-4 border border-black/5">
-                                <span className="text-[8px] uppercase tracking-widest text-black  font-black">Full Access Admin</span>
+                                <select
+                                  value={adm.role || 'admin'}
+                                  onChange={(e) => handleUpdateUserRole(adm.id, e.target.value)}
+                                  disabled={adm.id === 1}
+                                  className={`text-[9px] uppercase tracking-widest px-2 py-0.5 border bg-transparent focus:outline-none border-black text-black font-black`}
+                                >
+                                  <option value="user">Customer</option>
+                                  <option value="admin">Admin</option>
+                                </select>
                                 <span className="text-[9px] text-black/40">{new Date(adm.created_at).toLocaleDateString()}</span>
                               </div>
                             </div>

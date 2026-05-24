@@ -3,7 +3,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchExchangeRates, setCurrency } from './store/currencySlice';
-import { logout } from './store/authSlice';
+import { logout, updateProfile } from './store/authSlice';
 import { fetchWishlist } from './store/wishlistSlice';
 
 import Navbar from './components/Navbar';
@@ -69,6 +69,9 @@ function App() {
         if (res.status === 401) {
           dispatch(logout());
           window.location.href = '/';
+        } else if (res.ok) {
+          const freshUser = await res.json();
+          dispatch(updateProfile(freshUser));
         }
       } catch (e) {}
     };
