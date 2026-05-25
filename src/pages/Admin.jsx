@@ -2690,7 +2690,6 @@ v>
                               <th className="p-6">Admin Identity</th>
                               <th className="p-6">Permissions</th>
                               <th className="p-6">Joined Date</th>
-                              <th className="p-6 text-right">Management</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -2713,13 +2712,6 @@ v>
                                 <td className="p-6 text-black/60 uppercase">
                                   {new Date(adm.created_at).toLocaleDateString()}
                                 </td>
-                                <td className="p-6 text-right">
-                                  {adm.id !== 1 && (
-                                    <button onClick={() => handleDeleteUser(adm.id)} className="text-red-600/40 hover:text-red-600 transition-colors p-2">
-                                      <Trash2 size={16} />
-                                    </button>
-                                  )}
-                                </td>
                               </tr>
                             ))}
                           </tbody>
@@ -2739,11 +2731,6 @@ v>
                                     <p className="text-[9px] text-black/60 lowercase font-sans">{adm.email}</p>
                                   </div>
                                 </div>
-                                {adm.id !== 1 && (
-                                  <button onClick={() => handleDeleteUser(adm.id)} className="text-red-600/40 hover:text-red-600 transition-colors p-2">
-                                    <Trash2 size={18} />
-                                  </button>
-                                )}
                               </div>
                               <div className="flex justify-between items-center bg-neutral-50 p-4 border border-black/5">
                                 <span className="text-[8px] uppercase tracking-widest text-black font-black">Administrator</span>
