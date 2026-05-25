@@ -2680,78 +2680,7 @@ v>
                           <h2 className="text-lg md:text-xl font-serif tracking-[0.1em] md:tracking-widest uppercase text-black">Administration Team</h2>
                           <p className="text-[9px] md:text-[10px] tracking-[0.2em] md:tracking-[0.3em] text-black/40 uppercase mt-1 md:mt-2 font-black">Managing platform access controls</p>
                         </div>
-                        <button
-                          onClick={() => setIsAdding(!isAdding)}
-                          className="w-full sm:w-auto bg-black text-white px-6 md:px-8 py-3 md:py-4 text-[9px] md:text-[10px] uppercase tracking-widest hover:bg-black/80 transition-all flex items-center justify-center gap-3"
-                        >
-                          {isAdding ? <X size={14} /> : <Plus size={14} />}
-                          {isAdding ? 'Discard Draft' : 'Appoint New Admin'}
-                        </button>
                       </div>
-
-                      <AnimatePresence>
-                        {isAdding && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="bg-neutral-50 border border-black/10 p-8 md:p-12 mb-10"
-                          >
-                            <form onSubmit={handleAddAdmin} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                              <div className="md:col-span-2 border-b border-black/5 pb-4 mb-4">
-                                <h3 className="text-black font-serif tracking-widest uppercase">Admin Identity & Credentials</h3>
-                              </div>
-                              <div>
-                                <label className={labelClasses}>First Name</label>
-                                <input required className={inputClasses} value={adminFormData.firstName} onChange={e => setAdminFormData({ ...adminFormData, firstName: e.target.value })} />
-                              </div>
-                              <div>
-                                <label className={labelClasses}>Last Name</label>
-                                <input required className={inputClasses} value={adminFormData.lastName} onChange={e => setAdminFormData({ ...adminFormData, lastName: e.target.value })} />
-                              </div>
-                              <div>
-                                <label className={labelClasses}>Email Address</label>
-                                <input required type="email" className={inputClasses} value={adminFormData.email} onChange={e => setAdminFormData({ ...adminFormData, email: e.target.value })} />
-                              </div>
-                              <div>
-                                <label className={labelClasses}>Access Password</label>
-                                <div className="relative">
-                                  <input
-                                    required
-                                    type={showPassword ? "text" : "password"}
-                                    className={`${inputClasses} pr-12`}
-                                    value={adminFormData.password}
-                                    onChange={e => setAdminFormData({ ...adminFormData, password: e.target.value })}
-                                  />
-                                  <button
-                                    type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-black/40 hover:text-black transition-colors"
-                                  >
-                                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                                  </button>
-                                </div>
-                              </div>
-                              <div className="md:col-span-2 pt-4">
-                                <button
-                                  type="submit"
-                                  disabled={isProcessing}
-                                  className="w-full bg-black text-white py-5 text-[11px] tracking-[0.5em] uppercase hover:bg-neutral-800 transition-all flex items-center justify-center gap-3 font-black"
-                                >
-                                  {isProcessing ? (
-                                    <>
-                                      <Loader2 className="animate-spin" size={16} />
-                                      Processing Appointment...
-                                    </>
-                                  ) : (
-                                    'Confirm Appointment'
-                                  )}
-                                </button>
-                              </div>
-                            </form>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
 
                       <div className="bg-white border border-black/10 overflow-hidden">
                         {/* Desktop Table */}
