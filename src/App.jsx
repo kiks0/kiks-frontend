@@ -74,7 +74,7 @@ function App() {
         window.location.href = '/login';
         return;
       }
-    } else if (localStorage.getItem('recover_cart_pending') === 'true' && isAuthenticated) {
+    } else if (localStorage.getItem('recover_cart_pending') === 'true' && isAuthenticated && window.location.pathname === '/') {
       localStorage.removeItem('recover_cart_pending');
       dispatch(openCart());
     }
