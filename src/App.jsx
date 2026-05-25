@@ -1,7 +1,7 @@
 // KIKS ULTRA LUXURY - Production Build v1.0.4
 import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchExchangeRates, setCurrency } from './store/currencySlice';
 import { logout, updateProfile } from './store/authSlice';
 import { fetchWishlist } from './store/wishlistSlice';
@@ -51,6 +51,7 @@ const PaymentCancelled = lazy(() => import('./pages/PaymentCancelled'));
 
 function App() {
   const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => state.auth);
   
   useEffect(() => {
     dispatch(fetchExchangeRates());
@@ -59,10 +60,23 @@ function App() {
     // Check for cart recovery redirect
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('recover_cart') === 'true') {
+      const storedToken = localStorage.getItem('kiks_token');
+      if (storedToken) {
+        dispatch(openCart());
+        urlParams.delete('recover_cart');
+        const newPath = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+        window.history.replaceState(null, '', newPath);
+      } else {
+        localStorage.setItem('recover_cart_pending', 'true');
+        urlParams.delete('recover_cart');
+        const newPath = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+        window.history.replaceState(null, '', newPath);
+        window.location.href = '/auth';
+        return;
+      }
+    } else if (localStorage.getItem('recover_cart_pending') === 'true' && isAuthenticated) {
+      localStorage.removeItem('recover_cart_pending');
       dispatch(openCart());
-      urlParams.delete('recover_cart');
-      const newPath = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
-      window.history.replaceState(null, '', newPath);
     }
     
     // Global session validator for real-time security (e.g. instant logout on deletion)
@@ -90,7 +104,7 @@ function App() {
     // Check every 30 seconds for long-running sessions (Instant logout on deletion)
     const interval = setInterval(checkSession, 30000);
     return () => clearInterval(interval);
-  }, [dispatch]);
+  }, [dispatch, isAuthenticated]);
 
   return (
     <Router>

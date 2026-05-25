@@ -4662,18 +4662,10 @@ v>
                             <div className="space-y-6">
                               <div className="flex justify-between lg:block">
                                 <p className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2 font-bold">Status</p>
-                                <div className="flex flex-wrap gap-2">
-                                  <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-neutral-100 text-black text-[9px] uppercase tracking-widest font-bold">
-                                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                                    Active Session
-                                  </span>
-                                  {cart.recovery_sent_count > 0 && (
-                                    <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-gold-500/10 text-gold-600 border border-gold-500/20 text-[9px] uppercase tracking-widest font-bold">
-                                      <Mail size={10} className="text-gold-600" />
-                                      Recovery Sent ({cart.recovery_sent_count})
-                                    </span>
-                                  )}
-                                </div>
+                                <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-neutral-100 text-black text-[9px] uppercase tracking-widest font-bold">
+                                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                                  Active Session
+                                </span>
                               </div>
                               <div className="flex justify-between lg:block"><p className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2 font-bold">Last Synchronized</p><p className="text-[11px] text-black/60 tracking-wider">{new Date(cart.last_sync).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</p></div>
                             </div>
@@ -4688,9 +4680,21 @@ v>
                                 <button
                                   onClick={() => handleSendRecoveryEmail(cart.id)}
                                   disabled={isProcessing}
-                                  className="w-full flex items-center justify-center gap-2 bg-black text-white px-3 py-2.5 text-[8px] uppercase tracking-widest hover:bg-neutral-800 transition-all font-bold shadow-lg disabled:opacity-50"
+                                  className={`w-full flex items-center justify-center gap-2 px-3 py-2.5 text-[8px] uppercase tracking-widest transition-all font-bold shadow-lg disabled:opacity-50 ${
+                                    cart.recovery_sent_count > 0 
+                                      ? 'bg-gold-500 hover:bg-gold-600 text-white' 
+                                      : 'bg-black hover:bg-neutral-800 text-white'
+                                  }`}
                                 >
-                                  <Mail size={12} /> Send Recovery
+                                  {cart.recovery_sent_count > 0 ? (
+                                    <>
+                                      <CheckCircle2 size={12} /> Sent ✓ | Resend
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Mail size={12} /> Send Recovery
+                                    </>
+                                  )}
                                 </button>
                                 <button
                                   onClick={() => handleRemoveCart(cart.id)}
