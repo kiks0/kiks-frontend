@@ -107,7 +107,7 @@ const Addresses = () => {
                     }
                 } catch (err) {
                     console.error("Pincode detection failed:", err);
-                    setPincodeError(true);
+                    setPincodeError(false); // Fallback to manual if API is down
                 } finally {
                     setIsVerifyingPincode(false);
                 }
@@ -194,7 +194,14 @@ const Addresses = () => {
             return;
         }
 
-        if (pincodeError || isVerifyingPincode) return;
+        if (pincodeError || isVerifyingPincode) {
+            const element = document.getElementsByName('pincode')[0];
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                element.focus();
+            }
+            return;
+        }
 
         saveAddress();
     };
