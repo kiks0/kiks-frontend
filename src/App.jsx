@@ -71,7 +71,7 @@ function App() {
         urlParams.delete('recover_cart');
         const newPath = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
         window.history.replaceState(null, '', newPath);
-        window.location.href = '/auth';
+        window.location.href = '/login';
         return;
       }
     } else if (localStorage.getItem('recover_cart_pending') === 'true' && isAuthenticated) {
