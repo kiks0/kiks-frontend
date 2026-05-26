@@ -1,5 +1,30 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/collection/:collectionSlug/:productSlug",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "(?i)(googlebot|bingbot|yandexbot|facebookexternalhit|twitterbot|baiduspider|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest\\/0\\.|slackbot|vkShare|W3C_Validator)"
+        }
+      ],
+      "destination": "https://kiks-backend.onrender.com/api/seo/product/:collectionSlug/:productSlug"
+    },
+    {
+      "source": "/blog/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "(?i)(googlebot|bingbot|yandexbot|facebookexternalhit|twitterbot|baiduspider|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest\\/0\\.|slackbot|vkShare|W3C_Validator)"
+        }
+      ],
+      "destination": "https://kiks-backend.onrender.com/api/seo/blog/:slug"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ]
 }

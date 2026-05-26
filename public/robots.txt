@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /checkout
+Disallow: /order-success/
+Disallow: /payment-cancelled
+
+Sitemap: https://www.kiksultraluxury.com/sitemap.xml
