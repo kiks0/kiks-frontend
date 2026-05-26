@@ -533,11 +533,7 @@ const Home = () => {
                   )}
 
                   {(signatureProduct.notes) && (
-                    <div className="grid grid-cols-2 gap-8 pt-8 border-t border-black/5 mt-8">
-                      <div>
-                        <p className="text-[8px] tracking-[0.3em] uppercase text-black/40 font-bold mb-1">STRENGTH</p>
-                        <p className="text-[10px] tracking-[0.2em] uppercase text-black font-medium">{signatureProduct.strength || 'STRONG & RICH'}</p>
-                      </div>
+                    <div className="pt-8 border-t border-black/5 mt-8">
                       <div>
                         <p className="text-[8px] tracking-[0.3em] uppercase text-black/40 font-bold mb-1">MAIN NOTES</p>
                         <p className="text-[10px] tracking-[0.2em] uppercase text-black font-medium">{signatureProduct.notes}</p>
