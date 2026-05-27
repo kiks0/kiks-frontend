@@ -6,7 +6,7 @@ import {
   Plus, Trash2, Edit3, Save, X, Eye, EyeOff, CheckCircle, Package, Truck, AlertCircle,
   User, Mail, Phone, MapPin, Calendar, Clock, ArrowRight, Download, Filter, Star, Loader2, Users, Smartphone,
   FileSpreadsheet, ClipboardCheck, Layout, ArrowLeft, Sparkles, CheckCircle2, Upload, ImageIcon,
-  TrendingUp, DollarSign, ClipboardList, PackageCheck, ReceiptText, Ticket, ChevronDown
+  TrendingUp, DollarSign, ClipboardList, PackageCheck, ReceiptText, Ticket, ChevronDown, RefreshCcw
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
@@ -2536,6 +2536,14 @@ v>
                 <p className="text-[10px] uppercase tracking-widest text-black/40 font-bold">Real-time system events, exceptions, and security milestones</p>
               </div>
               <div className="flex gap-4 w-full md:w-auto">
+                <button
+                  onClick={() => fetchLogsData(logsSearch)}
+                  disabled={tabsLoading.logs}
+                  className="border border-black text-black px-6 py-4 text-[10px] tracking-widest uppercase font-black transition-all hover:bg-neutral-50 disabled:opacity-50 w-full md:w-auto flex items-center justify-center gap-2"
+                >
+                  {tabsLoading.logs ? <Loader2 className="animate-spin" size={12} /> : <RefreshCcw size={12} />}
+                  Refresh Logs
+                </button>
                 <button
                   onClick={handlePurgeLogs}
                   disabled={isProcessing}
