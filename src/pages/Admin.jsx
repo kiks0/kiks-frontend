@@ -68,6 +68,8 @@ const Admin = () => {
   const [downloadedHistory, setDownloadedHistory] = useState({ invoices: [], labels: [] });
   const [carts, setCarts] = useState([]);
   const [selectedCarts, setSelectedCarts] = useState([]);
+  const [logs, setLogs] = useState([]);
+  const [logsSearch, setLogsSearch] = useState('');
 
   // Marketing States
   const [popupSettings, setPopupSettings] = useState({ is_active: true, title: '', offer_text: '', image_url: '', delay_seconds: 5, redirect_url: '' });
@@ -91,7 +93,8 @@ const Admin = () => {
     marketing: false,
     admins: false,
     carts: false,
-    trash: false
+    trash: false,
+    logs: false
   });
 
   // Form states
@@ -183,6 +186,7 @@ const Admin = () => {
       case 'marketing': fetchMarketingData(); break;
       case 'homepage': setTimeout(() => fetchHomepageData(), 1000); break;
       case 'carts': fetchCartsData(); break;
+      case 'logs': fetchLogsData(); break;
       case 'trash': fetchTrashData(); break;
       default: fetchDashboardData();
     }
@@ -369,6 +373,44 @@ const Admin = () => {
       }
     } catch (e) { console.error("Carts fetch failed", e); }
     finally { setTabLoading('carts', false); }
+  };
+
+  const fetchLogsData = async (searchVal = logsSearch) => {
+    setTabLoading('logs', true);
+    try {
+      const res = await fetch(`${API_URL}/api/logs?search=${encodeURIComponent(searchVal)}`, { headers: getAdminHeaders() });
+      if (res.ok) {
+        setLogs(await res.json());
+      } else {
+        showErrorToast('Failed to retrieve system logs.');
+      }
+    } catch (e) {
+      console.error("Logs fetch failed", e);
+      showErrorToast('Logs synchronization fault.');
+    } finally {
+      setTabLoading('logs', false);
+    }
+  };
+
+  const handlePurgeLogs = async () => {
+    if (!window.confirm('WARNING: Are you absolutely certain you want to purge all system logs? This action is permanent.')) return;
+    setIsProcessing(true);
+    try {
+      const res = await fetch(`${API_URL}/api/logs/clear?force=true`, {
+        method: 'DELETE',
+        headers: getAdminHeaders()
+      });
+      if (res.ok) {
+        showSuccessToast('System logs registry completely purged.');
+        setLogs([]);
+      } else {
+        showErrorToast('Failed to purge logs.');
+      }
+    } catch (e) {
+      showErrorToast('Network error during logs purging.');
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleRemoveCart = async (cartId) => {
@@ -1665,7 +1707,7 @@ const Admin = () => {
               onChange={(e) => handleTabChange(e.target.value)}
               className="w-full bg-white border border-black/10 p-4 text-[10px] tracking-[0.3em] uppercase text-black focus:outline-none appearance-none"
             >
-              {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing', 'homepage', 'carts', 'trash'].map(tab => {
+              {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing', 'homepage', 'carts', 'logs', 'trash'].map(tab => {
                 const callbackCount = tab === 'waitlist' ? waitlist.filter(e => e.request_type === 'callback' && (e.status || 'Pending').toLowerCase() === 'pending').length : 0;
                 return (
                   <option key={tab} value={tab}>
@@ -1681,7 +1723,7 @@ const Admin = () => {
 
           {/* Desktop Tab Links */}
           <div className="hidden md:flex flex-wrap gap-x-8 gap-y-6">
-            {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing', 'homepage', 'carts', 'trash'].map(tab => {
+            {['dashboard', 'orders', 'users', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing', 'homepage', 'carts', 'logs', 'trash'].map(tab => {
               const callbackCount = tab === 'waitlist' ? waitlist.filter(e => e.request_type === 'callback' && (e.status || 'Pending').toLowerCase() === 'pending').length : 0;
               return (
                 <button
@@ -2480,6 +2522,91 @@ v>
                     <p className="text-[11px] tracking-[0.4em] text-black/20 uppercase  font-black">The Archive is currently empty.</p>
                   </div>
                 )}
+              </div>
+            )}
+          </motion.div>
+        )}
+
+        {/* TAB CONTENT: LOGS */}
+        {activeTab === 'logs' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-10">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-6 border-b border-black/5">
+              <div>
+                <h2 className="text-xl md:text-3xl font-serif tracking-widest uppercase text-black mb-2">System Audit Logs</h2>
+                <p className="text-[10px] uppercase tracking-widest text-black/40 font-bold">Real-time system events, exceptions, and security milestones</p>
+              </div>
+              <div className="flex gap-4 w-full md:w-auto">
+                <button
+                  onClick={handlePurgeLogs}
+                  disabled={isProcessing}
+                  className="bg-black text-white px-6 py-4 text-[10px] tracking-widest uppercase font-black transition-all hover:bg-neutral-800 disabled:opacity-50 w-full md:w-auto"
+                >
+                  Purge Log Registry
+                </button>
+              </div>
+            </div>
+
+            {/* Filter Search Bar */}
+            <div className="flex bg-neutral-50 border border-black/5 p-2 items-center">
+              <Search className="text-black/30 ml-3 flex-shrink-0" size={16} />
+              <input
+                type="text"
+                placeholder="SEARCH SYSTEM LOGS..."
+                value={logsSearch}
+                onChange={(e) => setLogsSearch(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') fetchLogsData(logsSearch);
+                }}
+                className="w-full bg-transparent border-none py-3 px-4 text-[11px] tracking-widest text-black focus:outline-none placeholder:text-black/20 font-bold"
+              />
+              <button
+                onClick={() => fetchLogsData(logsSearch)}
+                className="bg-black text-white px-6 py-3 text-[10px] tracking-widest uppercase font-black transition-all hover:bg-neutral-800"
+              >
+                Search
+              </button>
+            </div>
+
+            {/* Logs List Console Panel */}
+            {tabsLoading.logs ? (
+              <div className="flex items-center justify-center py-32">
+                <Loader2 className="animate-spin text-black" size={32} />
+              </div>
+            ) : logs.length === 0 ? (
+              <div className="text-center py-32 border border-dashed border-black/10">
+                <ClipboardList className="mx-auto text-black/10 mb-8" size={64} strokeWidth={0.5} />
+                <p className="text-[11px] tracking-[0.4em] text-black/20 uppercase font-black">No system logs found matching your query.</p>
+              </div>
+            ) : (
+              <div className="bg-neutral-950 text-neutral-300 font-mono text-[11px] leading-relaxed p-6 rounded-lg overflow-x-auto max-h-[600px] border border-black/10 shadow-2xl relative">
+                {/* Console header */}
+                <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4 text-[9px] uppercase tracking-widest text-white/40">
+                  <span>Palace Registry Terminal v1.0.4</span>
+                  <span>{logs.length} entries loaded</span>
+                </div>
+                <div className="space-y-3 font-mono">
+                  {logs.map((log) => {
+                    let levelColor = 'text-gray-400';
+                    if (log.level === 'ERROR') levelColor = 'text-red-500 font-bold';
+                    else if (log.level === 'WARN') levelColor = 'text-amber-500 font-bold';
+                    else if (log.level === 'INFO') levelColor = 'text-emerald-500';
+
+                    return (
+                      <div key={log.id} className="border-b border-white/5 pb-3 last:border-b-0 hover:bg-white/5 p-2 transition-all">
+                        <div className="flex flex-wrap items-center gap-3">
+                          <span className="text-white/40">[{new Date(log.created_at).toLocaleString()}]</span>
+                          <span className={`${levelColor} uppercase tracking-wider`}>{log.level}</span>
+                          <span className="text-white select-all font-bold">{log.message}</span>
+                        </div>
+                        {log.meta && Object.keys(log.meta).length > 0 && (
+                          <pre className="mt-2 text-[10px] text-white/50 bg-black/30 p-3 rounded overflow-x-auto whitespace-pre-wrap max-w-full border border-white/5">
+                            {JSON.stringify(log.meta, null, 2)}
+                          </pre>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             )}
           </motion.div>
