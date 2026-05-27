@@ -2598,9 +2598,9 @@ v>
                           <span className={`${levelColor} uppercase tracking-wider`}>{log.level}</span>
                           <span className="text-white select-all font-bold">{log.message}</span>
                         </div>
-                        {log.meta && Object.keys(log.meta).length > 0 && (
-                          <pre className="mt-2 text-[10px] text-white/50 bg-black/30 p-3 rounded overflow-x-auto whitespace-pre-wrap max-w-full border border-white/5">
-                            {JSON.stringify(log.meta, null, 2)}
+                        {log.level === 'ERROR' && log.meta?.stack && (
+                          <pre className="mt-2 text-[10px] text-red-400 bg-red-950/20 p-3 rounded overflow-x-auto whitespace-pre font-mono max-w-full border border-red-900/30">
+                            {log.meta.stack}
                           </pre>
                         )}
                       </div>
