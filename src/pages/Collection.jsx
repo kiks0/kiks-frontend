@@ -14,6 +14,7 @@ import { formatCurrency } from '../utils/currency';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 import PageLoader from '../components/PageLoader';
+import { logClientActivity } from '../utils/clientLogger';
 
 const Collection = () => {
     const { t } = useTranslation();
@@ -44,7 +45,11 @@ const Collection = () => {
                     return;
                 }
                 const colData = await colRes.json();
-                setCollection(colData.msg ? null : colData);
+                const validCollection = colData.msg ? null : colData;
+                setCollection(validCollection);
+                if (validCollection && validCollection.name) {
+                    logClientActivity('Opened collection page', validCollection.name);
+                }
 
                 // Fetch products for this collection
                 const prodRes = await fetch(`${API_URL}/api/products?collection=${category}`);

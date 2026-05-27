@@ -12,6 +12,7 @@ import SEO from '../components/SEO';
 import { getFullImageUrl } from '../utils/url';
 
 import PageLoader from '../components/PageLoader';
+import { logClientActivity } from '../utils/clientLogger';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -114,6 +115,9 @@ const ProductDetail = () => {
                 const res = await fetch(`${API_URL}/api/products/${productSlug || slug}`);
                 const data = await res.json();
                 setProduct(data);
+                if (data && data.name) {
+                    logClientActivity('Opened product details', data.name);
+                }
 
                 // Fetch Reviews
                 if (data.id) {

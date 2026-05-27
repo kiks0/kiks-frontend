@@ -7,6 +7,7 @@ import { removeFromCart, updateQuantity, setCart } from '../store/cartSlice';
 import { useNavigate } from 'react-router-dom';
 import { getFullImageUrl } from '../utils/url';
 import { formatCurrency } from '../utils/currency';
+import { logClientActivity } from '../utils/clientLogger';
 
 const CartDrawer = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
@@ -20,57 +21,60 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
   // --- REAL-TIME CART SYNC ---
   useEffect(() => {
-    if (isOpen && items.length > 0) {
-      const syncCart = async () => {
-        try {
-          const updatedItems = await Promise.all(items.map(async (item) => {
-            const currentSlug = item.slug || item.name?.toLowerCase().replace(/\s+/g, '-');
-            console.log(`[STOCK_CHECK] Checking ${item.name} with slug: ${currentSlug}`);
-
-            const res = await fetch(`${API_URL}/api/products/${currentSlug}`);
-            if (!res.ok) {
-              console.warn(`[STOCK_SYNC] Failed to fetch stock for ${item.name}. Status: ${res.status}`);
-              return item;
+    if (isOpen) {
+      logClientActivity('Opened cart drawer', `Items count: ${items.length}`);
+      if (items.length > 0) {
+        const syncCart = async () => {
+          try {
+            const updatedItems = await Promise.all(items.map(async (item) => {
+              const currentSlug = item.slug || item.name?.toLowerCase().replace(/\s+/g, '-');
+              console.log(`[STOCK_CHECK] Checking ${item.name} with slug: ${currentSlug}`);
+  
+              const res = await fetch(`${API_URL}/api/products/${currentSlug}`);
+              if (!res.ok) {
+                console.warn(`[STOCK_SYNC] Failed to fetch stock for ${item.name}. Status: ${res.status}`);
+                return item;
+              }
+              const fresh = await res.json();
+              console.log(`[STOCK_SYNC] ${item.name}: Server says ${fresh.stock_count}, Cart needs ${item.quantity}`);
+  
+              const priceRaw = (fresh.sale_price || fresh.price || "0").toString().replace(/[^0-9]/g, '');
+              const currentPrice = parseInt(priceRaw) || 0;
+  
+              const oldPriceRaw = (item.sale_price || item.price || "0").toString().replace(/[^0-9]/g, '');
+              const oldPrice = parseInt(oldPriceRaw) || 0;
+  
+              const isStockOut = Number(fresh.stock_count || 0) <= 0 || Number(fresh.stock_count || 0) < Number(item.quantity);
+  
+              return {
+                ...item,
+                price: fresh.price,
+                sale_price: fresh.sale_price,
+                stock_count: fresh.stock_count,
+                isOOS: isStockOut,
+                priceChanged: currentPrice !== oldPrice
+              };
+            }));
+  
+            // Determine if we need to update Redux (only if data actually changed)
+            const hasChanges = updatedItems.some((item, idx) => {
+              const old = items[idx];
+              if (!old) return true;
+              return item.price !== old.price ||
+                item.sale_price !== old.sale_price ||
+                item.stock_count !== old.stock_count ||
+                item.isOOS !== old.isOOS;
+            });
+  
+            if (hasChanges) {
+              dispatch(setCart({ items: updatedItems }));
             }
-            const fresh = await res.json();
-            console.log(`[STOCK_SYNC] ${item.name}: Server says ${fresh.stock_count}, Cart needs ${item.quantity}`);
-
-            const priceRaw = (fresh.sale_price || fresh.price || "0").toString().replace(/[^0-9]/g, '');
-            const currentPrice = parseInt(priceRaw) || 0;
-
-            const oldPriceRaw = (item.sale_price || item.price || "0").toString().replace(/[^0-9]/g, '');
-            const oldPrice = parseInt(oldPriceRaw) || 0;
-
-            const isStockOut = Number(fresh.stock_count || 0) <= 0 || Number(fresh.stock_count || 0) < Number(item.quantity);
-
-            return {
-              ...item,
-              price: fresh.price,
-              sale_price: fresh.sale_price,
-              stock_count: fresh.stock_count,
-              isOOS: isStockOut,
-              priceChanged: currentPrice !== oldPrice
-            };
-          }));
-
-          // Determine if we need to update Redux (only if data actually changed)
-          const hasChanges = updatedItems.some((item, idx) => {
-            const old = items[idx];
-            if (!old) return true;
-            return item.price !== old.price ||
-              item.sale_price !== old.sale_price ||
-              item.stock_count !== old.stock_count ||
-              item.isOOS !== old.isOOS;
-          });
-
-          if (hasChanges) {
-            dispatch(setCart({ items: updatedItems }));
+          } catch (err) {
+            console.error("Cart sync fault:", err);
           }
-        } catch (err) {
-          console.error("Cart sync fault:", err);
-        }
-      };
-      syncCart();
+        };
+        syncCart();
+      }
     }
   }, [isOpen]);
 

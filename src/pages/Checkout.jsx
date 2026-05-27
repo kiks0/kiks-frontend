@@ -32,6 +32,7 @@ import { clearCart, setCart } from '../store/cartSlice';
 import { formatCurrency } from '../utils/currency';
 import ActionLoader from '../components/ActionLoader';
 import { trackPurchase } from '../utils/analytics';
+import { logClientActivity } from '../utils/clientLogger';
 
 const Checkout = () => {
     const navigate = useNavigate();
@@ -91,6 +92,10 @@ const Checkout = () => {
             navigate('/login');
         }
     }, [isAuthenticated, navigate]);
+
+    useEffect(() => {
+        logClientActivity('Opened checkout page');
+    }, []);
 
     useEffect(() => {
         if (isAuthenticated && token) {
