@@ -1,10 +1,16 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Zap, Globe, Shield, Wind, Droplets, Sparkles } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const About = () => {
     return (
         <div className="bg-white min-h-screen text-black pt-20 md:pt-32 pb-20 md:pb-32 px-5 md:px-12 font-sans overflow-hidden selection:bg-black selection:text-white">
+            <SEO 
+                title="About Us | The Art of Alchemy" 
+                description="Learn about the heritage of KIKS, an independent luxury perfume brand crafting exceptional Extrait de Parfum fragrances in India."
+                keywords="About KIKS, Luxury Perfume Brand India, Scent Alchemy, Niche Perfumery"
+            />
             
             {/* HERO: THE BRAND SECTION */}
             <section className="container mx-auto max-w-7xl relative mb-12 md:mb-32">

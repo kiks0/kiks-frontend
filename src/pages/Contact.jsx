@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, MessageSquare, Globe, Sparkles, CheckCircle2 } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const Contact = () => {
     const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
@@ -37,6 +38,11 @@ const Contact = () => {
 
     return (
         <div className="bg-white min-h-screen text-black pt-20 md:pt-32 pb-12 md:pb-16 font-sans selection:bg-black/10 selection:text-black overflow-hidden relative">
+            <SEO 
+                title="Contact Us | Customer Concierge" 
+                description="Get in touch with KIKS Ultra Luxury. Contact our fragrance concierge for inquiries, custom orders, or customer support in India."
+                keywords="Contact KIKS, Perfume Concierge, Luxury Fragrances Support India"
+            />
 
             {/* Background Accents */}
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-black/5 blur-[120px] rounded-full pointer-events-none" />

@@ -170,10 +170,10 @@ const Collection = () => {
                                 className="mb-12 px-6"
                             >
 
-                                <h2 className="text-4xl sm:text-5xl md:text-8xl font-serif tracking-[0.1em] md:tracking-[0.15em] text-white relative z-20 uppercase leading-tight">
+                                <h1 className="text-4xl sm:text-5xl md:text-8xl font-serif tracking-[0.1em] md:tracking-[0.15em] text-white relative z-20 uppercase leading-tight">
                                     {collection?.name} <br className="md:hidden" />
                                     <span className="text-[8px] sm:text-xs md:text-sm block mt-2 md:mt-8 tracking-[0.3em] md:tracking-[0.4em] text-white/40 font-sans italic lowercase">Collection</span>
-                                </h2>
+                                </h1>
                             </motion.div>
 
 
@@ -211,11 +211,11 @@ const Collection = () => {
                                 >
                                     <ArrowRight size={10} className="mr-3 rotate-180 group-hover:-translate-x-2 transition-transform" /> Back to Collection
                                 </button>
-                                <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif tracking-[0.05em] text-black uppercase italic">
+                                <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif tracking-[0.05em] text-black uppercase italic">
                                     {collection?.name}
-                                </h2>
-                                <p className="text-black/40 text-[10px] tracking-[0.4em] md:tracking-[0.6em] uppercase mt-4 md:mt-6 max-w-md leading-relaxed">
-                                    Explore our {collection?.name?.toLowerCase().endsWith('collection') ? collection?.name?.toLowerCase() : `${collection?.name?.toLowerCase()} collection`}.
+                                </h1>
+                                <p className="text-black/40 text-[10px] tracking-[0.2em] md:tracking-[0.3em] uppercase mt-4 md:mt-6 max-w-md leading-relaxed">
+                                    {collection?.description || `Explore our ${collection?.name?.toLowerCase().endsWith('collection') ? collection?.name?.toLowerCase() : `${collection?.name?.toLowerCase()} collection`}.`}
                                 </p>
                             </div>
 

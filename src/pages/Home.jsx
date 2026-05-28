@@ -370,7 +370,7 @@ const Home = () => {
   return (
     <div className="bg-white min-h-screen text-black relative">
       <SEO
-        title=""
+        title="Premium Perfumes & Fragrances"
         description="High quality perfumes handcrafted with rare ingredients. Explore our exclusive collection of Extrait de Parfum."
         keywords="Luxury Perfume, Extrait de Parfum, KIKS, Premium Fragrance, Elite Collection"
       />
