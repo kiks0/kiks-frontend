@@ -9,6 +9,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { getFullImageUrl } from '../utils/url';
 import { Edit2, ChevronUp } from 'lucide-react';
+import { logClientActivity } from '../utils/clientLogger';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,6 +33,10 @@ const Home = () => {
     link: '/collection/arambh/elite'
   });
   const [galleryImages, setGalleryImages] = useState([]);
+
+  useEffect(() => {
+    logClientActivity('Opened home page');
+  }, []);
 
   // Indestructible Mobile & Refresh Stabilization
   useEffect(() => {

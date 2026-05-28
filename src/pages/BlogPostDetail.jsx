@@ -5,6 +5,7 @@ import { ArrowLeft, Calendar, User, Share2, Loader2, Tag } from 'lucide-react';
 import PageLoader from '../components/PageLoader';
 import SEO from '../components/SEO';
 import { getFullImageUrl } from '../utils/url';
+import { logClientActivity } from '../utils/clientLogger';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -24,6 +25,9 @@ const BlogPostDetail = () => {
             if (res.ok) {
                 const data = await res.json();
                 setPost(data);
+                if (data && data.title) {
+                    logClientActivity('Opened blog post', data.title);
+                }
             }
         } catch (err) {
             console.error("Error fetching story detail:", err);

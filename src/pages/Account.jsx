@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { logout, updateProfile } from '../store/authSlice';
 import { clearWishlist } from '../store/wishlistSlice';
 import { clearCart } from '../store/cartSlice';
+import { logClientActivity } from '../utils/clientLogger';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -31,6 +32,10 @@ const Account = () => {
   const [deletionRequested, setDeletionRequested] = useState(false);
   const [deletionStatus, setDeletionStatus] = useState('idle'); // idle, loading, success
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
+  useEffect(() => {
+    logClientActivity('Opened account settings');
+  }, []);
 
   useEffect(() => {
     if (appUser) {

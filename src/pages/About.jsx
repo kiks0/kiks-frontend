@@ -1,9 +1,15 @@
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Zap, Globe, Shield, Wind, Droplets, Sparkles } from 'lucide-react';
 import SEO from '../components/SEO';
+import { logClientActivity } from '../utils/clientLogger';
 
 const About = () => {
+    useEffect(() => {
+        logClientActivity('Opened about page');
+    }, []);
+
     return (
         <div className="bg-white min-h-screen text-black pt-20 md:pt-32 pb-20 md:pb-32 px-5 md:px-12 font-sans overflow-hidden selection:bg-black selection:text-white">
             <SEO 

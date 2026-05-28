@@ -6,6 +6,7 @@ import { Calendar, User, ArrowRight, Layout, Sparkles, Loader2 } from 'lucide-re
 import PageLoader from '../components/PageLoader';
 import SEO from '../components/SEO';
 import { getFullImageUrl } from '../utils/url';
+import { logClientActivity } from '../utils/clientLogger';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -16,6 +17,7 @@ const Blog = () => {
 
     useEffect(() => {
         fetchPosts();
+        logClientActivity('Opened blog listing');
     }, []);
 
     const fetchPosts = async () => {

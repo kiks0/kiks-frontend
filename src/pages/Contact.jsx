@@ -1,11 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, MessageSquare, Globe, Sparkles, CheckCircle2 } from 'lucide-react';
 import SEO from '../components/SEO';
+import { logClientActivity } from '../utils/clientLogger';
 
 const Contact = () => {
     const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
     const [status, setStatus] = useState('idle'); // idle, sending, success, error
+
+    useEffect(() => {
+        logClientActivity('Opened contact page');
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

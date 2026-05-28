@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { getFullImageUrl } from '../utils/url';
 import { formatCurrency } from '../utils/currency';
+import { logClientActivity } from '../utils/clientLogger';
 
 const Wishlist = () => {
   const navigate = useNavigate();
@@ -15,6 +16,10 @@ const Wishlist = () => {
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const { activeCurrency, rates, symbols } = useSelector((state) => state.currency);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    logClientActivity('Opened wishlist page');
+  }, []);
 
   useEffect(() => {
     if (!isAuthenticated) {
