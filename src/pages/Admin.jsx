@@ -68,6 +68,7 @@ const Admin = () => {
   const [downloadedHistory, setDownloadedHistory] = useState({ invoices: [], labels: [] });
   const [carts, setCarts] = useState([]);
   const [selectedCarts, setSelectedCarts] = useState([]);
+  const [selectedTrash, setSelectedTrash] = useState([]);
   const [logs, setLogs] = useState([]);
   const [logsSearch, setLogsSearch] = useState('');
 
@@ -234,6 +235,57 @@ const Admin = () => {
       }
     } catch (e) {
       showErrorToast('Restoration failed.');
+    }
+  };
+
+  const handleDestroyItem = async (entity, id) => {
+    if (!window.confirm("Are you sure you want to PERMANENTLY delete this item? This action is irreversible.")) return;
+    try {
+      const res = await fetch(`${API_URL}/api/trash/destroy/${entity}/${id}`, {
+        method: 'DELETE',
+        headers: getAdminHeaders()
+      });
+      if (res.ok) {
+        showSuccessToast('Item permanently deleted.');
+        setSelectedTrash(prev => prev.filter(k => k !== `${entity}-${id}`));
+        fetchTrashData();
+      } else {
+        const errData = await res.json();
+        showErrorToast(errData.msg || 'Permanent deletion failed.');
+      }
+    } catch (e) {
+      showErrorToast('Permanent deletion failed.');
+    }
+  };
+
+  const handleBulkDestroyTrash = async () => {
+    if (selectedTrash.length === 0) return;
+    if (!window.confirm(`Are you sure you want to PERMANENTLY delete the ${selectedTrash.length} selected items? This action cannot be undone.`)) return;
+
+    const items = selectedTrash.map(key => {
+      const [entity, id] = key.split('-');
+      return { entity, id: parseInt(id) };
+    });
+
+    try {
+      const res = await fetch(`${API_URL}/api/trash/bulk-destroy`, {
+        method: 'POST',
+        headers: {
+          ...getAdminHeaders(),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ items })
+      });
+      if (res.ok) {
+        showSuccessToast('Selected items permanently deleted.');
+        setSelectedTrash([]);
+        fetchTrashData();
+      } else {
+        const errData = await res.json();
+        showErrorToast(errData.msg || 'Bulk permanent deletion failed.');
+      }
+    } catch (e) {
+      showErrorToast('Bulk permanent deletion failed.');
     }
   };
 
@@ -2378,9 +2430,19 @@ v>
         {/* TAB CONTENT: TRASH (ARCHIVE) */}
         {activeTab === 'trash' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <div className="mb-12">
-              <h2 className="text-2xl font-serif tracking-widest uppercase text-red-600 mb-4">Decommissioned Assets</h2>
-              <p className="text-[10px] tracking-[0.3em] text-black/40 uppercase  font-black">Restore previously removed items to the active registry.</p>
+            <div className="mb-12 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <h2 className="text-2xl font-serif tracking-widest uppercase text-red-600 mb-4">Decommissioned Assets</h2>
+                <p className="text-[10px] tracking-[0.3em] text-black/40 uppercase font-black">Restore or permanently delete previously removed items.</p>
+              </div>
+              {selectedTrash.length > 0 && (
+                <button
+                  onClick={handleBulkDestroyTrash}
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-[8px] uppercase tracking-widest transition-all flex items-center gap-2 font-bold shadow-lg"
+                >
+                  <Trash2 size={12} /> Permanent Delete Selected ({selectedTrash.length})
+                </button>
+              )}
             </div>
 
             {tabsLoading.trash ? (
@@ -2396,18 +2458,37 @@ v>
                       <Package size={14} className="text-red-600" /> Deleted Orders
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {trashData.orders.map(order => (
-                        <div key={order.id} className="bg-neutral-50 border border-black/5 p-6 flex justify-between items-center group">
-                          <div>
-                            <p className="text-black font-serif">#{order.id.toString().padStart(4, '0')}</p>
-                            <p className="text-[10px] uppercase font-bold text-black/80">{order.customer_name}</p>
-                            <p className="text-[8px] text-black/40 uppercase">Deleted on {new Date(order.deleted_at).toLocaleDateString()}</p>
+                      {trashData.orders.map(order => {
+                        const isSelected = selectedTrash.includes(`orders-${order.id}`);
+                        return (
+                          <div key={order.id} className={`bg-neutral-50 border p-6 flex justify-between items-center group transition-all ${isSelected ? 'border-red-600 shadow-md bg-red-50/10' : 'border-black/5'}`}>
+                            <div className="flex items-center gap-4">
+                              <input
+                                type="checkbox"
+                                className="w-4 h-4 accent-red-600 cursor-pointer"
+                                checked={isSelected}
+                                onChange={() => {
+                                  const key = `orders-${order.id}`;
+                                  setSelectedTrash(prev => prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]);
+                                }}
+                              />
+                              <div>
+                                <p className="text-black font-serif">#{order.id.toString().padStart(4, '0')}</p>
+                                <p className="text-[10px] uppercase font-bold text-black/80">{order.customer_name}</p>
+                                <p className="text-[8px] text-black/40 uppercase">Deleted on {new Date(order.deleted_at).toLocaleDateString()}</p>
+                              </div>
+                            </div>
+                            <div className="flex gap-2">
+                              <button onClick={() => handleRestoreItem('orders', order.id)} className="bg-black text-white px-3 py-1.5 text-[9px] uppercase tracking-widest transition-all">
+                                Restore
+                              </button>
+                              <button onClick={() => handleDestroyItem('orders', order.id)} className="border border-red-600 text-red-600 hover:bg-red-50 px-3 py-1.5 text-[9px] uppercase tracking-widest transition-all">
+                                Delete
+                              </button>
+                            </div>
                           </div>
-                          <button onClick={() => handleRestoreItem('orders', order.id)} className="bg-black text-white px-4 py-2 text-[9px] uppercase tracking-widest transition-all">
-                            Restore
-                          </button>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </section>
                 )}
@@ -2419,20 +2500,39 @@ v>
                       <Layers size={14} className="text-red-600" /> Deleted Products
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {trashData.products.map(p => (
-                        <div key={p.id} className="bg-white border border-black/5 p-6 flex justify-between items-center group">
-                          <div className="flex items-center gap-4">
-                            <img src={getFullImageUrl(p.image_url)} alt="" className="w-10 h-10 object-cover opacity-80" />
-                            <div>
-                              <p className="text-[10px] uppercase font-bold text-black">{p.name}</p>
-                              <p className="text-[8px] text-black/40 uppercase tracking-widest font-black">{p.collection_name}</p>
+                      {trashData.products.map(p => {
+                        const isSelected = selectedTrash.includes(`products-${p.id}`);
+                        return (
+                          <div key={p.id} className={`bg-white border p-6 flex justify-between items-center group transition-all ${isSelected ? 'border-red-600 shadow-md bg-red-50/10' : 'border-black/5'}`}>
+                            <div className="flex items-center gap-4">
+                              <input
+                                type="checkbox"
+                                className="w-4 h-4 accent-red-600 cursor-pointer"
+                                checked={isSelected}
+                                onChange={() => {
+                                  const key = `products-${p.id}`;
+                                  setSelectedTrash(prev => prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]);
+                                }}
+                              />
+                              <div className="flex items-center gap-4">
+                                <img src={getFullImageUrl(p.image_url)} alt="" className="w-10 h-10 object-cover opacity-80" />
+                                <div>
+                                  <p className="text-[10px] uppercase font-bold text-black">{p.name}</p>
+                                  <p className="text-[8px] text-black/40 uppercase tracking-widest font-black">{p.collection_name}</p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex gap-2">
+                              <button onClick={() => handleRestoreItem('products', p.id)} className="bg-black text-white px-3 py-1.5 text-[9px] uppercase tracking-widest transition-all hover:bg-neutral-800">
+                                Restore
+                              </button>
+                              <button onClick={() => handleDestroyItem('products', p.id)} className="border border-red-600 text-red-600 hover:bg-red-50 px-3 py-1.5 text-[9px] uppercase tracking-widest transition-all">
+                                Delete
+                              </button>
                             </div>
                           </div>
-                          <button onClick={() => handleRestoreItem('products', p.id)} className="bg-black text-white px-4 py-2 text-[9px] uppercase tracking-widest transition-all hover:bg-neutral-800">
-                            Restore
-                          </button>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </section>
                 )}
@@ -2444,17 +2544,36 @@ v>
                       <FileText size={14} className="text-red-600" /> Deleted Blogs
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {trashData.blogs.map(blog => (
-                        <div key={blog.id} className="bg-white border border-black/5 p-6 flex justify-between items-center group">
-                          <div>
-                            <p className="text-[10px] uppercase font-bold text-black truncate max-w-[150px]">{blog.title}</p>
-                            <p className="text-[8px] text-black/40 uppercase tracking-widest font-black">By {blog.author}</p>
+                      {trashData.blogs.map(blog => {
+                        const isSelected = selectedTrash.includes(`blogs-${blog.id}`);
+                        return (
+                          <div key={blog.id} className={`bg-white border p-6 flex justify-between items-center group transition-all ${isSelected ? 'border-red-600 shadow-md bg-red-50/10' : 'border-black/5'}`}>
+                            <div className="flex items-center gap-4">
+                              <input
+                                type="checkbox"
+                                className="w-4 h-4 accent-red-600 cursor-pointer"
+                                checked={isSelected}
+                                onChange={() => {
+                                  const key = `blogs-${blog.id}`;
+                                  setSelectedTrash(prev => prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]);
+                                }}
+                              />
+                              <div>
+                                <p className="text-[10px] uppercase font-bold text-black truncate max-w-[150px]">{blog.title}</p>
+                                <p className="text-[8px] text-black/40 uppercase tracking-widest font-black">By {blog.author}</p>
+                              </div>
+                            </div>
+                            <div className="flex gap-2">
+                              <button onClick={() => handleRestoreItem('blogs', blog.id)} className="bg-black text-white px-3 py-1.5 text-[9px] uppercase tracking-widest transition-all hover:bg-neutral-800">
+                                Restore
+                              </button>
+                              <button onClick={() => handleDestroyItem('blogs', blog.id)} className="border border-red-600 text-red-600 hover:bg-red-50 px-3 py-1.5 text-[9px] uppercase tracking-widest transition-all">
+                                Delete
+                              </button>
+                            </div>
                           </div>
-                          <button onClick={() => handleRestoreItem('blogs', blog.id)} className="bg-black text-white px-4 py-2 text-[9px] uppercase tracking-widest transition-all hover:bg-neutral-800">
-                            Restore
-                          </button>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </section>
                 )}
@@ -2466,30 +2585,49 @@ v>
                       <Star size={14} className="text-red-600" /> Deleted Reviews
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {trashData.reviews.map(rev => (
-                        <div key={rev.id} className="bg-white border border-black/5 p-6 flex justify-between items-center group">
-                          <div>
-                            <p className="text-[10px] uppercase font-bold text-black">{rev.first_name} {rev.last_name}</p>
-                            <p className="text-[8px] text-black/60 uppercase tracking-widest mb-1 font-serif font-black">{rev.product_name}</p>
-                            <p className="text-[8px] text-black/40 uppercase mb-3 tracking-widest font-black">Deleted on {new Date(rev.deleted_at).toLocaleDateString()}</p>
-                            {rev.image_urls && (Array.isArray(rev.image_urls) ? rev.image_urls : JSON.parse(rev.image_urls)).length > 0 && (
-                              <div className="flex gap-2">
-                                {(Array.isArray(rev.image_urls) ? rev.image_urls : JSON.parse(rev.image_urls)).map((url, idx) => (
-                                  <img
-                                    key={idx}
-                                    src={getFullImageUrl(url)}
-                                    alt=""
-                                    className="w-8 h-8 object-cover border border-black/10"
-                                  />
-                                ))}
+                      {trashData.reviews.map(rev => {
+                        const isSelected = selectedTrash.includes(`reviews-${rev.id}`);
+                        return (
+                          <div key={rev.id} className={`bg-white border p-6 flex justify-between items-center group transition-all ${isSelected ? 'border-red-600 shadow-md bg-red-50/10' : 'border-black/5'}`}>
+                            <div className="flex items-center gap-4">
+                              <input
+                                type="checkbox"
+                                className="w-4 h-4 accent-red-600 cursor-pointer"
+                                checked={isSelected}
+                                onChange={() => {
+                                  const key = `reviews-${rev.id}`;
+                                  setSelectedTrash(prev => prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]);
+                                }}
+                              />
+                              <div>
+                                <p className="text-[10px] uppercase font-bold text-black">{rev.first_name} {rev.last_name}</p>
+                                <p className="text-[8px] text-black/60 uppercase tracking-widest mb-1 font-serif font-black">{rev.product_name}</p>
+                                <p className="text-[8px] text-black/40 uppercase mb-3 tracking-widest font-black">Deleted on {new Date(rev.deleted_at).toLocaleDateString()}</p>
+                                {rev.image_urls && (Array.isArray(rev.image_urls) ? rev.image_urls : JSON.parse(rev.image_urls)).length > 0 && (
+                                  <div className="flex gap-2">
+                                    {(Array.isArray(rev.image_urls) ? rev.image_urls : JSON.parse(rev.image_urls)).map((url, idx) => (
+                                      <img
+                                        key={idx}
+                                        src={getFullImageUrl(url)}
+                                        alt=""
+                                        className="w-8 h-8 object-cover border border-black/10"
+                                      />
+                                    ))}
+                                  </div>
+                                )}
                               </div>
-                            )}
+                            </div>
+                            <div className="flex gap-2">
+                              <button onClick={() => handleRestoreItem('reviews', rev.id)} className="bg-black text-white px-3 py-1.5 text-[9px] uppercase tracking-widest transition-all hover:bg-neutral-800">
+                                Restore
+                              </button>
+                              <button onClick={() => handleDestroyItem('reviews', rev.id)} className="border border-red-600 text-red-600 hover:bg-red-50 px-3 py-1.5 text-[9px] uppercase tracking-widest transition-all">
+                                Delete
+                              </button>
+                            </div>
                           </div>
-                          <button onClick={() => handleRestoreItem('reviews', rev.id)} className="bg-black text-white px-4 py-2 text-[9px] uppercase tracking-widest transition-all hover:bg-neutral-800">
-                            Restore
-                          </button>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </section>
                 )}
@@ -2501,16 +2639,31 @@ v>
                       <ImageIcon size={14} className="text-red-600" /> Deleted Gallery Assets
                     </h3>
                     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                      {trashData.gallery.map(img => (
-                        <div key={img.id} className="relative aspect-square group overflow-hidden border border-black/10 bg-neutral-50">
-                          <img src={getFullImageUrl(img.image_url)} alt="" className="w-full h-full object-cover opacity-60" />
-                          <div className="absolute inset-0 flex items-center justify-center bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button onClick={() => handleRestoreItem('community_gallery', img.id)} className="bg-black text-white px-3 py-1.5 text-[8px] uppercase tracking-widest">
-                              Restore
-                            </button>
+                      {trashData.gallery.map(img => {
+                        const isSelected = selectedTrash.includes(`community_gallery-${img.id}`);
+                        return (
+                          <div key={img.id} className={`relative aspect-square group overflow-hidden border bg-neutral-50 transition-all ${isSelected ? 'border-red-600 shadow-md ring-2 ring-red-600/25' : 'border-black/10'}`}>
+                            <img src={getFullImageUrl(img.image_url)} alt="" className="w-full h-full object-cover opacity-60" />
+                            <input
+                              type="checkbox"
+                              className="absolute top-2 left-2 z-10 w-4 h-4 accent-red-600 cursor-pointer"
+                              checked={isSelected}
+                              onChange={() => {
+                                  const key = `community_gallery-${img.id}`;
+                                  setSelectedTrash(prev => prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]);
+                              }}
+                            />
+                            <div className="absolute inset-0 flex flex-col gap-2 items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity p-2">
+                              <button onClick={() => handleRestoreItem('community_gallery', img.id)} className="bg-black text-white w-full py-1.5 text-[8px] uppercase tracking-widest">
+                                Restore
+                              </button>
+                              <button onClick={() => handleDestroyItem('community_gallery', img.id)} className="bg-red-600 text-white w-full py-1.5 text-[8px] uppercase tracking-widest">
+                                Delete
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </section>
                 )}
@@ -2519,7 +2672,7 @@ v>
                 {trashData.orders.length === 0 && trashData.products.length === 0 && trashData.blogs.length === 0 && trashData.reviews.length === 0 && trashData.gallery.length === 0 && (
                   <div className="text-center py-32 border border-dashed border-black/10">
                     <Trash2 className="mx-auto text-black/10 mb-8" size={64} strokeWidth={0.5} />
-                    <p className="text-[11px] tracking-[0.4em] text-black/20 uppercase  font-black">The Archive is currently empty.</p>
+                    <p className="text-[11px] tracking-[0.4em] text-black/20 uppercase font-black">The Archive is currently empty.</p>
                   </div>
                 )}
               </div>
