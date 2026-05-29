@@ -2433,7 +2433,7 @@ v>
             <div className="mb-12 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
                 <h2 className="text-2xl font-serif tracking-widest uppercase text-red-600 mb-4">Decommissioned Assets</h2>
-                <p className="text-[10px] tracking-[0.3em] text-black/40 uppercase font-black">Restore or permanently delete previously removed items.</p>
+                <p className="text-[10px] tracking-[0.3em] text-black/40 uppercase font-black font-bold">Restore previously removed items, or select items to permanently delete.</p>
               </div>
               {selectedTrash.length > 0 && (
                 <button
@@ -2478,14 +2478,9 @@ v>
                                 <p className="text-[8px] text-black/40 uppercase">Deleted on {new Date(order.deleted_at).toLocaleDateString()}</p>
                               </div>
                             </div>
-                            <div className="flex gap-2">
-                              <button onClick={() => handleRestoreItem('orders', order.id)} className="bg-black text-white px-3 py-1.5 text-[9px] uppercase tracking-widest transition-all">
-                                Restore
-                              </button>
-                              <button onClick={() => handleDestroyItem('orders', order.id)} className="border border-red-600 text-red-600 hover:bg-red-50 px-3 py-1.5 text-[9px] uppercase tracking-widest transition-all">
-                                Delete
-                              </button>
-                            </div>
+                            <button onClick={() => handleRestoreItem('orders', order.id)} className="bg-black text-white px-4 py-2 text-[9px] uppercase tracking-widest transition-all">
+                              Restore
+                            </button>
                           </div>
                         );
                       })}
@@ -2522,14 +2517,9 @@ v>
                                 </div>
                               </div>
                             </div>
-                            <div className="flex gap-2">
-                              <button onClick={() => handleRestoreItem('products', p.id)} className="bg-black text-white px-3 py-1.5 text-[9px] uppercase tracking-widest transition-all hover:bg-neutral-800">
-                                Restore
-                              </button>
-                              <button onClick={() => handleDestroyItem('products', p.id)} className="border border-red-600 text-red-600 hover:bg-red-50 px-3 py-1.5 text-[9px] uppercase tracking-widest transition-all">
-                                Delete
-                              </button>
-                            </div>
+                            <button onClick={() => handleRestoreItem('products', p.id)} className="bg-black text-white px-4 py-2 text-[9px] uppercase tracking-widest transition-all hover:bg-neutral-800">
+                              Restore
+                            </button>
                           </div>
                         );
                       })}
@@ -2563,14 +2553,9 @@ v>
                                 <p className="text-[8px] text-black/40 uppercase tracking-widest font-black">By {blog.author}</p>
                               </div>
                             </div>
-                            <div className="flex gap-2">
-                              <button onClick={() => handleRestoreItem('blogs', blog.id)} className="bg-black text-white px-3 py-1.5 text-[9px] uppercase tracking-widest transition-all hover:bg-neutral-800">
-                                Restore
-                              </button>
-                              <button onClick={() => handleDestroyItem('blogs', blog.id)} className="border border-red-600 text-red-600 hover:bg-red-50 px-3 py-1.5 text-[9px] uppercase tracking-widest transition-all">
-                                Delete
-                              </button>
-                            </div>
+                            <button onClick={() => handleRestoreItem('blogs', blog.id)} className="bg-black text-white px-4 py-2 text-[9px] uppercase tracking-widest transition-all hover:bg-neutral-800">
+                              Restore
+                            </button>
                           </div>
                         );
                       })}
@@ -2617,14 +2602,9 @@ v>
                                 )}
                               </div>
                             </div>
-                            <div className="flex gap-2">
-                              <button onClick={() => handleRestoreItem('reviews', rev.id)} className="bg-black text-white px-3 py-1.5 text-[9px] uppercase tracking-widest transition-all hover:bg-neutral-800">
-                                Restore
-                              </button>
-                              <button onClick={() => handleDestroyItem('reviews', rev.id)} className="border border-red-600 text-red-600 hover:bg-red-50 px-3 py-1.5 text-[9px] uppercase tracking-widest transition-all">
-                                Delete
-                              </button>
-                            </div>
+                            <button onClick={() => handleRestoreItem('reviews', rev.id)} className="bg-black text-white px-4 py-2 text-[9px] uppercase tracking-widest transition-all hover:bg-neutral-800">
+                              Restore
+                            </button>
                           </div>
                         );
                       })}
@@ -2656,9 +2636,6 @@ v>
                             <div className="absolute inset-0 flex flex-col gap-2 items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity p-2">
                               <button onClick={() => handleRestoreItem('community_gallery', img.id)} className="bg-black text-white w-full py-1.5 text-[8px] uppercase tracking-widest">
                                 Restore
-                              </button>
-                              <button onClick={() => handleDestroyItem('community_gallery', img.id)} className="bg-red-600 text-white w-full py-1.5 text-[8px] uppercase tracking-widest">
-                                Delete
                               </button>
                             </div>
                           </div>
