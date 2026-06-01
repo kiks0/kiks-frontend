@@ -9,6 +9,25 @@ import { logClientActivity } from '../utils/clientLogger';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
+const renderContent = (content) => {
+    if (!content) return '';
+    
+    // Escape HTML to prevent XSS
+    let safeContent = content
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    
+    // Replace markdown links [Text](URL) with styled anchor tags
+    // Support target="_blank" for external links and normal navigation for internal ones
+    const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+    return safeContent.replace(markdownLinkRegex, (match, anchorText, url) => {
+        const isExternal = url.startsWith('http://') || url.startsWith('https://');
+        const target = isExternal ? 'target="_blank" rel="noopener noreferrer"' : '';
+        return `<a href="${url}" ${target} class="underline underline-offset-4 text-black hover:text-black/60 transition-colors duration-200">${anchorText}</a>`;
+    });
+};
+
 const BlogPostDetail = () => {
     const { slug } = useParams();
     const [post, setPost] = useState(null);
@@ -117,10 +136,9 @@ const BlogPostDetail = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-[14px] md:text-[16px] lg:text-[18px] text-black/90 leading-[1.8] md:leading-[2.2] tracking-normal mb-12 whitespace-pre-wrap font-serif font-light italic"
-                    >
-                        {post.content}
-                    </motion.div>
+                        className="text-[14px] md:text-[16px] lg:text-[18px] text-black/90 leading-[1.8] md:leading-[2.2] tracking-normal mb-12 whitespace-pre-wrap font-sans"
+                        dangerouslySetInnerHTML={{ __html: renderContent(post.content) }}
+                    />
 
                     <motion.div
                         initial={{ opacity: 0 }}
