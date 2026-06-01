@@ -25,9 +25,9 @@ const Home = () => {
 
   const [heroVideoUrl, setHeroVideoUrl] = useState('https://res.cloudinary.com/dprxiz6os/video/upload/v1778044738/hero-video_webm_vlvq4g.webm');
   const [signatureProduct, setSignatureProduct] = useState({
-    image_url: 'https://res.cloudinary.com/dprxiz6os/image/upload/v1778429911/kiks_general/kiks-1778429909414-168768629_meinpk.png',
+    image_url: 'https://res.cloudinary.com/dprxiz6os/image/upload/v1779798423/kiks_general/kiks-1779798422610-749106583_xke7wd.webp',
     name: 'Elite',
-    description: 'Handcrafted with rare ingredients to define your signature presence.',
+    description: 'Handcrafted with rare ingr  edients to define your signature presence.',
     strength: 'Extrait de Parfum',
     notes: 'Aoud, Midnight Spices, Rare Woods',
     link: '/collection/arambh/elite'
@@ -43,11 +43,11 @@ const Home = () => {
     if (history.scrollRestoration) {
       history.scrollRestoration = 'manual';
     }
-    
-    ScrollTrigger.config({ 
+
+    ScrollTrigger.config({
       ignoreMobileResize: true, // PREVENT JITTER ON ADDRESS BAR TOGGLE
       limitCallbacks: true,
-      autoRefreshEvents: "visibilitychange,DOMContentLoaded,load,resize" 
+      autoRefreshEvents: "visibilitychange,DOMContentLoaded,load,resize"
     });
 
     // Forced Refresh Sequence
@@ -202,7 +202,7 @@ const Home = () => {
   // New Perfume Showcase Logic (GSAP Sticky Reveal)
   useEffect(() => {
     if (!showcaseContainerRef.current) return;
-    
+
     const mm = gsap.matchMedia();
 
     // Desktop: Side-by-Side Split
@@ -217,7 +217,7 @@ const Home = () => {
 
       sections.forEach((section, index) => {
         if (!photos[index]) return;
-        
+
         const headline = section.querySelector('.showcaseReveal');
 
         // Image Reveal Timeline
@@ -300,10 +300,10 @@ const Home = () => {
 
         // Stealth Stack Reveal: Faithful to 'old thing' - fade in over previous essence
         tl.to(slide, {
-            autoAlpha: 1,
-            scale: 1,
-            duration: 1,
-            ease: "power2.inOut"
+          autoAlpha: 1,
+          scale: 1,
+          duration: 1,
+          ease: "power2.inOut"
         }, index);
       });
 
@@ -314,9 +314,9 @@ const Home = () => {
 
     // Robust Refresh Protocol: Ensure ScrollTrigger is perfectly synced after images load
     const refreshTimer = setTimeout(() => {
-        // Refresh only if we're not in the middle of a reveal
-        ScrollTrigger.refresh();
-        console.log("[GSAP] ScrollTrigger Synchronized.");
+      // Refresh only if we're not in the middle of a reveal
+      ScrollTrigger.refresh();
+      console.log("[GSAP] ScrollTrigger Synchronized.");
     }, 2000);
 
     return () => {
@@ -408,14 +408,14 @@ const Home = () => {
             <div ref={heroTitleRef} className="will-change-transform">
               <h1 className="text-6xl md:text-8xl font-serif font-bold tracking-[0.2em] text-white uppercase mb-8">
                 {['K', 'I', 'K', 'S'].map((char, index) => (
-                  <motion.span 
-                    key={index} 
+                  <motion.span
+                    key={index}
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ 
-                      duration: 1.2, 
-                      delay: index * 0.15, 
-                      ease: [0.215, 0.61, 0.355, 1] 
+                    transition={{
+                      duration: 1.2,
+                      delay: index * 0.15,
+                      ease: [0.215, 0.61, 0.355, 1]
                     }}
                     className="inline-block"
                   >
@@ -424,9 +424,9 @@ const Home = () => {
                 ))}
               </h1>
             </div>
-              
+
             <div ref={heroDescRef} className="max-w-2xl">
-              <motion.p 
+              <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1, duration: 1.2 }}
@@ -441,117 +441,117 @@ const Home = () => {
 
       {/* Product 1: SIGNATURE SHOWCASE */}
       {signatureProduct.name && (
-      <section className="relative pt-16 pb-8 md:py-16 overflow-hidden bg-white">
-        {/* Decorative Background Elements */}
-        <div className="absolute top-1/2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-black/5 to-transparent pointer-events-none" />
-        <div className="absolute top-1/4 right-0 w-64 h-64 bg-black/5 blur-[120px] rounded-full pointer-events-none" />
+        <section className="relative pt-16 pb-8 md:py-16 overflow-hidden bg-white">
+          {/* Decorative Background Elements */}
+          <div className="absolute top-1/2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-black/5 to-transparent pointer-events-none" />
+          <div className="absolute top-1/4 right-0 w-64 h-64 bg-black/5 blur-[120px] rounded-full pointer-events-none" />
 
-        <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-[1400px]">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-12 lg:gap-24">
+          <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-[1400px]">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-12 lg:gap-24">
 
-            {/* Mobile Header: Name on Top */}
-            <div className="md:hidden text-center mb-6">
-              <h2 className="text-5xl font-serif font-light tracking-[0.15em] leading-none text-black uppercase">
-                {signatureProduct.name}
-              </h2>
-            </div>
-
-            {/* Visual Column */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              viewport={{ once: true, amount: 0.2 }}
-              className="w-full md:w-[48%] relative group"
-            >
-              {/* Desktop Only Frame */}
-              <div className="hidden md:block absolute -inset-4 border border-black/5 pointer-events-none group-hover:border-black/10 transition-colors duration-1000" />
-              
-              <Link to={signatureProduct.link || "#"} className="relative block overflow-hidden rounded-sm md:bg-[#f9f9f9] md:border md:border-black/5 md:p-4">
-                {isVideo(signatureProduct.image_url) ? (
-                  <video
-                    src={getFullImageUrl(signatureProduct.image_url)}
-                    className="w-full h-auto object-cover md:object-contain"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                  />
-                ) : (
-                  <img
-                    src={signatureProduct.image_url ? getFullImageUrl(signatureProduct.image_url) : "https://res.cloudinary.com/dprxiz6os/image/upload/v1778050809/IMG-20260506-WA0002.jpg_cqlvdx.webp"}
-                    alt={signatureProduct.name}
-                    fetchpriority="high"
-                    width="800"
-                    height="1000"
-                    decoding="async"
-                    style={{ willChange: 'transform' }}
-                    className="w-full h-auto object-cover md:object-contain transition-transform duration-[2000ms] ease-out group-hover:scale-105"
-                  />
-                )}
-              </Link>
-            </motion.div>
-
-            {/* Narrative Column */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-              viewport={{ once: true, amount: 0.2 }}
-              className="w-full md:w-[45%] flex flex-col items-center md:items-start justify-center text-center md:text-left relative"
-            >
-              {/* Large Background Ghost Text (Desktop Only) */}
-              <div className="absolute -top-20 -left-10 text-[12rem] font-serif font-black text-black/[0.02] pointer-events-none select-none hidden lg:block uppercase tracking-tighter leading-none">
-                {signatureProduct.name}
+              {/* Mobile Header: Name on Top */}
+              <div className="md:hidden text-center mb-6">
+                <h2 className="text-5xl font-serif font-light tracking-[0.15em] leading-none text-black uppercase">
+                  {signatureProduct.name}
+                </h2>
               </div>
 
-              <div className="relative z-10 space-y-4 md:space-y-6 w-full mt-8 md:mt-0">
-                {/* Header (Desktop Only) */}
-                <div className="hidden md:block space-y-4">
-                  <h2 className="text-5xl md:text-[5.5rem] font-serif font-light tracking-[0.15em] leading-none text-black uppercase">
-                    {signatureProduct.name}
-                  </h2>
+              {/* Visual Column */}
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1, ease: "easeOut" }}
+                viewport={{ once: true, amount: 0.2 }}
+                className="w-full md:w-[48%] relative group"
+              >
+                {/* Desktop Only Frame */}
+                <div className="hidden md:block absolute -inset-4 border border-black/5 pointer-events-none group-hover:border-black/10 transition-colors duration-1000" />
+
+                <Link to={signatureProduct.link || "#"} className="relative block overflow-hidden rounded-sm md:bg-[#f9f9f9] md:border md:border-black/5 md:p-4">
+                  {isVideo(signatureProduct.image_url) ? (
+                    <video
+                      src={getFullImageUrl(signatureProduct.image_url)}
+                      className="w-full h-auto object-cover md:object-contain"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                    />
+                  ) : (
+                    <img
+                      src={signatureProduct.image_url ? getFullImageUrl(signatureProduct.image_url) : "https://res.cloudinary.com/dprxiz6os/image/upload/v1778050809/IMG-20260506-WA0002.jpg_cqlvdx.webp"}
+                      alt={signatureProduct.name}
+                      fetchpriority="high"
+                      width="800"
+                      height="1000"
+                      decoding="async"
+                      style={{ willChange: 'transform' }}
+                      className="w-full h-auto object-cover md:object-contain transition-transform duration-[2000ms] ease-out group-hover:scale-105"
+                    />
+                  )}
+                </Link>
+              </motion.div>
+
+              {/* Narrative Column */}
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
+                viewport={{ once: true, amount: 0.2 }}
+                className="w-full md:w-[45%] flex flex-col items-center md:items-start justify-center text-center md:text-left relative"
+              >
+                {/* Large Background Ghost Text (Desktop Only) */}
+                <div className="absolute -top-20 -left-10 text-[12rem] font-serif font-black text-black/[0.02] pointer-events-none select-none hidden lg:block uppercase tracking-tighter leading-none">
+                  {signatureProduct.name}
                 </div>
 
-                {/* Description Block */}
-                <div className="space-y-4 md:space-y-5 max-w-lg mx-auto md:mx-0">
-                  <div className="space-y-2">
-                    {signatureProduct.strength && (
-                      <p className="text-[10px] md:text-xs tracking-[0.4em] text-black/40 uppercase font-black">
-                        {signatureProduct.strength}
-                      </p>
-                    )}
-                    {signatureProduct.description && (
-                      <p className="text-[11px] md:text-base text-black leading-relaxed tracking-widest font-normal opacity-90">
-                        {signatureProduct.description}
-                      </p>
-                    )}
+                <div className="relative z-10 space-y-4 md:space-y-6 w-full mt-8 md:mt-0">
+                  {/* Header (Desktop Only) */}
+                  <div className="hidden md:block space-y-4">
+                    <h2 className="text-5xl md:text-[5.5rem] font-serif font-light tracking-[0.15em] leading-none text-black uppercase">
+                      {signatureProduct.name}
+                    </h2>
                   </div>
 
-                  {signatureProduct.link && (
-                    <Link to={signatureProduct.link} className="inline-block group/link">
-                      <span className="text-[10px] tracking-[0.4em] text-black uppercase font-bold border-b border-black/20 pb-1 group-hover/link:border-black transition-colors">
-                        SHOP NOW
-                      </span>
-                    </Link>
-                  )}
-
-                  {(signatureProduct.notes) && (
-                    <div className="pt-8 border-t border-black/5 mt-8">
-                      <div>
-                        <p className="text-[8px] tracking-[0.3em] uppercase text-black/40 font-bold mb-1">MAIN NOTES</p>
-                        <p className="text-[10px] tracking-[0.2em] uppercase text-black font-medium">{signatureProduct.notes}</p>
-                      </div>
+                  {/* Description Block */}
+                  <div className="space-y-4 md:space-y-5 max-w-lg mx-auto md:mx-0">
+                    <div className="space-y-2">
+                      {signatureProduct.strength && (
+                        <p className="text-[10px] md:text-xs tracking-[0.4em] text-black/40 uppercase font-black">
+                          {signatureProduct.strength}
+                        </p>
+                      )}
+                      {signatureProduct.description && (
+                        <p className="text-[11px] md:text-base text-black leading-relaxed tracking-widest font-normal opacity-90">
+                          {signatureProduct.description}
+                        </p>
+                      )}
                     </div>
-                  )}
-                </div>
-              </div>
-            </motion.div>
 
+                    {signatureProduct.link && (
+                      <Link to={signatureProduct.link} className="inline-block group/link">
+                        <span className="text-[10px] tracking-[0.4em] text-black uppercase font-bold border-b border-black/20 pb-1 group-hover/link:border-black transition-colors">
+                          SHOP NOW
+                        </span>
+                      </Link>
+                    )}
+
+                    {(signatureProduct.notes) && (
+                      <div className="pt-8 border-t border-black/5 mt-8">
+                        <div>
+                          <p className="text-[8px] tracking-[0.3em] uppercase text-black/40 font-bold mb-1">MAIN NOTES</p>
+                          <p className="text-[10px] tracking-[0.2em] uppercase text-black font-medium">{signatureProduct.notes}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
       )}
 
       {/* SECTION 3: THE LUXURY SHOWCASE (GSAP STICKY REVEAL) */}
@@ -575,14 +575,14 @@ const Home = () => {
                 <div className="relative group w-full max-w-[200px] aspect-[3/4] mb-6">
                   <div className="absolute inset-0 bg-black/5 blur-3xl rounded-full opacity-30" />
                   <Link to={product.product_link || '#'} className="relative block w-full h-full bg-[#fcfcfc] border border-black/10 overflow-hidden aspect-[3/4]">
-                    <img 
-                      src={getFullImageUrl(product.image_url)} 
-                      alt={product.name} 
+                    <img
+                      src={getFullImageUrl(product.image_url)}
+                      alt={product.name}
                       loading="lazy"
                       width="300"
                       height="400"
                       decoding="async"
-                      className="w-full h-full object-contain p-6" 
+                      className="w-full h-full object-contain p-6"
                     />
                   </Link>
                 </div>
@@ -788,12 +788,12 @@ const Home = () => {
         <section className="pt-12 pb-8 md:pt-20 md:pb-12 border-t border-black/5 bg-white">
           <div className="container mx-auto px-6 max-w-[1400px]">
             <div className="text-center mb-10 md:mb-16">
-                <h2 className="text-4xl md:text-6xl font-serif font-light text-black tracking-[0.2em] leading-tight mb-8 uppercase">
-                  {t('home.house_kiks')}
-                </h2>
-                <p className="text-black/70 text-sm md:text-base leading-relaxed max-w-2xl mx-auto tracking-widest font-light">
-                  Our community around the world.
-                </p>
+              <h2 className="text-4xl md:text-6xl font-serif font-light text-black tracking-[0.2em] leading-tight mb-8 uppercase">
+                {t('home.house_kiks')}
+              </h2>
+              <p className="text-black/70 text-sm md:text-base leading-relaxed max-w-2xl mx-auto tracking-widest font-light">
+                Our community around the world.
+              </p>
             </div>
 
             <div className="columns-2 md:columns-4 gap-2 md:gap-4 space-y-2 md:space-y-4">
@@ -806,12 +806,12 @@ const Home = () => {
                   transition={{ duration: 0.8, delay: (idx % 4) * 0.1 }}
                   className="relative group overflow-hidden break-inside-avoid"
                 >
-                  <img 
-                    src={getFullImageUrl(img.image_url)} 
-                    loading="lazy" 
-                    decoding="async" 
-                    className="w-full h-auto transition-transform duration-1000 group-hover:scale-105" 
-                    alt={`Lifestyle ${idx + 1}`} 
+                  <img
+                    src={getFullImageUrl(img.image_url)}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-auto transition-transform duration-1000 group-hover:scale-105"
+                    alt={`Lifestyle ${idx + 1}`}
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500" />
                 </motion.div>
