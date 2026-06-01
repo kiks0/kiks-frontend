@@ -376,7 +376,7 @@ const PersonalDetails = () => {
 
                 <div className="text-center mb-6 md:mb-12">
                     <h1 className="text-2xl md:text-4xl font-serif tracking-[0.2em] uppercase mb-4 md:mb-8 text-black">Personal Details</h1>
-                    <p className="text-[10px] md:text-[11px] text-black/40 tracking-wider">Updates made to your information will be reflected across your KIKS profile.</p>
+                    <p className="text-[10px] md:text-[11px] text-black/40 tracking-wider">Updates made to your information will be reflected across your profile.</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6 md:space-y-16">

@@ -301,7 +301,7 @@ const Account = () => {
                     <Mail size={18} strokeWidth={1.5} />
                   </div>
                   <div className="text-left">
-                    <p className="text-[9px] tracking-widest text-black/30 uppercase mb-1">Electronic Mail</p>
+                    <p className="text-[9px] tracking-widest text-black/30 uppercase mb-1">Mail</p>
                     <p className="text-xs md:text-sm text-black tracking-wide">kiksultraluxury@gmail.com</p>
                   </div>
                 </a>
@@ -443,7 +443,7 @@ const Account = () => {
 
               <div className="mt-8 sm:mt-12 text-center">
                 <p className="text-[9px] tracking-[0.2em] text-neutral-400 uppercase leading-loose">
-                  Our advisors are available 24/7 to ensure your experience with KIKS remains absolute.
+                  Our advisors are available 24/7 to ensure your experience with KIKS Ultra Luxury remains absolute.
                 </p>
               </div>
             </motion.div>

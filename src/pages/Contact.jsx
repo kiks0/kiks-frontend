@@ -134,8 +134,13 @@ const Contact = () => {
                         <section className="space-y-10">
                             <h2 className="text-[11px] tracking-[0.5em] font-black text-black/30 uppercase">Follow Our Journey</h2>
                             <div className="flex space-x-6 text-black/40">
-                                <Globe size={24} className="hover:text-black transition-colors cursor-pointer" />
-                                <MessageSquare size={24} className="hover:text-black transition-colors cursor-pointer" />
+                                <a href="https://www.instagram.com/kiksultraluxury?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="hover:text-black transition-colors cursor-pointer">
+                                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                    </svg>
+                                </a>
                             </div>
                         </section>
                     </div>
