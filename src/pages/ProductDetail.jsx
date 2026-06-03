@@ -128,7 +128,7 @@ const ProductDetail = () => {
                     // Verified Review Eligibility
                     if (isAuthenticated) {
                         const eligRes = await fetch(`${API_URL}/api/reviews/check/${data.id}`, {
-                            headers: { 'Authorization': `Bearer ${localStorage.getItem('kiks_token')}` }
+                            headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` }
                         });
                         if (eligRes.ok) {
                             const eligData = await eligRes.json();
@@ -202,9 +202,9 @@ const ProductDetail = () => {
                     const formData = new FormData();
                     formData.append('image', file);
                     formData.append('folder', 'kiks_reviews');
-                    const uploadRes = await fetch(`${API_URL}/api/upload`, {
+                     const uploadRes = await fetch(`${API_URL}/api/upload`, {
                         method: 'POST',
-                        headers: { 'Authorization': `Bearer ${localStorage.getItem('kiks_token')}` },
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` },
                         body: formData
                     });
                     if (uploadRes.ok) {
@@ -218,9 +218,9 @@ const ProductDetail = () => {
             // 2. Submit Review
             const res = await fetch(`${API_URL}/api/reviews`, {
                 method: 'POST',
-                headers: {
+                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('kiks_token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
                 },
                 body: JSON.stringify({ product_id: product.id, ...reviewForm, image_urls: imageUrls })
             });
@@ -247,9 +247,9 @@ const ProductDetail = () => {
     const handleDeleteReview = async (id) => {
         if (!window.confirm('Delete this review?')) return;
         try {
-            const res = await fetch(`${API_URL}/api/reviews/${id}`, {
+             const res = await fetch(`${API_URL}/api/reviews/${id}`, {
                 method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${localStorage.getItem('kiks_token')}` }
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` }
             });
 
             if (res.ok) {

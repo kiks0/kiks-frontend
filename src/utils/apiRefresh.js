@@ -18,7 +18,7 @@ window.fetch = async (...args) => {
     config.credentials = 'include'; // Ensure cookies are sent/received in CORS requests
 
     // Attach access token if present in localStorage
-    const token = localStorage.getItem('kiks_token');
+    const token = localStorage.getItem('auth_token');
     if (token) {
       // Handle different headers formats
       if (config.headers instanceof Headers) {
@@ -66,8 +66,8 @@ window.fetch = async (...args) => {
           console.log('[AUTH] Token refresh successful.');
 
           // Save new credentials
-          localStorage.setItem('kiks_token', data.token);
-          localStorage.setItem('kiks_user', JSON.stringify(data.user));
+          localStorage.setItem('auth_token', data.token);
+          localStorage.setItem('auth_user', JSON.stringify(data.user));
           localStorage.setItem('currentUser', JSON.stringify(data.user));
           
           // Dispatch to Redux store to update app state
@@ -100,10 +100,10 @@ window.fetch = async (...args) => {
       console.warn('[AUTH] Silent refresh failed or expired. Logging out user.', refreshError);
       
       // Clear local storage and logout
-      localStorage.removeItem('kiks_token');
-      localStorage.removeItem('kiks_user');
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('auth_user');
       localStorage.removeItem('currentUser');
-      localStorage.removeItem('kiks_cart');
+      localStorage.removeItem('shopping_cart');
 
       store.dispatch(logout());
 

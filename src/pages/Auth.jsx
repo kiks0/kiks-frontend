@@ -94,8 +94,8 @@ const Auth = ({ isRegisterInitial = false }) => {
             // Only redirect if we are authenticated AND we aren't in a special state
             const params = new URLSearchParams(location.search);
             if (!params.get('verified') && status === 'idle') {
-                localStorage.removeItem('kiks_token');
-                localStorage.removeItem('kiks_user');
+                localStorage.removeItem('auth_token');
+                localStorage.removeItem('auth_user');
                 window.location.href = '/';
             }
         }
@@ -166,8 +166,8 @@ const Auth = ({ isRegisterInitial = false }) => {
                 // AUTOMATIC LOGIN AFTER VERIFICATION
                 try {
                     const parsedUser = JSON.parse(decodeURIComponent(userFromUrl));
-                    localStorage.setItem('kiks_token', tokenFromUrl);
-                    localStorage.setItem('kiks_user', JSON.stringify(parsedUser));
+                    localStorage.setItem('auth_token', tokenFromUrl);
+                    localStorage.setItem('auth_user', JSON.stringify(parsedUser));
                     dispatch(login({ token: tokenFromUrl, user: parsedUser }));
                     dispatch(fetchWishlist());
                     setStatus('success');
@@ -187,7 +187,7 @@ const Auth = ({ isRegisterInitial = false }) => {
             setStatus('verification_already');
         } else if (path.includes('/register') || path.includes('/login')) {
             // TOTAL SESSION EXORCISM: Clear every ghost key to prevent bypass
-            const ghostKeys = ['kiks_token', 'kiks_user', 'currentUser', 'token', 'user'];
+            const ghostKeys = ['auth_token', 'auth_user', 'currentUser', 'token', 'user'];
             ghostKeys.forEach(key => localStorage.removeItem(key));
             
             if (isAuthenticated && !status.includes('verification')) {
@@ -210,12 +210,12 @@ const Auth = ({ isRegisterInitial = false }) => {
         dobMonth: 'Month',
         dobYear: 'Year',
         password: '',
-        location: localStorage.getItem('kiks_location_name') || 'India'
+        location: localStorage.getItem('location_name') || 'India'
     });
 
     useEffect(() => {
         // Set initial country code based on location
-        const loc = localStorage.getItem('kiks_location_name') || 'India';
+        const loc = localStorage.getItem('location_name') || 'India';
         const country = countryList.find(c => c.name === loc);
         if (country) {
             setFormData(prev => ({
@@ -367,8 +367,8 @@ Marketing Consent: Granted
 
             // 4. Update local app state ONLY if verification is NOT required (Standard Login)
             if (data.token) {
-                localStorage.setItem('kiks_token', data.token);
-                localStorage.setItem('kiks_user', JSON.stringify(data.user));
+                localStorage.setItem('auth_token', data.token);
+                localStorage.setItem('auth_user', JSON.stringify(data.user));
                 dispatch(login({ user: data.user, token: data.token }));
                 dispatch(fetchWishlist());
                 setStatus('success');

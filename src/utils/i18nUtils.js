@@ -85,7 +85,7 @@ export const applyLocationSettings = (countryName, i18n, dispatch, setCurrencyAc
         }
         
         // Persist location name
-        localStorage.setItem('kiks_location_name', countryName);
+        localStorage.setItem('location_name', countryName);
         
         return mapping;
     }

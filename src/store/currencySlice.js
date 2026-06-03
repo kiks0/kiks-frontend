@@ -19,14 +19,14 @@ const currencySlice = createSlice({
   name: 'currency',
   initialState: {
     baseCurrency: 'INR',
-    activeCurrency: localStorage.getItem('kiks_currency') || 'INR',
+    activeCurrency: localStorage.getItem('currency') || 'INR',
     rates: { INR: 1 },
     status: 'idle'
   },
   reducers: {
     setCurrency: (state, action) => {
       state.activeCurrency = action.payload;
-      localStorage.setItem('kiks_currency', action.payload);
+      localStorage.setItem('currency', action.payload);
     }
   },
   extraReducers: (builder) => {

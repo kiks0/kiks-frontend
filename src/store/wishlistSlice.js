@@ -3,13 +3,13 @@ import { BASE_API_URL } from '../utils/url';
 
 const getInitialWishlist = () => {
     try {
-        const stored = localStorage.getItem('kiks_wishlist');
+        const stored = localStorage.getItem('wishlist');
         return stored ? JSON.parse(stored) : [];
     } catch { return []; }
 };
 
 export const fetchWishlist = createAsyncThunk('wishlist/fetchWishlist', async (_, { getState }) => {
-    const token = getState().auth.token || localStorage.getItem('kiks_token');
+    const token = getState().auth.token || localStorage.getItem('auth_token');
     if (!token) throw new Error("No token");
     const res = await fetch(`${BASE_API_URL}/api/auth/wishlist`, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -19,7 +19,7 @@ export const fetchWishlist = createAsyncThunk('wishlist/fetchWishlist', async (_
 });
 
 export const updateWishlistInDB = createAsyncThunk('wishlist/updateWishlistInDB', async (wishlist, { getState }) => {
-    const token = getState().auth.token || localStorage.getItem('kiks_token');
+    const token = getState().auth.token || localStorage.getItem('auth_token');
     if (!token) return wishlist;
     await fetch(`${BASE_API_URL}/api/auth/wishlist`, {
         method: 'PUT',
@@ -42,17 +42,17 @@ export const wishlistSlice = createSlice({
       } else {
         state.items.push(action.payload);
       }
-      localStorage.setItem('kiks_wishlist', JSON.stringify(state.items));
+      localStorage.setItem('wishlist', JSON.stringify(state.items));
     },
     clearWishlist: (state) => {
       state.items = [];
-      localStorage.removeItem('kiks_wishlist');
+      localStorage.removeItem('wishlist');
     }
   },
   extraReducers: (builder) => {
       builder.addCase(fetchWishlist.fulfilled, (state, action) => {
           state.items = action.payload;
-          localStorage.setItem('kiks_wishlist', JSON.stringify(action.payload));
+          localStorage.setItem('wishlist', JSON.stringify(action.payload));
       });
   }
 });
@@ -62,7 +62,7 @@ export const { toggleWishlist, clearWishlist } = wishlistSlice.actions;
 export const toggleWishlistAndSync = (item) => (dispatch, getState) => {
     dispatch(toggleWishlist(item));
     const items = getState().wishlist.items;
-    const token = getState().auth.token || localStorage.getItem('kiks_token');
+    const token = getState().auth.token || localStorage.getItem('auth_token');
     if (token) {
         dispatch(updateWishlistInDB(items));
     }

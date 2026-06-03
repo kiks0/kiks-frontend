@@ -8,7 +8,7 @@ const CookieBanner = () => {
 
     useEffect(() => {
         // Check if user has already accepted cookies
-        const hasAccepted = localStorage.getItem('kiks_cookies_accepted');
+        const hasAccepted = localStorage.getItem('cookies_accepted');
         if (!hasAccepted) {
             const timer = setTimeout(() => setIsVisible(true), 1500);
             return () => clearTimeout(timer);
@@ -16,7 +16,7 @@ const CookieBanner = () => {
     }, []);
 
     const handleAccept = () => {
-        localStorage.setItem('kiks_cookies_accepted', 'true');
+        localStorage.setItem('cookies_accepted', 'true');
         setIsVisible(false);
     };
 

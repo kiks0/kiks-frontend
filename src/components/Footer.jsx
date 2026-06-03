@@ -15,7 +15,7 @@ const Footer = () => {
   const dispatch = useDispatch();
   const [isHighContrast, setIsHighContrast] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState(localStorage.getItem('kiks_location_name') || 'India');
+  const [selectedLocation, setSelectedLocation] = useState(localStorage.getItem('location_name') || 'India');
   const [isNewsletterModalOpen, setIsNewsletterModalOpen] = useState(false);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);

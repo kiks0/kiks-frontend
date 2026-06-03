@@ -41,7 +41,7 @@ const Account = () => {
     if (appUser) {
         setUserName(appUser.first_name || appUser.email.split('@')[0]);
         // Fetch order count
-        const token = localStorage.getItem('kiks_token') || null;
+        const token = localStorage.getItem('auth_token') || null;
         if (token) {
              fetch(`${API_URL}/api/orders/myorders`, {
                  headers: { 'Authorization': `Bearer ${token}` }
@@ -78,7 +78,7 @@ const Account = () => {
                 setUserName(savedUser);
             }
             // Fetch order count for savedUser locally if token exists
-            const token = localStorage.getItem('kiks_token') || null;
+            const token = localStorage.getItem('auth_token') || null;
             if (token) {
                  fetch(`${API_URL}/api/orders/myorders`, {
                      headers: { 'Authorization': `Bearer ${token}` }
@@ -370,7 +370,7 @@ const Account = () => {
                                   method: 'POST',
                                   headers: { 
                                     'Content-Type': 'application/json',
-                                    'Authorization': `Bearer ${localStorage.getItem('kiks_token')}`
+                                    'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
                                   },
                                   body: JSON.stringify({ 
                                     phone: callbackPhone,
@@ -420,7 +420,7 @@ const Account = () => {
                             const res = await fetch(`${API_URL}/api/users/request-deletion`, {
                               method: 'POST',
                               headers: { 
-                                'Authorization': `Bearer ${localStorage.getItem('kiks_token')}`
+                                'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
                               }
                             });
                             if (res.ok) {

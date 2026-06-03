@@ -25,8 +25,8 @@ const PromoPopup = () => {
                 setPopupData(data);
 
                 // Check localStorage timestamps for custom display intervals
-                const dismissedAt = localStorage.getItem('kiks_promo_dismissed_at');
-                const subscribedAt = localStorage.getItem('kiks_promo_subscribed_at');
+                const dismissedAt = localStorage.getItem('promo_dismissed_at');
+                const subscribedAt = localStorage.getItem('promo_subscribed_at');
                 const now = Date.now();
 
                 let shouldShow = true;
@@ -48,7 +48,7 @@ const PromoPopup = () => {
                 }
 
                 // Fallback session check (respect current tab dismissal)
-                if (sessionStorage.getItem('kiks_promo_seen') === 'true') {
+                if (sessionStorage.getItem('promo_seen') === 'true') {
                     shouldShow = false;
                 }
 
@@ -69,9 +69,9 @@ const PromoPopup = () => {
 
     const handleClose = (isFromSubscription = false) => {
         setIsVisible(false);
-        sessionStorage.setItem('kiks_promo_seen', 'true');
+        sessionStorage.setItem('promo_seen', 'true');
         if (!isFromSubscription) {
-            localStorage.setItem('kiks_promo_dismissed_at', Date.now().toString());
+            localStorage.setItem('promo_dismissed_at', Date.now().toString());
         }
     };
 
@@ -86,8 +86,8 @@ const PromoPopup = () => {
 
             if (res.ok) {
                 setIsSubmitted(true);
-                localStorage.setItem('kiks_promo_subscribed_at', Date.now().toString());
-                localStorage.removeItem('kiks_promo_dismissed_at'); // clean up dismissed key
+                localStorage.setItem('promo_subscribed_at', Date.now().toString());
+                localStorage.removeItem('promo_dismissed_at'); // clean up dismissed key
                 setTimeout(() => {
                     handleClose(true);
                 }, 3000);
@@ -132,8 +132,8 @@ const PromoPopup = () => {
                         <div className={`relative overflow-hidden ${isImageOnly ? 'w-full aspect-[4/5]' : 'w-full md:w-1/2 h-48 md:h-auto'}`}>
                             {popupData?.redirect_url ? (
                                 <a href={popupData.redirect_url} onClick={() => {
-                                    sessionStorage.setItem('kiks_promo_seen', 'true');
-                                    localStorage.setItem('kiks_promo_dismissed_at', Date.now().toString());
+                                    sessionStorage.setItem('promo_seen', 'true');
+                                    localStorage.setItem('promo_dismissed_at', Date.now().toString());
                                 }}>
                                     <img
                                         src={popupData?.image_url ? (popupData.image_url.startsWith('http') ? popupData.image_url : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${popupData.image_url}`) : "/alchemy.webp"}

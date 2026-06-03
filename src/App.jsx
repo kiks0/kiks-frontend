@@ -60,7 +60,7 @@ function App() {
     // Check for cart recovery redirect
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('recover_cart') === 'true') {
-      const storedToken = localStorage.getItem('kiks_token');
+      const storedToken = localStorage.getItem('auth_token');
       if (storedToken) {
         dispatch(openCart());
         urlParams.delete('recover_cart');
@@ -81,7 +81,7 @@ function App() {
     
     // Global session validator for real-time security (e.g. instant logout on deletion)
     const checkSession = async () => {
-      const token = localStorage.getItem('kiks_token');
+      const token = localStorage.getItem('auth_token');
       if (!token) return;
       
       try {
