@@ -133,6 +133,16 @@ const Account = () => {
       }).catch(err => console.error("Final logout sync failed:", err));
     }
 
+    // 2. Call backend to delete session row and clear cookies
+    try {
+      await fetch(`${API_URL}/api/auth/logout`, {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch (err) {
+      console.error("Backend logout failed:", err);
+    }
+
     dispatch(logout());
     dispatch(clearWishlist());
     dispatch(clearCart());
