@@ -27,7 +27,6 @@ export const authSlice = createSlice({
       state.isAuthenticated = true;
       localStorage.setItem('auth_user', JSON.stringify(user));
       localStorage.setItem('auth_token', token);
-      localStorage.setItem('currentUser', JSON.stringify(user));
     },
     logout: (state) => {
       state.user = null;
@@ -35,7 +34,6 @@ export const authSlice = createSlice({
       state.isAuthenticated = false;
       localStorage.removeItem('auth_user');
       localStorage.removeItem('auth_token');
-      localStorage.removeItem('currentUser');
       localStorage.removeItem('shopping_cart'); // Clear cart from device on logout
     },
     setUserRole: (state, action) => {
@@ -48,7 +46,6 @@ export const authSlice = createSlice({
       if (state.user) {
         state.user = { ...state.user, ...action.payload };
         localStorage.setItem('auth_user', JSON.stringify(state.user));
-        localStorage.setItem('currentUser', JSON.stringify(state.user));
       }
     }
   },

@@ -69,7 +69,7 @@ const Account = () => {
              setDeletionRequested(appUser.deletion_requested || false);
         }
     } else {
-        const savedUser = localStorage.getItem('currentUser');
+        const savedUser = localStorage.getItem('auth_user');
         if (savedUser) {
             try {
                 const user = JSON.parse(savedUser);

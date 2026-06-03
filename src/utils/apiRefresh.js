@@ -68,7 +68,6 @@ window.fetch = async (...args) => {
           // Save new credentials
           localStorage.setItem('auth_token', data.token);
           localStorage.setItem('auth_user', JSON.stringify(data.user));
-          localStorage.setItem('currentUser', JSON.stringify(data.user));
           
           // Dispatch to Redux store to update app state
           store.dispatch(login({ user: data.user, token: data.token }));
@@ -102,7 +101,6 @@ window.fetch = async (...args) => {
       // Clear local storage and logout
       localStorage.removeItem('auth_token');
       localStorage.removeItem('auth_user');
-      localStorage.removeItem('currentUser');
       localStorage.removeItem('shopping_cart');
 
       store.dispatch(logout());
