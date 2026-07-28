@@ -22,31 +22,30 @@ const Loader = () => {
   return (
     <AnimatePresence>
       {!isLoaded && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 1 }}
-          exit={{ 
+          exit={{
             opacity: 0,
-            transition: { duration: 1.2, ease: [0.43, 0.13, 0.23, 0.96] } 
+            transition: { duration: 1.2, ease: [0.43, 0.13, 0.23, 0.96] }
           }}
           className="fixed inset-0 z-[9999999] bg-white grid place-items-center"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ 
-                opacity: 1, 
-                scale: 1,
+            animate={{
+              opacity: 1,
+              scale: 1,
             }}
             transition={{ duration: 1, ease: "easeOut" }}
             className="relative flex flex-col items-center"
           >
-             {/* Subtle Glow */}
-             <div className="absolute inset-0 bg-black/5 blur-[40px] rounded-full animate-pulse" />
-             
-             <img 
-                src="/logo-kiks.png" 
-                alt="Kiks Loading" 
-                className="w-[80px] md:w-[100px] h-auto relative z-10 animate-luxury-pulse"
-              />
+            {/* Subtle Glow */}
+            <div className="absolute inset-0 bg-black/5 blur-[40px] rounded-full animate-pulse" />
+            <img
+              src="/logo-kiks.png"
+              alt="Kiks Loading"
+              className="w-[80px] md:w-[100px] h-auto relative z-10 animate-luxury-pulse"
+            />
           </motion.div>
         </motion.div>
       )}

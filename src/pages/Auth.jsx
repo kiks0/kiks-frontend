@@ -12,6 +12,7 @@ import { setCurrency } from '../store/currencySlice';
 import { applyLocationSettings } from '../utils/i18nUtils';
 
 import PageLoader from '../components/PageLoader';
+import AnimatedDropdown from '../components/AnimatedDropdown';
 
 // Comprehensive Country data (Synchronized with PersonalDetails)
 const countryList = [
@@ -866,21 +867,21 @@ Marketing Consent: Granted
                                             {/* Title Selection */}
                                             <div className="relative group">
                                                 <label className={`${labelClasses} ${fieldErrors.title ? 'text-red-500' : ''}`}>Title <span className={formData.title ? 'text-green-600' : 'text-red-500'}>*</span></label>
-                                                <select
-                                                    className={`${inputClasses} ${fieldErrors.title ? 'border-red-500' : ''}`}
+                                                <AnimatedDropdown
+                                                    options={[
+                                                        { value: 'Mr', label: 'Mr' },
+                                                        { value: 'Mrs', label: 'Mrs' },
+                                                        { value: 'Miss', label: 'Miss' },
+                                                        { value: 'Mx', label: 'Mx' }
+                                                    ]}
                                                     value={formData.title}
-                                                    onChange={(e) => {
-                                                        setFormData({ ...formData, title: e.target.value });
+                                                    onChange={(value) => {
+                                                        setFormData({ ...formData, title: value });
                                                         if (fieldErrors.title) setFieldErrors(prev => { const n = {...prev}; delete n.title; return n; });
                                                     }}
-                                                >
-                                                    <option className="bg-white text-black" value="">Select Title</option>
-                                                    <option className="bg-white text-black" value="Mr">Mr</option>
-                                                    <option className="bg-white text-black" value="Mrs">Mrs</option>
-                                                    <option className="bg-white text-black" value="Miss">Miss</option>
-                                                    <option className="bg-white text-black" value="Mx">Mx</option>
-                                                </select>
-                                                <ChevronDown size={14} className="absolute right-0 bottom-5 text-black/30 pointer-events-none" />
+                                                    placeholder="Select Title"
+                                                    hasError={!!fieldErrors.title}
+                                                />
                                             </div>
 
                                             {/* Names Section */}
@@ -918,12 +919,14 @@ Marketing Consent: Granted
                                             <div className="mt-4">
                                                 <label className={labelClasses}>Telephone (optional)</label>
                                                 <div className="flex items-end border-b border-black/10 focus-within:border-black transition-all">
-                                                    <div className="relative min-w-[100px]">
-                                                        <select
-                                                            className="w-full bg-transparent py-4 text-[15px] text-black focus:outline-none appearance-none cursor-pointer font-light tracking-widest"
+                                                    <div className="relative min-w-[130px]">
+                                                        <AnimatedDropdown
+                                                            options={countryList.map(c => ({
+                                                                value: `${c.code} (${c.iso})`,
+                                                                label: `${c.code} (${c.iso})`
+                                                            }))}
                                                             value={formData.countryCode}
-                                                            onChange={(e) => {
-                                                                const selectedValue = e.target.value;
+                                                            onChange={(selectedValue) => {
                                                                 const pureCode = selectedValue.split(' ')[0];
                                                                 const country = countryList.find(c => c.code === pureCode);
                                                                 setFormData({
@@ -935,14 +938,9 @@ Marketing Consent: Granted
                                                                     applyLocationSettings(country.name, i18n, dispatch, setCurrency);
                                                                 }
                                                             }}
-                                                        >
-                                                            {countryList.map(c => (
-                                                                <option key={`${c.iso}-${c.code}`} className="bg-white text-black" value={`${c.code} (${c.iso})`}>
-                                                                    {c.code} ({c.iso})
-                                                                </option>
-                                                            ))}
-                                                        </select>
-                                                        <ChevronDown size={14} className="absolute right-2 bottom-5 text-black/30 pointer-events-none" />
+                                                            placeholder="Code"
+                                                            className="border-none"
+                                                        />
                                                     </div>
                                                     <div className="w-px h-6 bg-black/10 mx-4 mb-4" />
                                                     <input
@@ -966,25 +964,28 @@ Marketing Consent: Granted
                                                 </div>
                                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-4">
                                                     <div className="relative">
-                                                        <select className={inputClasses} value={formData.dobDay} onChange={(e) => setFormData({ ...formData, dobDay: e.target.value })}>
-                                                            <option className="bg-white text-black">Day</option>
-                                                            {Array.from({ length: 31 }, (_, i) => i + 1).map(d => <option key={d} className="bg-white text-black" value={d}>{d}</option>)}
-                                                        </select>
-                                                        <ChevronDown size={14} className="absolute right-0 bottom-5 text-black/30 pointer-events-none" />
+                                                        <AnimatedDropdown
+                                                            options={Array.from({ length: 31 }, (_, i) => i + 1).map(d => ({ value: d.toString(), label: d.toString() }))}
+                                                            value={formData.dobDay !== 'Day' ? formData.dobDay : ''}
+                                                            onChange={(val) => setFormData({ ...formData, dobDay: val })}
+                                                            placeholder="Day"
+                                                        />
                                                     </div>
                                                     <div className="relative">
-                                                        <select className={inputClasses} value={formData.dobMonth} onChange={(e) => setFormData({ ...formData, dobMonth: e.target.value })}>
-                                                            <option className="bg-white text-black">Month</option>
-                                                            {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(m => <option key={m} className="bg-white text-black" value={m}>{m}</option>)}
-                                                        </select>
-                                                        <ChevronDown size={14} className="absolute right-0 bottom-5 text-black/30 pointer-events-none" />
+                                                        <AnimatedDropdown
+                                                            options={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(m => ({ value: m, label: m }))}
+                                                            value={formData.dobMonth !== 'Month' ? formData.dobMonth : ''}
+                                                            onChange={(val) => setFormData({ ...formData, dobMonth: val })}
+                                                            placeholder="Month"
+                                                        />
                                                     </div>
                                                     <div className="relative">
-                                                        <select className={inputClasses} value={formData.dobYear} onChange={(e) => setFormData({ ...formData, dobYear: e.target.value })}>
-                                                            <option className="bg-white text-black">Year</option>
-                                                            {Array.from({ length: 80 }, (_, i) => 2024 - i).map(y => <option key={y} className="bg-white text-black" value={y}>{y}</option>)}
-                                                        </select>
-                                                        <ChevronDown size={14} className="absolute right-0 bottom-5 text-black/30 pointer-events-none" />
+                                                        <AnimatedDropdown
+                                                            options={Array.from({ length: 80 }, (_, i) => 2024 - i).map(y => ({ value: y.toString(), label: y.toString() }))}
+                                                            value={formData.dobYear !== 'Year' ? formData.dobYear : ''}
+                                                            onChange={(val) => setFormData({ ...formData, dobYear: val })}
+                                                            placeholder="Year"
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>

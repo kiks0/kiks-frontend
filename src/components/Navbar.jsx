@@ -251,8 +251,16 @@ const Navbar = () => {
                 className={`w-full flex items-center justify-center relative transition-all duration-500 ease-in-out px-10 ${showMenu ? 'max-h-24 opacity-100 mb-2' : 'max-h-0 opacity-0 mb-0 pointer-events-none'
                   }`}
               >
-                <div className={`flex space-x-16 text-[10px] tracking-[0.3em] font-light items-center mx-auto font-sans ${isScrolled || isWhiteThemePage ? 'text-black' : 'text-white'}`}>
-                  <div
+                <motion.div 
+                  className={`flex space-x-16 text-[10px] tracking-[0.3em] font-light items-center mx-auto font-sans ${isScrolled || isWhiteThemePage ? 'text-black' : 'text-white'}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ staggerChildren: 0.15, delayChildren: 0.2 }}
+                >
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                     className="relative group h-full flex items-center py-1 cursor-pointer"
                     onMouseEnter={() => setIsCollectionsHovered(true)}
                     onMouseLeave={() => setIsCollectionsHovered(false)}
@@ -278,19 +286,29 @@ const Navbar = () => {
                       )}
                     </div>
                   </div>
-                </div>
-                <Link to="/blog" className="opacity-60 hover:opacity-100 transition-all">{t('nav.blog')}</Link>
-                <Link to="/contact" className="opacity-60 hover:opacity-100 transition-all">{t('nav.contact')}</Link>
+                </motion.div>
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}>
+                  <Link to="/blog" className="opacity-60 hover:opacity-100 transition-all block">{t('nav.blog')}</Link>
+                </motion.div>
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}>
+                  <Link to="/contact" className="opacity-60 hover:opacity-100 transition-all block">{t('nav.contact')}</Link>
+                </motion.div>
                 {!isAuthenticated && (
                   <>
-                    <Link to="/login" className="opacity-60 hover:opacity-100 transition-all">{t('nav.login')}</Link>
-                    <Link to="/register" className="opacity-60 hover:opacity-100 transition-all">{t('nav.register')}</Link>
+                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.45 }}>
+                      <Link to="/login" className="opacity-60 hover:opacity-100 transition-all block">{t('nav.login')}</Link>
+                    </motion.div>
+                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}>
+                      <Link to="/register" className="opacity-60 hover:opacity-100 transition-all block">{t('nav.register')}</Link>
+                    </motion.div>
                   </>
                 )}
                 {isAuthenticated && isAdmin && (
-                  <Link to="/admin" className="opacity-60 hover:opacity-100 transition-all uppercase">{t('nav.admin')}</Link>
+                  <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.45 }}>
+                    <Link to="/admin" className="opacity-60 hover:opacity-100 transition-all uppercase block">{t('nav.admin')}</Link>
+                  </motion.div>
                 )}
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>

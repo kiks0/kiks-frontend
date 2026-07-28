@@ -132,9 +132,6 @@ const Home = () => {
   const storyTextRef = useRef(null);
   const storyImgRef = useRef(null);
   const showcaseContainerRef = useRef(null);
-  const heroTitleRef = useRef(null);
-  const heroDescRef = useRef(null);
-  const heroSectionRef = useRef(null);
 
   useEffect(() => {
     if (!storyRef.current || !storyTextRef.current) return;
@@ -150,33 +147,51 @@ const Home = () => {
         }
       });
 
-      // Initial state
-      gsap.set(spans, {
-        opacity: 0,
-        y: 80,
-        rotateX: 20,
-        transformOrigin: "top center",
-        force3D: true,
-      });
-
-      // Reveal animation
-      gsap.to(spans, {
-        opacity: 1,
-        y: 0,
-        rotateX: 0,
-
-        stagger: 0.06,
-        duration: 1.2,
-
-        ease: "power4.out",
-
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: storyRef.current,
           start: "top 75%",
           toggleActions: "play none none reverse",
           invalidateOnRefresh: true,
-        },
+        }
       });
+
+      // 1. Label fades in
+      tl.from(".story-label", {
+        opacity: 0,
+        y: 20,
+        duration: 0.6,
+        ease: "power2.out"
+      })
+      // 2. Title words reveal sequentially
+      .fromTo(spans, {
+        opacity: 0,
+        y: 80,
+        rotateX: 20,
+        transformOrigin: "top center",
+        force3D: true,
+      }, {
+        opacity: 1,
+        y: 0,
+        rotateX: 0,
+        stagger: 0.06,
+        duration: 1.0,
+        ease: "power4.out",
+      }, "-=0.3")
+      // 3. Description fades up
+      .from(".story-desc", {
+        opacity: 0,
+        y: 30,
+        duration: 0.8,
+        ease: "power2.out"
+      }, "-=0.5")
+      // 4. Muse image floats in smoothly from the right
+      .from(".floating-muse", {
+        opacity: 0,
+        x: 60,
+        duration: 1.2,
+        ease: "power3.out"
+      }, "-=0.7");
 
       // Background image animation
       if (storyImgRef.current) {
@@ -336,39 +351,6 @@ const Home = () => {
   });
   const xTranslate = useTransform(carouselProgress, [0, 1], ["0%", "-66.666%"]);
 
-  // Hero Scroll Animation with GSAP
-  useEffect(() => {
-    if (!heroTitleRef.current || !heroDescRef.current || !heroSectionRef.current) return;
-
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: heroSectionRef.current,
-          start: "top top",
-          end: "+=100%",
-          scrub: 1.5,
-          pin: true,
-          invalidateOnRefresh: true,
-        }
-      });
-
-      tl.to(heroTitleRef.current, {
-        scale: 2.5,
-        opacity: 0,
-        y: -150,
-        ease: "power2.inOut"
-      }, 0);
-
-      tl.to(heroDescRef.current, {
-        opacity: 0,
-        scale: 0.8,
-        y: 100,
-        ease: "power2.inOut"
-      }, 0);
-    });
-
-    return () => ctx.revert();
-  }, []);
 
   const { scrollY } = useScroll();
 
@@ -382,7 +364,7 @@ const Home = () => {
 
 
       {/* Hero Section */}
-      <section ref={heroSectionRef} className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-x-4 bottom-4 top-[100px] sm:inset-x-6 sm:bottom-6 sm:top-[120px] md:inset-x-10 md:bottom-10 md:top-[180px] border border-transparent z-30 pointer-events-none" />
 
         {/* Video Background */}
@@ -394,48 +376,16 @@ const Home = () => {
             muted
             playsInline
             preload="metadata"
-            className="w-full h-full object-cover object-center scale-100 opacity-100 will-change-transform"
+            poster={(() => {
+              const fullUrl = heroVideoUrl.startsWith('http') || heroVideoUrl.startsWith('/assets') ? heroVideoUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${heroVideoUrl}`;
+              return fullUrl.includes('cloudinary') && fullUrl.match(/\.(webm|mp4|mov|ogg)$/i) ? fullUrl.replace(/\.[^/.]+$/, ".jpg") : undefined;
+            })()}
+            className="w-full h-full object-cover object-center scale-100 opacity-100 will-change-transform bg-[#f9f9f9]"
           >
             <source src={heroVideoUrl.startsWith('http') || heroVideoUrl.startsWith('/assets') ? heroVideoUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${heroVideoUrl}`} />
           </video>
           {/* Subtle Overlay to make text readable */}
           <div className="absolute inset-0 bg-black/20 z-[1]" />
-        </div>
-
-        {/* Text Overlay Content */}
-        <div className="relative z-20 text-center px-6">
-          <div className="flex flex-col items-center">
-            <div ref={heroTitleRef} className="will-change-transform">
-              <h1 className="text-6xl md:text-8xl font-serif font-bold tracking-[0.2em] text-white uppercase mb-8">
-                {['K', 'I', 'K', 'S'].map((char, index) => (
-                  <motion.span
-                    key={index}
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 1.2,
-                      delay: index * 0.15,
-                      ease: [0.215, 0.61, 0.355, 1]
-                    }}
-                    className="inline-block"
-                  >
-                    {char}
-                  </motion.span>
-                ))}
-              </h1>
-            </div>
-
-            <div ref={heroDescRef} className="max-w-2xl">
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1, duration: 1.2 }}
-                className="text-[11px] md:text-base tracking-[0.2em] text-white/90 uppercase font-light leading-relaxed"
-              >
-                Handcrafted with rare ingredients to define your signature presence.
-              </motion.p>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -650,12 +600,12 @@ const Home = () => {
       <section ref={storyRef} className="relative py-16 md:h-screen bg-[#f9f9f9] overflow-hidden">
         <div className="relative z-20 h-full flex flex-col items-center justify-center px-6">
           <div className="text-center max-w-4xl mx-auto flex flex-col items-center w-full">
-            <span className="text-black text-[10px] tracking-[0.6em] uppercase font-black block mb-6">OUR PROCESS</span>
+            <span className="story-label text-black text-[10px] tracking-[0.6em] uppercase font-black block mb-6">OUR PROCESS</span>
 
             <div className="overflow-hidden mb-8 w-full text-center">
               <h2
                 ref={storyTextRef}
-                className="text-3xl md:text-6xl lg:text-7xl font-serif text-white tracking-[0.1em] leading-[1.3] md:leading-[1.2] uppercase font-light text-center"
+                className="text-3xl md:text-6xl lg:text-7xl font-serif text-black tracking-[0.1em] leading-[1.3] md:leading-[1.2] uppercase font-light text-center"
               >
                 {t('home.symphony_notes')
                   .split(' ')
@@ -670,7 +620,7 @@ const Home = () => {
               </h2>
             </div>
 
-            <p className="text-black/70 text-[12px] md:text-[14px] leading-relaxed max-w-2xl mx-auto tracking-[0.15em] font-medium uppercase text-center opacity-80">
+            <p className="story-desc text-black/70 text-[12px] md:text-[14px] leading-relaxed max-w-2xl mx-auto tracking-[0.15em] font-medium uppercase text-center opacity-80">
               {t('home.creation_desc')}
             </p>
           </div>
