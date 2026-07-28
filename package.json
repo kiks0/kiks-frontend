@@ -14,8 +14,6 @@
   },
   "dependencies": {
     "@react-oauth/google": "^0.13.5",
-    "@react-three/drei": "^10.7.7",
-    "@react-three/fiber": "^9.5.0",
     "@reduxjs/toolkit": "^2.11.2",
     "@tailwindcss/postcss": "^4.2.2",
     "@tailwindcss/vite": "^4.2.2",
@@ -34,7 +32,6 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.13.2",
     "tailwind-merge": "^3.5.0",
-    "three": "^0.183.2",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
