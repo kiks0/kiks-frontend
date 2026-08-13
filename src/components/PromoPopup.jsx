@@ -136,7 +136,7 @@ const PromoPopup = () => {
                                     localStorage.setItem('promo_dismissed_at', Date.now().toString());
                                 }}>
                                     <img
-                                        src={popupData?.image_url ? (popupData.image_url.startsWith('http') ? popupData.image_url : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${popupData.image_url}`) : "/alchemy.webp"}
+                                        src={popupData?.image_url ? (popupData.image_url.startsWith('http') ? popupData.image_url : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${popupData.image_url}`) : "/logo-new.webp"}
                                         className="w-full h-full object-cover"
                                         alt="Promo"
                                     />
@@ -148,7 +148,7 @@ const PromoPopup = () => {
                                 </a>
                             ) : (
                                 <img
-                                    src={popupData?.image_url ? (popupData.image_url.startsWith('http') ? popupData.image_url : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${popupData.image_url}`) : "/alchemy.webp"}
+                                    src={popupData?.image_url ? (popupData.image_url.startsWith('http') ? popupData.image_url : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${popupData.image_url}`) : "/logo-new.webp"}
                                     className="w-full h-full object-cover"
                                     alt="Promo"
                                 />

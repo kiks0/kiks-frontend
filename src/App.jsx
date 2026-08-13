@@ -30,6 +30,7 @@ const BlogPostDetail = lazy(() => import('./pages/BlogPostDetail'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Auth = lazy(() => import('./pages/Auth'));
 const Collection = lazy(() => import('./pages/Collection'));
+const Fragrance = lazy(() => import('./pages/Fragrance'));
 const ProductDetail = lazy(() => import('./pages/ProductDetail'));
 const Admin = lazy(() => import('./pages/Admin'));
 const Checkout = lazy(() => import('./pages/Checkout'));
@@ -79,30 +80,36 @@ function App() {
       dispatch(openCart());
     }
     
-    // Global session validator for real-time security (e.g. instant logout on deletion)
+    // Global session & profile synchronizer (Token Refresh check every 1 hour)
     const checkSession = async () => {
       const token = localStorage.getItem('auth_token');
       if (!token) return;
       
       try {
         const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-        const res = await fetch(`${API_URL}/api/users/me`, {
+        // Use window.fetch to trigger our automatic token refresh interceptor if expired
+        const res = await window.fetch(`${API_URL}/api/users/me`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         
         if (res.status === 401) {
+          // If 401 persists after auto-refresh attempt, clear state cleanly
           dispatch(logout());
-          window.location.href = '/';
+          if (window.location.pathname !== '/') {
+            window.location.href = '/';
+          }
         } else if (res.ok) {
           const freshUser = await res.json();
           dispatch(updateProfile(freshUser));
         }
-      } catch (e) {}
+      } catch (e) {
+        console.warn('Session sync hiccup:', e.message);
+      }
     };
 
     checkSession();
-    // Check every 30 seconds for long-running sessions (Instant logout on deletion)
-    const interval = setInterval(checkSession, 30000);
+    // Check every 1 hour (3600000 ms) as per professional JWT token refresh architecture
+    const interval = setInterval(checkSession, 3600000);
     return () => clearInterval(interval);
   }, [dispatch, isAuthenticated]);
 
@@ -135,6 +142,7 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Auth key="login" />} />
               <Route path="/register" element={<Auth isRegisterInitial={true} key="register" />} />
+              <Route path="/fragrance" element={<Fragrance />} />
               <Route path="/collection/:slug" element={<Collection />} />
               <Route path="/collection/:collectionSlug/:productSlug" element={<ProductDetail />} />
               <Route path="/product/:slug" element={<ProductDetail />} />

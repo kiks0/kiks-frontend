@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Search as SearchIcon, ArrowRight, TrendingUp, Sparkles } from 'lucide-react';
-import { useNavigate, Link } from 'react-router-dom';
+import { X, Search as SearchIcon, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../store/authSlice';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -9,34 +11,24 @@ const SearchOverlay = ({ isOpen, onClose }) => {
   const [query, setQuery] = useState('');
   const inputRef = useRef(null);
   const navigate = useNavigate();
-  const [dbResults, setDbResults] = useState([]);
+  const dispatch = useDispatch();
+  const { isAuthenticated, token } = useSelector(state => state.auth);
+  const [searchData, setSearchData] = useState({ hasResults: false, totalCount: 0, results: {}, emptyState: null });
   const [loading, setLoading] = useState(false);
   const searchCache = useRef({});
 
-  // Core Site Pages
-  // Core Site Pages with Keywords for better searchability
-  const sitePages = [
-    { id: 'p1', title: 'Home', type: 'Experience', link: '/', category: 'PAGE', keywords: ['main', 'landing', 'start', 'home'] },
-    { id: 'p2', title: 'BLOG', type: 'Stories', link: '/blog', category: 'PAGE', keywords: ['blog', 'news', 'articles', 'updates', 'journal', 'stories'] },
-    { id: 'p3', title: 'Support', type: 'Support', link: '/contact', category: 'PAGE', keywords: ['contact', 'help', 'email', 'support', 'reach out', 'contact us'] },
-    { id: 'p4', title: 'MY ACCOUNT', type: 'Account', link: '/account/personal-details', category: 'ACCOUNT', keywords: ['profile', 'settings', 'user', 'info', 'me', 'account', 'my account'] },
-    { id: 'p5', title: 'My Orders', type: 'History', link: '/orders', category: 'ACCOUNT', keywords: ['purchases', 'tracking', 'list', 'bought', 'orders', 'history'] },
-    { id: 'p15', title: 'Wishlist', type: 'Curations', link: '/wishlist', category: 'ACCOUNT', keywords: ['wishlist', 'saved', 'favorites', 'likes', 'want', 'collection'] },
-
-    { id: 'p7', title: 'Login', type: 'Secure Access', link: '/login', category: 'AUTH', keywords: ['signin', 'login', 'access', 'enter', 'profile', 'account'] },
-    { id: 'p8', title: 'Register', type: 'Identity Verification', link: '/register', category: 'AUTH', keywords: ['signup', 'register', 'join', 'create account', 'membership'] },
-    { id: 'p9', title: 'Privacy Policy', type: 'Legal', link: '/privacy-policy', category: 'POLICY', keywords: ['data', 'security', 'gdpr', 'privacy', 'legal'] },
-    { id: 'p10', title: 'Terms & Conditions', type: 'Legal', link: '/terms-conditions', category: 'POLICY', keywords: ['agreement', 'rules', 'tos', 'conditions', 'legal'] },
-    { id: 'p11', title: 'Refund Policy', type: 'Service', link: '/refund-policy', category: 'POLICY', keywords: ['money back', 'refund', 'cancellation', 'returns'] },
-    { id: 'p12', title: 'Return Policy', type: 'Service', link: '/return-policy', category: 'POLICY', keywords: ['returns', 'shipping', 'delivery', 'exchange', 'policy'] },
-    { id: 'p13', title: 'Disclaimer', type: 'Legal', link: '/disclaimer', category: 'POLICY', keywords: ['legal', 'notice', 'warning', 'disclaimer'] },
-    { id: 'p14', title: 'About Us', type: 'Story', link: '/about', category: 'PAGE', keywords: ['brand', 'who we are', 'team', 'company', 'story'] }
-  ];
+  const filteredPages = (searchData.results?.pages || []).filter(item => {
+    if (isAuthenticated) {
+      return item.id !== 'pg-login' && item.id !== 'pg-register' && item.link !== '/login' && item.link !== '/register';
+    } else {
+      return item.id !== 'pg-logout' && item.link !== '#logout';
+    }
+  });
 
   useEffect(() => {
     if (isOpen) {
       setQuery('');
-      setDbResults([]);
+      setSearchData({ hasResults: false, totalCount: 0, results: {}, emptyState: null });
       setTimeout(() => inputRef.current?.focus(), 400);
       document.body.style.overflow = 'hidden';
     } else {
@@ -46,115 +38,162 @@ const SearchOverlay = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     const fetchResults = async () => {
-      const trimmedQuery = query.trim().toLowerCase();
+      const trimmedQuery = query.trim();
       if (trimmedQuery.length < 2) {
-        setDbResults([]);
+        setSearchData({ hasResults: false, totalCount: 0, results: {}, emptyState: null });
+        setLoading(false);
         return;
       }
 
-      // Check Cache
-      if (searchCache.current[trimmedQuery]) {
-        setDbResults(searchCache.current[trimmedQuery]);
+      const cacheKey = trimmedQuery.toLowerCase();
+      // Check Client Memory Cache for instant sub-10ms rendering
+      if (searchCache.current[cacheKey]) {
+        setSearchData(searchCache.current[cacheKey]);
+        setLoading(false);
         return;
       }
-
-      // 1. Local Search (Pages) - Instant & Reliable
-      const filteredPages = sitePages.filter(p => {
-        const titleMatch = p.title.toLowerCase();
-        if (trimmedQuery.length < 3) {
-          // Sharp Mode: Must start with the query
-          return titleMatch.startsWith(trimmedQuery);
-        }
-        // Normal Mode: Substring match including keywords
-        return (
-          titleMatch.includes(trimmedQuery) ||
-          p.type.toLowerCase().includes(trimmedQuery) ||
-          p.keywords.some(k => k.toLowerCase().includes(trimmedQuery))
-        );
-      });
 
       setLoading(true);
       try {
-        const [prodRes, colRes] = await Promise.all([
-          fetch(`${API_URL}/api/products?search=${encodeURIComponent(query)}`),
-          fetch(`${API_URL}/api/collections`)
-        ]);
-
-        let products = [];
-        if (prodRes.ok) products = await prodRes.json();
-
-        let collections = [];
-        if (colRes.ok) collections = await colRes.json();
-
-        const formattedProducts = products.map(p => ({
-          id: p.id,
-          title: p.name,
-          type: p.product_type || 'Extrait de Parfum',
-          link: `/product/${p.slug}`,
-          category: 'PRODUCT',
-          price: p.price
-        }));
-
-        const formattedCollections = collections
-          .filter(c => c.name.toLowerCase().includes(trimmedQuery))
-          .map(c => ({
-            id: `c-${c.id}`,
-            title: c.name,
-            type: 'Curation',
-            link: `/collection/${c.slug}`,
-            category: 'COLLECTION'
-          }));
-
-        // 2. Price Filtering (Client-side refinement)
-        const priceMatches = !isNaN(trimmedQuery) ? formattedProducts.filter(p => 
-          Math.abs(parseFloat(p.price) - parseFloat(trimmedQuery)) < 500
-        ) : [];
-
-        // 3. Combine & Prioritize
-        const allResults = [...filteredPages, ...formattedCollections, ...formattedProducts, ...priceMatches];
-        
-        // Remove duplicates by ID
-        const uniqueResults = Array.from(new Map(allResults.map(item => [item.id, item])).values())
-          .sort((a, b) => {
-            const aTitle = a.title.toLowerCase();
-            const bTitle = b.title.toLowerCase();
-            const aStarts = aTitle.startsWith(trimmedQuery);
-            const bStarts = bTitle.startsWith(trimmedQuery);
-            if (aStarts && !bStarts) return -1;
-            if (!aStarts && bStarts) return 1;
-            return 0;
-          });
-
-        searchCache.current[trimmedQuery] = uniqueResults;
-        setDbResults(uniqueResults);
+        const res = await fetch(`${API_URL}/api/search?q=${encodeURIComponent(trimmedQuery)}`);
+        if (res.ok) {
+          const data = await res.json();
+          searchCache.current[cacheKey] = data;
+          setSearchData(data);
+        }
       } catch (err) {
-        console.error("Search error:", err);
-        // Fallback to local results only if network fails
-        setDbResults(filteredPages);
+        console.error("Search API fault:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    const timer = setTimeout(fetchResults, 200); // Faster debounce
+    // Debounce requests precisely (275 ms) to avoid spamming backend while keeping UI responsive
+    const timer = setTimeout(fetchResults, 275);
     return () => clearTimeout(timer);
   }, [query]);
 
+  // Highlight matched words inside search results without breaking font styling
+  const renderHighlightedText = (text, q) => {
+    if (!q || !text || typeof text !== 'string') return text;
+    const words = q.trim().split(/\s+/).filter(w => w.length > 0);
+    if (words.length === 0) return text;
+    
+    try {
+      const regex = new RegExp(`(${words.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'gi');
+      const parts = text.split(regex);
+      return parts.map((part, index) =>
+        regex.test(part) ? (
+          <span key={index} className="font-bold underline text-black bg-neutral-200/60 px-0.5 rounded-xs transition-colors">
+            {part}
+          </span>
+        ) : (
+          part
+        )
+      );
+    } catch (e) {
+      return text;
+    }
+  };
+
+  const handleLinkClick = async (link) => {
+    onClose();
+    if (link === '#logout') {
+      try {
+        await fetch(`${API_URL}/api/auth/logout`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+      } catch (err) {
+        console.error("Backend logout failed:", err);
+      }
+      dispatch(logout());
+      navigate('/');
+      return;
+    }
+    navigate(link);
+  };
+
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && dbResults.length > 0) {
-      handleLinkClick(dbResults[0].link);
+    if (e.key === 'Enter') {
+      const allItems = [
+        ...(searchData.results?.products || []),
+        ...(searchData.results?.collections || []),
+        ...(searchData.results?.blogs || []),
+        ...filteredPages,
+        ...(searchData.emptyState?.trendingSearches || []),
+        ...(searchData.emptyState?.popularProducts || [])
+      ];
+      if (allItems.length > 0) {
+        handleLinkClick(allItems[0].link);
+      }
     }
     if (e.key === 'Escape') {
       onClose();
     }
   };
 
-  const handleLinkClick = (link) => {
-    onClose();
-    navigate(link);
+  // Render standardized search result sections with identical luxury UI structure & animations
+  const renderSection = (title, items, viewAllLink = null, maxLimit = 12) => {
+    if (!items || items.length === 0) return null;
+    const displayItems = items.slice(0, maxLimit);
+
+    return (
+      <div key={title} className="mb-8">
+        <div className="py-2 mb-1 border-b border-black/10 flex items-center justify-between">
+          <span className="text-[10px] md:text-[11px] tracking-[0.3em] uppercase font-black text-black/70">{title}</span>
+          <span className="text-[9px] tracking-[0.2em] uppercase text-black/40">{items.length} {items.length === 1 ? 'Item' : 'Items'}</span>
+        </div>
+        <div className="space-y-0">
+          {displayItems.map((item, idx) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: idx * 0.04 + 0.1 }}
+              className="group py-6 md:py-8 border-b border-black/5 flex items-center justify-between cursor-pointer hover:border-black/20 transition-all duration-500"
+              onClick={() => handleLinkClick(item.link)}
+            >
+              <div className="flex flex-col">
+                 <div className="flex items-center mb-2">
+                    <span className="text-black text-[8px] md:text-[9px] tracking-[0.4em] font-black uppercase bg-black/5 px-2 py-0.5 rounded-sm line-clamp-1">
+                      {item.category}
+                    </span>
+                    <span className="text-black/20 text-[9px] tracking-[0.2em] uppercase ml-4">
+                      {item.type}
+                    </span>
+                    {item.price && (
+                      <span className="text-black text-[10px] tracking-[0.2em] font-medium ml-4">
+                        {item.price}
+                      </span>
+                    )}
+                 </div>
+                 <h3 className="text-lg md:text-2xl text-black/80 group-hover:text-black font-light tracking-[0.1em] transition-all duration-500 group-hover:pl-4 uppercase">
+                    {renderHighlightedText(item.title, query)}
+                 </h3>
+              </div>
+              <div className="relative w-12 h-12 flex items-center justify-center overflow-hidden">
+                 <ArrowRight className="text-black/20 transform -translate-x-full group-hover:translate-x-0 transition-all duration-500" size={24} strokeWidth={1} />
+                 <ArrowRight className="text-black/20 absolute transform translate-x-0 group-hover:translate-x-full transition-all duration-500 opacity-20" size={24} strokeWidth={1} />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+        {viewAllLink && items.length > 5 && (
+          <div className="mt-3 text-right">
+            <button
+              onClick={() => handleLinkClick(viewAllLink)}
+              className="text-[10px] tracking-[0.3em] uppercase font-bold text-black hover:underline transition-all py-2 inline-block"
+            >
+              View All {title} →
+            </button>
+          </div>
+        )}
+      </div>
+    );
   };
 
-  // Variants for staggered entrance
+  // Variants for staggered entrance (Preserved exactly as original)
   const containerVariants = {
     hidden: { opacity: 0, y: -20 },
     visible: { 
@@ -190,8 +229,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
           </div>
 
           <div className="h-full w-full flex flex-col items-center justify-center p-8 md:p-14 lg:p-20 relative">
-            {/* Background Mark is already there */}
-               
+                
                 {/* Close Header */}
                <div className="flex justify-between items-center mb-10 md:mb-16 w-full max-w-4xl">
                   <div />
@@ -215,7 +253,15 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                     />
                     <div 
                       className="absolute right-0 bottom-5 md:bottom-8 opacity-20 group-hover:opacity-100 transition-opacity cursor-pointer"
-                      onClick={() => dbResults.length > 0 && handleLinkClick(dbResults[0].link)}
+                      onClick={() => {
+                        const allItems = [
+                          ...(searchData.results?.products || []),
+                          ...(searchData.results?.collections || []),
+                          ...(searchData.results?.blogs || []),
+                          ...filteredPages
+                        ];
+                        if (allItems.length > 0) handleLinkClick(allItems[0].link);
+                      }}
                     >
                        <SearchIcon className="text-black" size={24} strokeWidth={1} />
                     </div>
@@ -230,36 +276,28 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                     </div>
                   )}
 
-                  {!loading && query.trim() !== '' && dbResults.length === 0 && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-20 text-center">
-                       <p className="text-black/40 text-[10px] tracking-[0.4em] uppercase">No essence matches your search</p>
-                    </motion.div>
+                  {!loading && query.trim().length >= 2 && !searchData.hasResults && (
+                    <div className="py-6">
+                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-10 text-center mb-6 border-b border-black/10">
+                         <p className="text-black/70 text-[11px] md:text-[13px] tracking-[0.4em] uppercase font-bold">No results found</p>
+                         <p className="text-black/40 text-[9px] tracking-[0.2em] uppercase mt-2">Explore popular products and trending searches below</p>
+                      </motion.div>
+                      {searchData.emptyState && (
+                        <div className="space-y-6">
+                           {renderSection('Trending Searches', searchData.emptyState.trendingSearches, null, 5)}
+                           {renderSection('Popular Products', searchData.emptyState.popularProducts, '/collection/arambh', 4)}
+                           {renderSection('Recommended Blogs', searchData.emptyState.recommendedBlogs, '/blog', 3)}
+                        </div>
+                      )}
+                    </div>
                   )}
 
-                  {!loading && dbResults.length > 0 && (
-                    <div className="space-y-0">
-                      {dbResults.map((item, idx) => (
-                        <motion.div
-                          key={item.id}
-                           initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: idx * 0.05 + 0.2 }}
-                          className="group py-6 md:py-8 border-b border-black/5 flex items-center justify-between cursor-pointer hover:border-black/20 transition-all duration-500"
-                          onClick={() => handleLinkClick(item.link)}
-                        >
-                          <div className="flex flex-col">
-                             <div className="flex items-center mb-2">
-                                <span className="text-black text-[8px] md:text-[9px] tracking-[0.4em] font-black uppercase bg-black/5 px-2 py-0.5 rounded-sm line-clamp-1">{item.category}</span>
-                                 <span className="text-black/20 text-[9px] tracking-[0.2em] uppercase ml-4">{item.type}</span>
-                             </div>
-                             <h3 className="text-lg md:text-2xl text-black/80 group-hover:text-black font-light tracking-[0.1em] transition-all duration-500 group-hover:pl-4 uppercase">{item.title}</h3>
-                          </div>
-                          <div className="relative w-12 h-12 flex items-center justify-center overflow-hidden">
-                             <ArrowRight className="text-black/20 transform -translate-x-full group-hover:translate-x-0 transition-all duration-500" size={24} strokeWidth={1} />
-                             <ArrowRight className="text-black/20 absolute transform translate-x-0 group-hover:translate-x-full transition-all duration-500 opacity-20" size={24} strokeWidth={1} />
-                          </div>
-                        </motion.div>
-                      ))}
+                  {!loading && searchData.hasResults && (
+                    <div className="space-y-4">
+                       {renderSection('Products', searchData.results?.products, '/collection/arambh', 12)}
+                       {renderSection('Collections', searchData.results?.collections, '/collection/arambh', 6)}
+                       {renderSection('Blogs', searchData.results?.blogs, '/blog', 10)}
+                       {renderSection('Pages', filteredPages, '/', 10)}
                     </div>
                   )}
                </div>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Zap, Globe, Shield, Wind, Droplets, Sparkles } from 'lucide-react';
@@ -6,8 +6,22 @@ import SEO from '../components/SEO';
 import { logClientActivity } from '../utils/clientLogger';
 
 const About = () => {
+    const [latestCollectionSlug, setLatestCollectionSlug] = useState('arambh');
+
     useEffect(() => {
         logClientActivity('Opened about page');
+        const fetchLatestCollection = async () => {
+            try {
+                const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/collections`);
+                const data = await res.json();
+                if (data && data.length > 0 && data[0].slug) {
+                    setLatestCollectionSlug(data[0].slug);
+                }
+            } catch (err) {
+                console.error("Failed to fetch latest collection:", err);
+            }
+        };
+        fetchLatestCollection();
     }, []);
 
     return (
@@ -173,7 +187,7 @@ const About = () => {
                         It is felt.
                     </h2>
                     <Link 
-                        to="/collection/arambh" 
+                        to={`/collection/${latestCollectionSlug}`} 
                         className="inline-block border border-black px-10 md:px-14 py-4 md:py-5 text-[9px] md:text-[10px] tracking-[0.4em] md:tracking-[0.5em] font-black uppercase hover:bg-black hover:text-white transition-all duration-500"
                     >
                         Explore Collection

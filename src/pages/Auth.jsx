@@ -58,6 +58,20 @@ const countryList = [
     { name: 'Israel', code: '+972', iso: 'IL', length: 9, pattern: /^[0-9]{9}$/ }
 ];
 
+const getMailUrl = (email) => {
+    if (!email) return 'mailto:';
+    const domain = email.split('@')[1];
+    if (!domain) return 'mailto:';
+    
+    const d = domain.toLowerCase();
+    if (d === 'gmail.com' || d === 'googlemail.com') return 'https://mail.google.com';
+    if (d === 'yahoo.com' || d === 'ymail.com' || d === 'rocketmail.com') return 'https://mail.yahoo.com';
+    if (d === 'hotmail.com' || d === 'outlook.com' || d === 'live.com' || d === 'msn.com') return 'https://outlook.live.com';
+    if (d === 'icloud.com' || d === 'me.com' || d === 'mac.com') return 'https://www.icloud.com/mail';
+    
+    return `https://${d}`;
+};
+
 const Auth = ({ isRegisterInitial = false }) => {
     const [isRegister, setIsRegister] = useState(isRegisterInitial);
     const [isForgotPassword, setIsForgotPassword] = useState(false);
@@ -186,6 +200,8 @@ const Auth = ({ isRegisterInitial = false }) => {
             }
         } else if (verified === 'already') {
             setStatus('verification_already');
+        } else if (params.get('error') === 'invalid_link') {
+            setErrorMessage('Invalid or expired verification link.');
         } else if (path.includes('/register') || path.includes('/login')) {
             // TOTAL SESSION EXORCISM: Clear every ghost key to prevent bypass
             const ghostKeys = ['auth_token', 'auth_user', 'currentUser', 'token', 'user'];
@@ -381,7 +397,7 @@ Marketing Consent: Granted
 
         } catch (error) {
             console.error('Auth error:', error);
-            setErrorMessage('Connection error. Please ensure the server is running.');
+            setErrorMessage('Connection Lost please check the internet connection');
             setStatus('error');
         } finally {
             setIsLoading(false);
@@ -616,7 +632,7 @@ Marketing Consent: Granted
                                 </h2>
 
                                 <p className="text-neutral-500 text-[11px] md:text-xs tracking-[0.4em] uppercase mb-16 leading-relaxed max-w-md mx-auto font-medium">
-                                    TO ENSURE THE ABSOLUTE SECURITY OF YOUR ELITE PATRON ACCOUNT, A VERIFICATION LINK HAS BEEN DISPATCHED TO YOUR REGISTERED EMAIL.
+                                    TO ENSURE THE ABSOLUTE SECURITY OF YOUR ACCOUNT, A VERIFICATION LINK HAS BEEN DISPATCHED TO YOUR REGISTERED EMAIL.
                                 </p>
 
                                 <div className="space-y-8">
@@ -624,16 +640,27 @@ Marketing Consent: Granted
                                         <Loader2 size={16} className="animate-spin" />
                                         <span className="text-[10px] tracking-[0.3em] uppercase">Awaiting Activation...</span>
                                     </div>
-                                    <button
-                                        onClick={() => {
-                                            setStatus('idle');
-                                            setIsRegister(false);
-                                            navigate('/login');
-                                        }}
-                                        className="text-[10px] tracking-[0.5em] text-black hover:text-black/60 uppercase font-black transition-all border-b-2 border-black pb-2"
-                                    >
-                                        RETURN TO LOGIN
-                                    </button>
+                                    <div className="flex flex-col items-center space-y-4">
+                                        <button
+                                            onClick={() => {
+                                                const url = getMailUrl(formData.email);
+                                                window.open(url, '_blank');
+                                            }}
+                                            className="w-full bg-black text-white py-4 text-[10px] font-bold uppercase tracking-[0.4em] hover:bg-neutral-900 transition-colors"
+                                        >
+                                            Go to Mail
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                setStatus('idle');
+                                                setIsRegister(false);
+                                                navigate('/login');
+                                            }}
+                                            className="text-[10px] tracking-[0.5em] text-black/60 hover:text-black uppercase font-black transition-all border-b border-black/30 pb-1"
+                                        >
+                                            RETURN TO LOGIN
+                                        </button>
+                                    </div>
                                 </div>
                             </motion.div>
                         ) : status === 'verification_success' ? (
@@ -712,7 +739,7 @@ Marketing Consent: Granted
                                 </h2>
 
                                 <p className="text-neutral-500 text-[10px] tracking-[0.4em] uppercase mb-8 leading-relaxed">
-                                    {(isRegister || new URLSearchParams(location.search).get('verified') === 'true') ? 'Your elite patron account is now active. Preparing your curated journey...' : 'Accessing KIKS Ultra Luxury'}
+                                    {(isRegister || new URLSearchParams(location.search).get('verified') === 'true') ? 'Your account is now active. Preparing your curated journey...' : 'Accessing KIKS Ultra Luxury'}
                                 </p>
 
                                 <button
@@ -832,16 +859,6 @@ Marketing Consent: Granted
                                     <p className="text-[10px] tracking-[0.5em] text-black/40 uppercase mt-2">
                                         {isRegister ? 'Create your account' : ''}
                                     </p>
-
-                                    {errorMessage && (
-                                        <motion.div
-                                            initial={{ opacity: 0, height: 0 }}
-                                            animate={{ opacity: 1, height: 'auto' }}
-                                            className="mt-6 p-4 bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] tracking-widest uppercase"
-                                        >
-                                            {errorMessage}
-                                        </motion.div>
-                                    )}
                                 </div>
 
                                 <form onSubmit={handleSubmit} className="space-y-8 md:space-y-12">
@@ -1066,6 +1083,16 @@ Marketing Consent: Granted
                                                 <ArrowRight size={18} className="ml-4 transform group-hover:translate-x-2 transition-transform" />
                                             </span>
                                         </button>
+
+                                        {errorMessage && (
+                                            <motion.div
+                                                initial={{ opacity: 0, height: 0 }}
+                                                animate={{ opacity: 1, height: 'auto' }}
+                                                className="mt-6 p-4 bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] tracking-widest uppercase font-bold text-center"
+                                            >
+                                                {errorMessage}
+                                            </motion.div>
+                                        )}
                                     </div>
 
                                     <div className="text-center mt-10">

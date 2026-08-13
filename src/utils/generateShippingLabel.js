@@ -157,18 +157,6 @@ export const generateShippingLabel = async (orderInput) => {
                 doc.line(2, 68 + alertOffset, 98, 68 + alertOffset);
             }
 
-            if (order?.is_gift) {
-                doc.setFillColor(0, 0, 0);
-                doc.rect(2, 68 + alertOffset, 96, 10, 'F');
-                doc.setTextColor(255, 255, 255);
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(7);
-                doc.text("GIFT WRAP REQUESTED. NOTE INCLUDED.", 50, 74 + alertOffset, { align: 'center' });
-                doc.setTextColor(0, 0, 0); // reset
-                alertOffset += 10;
-                doc.line(2, 68 + alertOffset, 98, 68 + alertOffset);
-            }
-
             // Section 4: Items Table for the box
             const tableColumn = ["SKU Code", "Qty"];
             const tableRows = [];

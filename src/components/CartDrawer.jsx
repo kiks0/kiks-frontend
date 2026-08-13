@@ -27,7 +27,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
         const syncCart = async () => {
           try {
             const updatedItems = await Promise.all(items.map(async (item) => {
-              const currentSlug = item.slug || item.name?.toLowerCase().replace(/\s+/g, '-');
+              const currentSlug = item.slug || item.productId || String(item.id).split('-')[0] || item.name?.toLowerCase().replace(/\s+/g, '-');
               console.log(`[STOCK_CHECK] Checking ${item.name} with slug: ${currentSlug}`);
   
               const res = await fetch(`${API_URL}/api/products/${currentSlug}`);
@@ -38,19 +38,39 @@ const CartDrawer = ({ isOpen, onClose }) => {
               const fresh = await res.json();
               console.log(`[STOCK_SYNC] ${item.name}: Server says ${fresh.stock_count}, Cart needs ${item.quantity}`);
   
-              const priceRaw = (fresh.sale_price || fresh.price || "0").toString().replace(/[^0-9]/g, '');
+              let freshPrice = fresh.price;
+              let freshSalePrice = fresh.sale_price;
+              let freshStock = fresh.stock_count;
+
+              if (fresh.variants && (item.isVariant || (item.size && item.size !== (fresh.size || '100 ML')))) {
+                  let parsedVariants = [];
+                  try {
+                      parsedVariants = typeof fresh.variants === 'string' ? JSON.parse(fresh.variants) : (fresh.variants || []);
+                      if (!Array.isArray(parsedVariants)) parsedVariants = [];
+                  } catch (e) {}
+                  const targetSize = String(item.variantName || item.size || '').trim().toLowerCase();
+                  const targetIndex = String(item.id).includes('-') ? parseInt(String(item.id).split('-')[1]) - 1 : (item.variantIndex !== undefined ? parseInt(item.variantIndex) - 1 : -1);
+                  const matchingVariant = parsedVariants.find((v, idx) => String(v.size || v.name || '').trim().toLowerCase() === targetSize || (targetIndex >= 0 && idx === targetIndex));
+                  if (matchingVariant) {
+                      freshPrice = (matchingVariant.price !== undefined && matchingVariant.price !== '') ? matchingVariant.price : freshPrice;
+                      freshSalePrice = (matchingVariant.sale_price !== undefined && matchingVariant.sale_price !== '') ? matchingVariant.sale_price : '';
+                      freshStock = matchingVariant.stock !== undefined ? matchingVariant.stock : freshStock;
+                  }
+              }
+
+              const priceRaw = (freshSalePrice || freshPrice || "0").toString().replace(/[^0-9]/g, '');
               const currentPrice = parseInt(priceRaw) || 0;
   
               const oldPriceRaw = (item.sale_price || item.price || "0").toString().replace(/[^0-9]/g, '');
               const oldPrice = parseInt(oldPriceRaw) || 0;
   
-              const isStockOut = Number(fresh.stock_count || 0) <= 0 || Number(fresh.stock_count || 0) < Number(item.quantity);
+              const isStockOut = Number(freshStock || 0) <= 0 || Number(freshStock || 0) < Number(item.quantity);
   
               return {
                 ...item,
-                price: fresh.price,
-                sale_price: fresh.sale_price,
-                stock_count: fresh.stock_count,
+                price: freshPrice,
+                sale_price: freshSalePrice,
+                stock_count: freshStock,
                 isOOS: isStockOut,
                 priceChanged: currentPrice !== oldPrice
               };
@@ -110,110 +130,110 @@ const CartDrawer = ({ isOpen, onClose }) => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 h-full w-full max-w-[450px] bg-white z-[200000] shadow-2xl flex flex-col font-sans"
+            className="fixed right-0 top-0 h-full w-[85%] sm:w-[80%] max-w-[360px] sm:max-w-[450px] bg-white z-[200000] shadow-2xl flex flex-col font-sans overflow-hidden"
           >
             {/* Header */}
-            <div className="p-5 md:p-8 border-b border-black/5 flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <h2 className="text-sm md:text-xl font-black tracking-[0.3em] text-black uppercase flex items-center">
+            <div className="p-4 sm:p-6 md:p-8 border-b border-black/5 flex items-center justify-between bg-white shrink-0">
+              <div className="flex items-center space-x-2.5 sm:space-x-3">
+                <h2 className="text-xs sm:text-base md:text-xl font-black tracking-[0.2em] sm:tracking-[0.3em] text-black uppercase flex items-center">
                   {t('cart.your_bag')}
                   {items.some(i => i.isOOS) && (
                     <span className="ml-2 w-2 h-2 bg-red-500 rounded-full animate-ping" title="OOS Detected" />
                   )}
                 </h2>
-                <span className="text-[9px] bg-black/5 px-2 py-0.5 rounded-full text-black/60 font-bold tracking-widest">{cartCount}</span>
+                <span className="text-[9px] sm:text-[10px] bg-black text-white px-2 py-0.5 rounded-full font-black tracking-widest shadow-xs">{cartCount}</span>
               </div>
               <button
                 onClick={onClose}
-                className="p-2 hover:bg-black/5 rounded-full transition-colors text-black/40 hover:text-black"
+                className="p-2 hover:bg-black/5 rounded-full transition-colors text-black/40 hover:text-black shrink-0"
               >
-                <X size={20} strokeWidth={1.5} />
+                <X size={18} strokeWidth={1.5} className="sm:w-5 sm:h-5" />
               </button>
             </div>
 
             {/* Cart Items */}
-            <div className="flex-grow overflow-y-auto px-6 md:px-8 py-4 custom-scrollbar">
+            <div className="flex-grow overflow-y-auto px-4 sm:px-6 md:px-8 py-4 custom-scrollbar">
               {items.length > 0 ? (
-                <div className="space-y-8 py-4">
+                <div className="space-y-6 py-2">
                   {items.map((item) => (
                     <motion.div
                       layout
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       key={`${item.id}-${item.size}`}
-                      className="flex gap-6 group cursor-pointer"
+                      className="flex items-center gap-3.5 sm:gap-4 md:gap-5 group cursor-pointer border-b border-black/5 pb-5 last:border-0 last:pb-0"
                       onClick={() => {
-                        const slug = item.slug || item.name?.toLowerCase().replace(/\s+/g, '-');
+                        const slug = item.slug || item.productId || String(item.id).split('-')[0] || item.name?.toLowerCase().replace(/\s+/g, '-');
+                        const variantQuery = item.variantName || item.size || '';
                         onClose();
-                        navigate(`/product/${slug}`);
+                        navigate(`/product/${slug}${variantQuery ? `?variant=${encodeURIComponent(variantQuery)}` : ''}`);
                       }}
                     >
                       {/* Product Image */}
-                      <div className="w-24 h-32 bg-gray-50 overflow-hidden flex-shrink-0 border border-black/5 group-hover:border-black/20 transition-all">
+                      <div className="w-[70px] sm:w-[78px] md:w-20 aspect-[4/5] bg-neutral-50/80 overflow-hidden flex-shrink-0 border border-black/5 rounded-sm group-hover:border-black/20 transition-all flex items-center justify-center">
                         <img
                           src={getFullImageUrl(item.image_url || item.image || item.banner_url)}
                           alt={item.name}
-                          className="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform duration-700"
+                          className="w-full h-full object-contain p-1.5 sm:p-2 group-hover:scale-105 transition-transform duration-700"
                         />
                       </div>
 
                       {/* Product Info */}
-                      <div className="flex-grow flex flex-col justify-between py-1">
+                      <div className="flex-grow flex flex-col justify-center gap-1.5 sm:gap-2 min-w-0 py-0.5">
                         <div>
-                          <div className="flex justify-between items-start mb-1">
-                            <h3 className="text-xs font-bold tracking-[0.15em] text-black uppercase leading-relaxed pr-4 group-hover:opacity-60 transition-opacity">
-                              {item.name}
+                          <div className="flex justify-between items-center gap-2">
+                            <h3 className="text-xs sm:text-[13px] font-bold tracking-[0.1em] text-black uppercase leading-tight truncate group-hover:opacity-60 transition-opacity">
+                              {(item.name || '').replace(/\s*\([^)]*\)$/, '')}
                             </h3>
-                            <div className="flex flex-col items-end space-y-3">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  dispatch(removeFromCart({ id: item.id, size: item.size }));
-                                }}
-                                className="text-black/20 hover:text-red-500 transition-colors"
-                              >
-                                <Trash2 size={16} strokeWidth={1.5} />
-                              </button>
-                              </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                dispatch(removeFromCart({ id: item.id, size: item.size }));
+                              }}
+                              className="p-1 text-black/30 hover:text-red-600 transition-colors shrink-0 -mr-1"
+                              title="Remove item"
+                            >
+                              <Trash2 size={15} strokeWidth={1.5} />
+                            </button>
                           </div>
-                          <p className="text-[9px] text-black/40 tracking-[0.1em] uppercase mb-1">
-                            {item.category} • {item.volume || item.size}
-                          </p>
-                          
-                          {item.isOOS && (
-                            <div className="mt-2 mb-3 bg-red-500/5 border border-red-500/10 py-1.5 px-3 rounded-sm">
-                               <p className="text-[9px] text-red-500 font-black tracking-[0.2em] animate-pulse uppercase">
-                                  ITEM UNAVAILABLE • OUT OF STOCK
-                               </p>
-                            </div>
-                          )}
-
-                          <p className="text-[11px] text-black font-bold tracking-widest">
-                            {formatCurrency(parsePrice(item.sale_price || item.price) * item.quantity, activeCurrency, rates, symbols)}
+                          <p className="text-[10px] sm:text-[11px] text-black/50 tracking-[0.1em] uppercase font-bold mt-0.5 truncate">
+                            {item.volume || item.size || '100 ML'}
                           </p>
                         </div>
+                        
+                        {item.isOOS && (
+                          <div className="bg-red-500/10 border border-red-500/20 py-1 px-2 rounded-sm">
+                             <p className="text-[8px] text-red-600 font-black tracking-[0.15em] animate-pulse uppercase truncate">
+                                UNAVAILABLE • OUT OF STOCK
+                             </p>
+                          </div>
+                        )}
 
-                        {/* Quantity Selector */}
-                        <div className="flex items-center space-x-4" onClick={(e) => e.stopPropagation()}>
-                          <div className="flex items-center border border-black/10 rounded-full h-8 px-1">
+                        {/* Price & Quantity Selector Row */}
+                        <div className="flex items-center justify-between gap-2 pt-0.5" onClick={(e) => e.stopPropagation()}>
+                          <p className="text-[12px] sm:text-[13px] font-black tracking-widest text-black">
+                            {formatCurrency(parsePrice(item.sale_price || item.price) * item.quantity, activeCurrency, rates, symbols)}
+                          </p>
+
+                          <div className="flex items-center border border-black/20 rounded-full h-7 sm:h-8 px-1.5 bg-white shadow-xs shrink-0">
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleUpdateQuantity(item.id, item.size, item.quantity, -1);
                               }}
-                              className="p-1 hover:text-black transition-colors"
+                              className="p-1 text-black/60 hover:text-black transition-colors"
                             >
-                              <Minus size={14} />
+                              <Minus size={12} strokeWidth={2} />
                             </button>
-                            <span className="w-8 text-center text-[11px] font-bold text-black">{item.quantity}</span>
+                            <span className="w-6 sm:w-7 text-center text-[11px] font-black text-black select-none">{item.quantity}</span>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleUpdateQuantity(item.id, item.size, item.quantity, 1);
                               }}
-                              className="p-1 hover:text-black transition-colors"
+                              className="p-1 text-black/60 hover:text-black transition-colors"
                             >
-                              <Plus size={14} />
+                              <Plus size={12} strokeWidth={2} />
                             </button>
                           </div>
                         </div>
@@ -222,14 +242,14 @@ const CartDrawer = ({ isOpen, onClose }) => {
                   ))}
                 </div>
               ) : (
-                <div className="h-full flex flex-col items-center justify-center text-center opacity-40">
-                  <div className="w-16 h-16 bg-black/5 rounded-full flex items-center justify-center mb-6">
-                    <ShoppingBag size={32} strokeWidth={1} />
+                <div className="h-full flex flex-col items-center justify-center text-center opacity-40 py-12">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 bg-black/5 rounded-full flex items-center justify-center mb-5 sm:mb-6">
+                    <ShoppingBag size={28} strokeWidth={1} />
                   </div>
-                  <p className="text-sm font-light tracking-[0.2em] uppercase mb-8">{t('cart.empty')}</p>
+                  <p className="text-xs sm:text-sm font-light tracking-[0.2em] uppercase mb-6 sm:mb-8">{t('cart.empty')}</p>
                   <button
                     onClick={onClose}
-                    className="text-[10px] tracking-[0.3em] font-bold text-black uppercase border-b border-black/20 pb-1 hover:border-black transition-all"
+                    className="text-[9px] sm:text-[10px] tracking-[0.3em] font-bold text-black uppercase border-b border-black/20 pb-1 hover:border-black transition-all"
                   >
                     {t('cart.start')}
                   </button>
@@ -239,13 +259,13 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
             {/* Footer / Summary */}
             {items.length > 0 && (
-              <div className="p-8 border-t border-black/5 bg-gray-50">
-                <div className="flex items-center justify-between mb-8">
-                  <span className="text-[10px] tracking-[0.4em] text-black/40 uppercase">{t('cart.subtotal')}</span>
-                  <span className="text-lg font-bold tracking-widest text-black">{formatCurrency(total || 0, activeCurrency, rates, symbols)}</span>
+              <div className="p-4 sm:p-6 md:p-8 border-t border-black/10 bg-neutral-50/80 shrink-0">
+                <div className="flex items-center justify-between mb-5 sm:mb-6">
+                  <span className="text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.3em] text-black/50 uppercase font-black">{t('cart.subtotal')}</span>
+                  <span className="text-base sm:text-lg font-black tracking-widest text-black">{formatCurrency(total || 0, activeCurrency, rates, symbols)}</span>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   <button
                     disabled={items.length === 0}
                     onClick={() => {
@@ -263,20 +283,21 @@ const CartDrawer = ({ isOpen, onClose }) => {
                         navigate('/checkout');
                       }
                     }}
-                    className={`w-full h-14 text-[11px] font-black tracking-[0.4em] uppercase flex items-center justify-center space-x-4 transition-all group ${items.some(i => i.isOOS) ? 'bg-neutral-400 text-white' : 'bg-black text-white hover:bg-black/90'} disabled:opacity-30 disabled:cursor-not-allowed`}
+                    className={`w-full py-3.5 sm:py-4 text-[10px] sm:text-[11px] font-black tracking-[0.15em] sm:tracking-[0.3em] uppercase flex items-center justify-center gap-2 sm:gap-3 transition-all rounded-xs shadow-md ${items.some(i => i.isOOS) ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-black text-white hover:bg-neutral-800'} disabled:opacity-30 disabled:cursor-not-allowed`}
                   >
-                    <span className="relative z-10 flex items-center">
-                      {items.some(i => i.isOOS) ? 'REMOVE UNAVAILABLE ITEMS' : t('cart.checkout')} <ArrowRight size={16} className="ml-3 group-hover:translate-x-1 transition-transform" />
+                    <span className="relative z-10 flex items-center text-center">
+                      {items.some(i => i.isOOS) ? 'REMOVE OUT OF STOCK ITEMS' : t('cart.checkout')} 
+                      {!items.some(i => i.isOOS) && <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform shrink-0" />}
                     </span>
                   </button>
                   <button
                     onClick={onClose}
-                    className="w-full h-14 flex items-center justify-center border border-black/10 text-black text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-black/5 transition-all"
+                    className="w-full py-3 sm:py-3.5 flex items-center justify-center border border-black/15 bg-white text-black text-[9px] sm:text-[10px] font-bold tracking-[0.2em] sm:tracking-[0.3em] uppercase hover:bg-black hover:text-white transition-all rounded-xs shadow-xs"
                   >
                     {t('cart.continue')}
                   </button>
                 </div>
-                <p className="text-[9px] text-black/20 text-center mt-6 tracking-[0.1em] uppercase">
+                <p className="text-[8px] sm:text-[9px] text-black/40 text-center mt-4 sm:mt-5 tracking-[0.15em] sm:tracking-[0.2em] uppercase font-bold">
                   {t('cart.free_shipping')}
                 </p>
               </div>

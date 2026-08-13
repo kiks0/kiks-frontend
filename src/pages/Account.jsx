@@ -9,8 +9,33 @@ import { logout, updateProfile } from '../store/authSlice';
 import { clearWishlist } from '../store/wishlistSlice';
 import { clearCart } from '../store/cartSlice';
 import { logClientActivity } from '../utils/clientLogger';
+import AnimatedDropdown from '../components/AnimatedDropdown';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+const COUNTRIES = [
+    { name: 'India', code: '+91 (IN)', length: 10 },
+    { name: 'UAE', code: '+971 (AE)', length: 9 },
+    { name: 'Saudi Arabia', code: '+966 (SA)', length: 9 },
+    { name: 'Qatar', code: '+974 (QA)', length: 8 },
+    { name: 'Kuwait', code: '+965 (KW)', length: 8 },
+    { name: 'Oman', code: '+968 (OM)', length: 8 },
+    { name: 'Bahrain', code: '+973 (BH)', length: 8 },
+    { name: 'United Kingdom', code: '+44 (GB)', length: 10 },
+    { name: 'United States', code: '+1 (US)', length: 10 },
+    { name: 'France', code: '+33 (FR)', length: 9 },
+    { name: 'Germany', code: '+49 (DE)', length: 11 },
+    { name: 'Italy', code: '+39 (IT)', length: 10 },
+    { name: 'Spain', code: '+34 (ES)', length: 9 },
+    { name: 'Switzerland', code: '+41 (CH)', length: 9 },
+    { name: 'Singapore', code: '+65 (SG)', length: 8 },
+    { name: 'Canada', code: '+1 (CA)', length: 10 },
+    { name: 'Australia', code: '+61 (AU)', length: 9 },
+    { name: 'Japan', code: '+81 (JP)', length: 10 },
+    { name: 'Korea', code: '+82 (KR)', length: 10 },
+    { name: 'Mainland China', code: '+86 (CN)', length: 11 },
+    { name: 'Hong Kong S.A.R.', code: '+852 (HK)', length: 8 },
+];
 
 const Account = () => {
   const { t } = useTranslation();
@@ -26,6 +51,7 @@ const Account = () => {
   const [loadingOrdersCount, setLoadingOrdersCount] = useState(true);
   const [isConciergeOpen, setIsConciergeOpen] = useState(false);
   const [showCallbackForm, setShowCallbackForm] = useState(false);
+  const [callbackCountryCode, setCallbackCountryCode] = useState(appUser?.country_code || '+91 (IN)');
   const [callbackPhone, setCallbackPhone] = useState('');
   const [callbackStatus, setCallbackStatus] = useState('idle'); // idle, loading, success
   const [callbacksCount, setCallbacksCount] = useState(0);
@@ -343,7 +369,7 @@ const Account = () => {
                   <motion.div 
                     initial={{ opacity: 0, x: 10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="p-8 bg-black/[0.02] border border-black/5"
+                    className="p-4.5 sm:p-8 bg-black/[0.02] border border-black/5"
                   >
                     {callbackStatus === 'success' ? (
                       <div className="text-center py-4">
@@ -360,19 +386,36 @@ const Account = () => {
                       <>
                         <p className="text-black/40 text-[9px] tracking-widest uppercase mb-6">Enter your telephone number</p>
                         <div className="flex flex-col space-y-4">
-                          <input 
-                            type="tel"
-                            placeholder="+91"
-                            value={callbackPhone}
-                            onChange={(e) => {
-                              const val = e.target.value.replace(/\D/g, '').slice(0, 10);
-                              setCallbackPhone(val);
-                            }}
-                            maxLength="10"
-                            className="w-full bg-white border border-black/10 px-4 py-3 text-black text-sm focus:outline-none focus:border-black transition-all font-light"
-                          />
+                          <div className="flex flex-col sm:flex-row sm:items-center border border-black/10 bg-white focus-within:border-black transition-all">
+                            <div className="relative w-full sm:w-auto sm:min-w-[130px] border-b sm:border-b-0 sm:border-r border-black/10">
+                              <AnimatedDropdown
+                                options={COUNTRIES.map(c => ({ label: c.code, value: c.code }))}
+                                value={callbackCountryCode}
+                                onChange={(val) => setCallbackCountryCode(val)}
+                                placeholder="Code"
+                                className="border-none text-xs font-light w-full"
+                              />
+                            </div>
+                            <input 
+                              type="tel"
+                              placeholder="Phone number"
+                              value={callbackPhone}
+                              onChange={(e) => {
+                                const country = COUNTRIES.find(c => c.code === callbackCountryCode);
+                                const maxLen = country ? country.length : 15;
+                                const val = e.target.value.replace(/\D/g, '').slice(0, maxLen);
+                                setCallbackPhone(val);
+                              }}
+                              maxLength={COUNTRIES.find(c => c.code === callbackCountryCode)?.length || 15}
+                              className="w-full bg-transparent px-4 py-3 text-black text-xs sm:text-sm focus:outline-none transition-all font-light"
+                            />
+                          </div>
                           <button 
-                            disabled={callbackStatus === 'loading' || !callbackPhone || callbackPhone.length < 10}
+                            disabled={
+                              callbackStatus === 'loading' || 
+                              !callbackPhone || 
+                              callbackPhone.length < (COUNTRIES.find(c => c.code === callbackCountryCode)?.length || 8)
+                            }
                             onClick={async () => {
                               setCallbackStatus('loading');
                               try {
@@ -383,7 +426,7 @@ const Account = () => {
                                     'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
                                   },
                                   body: JSON.stringify({ 
-                                    phone: callbackPhone,
+                                    phone: `${callbackCountryCode} ${callbackPhone}`,
                                     name: userName,
                                     email: appUser?.email
                                   })

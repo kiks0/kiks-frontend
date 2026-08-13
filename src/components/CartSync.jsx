@@ -44,14 +44,14 @@ const CartSync = () => {
             const userId = user?.id || user?._id || user?.user_id;
 
             if (!isAuthenticated || !token || !userId) {
-                console.log('[VAULT] Auth or ID missing, skipping fetch. ID detected:', userId);
+                // console.log('[VAULT] Auth or ID missing, skipping fetch. ID detected:', userId);
                 hasFetchedRef.current = false;
                 lastSyncRef.current = null;
                 return;
             }
 
             fetchingRef.current = true;
-            console.log('[VAULT] Opening Vault for User ID:', userId);
+            // console.log('[VAULT] Opening Vault for User ID:', userId);
 
             try {
                 const res = await fetch(`${API_URL}/api/carts`, {
@@ -61,17 +61,17 @@ const CartSync = () => {
                 });
 
                 if (!res.ok) {
-                    console.error('[VAULT] Entry Denied:', res.status);
+                    // console.error('[VAULT] Entry Denied:', res.status);
                     return;
                 }
 
                 const data = await res.json();
                 let dbItems = data.items || [];
-                console.log('[VAULT] Items found in Vault:', dbItems);
+                // console.log('[VAULT] Items found in Vault:', dbItems);
 
                 // Handle cases where DB returns {} instead of []
                 if (dbItems && !Array.isArray(dbItems) && typeof dbItems === 'object') {
-                    console.warn('[VAULT] Normalizing object to array...');
+                    // console.warn('[VAULT] Normalizing object to array...');
                     dbItems = [];
                 }
 
@@ -96,7 +96,7 @@ const CartSync = () => {
                     }))
                     : [];
 
-                console.log('[VAULT] Sanctified items for Redux:', mappedDbItems);
+                // console.log('[VAULT] Sanctified items for Redux:', mappedDbItems);
 
                 const currentLocalItems = itemsRef.current || [];
                 let mergedItems = [...mappedDbItems];
@@ -104,7 +104,7 @@ const CartSync = () => {
                 // ONLY merge local items if we are transitioning from guest to logged in
                 // If it's a refresh (already auth on mount), we trust the DB source
                 if (shouldMergeRef.current) {
-                    console.log('[VAULT] Merging guest items into account...');
+                    // console.log('[VAULT] Merging guest items into account...');
                     currentLocalItems.forEach(localItem => {
                         const dbItemIdx = mergedItems.findIndex(dbItem =>
                             String(dbItem.id) === String(localItem.id) && String(dbItem.size) === String(localItem.size)
@@ -124,7 +124,7 @@ const CartSync = () => {
                     // Merge complete, don't do it again unless they logout/login
                     shouldMergeRef.current = false;
                 } else {
-                    console.log('[VAULT] Refresh detected or already merged, using DB as source of truth.');
+                    // console.log('[VAULT] Refresh detected or already merged, using DB as source of truth.');
                 }
 
                 lastSyncRef.current = JSON.stringify(mergedItems);
@@ -187,12 +187,12 @@ const CartSync = () => {
 
                 if (!res.ok) {
                     const errRes = await res.json();
-                    console.error('[VAULT] Sync Failure:', res.status, errRes.msg);
+                    // console.error('[VAULT] Sync Failure:', res.status, errRes.msg);
                     return;
                 }
 
                 lastSyncRef.current = cartState;
-                console.log('[VAULT] Vault updated successfully.');
+                // console.log('[VAULT] Vault updated successfully.');
             } catch (err) {
                 console.error('Cart sync fault:', err);
             }

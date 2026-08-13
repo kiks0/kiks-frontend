@@ -225,23 +225,28 @@ const Addresses = () => {
         }
     };
 
-    if (loading) return <PageLoader fullScreen />;
-
     return (
-        <div className="bg-white min-h-screen text-black pt-24 md:pt-40 pb-8 md:pb-32">
+        <div className="bg-white min-h-screen text-black pt-20 md:pt-36 pb-8 md:pb-32 font-sans">
+            <div className="container mx-auto px-6 md:px-12 lg:px-24 max-w-[1400px]">
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-start mb-8 md:mb-12">
+                    <Link to="/account" className="inline-flex items-center text-[11px] tracking-[0.4em] text-black/50 hover:text-black transition-colors uppercase group">
+                        <ArrowLeft size={16} className="mr-3 group-hover:-translate-x-1 transition-transform" /> BACK TO ACCOUNT
+                    </Link>
+                </motion.div>
+            </div>
+
             <div className="kiks-chanel-container">
                 
                 <div className="mb-4 md:mb-12 text-center">
-                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-center mb-12">
-                        <Link to="/account" className="inline-flex items-center text-[11px] tracking-[0.4em] text-black/50 hover:text-black transition-colors uppercase group">
-                            <ArrowLeft size={16} className="mr-3 group-hover:-translate-x-1 transition-transform" /> BACK TO ACCOUNT
-                        </Link>
-                    </motion.div>
                     <h1 className="kiks-main-title">Addresses</h1>
                 </div>
 
                 <AnimatePresence mode="wait">
-                    {!action ? (
+                    {loading ? (
+                        <motion.div key="loader" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex justify-center items-center py-24">
+                            <Loader2 className="w-6 h-6 animate-spin text-black/30" />
+                        </motion.div>
+                    ) : !action ? (
                         <motion.div 
                             key="list"
                             initial={{ opacity: 0, y: 20 }}

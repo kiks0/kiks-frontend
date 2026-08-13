@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Menu, X, ShoppingBag, Heart, User, UserPlus, ChevronDown, Shield, ChevronLeft, ArrowRight } from 'lucide-react';
+import { Search, Menu, X, ShoppingBag, Heart, User, UserPlus, ChevronDown, Shield, ChevronLeft, ArrowRight, LogOut } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { toggleWishlistAndSync } from '../store/wishlistSlice';
+import { toggleWishlistAndSync, clearWishlist } from '../store/wishlistSlice';
 import { openAuthModal, openWishlistAuthPopup, openCart, closeCart } from '../store/uiSlice';
+import { logout } from '../store/authSlice';
+import { clearCart } from '../store/cartSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SearchOverlay from './SearchOverlay';
@@ -18,7 +20,7 @@ const Navbar = () => {
   const wishlistCount = wishlistItems.length;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const currentPath = location.pathname.toLowerCase();
   const isWhiteThemePage = 
@@ -42,6 +44,7 @@ const Navbar = () => {
     currentPath.includes('/about') ||
     (currentPath.includes('/collection') && (location.pathname.split('/').length > 3 || location.search.includes('view=products'))) ||
     currentPath.includes('/product') ||
+    currentPath.includes('/fragrance') ||
     currentPath.includes('/contact');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -52,15 +55,56 @@ const Navbar = () => {
   const setIsCartOpen = (isOpen) => isOpen ? dispatch(openCart()) : dispatch(closeCart());
   const [navCollections, setNavCollections] = useState([]);
   const [mobileMenuLevel, setMobileMenuLevel] = useState('main'); // 'main' or 'collections'
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const { items: cartItems, total: cartTotal } = useSelector((state) => state.cart);
-  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { isAuthenticated, user, token } = useSelector((state) => state.auth);
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   const isAdmin = user && (
     user.email === 'kiksultraluxury@gmail.com' ||
     user.email === 'hit.goyani1010@gmail.com'
   );
+
+  const handleLogout = async () => {
+    setShowLogoutConfirm(false);
+
+    if (user && token) {
+      fetch(`${API_URL}/api/carts/sync`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          user_id: user.id,
+          email: user.email,
+          items: cartItems.map(i => ({
+            product_id: i.id,
+            product_name: i.name,
+            quantity: i.quantity,
+            price: i.price,
+            image_url: i.image_url,
+            size: i.size
+          }))
+        })
+      }).catch(err => console.error("Final logout sync failed:", err));
+    }
+
+    try {
+      await fetch(`${API_URL}/api/auth/logout`, {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch (err) {
+      console.error("Backend logout failed:", err);
+    }
+
+    dispatch(logout());
+    dispatch(clearWishlist());
+    dispatch(clearCart());
+    window.location.href = '/';
+  };
 
   const lastScrollY = useRef(0);
 
@@ -122,7 +166,22 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className={`fixed w-full z-[99999] transition-all duration-300 ${isScrolled || isWhiteThemePage || isMobileMenuOpen ? 'bg-white py-0 shadow-sm text-black' : 'bg-transparent py-0.5 text-white'}`}>
+      <motion.nav 
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.2,
+              delayChildren: 1.5,
+              duration: 0.8
+            }
+          }
+        }}
+        className={`fixed w-full z-[99999] transition-colors duration-300 ${isScrolled || isWhiteThemePage || isMobileMenuOpen ? 'bg-white py-0 shadow-sm text-black' : 'bg-transparent py-0.5 text-white'}`}
+      >
         <div className="container mx-auto px-5 lg:px-12 flex flex-col items-center">
 
           {/* ======================================= */}
@@ -131,17 +190,23 @@ const Navbar = () => {
           <div className={`flex md:hidden flex-row items-center justify-between w-full relative z-50 h-[56px] ${isScrolled || isWhiteThemePage || isMobileMenuOpen ? 'text-black' : 'text-white'}`}>
 
             {/* Left: Mobile Menu & Search */}
-            <div className="flex items-center space-x-3.5 px-1">
+            <motion.div 
+              variants={{ hidden: { opacity: 0, y: -20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
+              className="flex items-center space-x-3.5 px-1"
+            >
               <button className="hover:text-gold-400 transition-colors" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
                 {isMobileMenuOpen ? <X size={18} strokeWidth={1.5} /> : <Menu size={18} strokeWidth={1.5} />}
               </button>
               <button className="hover:text-gold-400 transition-colors" onClick={() => { setIsSearchOpen(true); setIsMobileMenuOpen(false); }}>
                 <Search size={18} strokeWidth={1.5} />
               </button>
-            </div>
+            </motion.div>
 
             {/* Center: Brand Logo */}
-            <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-center pointer-events-none">
+            <motion.div 
+              variants={{ hidden: { opacity: 0, y: -20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
+              className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-center pointer-events-none"
+            >
               <Link
                 to="/"
                 onClick={(e) => {
@@ -159,10 +224,13 @@ const Navbar = () => {
                   className="h-10 w-auto object-contain transition-all"
                 />
               </Link>
-            </div>
+            </motion.div>
 
             {/* Right: Mobile Icons */}
-            <div className="flex items-center space-x-3.5 px-1">
+            <motion.div 
+              variants={{ hidden: { opacity: 0, y: -20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
+              className="flex items-center space-x-3.5 px-1"
+            >
               <Link to="/account" className="hover:text-gold-400 transition-colors">
                 <User size={18} strokeWidth={1.5} />
               </Link>
@@ -181,7 +249,7 @@ const Navbar = () => {
                   </span>
                 )}
               </button>
-            </div>
+            </motion.div>
           </div>
 
           {/* ========================================= */}
@@ -191,29 +259,34 @@ const Navbar = () => {
 
             {/* Top Row: Brand Logo (Center) & Action Icons (Right) */}
             <div className={`w-full flex items-center justify-center relative transition-all duration-500 ${showMenu ? 'pt-3 pb-1' : 'py-2'} px-12`}>
-              <Link
-                to="/"
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = '/';
-                }}
-                className="flex items-center justify-center transform transition z-50"
-              >
-                <img
-                  src="/logo-kiks.png"
-                  alt="KIKS Logo"
-                  width="180"
-                  height="72"
-                  className={`w-auto object-contain transition-all duration-500 ${showMenu ? 'h-14 md:h-18' : 'h-9 md:h-11'}`}
-                />
-              </Link>
+              <motion.div variants={{ hidden: { opacity: 0, y: -20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}>
+                <Link
+                  to="/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = '/';
+                  }}
+                  className="flex items-center justify-center transform transition z-50"
+                >
+                  <img
+                    src="/logo-kiks.png"
+                    alt="KIKS Logo"
+                    width="180"
+                    height="72"
+                    className={`w-auto object-contain transition-all duration-500 ${showMenu ? 'h-14 md:h-18' : 'h-9 md:h-11'}`}
+                  />
+                </Link>
+              </motion.div>
 
               {/* Right Side Icons - Moved to top row */}
-              <div className={`flex space-x-4 items-center absolute right-12 ${isScrolled || isWhiteThemePage ? 'text-black/70' : 'text-white/70'}`}>
-                <button className="hover:text-current hover:opacity-100 transition-all" onClick={() => { setIsSearchOpen(true); setIsMobileMenuOpen(false); }}>
-                  <Search size={18} strokeWidth={1.5} />
-                </button>
-                <Link to="/account" className="hover:text-current hover:opacity-100 transition-all">
+              <motion.div 
+                variants={{ hidden: { opacity: 0, y: -20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
+                className={`flex space-x-4 items-center absolute right-12 ${isScrolled || isWhiteThemePage ? 'text-black/70' : 'text-white/70'}`}
+              >
+                  <button className="hover:text-current hover:opacity-100 transition-all" onClick={() => { setIsSearchOpen(true); setIsMobileMenuOpen(false); }}>
+                    <Search size={18} strokeWidth={1.5} />
+                  </button>
+                  <Link to="/account" className="hover:text-current hover:opacity-100 transition-all">
                   <User size={18} strokeWidth={1.5} />
                 </Link>
                 <button
@@ -244,7 +317,7 @@ const Navbar = () => {
                     </span>
                   )}
                 </button>
-              </div>
+              </motion.div>
             </div>
 
               <div
@@ -253,14 +326,10 @@ const Navbar = () => {
               >
                 <motion.div 
                   className={`flex space-x-16 text-[10px] tracking-[0.3em] font-light items-center mx-auto font-sans ${isScrolled || isWhiteThemePage ? 'text-black' : 'text-white'}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ staggerChildren: 0.15, delayChildren: 0.2 }}
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.15 } } }}
                 >
                   <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    variants={{ hidden: { opacity: 0, y: -10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } } }}
                     className="relative group h-full flex items-center py-1 cursor-pointer"
                     onMouseEnter={() => setIsCollectionsHovered(true)}
                     onMouseLeave={() => setIsCollectionsHovered(false)}
@@ -286,25 +355,28 @@ const Navbar = () => {
                       )}
                     </div>
                   </div>
-                </motion.div>
-                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}>
-                  <Link to="/blog" className="opacity-60 hover:opacity-100 transition-all block">{t('nav.blog')}</Link>
-                </motion.div>
-                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}>
-                  <Link to="/contact" className="opacity-60 hover:opacity-100 transition-all block">{t('nav.contact')}</Link>
-                </motion.div>
+                  </motion.div>
+                  <motion.div variants={{ hidden: { opacity: 0, y: -10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } } }}>
+                    <Link to="/fragrance" className="opacity-60 hover:opacity-100 transition-all block font-sans uppercase">Fragrance</Link>
+                  </motion.div>
+                  <motion.div variants={{ hidden: { opacity: 0, y: -10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } } }}>
+                    <Link to="/blog" className="opacity-60 hover:opacity-100 transition-all block">{t('nav.blog')}</Link>
+                  </motion.div>
+                  <motion.div variants={{ hidden: { opacity: 0, y: -10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } } }}>
+                    <Link to="/contact" className="opacity-60 hover:opacity-100 transition-all block">{t('nav.contact')}</Link>
+                  </motion.div>
                 {!isAuthenticated && (
                   <>
-                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.45 }}>
+                    <motion.div variants={{ hidden: { opacity: 0, y: -10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } } }}>
                       <Link to="/login" className="opacity-60 hover:opacity-100 transition-all block">{t('nav.login')}</Link>
                     </motion.div>
-                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}>
+                    <motion.div variants={{ hidden: { opacity: 0, y: -10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } } }}>
                       <Link to="/register" className="opacity-60 hover:opacity-100 transition-all block">{t('nav.register')}</Link>
                     </motion.div>
                   </>
                 )}
                 {isAuthenticated && isAdmin && (
-                  <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.45 }}>
+                  <motion.div variants={{ hidden: { opacity: 0, y: -10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } } }}>
                     <Link to="/admin" className="opacity-60 hover:opacity-100 transition-all uppercase block">{t('nav.admin')}</Link>
                   </motion.div>
                 )}
@@ -312,8 +384,7 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-
-      </nav>
+      </motion.nav>
 
       {/* Mobile Sidebar (Chanel Style) */}
       <AnimatePresence>
@@ -377,6 +448,13 @@ const Navbar = () => {
                       </div>
 
                       <div className="space-y-8">
+                        <Link
+                          to="/fragrance"
+                          onClick={() => { setIsMobileMenuOpen(false); setMobileMenuLevel('main'); }}
+                          className="block text-[11px] tracking-[0.25em] uppercase font-medium font-sans text-black hover:text-gold-500"
+                        >
+                          Fragrance
+                        </Link>
 
                         <Link
                           to="/blog"
@@ -453,6 +531,18 @@ const Navbar = () => {
                             <Shield size={16} className="mr-4" strokeWidth={1} /> {t('nav.admin')}
                           </Link>
                         )}
+
+                        {isAuthenticated && (
+                          <button
+                            onClick={() => {
+                              setIsMobileMenuOpen(false);
+                              setShowLogoutConfirm(true);
+                            }}
+                            className="flex items-center w-full text-[10px] tracking-[0.3em] text-black/80 uppercase hover:text-red-600 font-sans relative text-left transition-colors"
+                          >
+                            <LogOut size={16} className="mr-4" strokeWidth={1} /> LOGOUT
+                          </button>
+                        )}
                       </div>
                     </motion.div>
                   ) : (
@@ -488,6 +578,52 @@ const Navbar = () => {
               </div>
             </motion.div>
           </>
+        )}
+      </AnimatePresence>
+
+      {/* LOGOUT CONFIRMATION MODAL */}
+      <AnimatePresence>
+        {showLogoutConfirm && (
+          <div className="fixed inset-0 z-[200003] flex items-center justify-center p-6">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowLogoutConfirm(false)}
+              className="absolute inset-0 bg-black/90 backdrop-blur-md"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-sm bg-white border border-black/10 p-10 md:p-12 text-center shadow-2xl"
+            >
+              <div className="mb-8">
+                <div className="w-12 h-12 border border-gold-500/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <X size={20} className="text-gold-500 font-light" />
+                </div>
+                <h3 className="text-sm font-serif tracking-[0.3em] uppercase text-black mb-4">End Session</h3>
+                <p className="text-[10px] tracking-[0.15em] text-black/40 uppercase leading-relaxed">
+                  Are you certain you wish to depart from the boutique? Your selections will be synchronized.
+                </p>
+              </div>
+
+              <div className="flex flex-col space-y-4">
+                <button
+                  onClick={handleLogout}
+                  className="w-full bg-black text-white py-4 text-[10px] font-black tracking-[0.3em] uppercase border border-black hover:bg-white hover:text-black transition-all duration-500"
+                >
+                  Confirm Logout
+                </button>
+                <button
+                  onClick={() => setShowLogoutConfirm(false)}
+                  className="w-full border border-black/10 py-4 text-[10px] font-bold tracking-[0.3em] uppercase text-black/40 hover:text-black transition-all"
+                >
+                  Remain in the site
+                </button>
+              </div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
 

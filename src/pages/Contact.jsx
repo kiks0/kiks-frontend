@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, MessageSquare, Globe, Sparkles, CheckCircle2 } from 'lucide-react';
+import { MapPin, Phone, Mail, Globe, Truck, ShieldCheck, Clock, CreditCard, ShoppingBag } from 'lucide-react';
 import SEO from '../components/SEO';
 import { logClientActivity } from '../utils/clientLogger';
 
 const Contact = () => {
-    const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
-    const [status, setStatus] = useState('idle'); // idle, sending, success, error
+    const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', phone: '', message: '' });
+    const [status, setStatus] = useState('idle');
 
     useEffect(() => {
         logClientActivity('Opened contact page');
@@ -15,9 +15,7 @@ const Contact = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setStatus('sending');
-
         try {
-            // Submit to Web3Forms (A secure, high-end email delivery API)
             const response = await fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -25,13 +23,15 @@ const Contact = () => {
                     access_key: '7b09bf9e-5d82-4987-8350-bb836992b949',
                     from_name: 'KIKS ULTRA LUXURY',
                     subject: 'New Website Inquiry',
-                    ...formData
+                    name: `${formData.firstName} ${formData.lastName}`,
+                    email: formData.email,
+                    phone: formData.phone,
+                    message: formData.message
                 }),
             });
-
             if (response.ok) {
                 setStatus('success');
-                setFormData({ name: '', email: '', subject: '', message: '' });
+                setFormData({ firstName: '', lastName: '', email: '', phone: '', message: '' });
                 setTimeout(() => setStatus('idle'), 5000);
             } else {
                 setStatus('error');
@@ -42,237 +42,238 @@ const Contact = () => {
     };
 
     return (
-        <div className="bg-white min-h-screen text-black pt-20 md:pt-32 pb-12 md:pb-16 font-sans selection:bg-black/10 selection:text-black overflow-hidden relative">
-            <SEO 
-                title="Contact Us | Customer Concierge" 
-                description="Get in touch with KIKS Ultra Luxury. Contact our fragrance concierge for inquiries, custom orders, or customer support in India."
-                keywords="Contact KIKS, Perfume Concierge, Luxury Fragrances Support India"
+        <div className="bg-white min-h-screen text-black font-sans selection:bg-black/10 selection:text-black overflow-hidden pt-20 md:pt-32">
+            <SEO
+                title="Contact Us | KIKS Ultra Luxury"
+                description="Get in touch with KIKS Ultra Luxury. Contact our team for inquiries, custom orders, or customer support."
+                keywords="Contact KIKS, Perfume Support, Luxury Fragrances Support"
             />
 
-            {/* Background Accents */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-black/5 blur-[120px] rounded-full pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-black/5 blur-[120px] rounded-full pointer-events-none" />
+            {/* HERO BANNER */}
+            <section className="relative w-full h-[300px] md:h-[400px] bg-neutral-50 flex items-center justify-center overflow-hidden">
+                <motion.img
+                    initial={{ scale: 1.1, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 0.4 }}
+                    transition={{ duration: 1.5, ease: 'easeOut' }}
+                    src="https://res.cloudinary.com/vl2wprzs/image/upload/v1785420133/arambh_colelction_coblfi.png"
+                    alt="Contact Banner"
+                    className="absolute inset-0 w-full h-full object-cover"
+                />
+                <motion.div 
+                    initial={{ y: 30, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 1, delay: 0.3 }}
+                    className="relative z-10 text-center space-y-4"
+                >
+                    <h1 className="text-4xl md:text-5xl font-serif text-black">Contact Us</h1>
+                    <p className="text-[10px] md:text-xs tracking-[0.2em] uppercase font-bold text-black/60">
+                        Home <span className="mx-2">/</span> Contact Us
+                    </p>
+                </motion.div>
+            </section>
 
-            <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-[1300px] relative z-10">
+            {/* MAIN CONTACT SECTION */}
+            <section className="max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-32">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
 
-                {/* Header Section */}
-                <div className="max-w-3xl mb-6 md:mb-8">
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="flex items-center space-x-4 mb-2"
-                    >
-                        <span className="w-12 h-[1px] bg-black" />
-                        <p className="text-black text-[10px] tracking-[0.6em] font-black uppercase">Connect With KIKS</p>
-                    </motion.div>
-                    <motion.h1
+                    {/* Left: Speak With Us */}
+                    <motion.div 
                         initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1, duration: 0.8 }}
-                        className="text-2xl md:text-4xl font-serif text-black tracking-[0.1em] uppercase font-light leading-tight mb-4"
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-100px" }}
+                        transition={{ duration: 0.8 }}
+                        className="space-y-12"
                     >
-                        How Can We <br />Help You?
-                    </motion.h1>
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.4 }}
-                        className="text-black/60 text-[10px] md:text-xs font-light tracking-[0.2em] max-w-xl leading-relaxed uppercase"
+                        <div>
+                            <h2 className="text-3xl md:text-4xl font-serif mb-4 text-black">Speak With Us</h2>
+                            <p className="text-xs md:text-sm text-black/60 leading-relaxed font-light max-w-md">
+                                Whether you have a question about our collections or want to inquire about a custom fragrance, we are here to assist you. Connect with KIKS Ultra Luxury.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 pt-4">
+                            <div className="flex gap-4 items-start group cursor-default hover:-translate-y-1 transition-transform duration-300">
+                                <MapPin className="w-5 h-5 text-black mt-1 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
+                                <div>
+                                    <h3 className="text-sm font-bold text-black mb-2">Store Address</h3>
+                                    <p className="text-[11px] text-black/60 leading-relaxed font-light group-hover:text-black transition-colors duration-300">
+                                        Bhavnagar, Gujarat<br />
+                                        India
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex gap-4 items-start group cursor-default hover:-translate-y-1 transition-transform duration-300">
+                                <Phone className="w-5 h-5 text-black mt-1 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
+                                <div>
+                                    <h3 className="text-sm font-bold text-black mb-2">Call Us</h3>
+                                    <p className="text-[11px] text-black/60 leading-relaxed font-light group-hover:text-black transition-colors duration-300">
+                                        +91 840 102 0339
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex gap-4 items-start group cursor-default hover:-translate-y-1 transition-transform duration-300">
+                                <Mail className="w-5 h-5 text-black mt-1 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
+                                <div>
+                                    <h3 className="text-sm font-bold text-black mb-2">Mail Us</h3>
+                                    <p className="text-[11px] text-black/60 leading-relaxed font-light group-hover:text-black transition-colors duration-300">
+                                        kiksultraluxury@gmail.com
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-4 items-start group cursor-pointer hover:-translate-y-1 transition-transform duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-black mt-1 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
+                                <div>
+                                    <h3 className="text-sm font-bold text-black mb-2">Instagram</h3>
+                                    <p className="text-[11px] text-black/60 leading-relaxed font-light">
+                                        <a href="https://www.instagram.com/kiksultraluxury?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" className="hover:text-black hover:underline transition-all">
+                                            @kiksultraluxury
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+
+                    {/* Right: Form */}
+                    <motion.div 
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-100px" }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className="bg-neutral-50 p-8 md:p-12 border border-black/5 hover:shadow-2xl transition-shadow duration-700"
                     >
-                        Whether you have a question about our collections or want to talk about a custom fragrance, our team is here to help you.
-                    </motion.p>
-                </div>
+                        <h2 className="text-2xl md:text-3xl font-serif mb-4 text-black">24/7 Support</h2>
+                        <p className="text-xs text-black/60 leading-relaxed font-light mb-10">
+                            Drop us a line and we will get back to you as soon as possible. Our team is dedicated to providing you with the best service.
+                        </p>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-
-                    {/* Left Side: Contact Information */}
-                    <div className="space-y-12 md:space-y-16">
-                        <section className="space-y-6 md:space-y-10">
-                            <h2 className="text-[10px] md:text-[11px] tracking-[0.4em] md:tracking-[0.5em] font-black text-black/30 uppercase">Reach out directly</h2>
-                            <div className="space-y-6 md:space-y-8">
+                        <AnimatePresence mode="wait">
+                            {status === 'success' ? (
                                 <motion.div
-                                    whileHover={{ x: 10 }}
-                                    className="flex items-center space-x-4 md:space-x-8"
+                                    key="success"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="py-12"
                                 >
-                                    <div className="w-12 h-12 md:w-16 md:h-16 flex-shrink-0 bg-black/5 border border-black/10 rounded-2xl md:rounded-3xl flex items-center justify-center text-black">
-                                        <Mail size={20} strokeWidth={1} className="md:w-6 md:h-6" />
-                                    </div>
-                                    <div className="min-w-0 pr-2">
-                                        <p className="text-[9px] md:text-[10px] tracking-widest text-black/40 uppercase mb-1 font-bold">Email us</p>
-                                        <p className="text-[12px] md:text-xl font-light tracking-widest break-all">kiksultraluxury@gmail.com</p>
-                                    </div>
+                                    <h3 className="text-2xl font-serif mb-4 text-black">Message Sent</h3>
+                                    <p className="text-black/60 text-xs font-light leading-relaxed">
+                                        Thank you for reaching out. We will respond shortly.
+                                    </p>
                                 </motion.div>
-
-                                <motion.div
-                                    whileHover={{ x: 10 }}
-                                    className="flex items-center space-x-4 md:space-x-8"
+                            ) : (
+                                <motion.form
+                                    key="form"
+                                    onSubmit={handleSubmit}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    className="space-y-6"
                                 >
-                                    <div className="w-12 h-12 md:w-16 md:h-16 flex-shrink-0 bg-black/5 border border-black/10 rounded-2xl md:rounded-3xl flex items-center justify-center text-black">
-                                        <Phone size={20} strokeWidth={1} className="md:w-6 md:h-6" />
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                        <input
+                                            type="text"
+                                            required
+                                            value={formData.firstName}
+                                            onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                                            className="w-full bg-white border border-black/10 px-6 py-4 text-xs text-black focus:outline-none focus:border-black transition-colors font-light placeholder:text-black/30"
+                                            placeholder="First name"
+                                        />
+                                        <input
+                                            type="text"
+                                            required
+                                            value={formData.lastName}
+                                            onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                                            className="w-full bg-white border border-black/10 px-6 py-4 text-xs text-black focus:outline-none focus:border-black transition-colors font-light placeholder:text-black/30"
+                                            placeholder="Last name"
+                                        />
                                     </div>
-                                    <div>
-                                        <p className="text-[9px] md:text-[10px] tracking-widest text-black/40 uppercase mb-1 font-bold">Call Support</p>
-                                        <p className="text-[12px] md:text-xl font-light tracking-widest whitespace-nowrap">+91 840 102 0339</p>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                        <input
+                                            type="email"
+                                            required
+                                            value={formData.email}
+                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                            className="w-full bg-white border border-black/10 px-6 py-4 text-xs text-black focus:outline-none focus:border-black transition-colors font-light placeholder:text-black/30"
+                                            placeholder="Email here"
+                                        />
+                                        <input
+                                            type="tel"
+                                            value={formData.phone}
+                                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                            className="w-full bg-white border border-black/10 px-6 py-4 text-xs text-black focus:outline-none focus:border-black transition-colors font-light placeholder:text-black/30"
+                                            placeholder="Phone number"
+                                        />
                                     </div>
-                                </motion.div>
-
-                                <motion.div
-                                    whileHover={{ x: 10 }}
-                                    className="flex items-center space-x-4 md:space-x-8"
-                                >
-                                    <div className="w-12 h-12 md:w-16 md:h-16 flex-shrink-0 bg-black/5 border border-black/10 rounded-2xl md:rounded-3xl flex items-center justify-center text-black">
-                                        <MapPin size={20} strokeWidth={1} className="md:w-6 md:h-6" />
-                                    </div>
-                                    <div>
-                                        <p className="text-[9px] md:text-[10px] tracking-widest text-black/40 uppercase mb-1 font-bold">Location</p>
-                                        <p className="text-[12px] md:text-xl font-light tracking-widest">Gujarat, India</p>
-                                    </div>
-                                </motion.div>
-                            </div>
-                        </section>
-
-                        <section className="space-y-10">
-                            <h2 className="text-[11px] tracking-[0.5em] font-black text-black/30 uppercase">Follow Our Journey</h2>
-                            <div className="flex space-x-6 text-black/40">
-                                <a href="https://www.instagram.com/kiksultraluxury?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="hover:text-black transition-colors cursor-pointer">
-                                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                                    </svg>
-                                </a>
-                            </div>
-                        </section>
-                    </div>
-
-                    {/* Right Side: Contact Form */}
-                    <div className="relative">
-                        <motion.div
-                            initial={{ opacity: 0, x: 50 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            className="bg-white border border-black/5 p-6 md:p-14 rounded-[2rem] md:rounded-[3rem] shadow-2xl relative"
-                        >
-                            <AnimatePresence mode='wait'>
-                                {status === 'success' ? (
-                                    <motion.div
-                                        key="success"
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0 }}
-                                        className="py-12 md:py-20 text-center flex flex-col items-center relative overflow-hidden"
+                                    <textarea
+                                        required
+                                        rows={5}
+                                        value={formData.message}
+                                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                                        className="w-full bg-white border border-black/10 px-6 py-4 text-xs text-black focus:outline-none focus:border-black transition-colors font-light resize-none placeholder:text-black/30"
+                                        placeholder="Additional message"
+                                    />
+                                    <button
+                                        type="submit"
+                                        disabled={status === 'sending'}
+                                        className="bg-black text-white px-10 py-4 text-[10px] uppercase tracking-[0.2em] font-bold hover:bg-neutral-800 transition-colors disabled:opacity-50"
                                     >
-                                        {/* Decorative Success Glow */}
-                                        <div className="absolute inset-0 bg-black/5 blur-[80px] rounded-full animate-pulse pointer-events-none" />
-
-                                        <motion.div 
-                                            initial={{ scale: 0 }}
-                                            animate={{ scale: 1 }}
-                                            transition={{ type: "spring", damping: 12, stiffness: 100, delay: 0.2 }}
-                                            className="w-20 h-20 md:w-28 md:h-28 bg-black/5 text-black rounded-full flex items-center justify-center mb-10 relative z-10"
-                                        >
-                                            <div className="absolute inset-0 rounded-full border-2 border-black/10 animate-[ping_3s_infinite]" />
-                                            <CheckCircle2 size={40} className="md:w-14 md:h-14" strokeWidth={1} />
-                                        </motion.div>
-
-                                        <div className="relative z-10">
-                                            <h3 className="text-3xl md:text-4xl font-serif text-black uppercase tracking-[0.1em] mb-6 leading-tight">
-                                                Inquiry <br className="md:hidden" /> Received
-                                            </h3>
-                                            <p className="text-black/60 text-[10px] md:text-xs tracking-[0.3em] leading-loose uppercase max-w-sm mx-auto mb-12 px-4">
-                                                Your message has been safely delivered to our curators. We will reach out to you through our support team within 24 hours.
-                                            </p>
-                                            
-                                            <motion.button
-                                                whileHover={{ scale: 1.05 }}
-                                                whileTap={{ scale: 0.95 }}
-                                                onClick={() => (window.location.href = '/')}
-                                                className="inline-flex items-center px-10 py-4 bg-black text-white text-[10px] font-black tracking-[0.3em] uppercase hover:bg-black/80 transition-all duration-500"
-                                            >
-                                                Return Home
-                                            </motion.button>
-                                        </div>
-                                    </motion.div>
-                                ) : (
-                                    <motion.form
-                                        key="form"
-                                        onSubmit={handleSubmit}
-                                        className="space-y-8 md:space-y-10"
-                                    >
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-                                            <div className="space-y-4">
-                                                <label className="text-[9px] tracking-[0.4em] font-bold text-black/30 uppercase">Your Name</label>
-                                                <input
-                                                    type="text"
-                                                    required
-                                                    value={formData.name}
-                                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                                    className="w-full bg-black/5 border-b border-black/10 p-4 text-sm text-black focus:outline-none focus:border-black transition-all font-light tracking-widest"
-                                                    placeholder="Enter your name"
-                                                />
-                                            </div>
-                                            <div className="space-y-4">
-                                                <label className="text-[9px] tracking-[0.4em] font-bold text-black/30 uppercase">Email Address</label>
-                                                <input
-                                                    type="email"
-                                                    required
-                                                    value={formData.email}
-                                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                                    className="w-full bg-black/5 border-b border-black/10 p-4 text-sm text-black focus:outline-none focus:border-black transition-all font-light tracking-widest"
-                                                    placeholder="Enter your email"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className="space-y-3 md:space-y-4">
-                                            <label className="text-[9px] tracking-[0.4em] font-bold text-black/30 uppercase">Subject</label>
-                                            <input
-                                                type="text"
-                                                required
-                                                value={formData.subject}
-                                                onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                                                className="w-full bg-black/5 border-b border-black/10 p-4 text-sm text-black focus:outline-none focus:border-black transition-all font-light tracking-widest"
-                                                placeholder="What are you interested in?"
-                                            />
-                                        </div>
-
-                                        <div className="space-y-4">
-                                            <label className="text-[9px] tracking-[0.4em] font-bold text-black/30 uppercase">Your Message</label>
-                                            <textarea
-                                                required
-                                                rows={5}
-                                                value={formData.message}
-                                                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                                className="w-full bg-black/5 border-b border-black/10 p-4 text-sm text-black focus:outline-none focus:border-black transition-all font-light tracking-widest resize-none"
-                                                placeholder="How can we help you create a legacy?"
-                                            />
-                                        </div>
-
-                                        <button
-                                            disabled={status === 'sending'}
-                                            className="w-full h-16 bg-black text-white text-[10px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.4em] uppercase hover:bg-black/90 transition-all duration-700 shadow-xl flex items-center justify-center relative overflow-hidden group px-2"
-                                        >
-                                            {status === 'sending' ? (
-                                                <span className="animate-pulse">Entrusting...</span>
-                                            ) : (
-                                                <span className="relative z-10 flex items-center whitespace-nowrap">
-                                                    Send Message <Send size={14} className="ml-2 md:ml-4 flex-shrink-0 transform group-hover:translate-x-2 transition-transform" />
-                                                </span>
-                                            )}
-                                        </button>
-
-                                        {status === 'error' && (
-                                            <p className="text-red-600 text-[10px] tracking-widest uppercase text-center font-bold">Something went wrong. Please try again.</p>
-                                        )}
-                                    </motion.form>
-                                )}
-                            </AnimatePresence>
-                        </motion.div>
-                    </div>
-
+                                        {status === 'sending' ? 'Sending...' : 'Send Message'}
+                                    </button>
+                                    {status === 'error' && (
+                                        <p className="text-red-600 text-[10px] tracking-widest mt-4">Failed to send message. Try again.</p>
+                                    )}
+                                </motion.form>
+                            )}
+                        </AnimatePresence>
+                    </motion.div>
                 </div>
+            </section>
 
-            </div>
+            {/* FEATURES SECTION */}
+            <section className="border-t border-black/5 bg-white py-16">
+                <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-5 gap-8 text-center">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="flex flex-col items-center group cursor-default hover:-translate-y-2 transition-transform duration-500">
+                        <Truck className="w-8 h-8 text-black mb-4 stroke-[1] group-hover:scale-110 transition-transform duration-500" />
+                        <h4 className="text-sm font-serif mb-2 text-black">Timely Delivery</h4>
+                        <p className="text-[10px] text-black/40 font-light max-w-[150px] group-hover:text-black/60 transition-colors duration-500">Ensuring your luxury reaches you perfectly on time.</p>
+                    </motion.div>
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex flex-col items-center group cursor-default hover:-translate-y-2 transition-transform duration-500">
+                        <ShoppingBag className="w-8 h-8 text-black mb-4 stroke-[1] group-hover:scale-110 transition-transform duration-500" />
+                        <h4 className="text-sm font-serif mb-2 text-black">Free Shipping</h4>
+                        <p className="text-[10px] text-black/40 font-light max-w-[150px] group-hover:text-black/60 transition-colors duration-500">Complimentary shipping on all exclusive orders.</p>
+                    </motion.div>
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="flex flex-col items-center group cursor-default hover:-translate-y-2 transition-transform duration-500">
+                        <Clock className="w-8 h-8 text-black mb-4 stroke-[1] group-hover:scale-110 transition-transform duration-500" />
+                        <h4 className="text-sm font-serif mb-2 text-black">24/7 Support</h4>
+                        <p className="text-[10px] text-black/40 font-light max-w-[150px] group-hover:text-black/60 transition-colors duration-500">Dedicated concierge service available around the clock.</p>
+                    </motion.div>
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4 }} className="flex flex-col items-center group cursor-default hover:-translate-y-2 transition-transform duration-500">
+                        <ShieldCheck className="w-8 h-8 text-black mb-4 stroke-[1] group-hover:scale-110 transition-transform duration-500" />
+                        <h4 className="text-sm font-serif mb-2 text-black">Secured Payment</h4>
+                        <p className="text-[10px] text-black/40 font-light max-w-[150px] group-hover:text-black/60 transition-colors duration-500">Enterprise-grade encryption for all transactions.</p>
+                    </motion.div>
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.5 }} className="flex flex-col items-center group cursor-default hover:-translate-y-2 transition-transform duration-500">
+                        <CreditCard className="w-8 h-8 text-black mb-4 stroke-[1] group-hover:scale-110 transition-transform duration-500" />
+                        <h4 className="text-sm font-serif mb-2 text-black">Safe Check Out</h4>
+                        <p className="text-[10px] text-black/40 font-light max-w-[150px] group-hover:text-black/60 transition-colors duration-500">Your privacy and payment details are fully protected.</p>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* MAP SECTION */}
+            <section className="w-full h-[400px] md:h-[500px] bg-neutral-100 border-t border-black/5">
+                <iframe
+                    src="https://maps.google.com/maps?q=Bhavnagar,Gujarat,India&t=&z=12&ie=UTF8&iwloc=&output=embed"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0, filter: 'grayscale(1) contrast(1.2) opacity(0.8)' }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                ></iframe>
+            </section>
+
         </div>
     );
 };

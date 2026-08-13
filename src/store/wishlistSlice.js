@@ -36,7 +36,7 @@ export const wishlistSlice = createSlice({
   },
   reducers: {
     toggleWishlist: (state, action) => {
-      const index = state.items.findIndex(item => item.id === action.payload.id);
+      const index = state.items.findIndex(item => String(item.id) === String(action.payload.id));
       if (index >= 0) {
         state.items.splice(index, 1);
       } else {

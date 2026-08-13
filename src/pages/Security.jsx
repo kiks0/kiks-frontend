@@ -133,19 +133,22 @@ const Security = () => {
     };
 
     return (
-        <div className="bg-white min-h-screen text-black pt-28 md:pt-32 pb-8 md:pb-32 px-6 font-sans">
-            <div className="max-w-2xl mx-auto">
-                
-                {/* Back Button */}
+        <div className="bg-white min-h-screen text-black pt-20 md:pt-36 pb-8 md:pb-32 font-sans">
+            
+            {/* Global Standard Back Button Placement */}
+            <div className="container mx-auto px-6 md:px-12 lg:px-24 max-w-[1400px]">
                 <motion.div 
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mb-12 flex justify-center"
+                    className="flex justify-start mb-8 md:mb-12"
                 >
                     <Link to="/account" className="inline-flex items-center text-[10px] tracking-[0.4em] text-black/30 hover:text-black transition-colors uppercase group">
                         <ArrowLeft size={14} className="mr-3 group-hover:-translate-x-1 transition-transform" /> BACK TO ACCOUNT
                     </Link>
                 </motion.div>
+            </div>
+
+            <div className="max-w-2xl mx-auto px-6">
 
                 {/* Page Title */}
                 <motion.h1 
@@ -243,67 +246,75 @@ const Security = () => {
                             If you wish to modify your password, please use this section. All fields are mandatory.
                         </p>
 
-                        <form onSubmit={handleUpdatePassword} className="space-y-8">
-                            <div className="space-y-8">
-                                 {/* Current Password */}
-                                <div className="space-y-1 relative">
-                                    <label className="text-[10px] tracking-[0.2em] text-black/50 uppercase block">Current password</label>
-                                    <input 
-                                        type={showPass1 ? "text" : "password"}
-                                        value={passForm.currentPassword}
-                                        onChange={(e) => setPassForm({...passForm, currentPassword: e.target.value})}
-                                        className="w-full bg-transparent border-b border-black/10 py-2 text-[13px] focus:border-black transition-colors outline-none font-medium tracking-widest"
-                                        required
-                                    />
-                                    <button 
-                                        type="button"
-                                        onClick={() => setShowPass1(!showPass1)}
-                                        className="absolute right-0 bottom-2 text-black/30 hover:text-black transition-colors"
-                                    >
-                                        {showPass1 ? <EyeOff size={14} /> : <Eye size={14} />}
-                                    </button>
-                                </div>
-
-                                 {/* New Password */}
-                                <div className="space-y-3">
+                        {user?.is_google_user ? (
+                            <div className="bg-black/5 p-6 border border-black/10">
+                                <p className="text-[11px] md:text-[12px] text-black/70 leading-relaxed font-light text-center">
+                                    You are logged in with a Google Account. Password management is not applicable.
+                                </p>
+                            </div>
+                        ) : (
+                            <form onSubmit={handleUpdatePassword} className="space-y-8">
+                                <div className="space-y-8">
+                                     {/* Current Password */}
                                     <div className="space-y-1 relative">
-                                        <label className="text-[10px] tracking-[0.2em] text-black/50 uppercase block">New password</label>
+                                        <label className="text-[10px] tracking-[0.2em] text-black/50 uppercase block">Current password</label>
                                         <input 
-                                            type={showPass2 ? "text" : "password"}
-                                            value={passForm.newPassword}
-                                            onChange={(e) => setPassForm({...passForm, newPassword: e.target.value})}
+                                            type={showPass1 ? "text" : "password"}
+                                            value={passForm.currentPassword}
+                                            onChange={(e) => setPassForm({...passForm, currentPassword: e.target.value})}
                                             className="w-full bg-transparent border-b border-black/10 py-2 text-[13px] focus:border-black transition-colors outline-none font-medium tracking-widest"
                                             required
                                         />
                                         <button 
                                             type="button"
-                                            onClick={() => setShowPass2(!showPass2)}
+                                            onClick={() => setShowPass1(!showPass1)}
                                             className="absolute right-0 bottom-2 text-black/30 hover:text-black transition-colors"
                                         >
-                                            {showPass2 ? <EyeOff size={14} /> : <Eye size={14} />}
+                                            {showPass1 ? <EyeOff size={14} /> : <Eye size={14} />}
                                         </button>
                                     </div>
-                                    <p className="text-[9px] text-black/20 leading-relaxed max-w-xs uppercase tracking-wider">
-                                        Min 8 characters • At least one uppercase letter
-                                    </p>
-                                </div>
-                            </div>
 
-                            {passStatus.msg && (
-                                <div className={`flex items-center gap-2 p-3 border font-bold ${passStatus.type === 'success' ? 'bg-green-500/5 border-green-500/20 text-green-500' : 'bg-red-600/5 border-red-600/20 text-red-600'} text-[10px] tracking-widest uppercase`}>
-                                    {passStatus.type === 'success' ? <CheckCircle2 size={14} /> : <AlertCircle size={14} />}
-                                    {passStatus.msg}
+                                     {/* New Password */}
+                                    <div className="space-y-3">
+                                        <div className="space-y-1 relative">
+                                            <label className="text-[10px] tracking-[0.2em] text-black/50 uppercase block">New password</label>
+                                            <input 
+                                                type={showPass2 ? "text" : "password"}
+                                                value={passForm.newPassword}
+                                                onChange={(e) => setPassForm({...passForm, newPassword: e.target.value})}
+                                                className="w-full bg-transparent border-b border-black/10 py-2 text-[13px] focus:border-black transition-colors outline-none font-medium tracking-widest"
+                                                required
+                                            />
+                                            <button 
+                                                type="button"
+                                                onClick={() => setShowPass2(!showPass2)}
+                                                className="absolute right-0 bottom-2 text-black/30 hover:text-black transition-colors"
+                                            >
+                                                {showPass2 ? <EyeOff size={14} /> : <Eye size={14} />}
+                                            </button>
+                                        </div>
+                                        <p className="text-[9px] text-black/20 leading-relaxed max-w-xs uppercase tracking-wider">
+                                            Min 8 characters • At least one uppercase letter
+                                        </p>
+                                    </div>
                                 </div>
-                            )}
 
-                            <button 
-                                type="submit"
-                                disabled={updatingPass}
-                                className="w-full md:w-fit px-12 py-3 border border-black text-[9px] font-bold tracking-[0.4em] uppercase hover:bg-black hover:text-white transition-all flex items-center justify-center gap-3"
-                            >
-                                {updatingPass ? <Loader2 size={12} className="animate-spin" /> : 'Change password'}
-                            </button>
-                        </form>
+                                {passStatus.msg && (
+                                    <div className={`flex items-center gap-2 p-3 border font-bold ${passStatus.type === 'success' ? 'bg-green-500/5 border-green-500/20 text-green-500' : 'bg-red-600/5 border-red-600/20 text-red-600'} text-[10px] tracking-widest uppercase`}>
+                                        {passStatus.type === 'success' ? <CheckCircle2 size={14} /> : <AlertCircle size={14} />}
+                                        {passStatus.msg}
+                                    </div>
+                                )}
+
+                                <button 
+                                    type="submit"
+                                    disabled={updatingPass}
+                                    className="w-full md:w-fit px-12 py-3 border border-black text-[9px] font-bold tracking-[0.4em] uppercase hover:bg-black hover:text-white transition-all flex items-center justify-center gap-3"
+                                >
+                                    {updatingPass ? <Loader2 size={12} className="animate-spin" /> : 'Change password'}
+                                </button>
+                            </form>
+                        )}
                     </motion.section>
 
                 </div>

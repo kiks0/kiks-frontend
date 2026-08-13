@@ -231,19 +231,41 @@ const Checkout = () => {
     // --- REAL-TIME CART VALIDATION (Price & Stock) ---
     useEffect(() => {
         const validateCart = async () => {
-            if (items.length === 0) {
+            if (items.length === 0 || directItem) {
                 setIsValidating(false);
                 return;
             }
 
             try {
-                // Fetch latest data for all items in the cart
+                // Fetch latest data for all items in the cart, respecting variant pricing
                 const updatedItems = await Promise.all(items.map(async (item) => {
-                    const res = await fetch(`${API_URL}/api/products/${item.slug}`);
+                    const slugToFetch = item.slug || item.productId || String(item.id).split('-')[0];
+                    const res = await fetch(`${API_URL}/api/products/${slugToFetch}`);
                     if (!res.ok) return item; 
                     const freshProduct = await res.json();
                     
-                    const priceRaw = (freshProduct.sale_price || freshProduct.price || "0").toString().replace(/[^0-9]/g, '');
+                    let freshPrice = freshProduct.price;
+                    let freshSalePrice = freshProduct.sale_price;
+                    let freshStock = freshProduct.stock_count;
+
+                    // Support variation pricing & stock if item is a specific variation
+                    if (freshProduct.variants && (item.isVariant || (item.size && item.size !== (freshProduct.size || '100 ML')))) {
+                        let parsedVariants = [];
+                        try {
+                            parsedVariants = typeof freshProduct.variants === 'string' ? JSON.parse(freshProduct.variants) : (freshProduct.variants || []);
+                            if (!Array.isArray(parsedVariants)) parsedVariants = [];
+                        } catch (e) {}
+                        const targetSize = String(item.variantName || item.size || '').trim().toLowerCase();
+                        const targetIndex = String(item.id).includes('-') ? parseInt(String(item.id).split('-')[1]) - 1 : (item.variantIndex !== undefined ? parseInt(item.variantIndex) - 1 : -1);
+                        const matchingVariant = parsedVariants.find((v, idx) => String(v.size || v.name || '').trim().toLowerCase() === targetSize || (targetIndex >= 0 && idx === targetIndex));
+                        if (matchingVariant) {
+                            freshPrice = (matchingVariant.price !== undefined && matchingVariant.price !== '') ? matchingVariant.price : freshPrice;
+                            freshSalePrice = (matchingVariant.sale_price !== undefined && matchingVariant.sale_price !== '') ? matchingVariant.sale_price : '';
+                            freshStock = matchingVariant.stock !== undefined ? matchingVariant.stock : freshStock;
+                        }
+                    }
+
+                    const priceRaw = (freshSalePrice || freshPrice || "0").toString().replace(/[^0-9]/g, '');
                     const currentPrice = parseInt(priceRaw) || 0;
                     
                     const oldPriceRaw = (item.sale_price || item.price || "0").toString().replace(/[^0-9]/g, '');
@@ -251,10 +273,10 @@ const Checkout = () => {
 
                     return {
                         ...item,
-                        price: freshProduct.price,
-                        sale_price: freshProduct.sale_price,
-                        stock_count: freshProduct.stock_count,
-                        isOOS: freshProduct.stock_count < item.quantity,
+                        price: freshPrice,
+                        sale_price: freshSalePrice,
+                        stock_count: freshStock,
+                        isOOS: Number(freshStock) < Number(item.quantity),
                         priceChanged: currentPrice !== oldPrice
                     };
                 }));
@@ -276,7 +298,7 @@ const Checkout = () => {
                            item.isOOS !== old.isOOS;
                 });
 
-                if (hasChanges) {
+                if (hasChanges && !directItem) {
                     dispatch(setCart({ items: updatedItems }));
                 }
             } catch (err) {
@@ -287,7 +309,7 @@ const Checkout = () => {
         };
 
         validateCart();
-    }, []);
+    }, [items, directItem, dispatch]);
 
     const selectSavedAddress = (addr) => {
         setFormData(prev => ({
@@ -476,6 +498,7 @@ const Checkout = () => {
                         }))
                     });
                     dispatch(clearCart());
+                    sessionStorage.setItem(`authorized_order_${freeOrderId}`, 'true');
                     navigate(`/order-success/${freeOrderId}`);
                 }
                 return;
@@ -501,6 +524,8 @@ const Checkout = () => {
             const keyRes = await fetch(`${API_URL}/api/payment/key`);
             const { key } = await keyRes.json();
 
+            let isPaymentHandled = false;
+
             const options = {
                 key: key,
                 amount: rzpOrder.amount,
@@ -515,6 +540,7 @@ const Checkout = () => {
                     contact: formData.phone
                 },
                 handler: async function (response) {
+                    isPaymentHandled = true;
                     try {
                         // 3. Confirm Payment and Finalize Order
                         const confirmRes = await fetch(`${API_URL}/api/orders/${draftOrderId}/confirm-payment`, {
@@ -540,6 +566,7 @@ const Checkout = () => {
                                 }))
                             });
                             dispatch(clearCart());
+                            sessionStorage.setItem(`authorized_order_${draftOrderId}`, 'true');
                             navigate(`/order-success/${draftOrderId}`);
                         } else {
                             setOrderError('Payment verification failed. Order marked as Abandoned.');
@@ -552,6 +579,7 @@ const Checkout = () => {
                 },
                 modal: {
                     ondismiss: function() {
+                        if (isPaymentHandled) return;
                         setIsLoading(false);
                         // Trigger Abandoned/Failure Email
                         fetch(`${API_URL}/api/orders/${draftOrderId}/notify-payment-failure`, { method: 'POST' }).catch(() => {});
@@ -590,22 +618,49 @@ const Checkout = () => {
                 payment_method: formData.paymentMethod.includes('online') ? 'Razorpay (Online)' : formData.paymentMethod,
                 status: status,
                 items: items.map(item => ({
-                    product_id: item.id,
-                    product_name: item.name,
-                    quantity: item.quantity,
-                    price: Number(String(item.sale_price || item.price).replace(/[^0-9.]/g, '')),
-                    image_url: item.image_url,
-                    size: item.size,
-                    slug: item.slug
+                    product_id: parseInt(String(item.productId || item.product_id || item.id).split('-')[0], 10),
+                    product_name: item.product_name || item.name || 'Signature Creation',
+                    quantity: item.quantity || 1,
+                    price: Number(String(item.sale_price || item.price || 0).replace(/[^0-9.]/g, '')),
+                    image_url: item.image_url || '',
+                    size: item.size || '100ml',
+                    slug: item.slug || ''
                 })),
                 applied_promo_code: appliedCode,
                 discount_amount: discountAmount,
-                is_gift: false, // Default
                 customer_note: formData.customerNote,
                 razorpay_order_id: paymentData?.razorpay_order_id || null,
                 razorpay_payment_id: paymentData?.razorpay_payment_id || null,
                 razorpay_signature: paymentData?.razorpay_signature || null
             };
+
+            // ---- Automatically Save Address to Account for Logged-In Users ----
+            if (user?.id && token) {
+                const addressPayload = {
+                    type: 'shipping',
+                    addressData: {
+                        first_name: formData.firstName,
+                        last_name: formData.lastName,
+                        house_no: formData.houseNo,
+                        area: formData.area,
+                        landmark: formData.landmark,
+                        city: formData.city,
+                        state: formData.state,
+                        country: formData.country,
+                        pincode: formData.pincode,
+                        phone: formData.phone
+                    }
+                };
+                fetch(`${API_URL}/api/addresses`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(addressPayload)
+                }).catch(err => console.error('Failed to sync address to account:', err));
+            }
+            // -------------------------------------------------------------------
 
             const response = await fetch(`${API_URL}/api/orders`, {
                 method: 'POST',

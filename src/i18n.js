@@ -20,7 +20,7 @@ const resources = {
         "scroll": "Scroll"
       },
       "footer": {
-        "explore": "EXPLORE KIKS.COM",
+        "explore": "EXPLORE KIKS",
         "services": "ONLINE SERVICES",
         "boutique": "BOUTIQUE SERVICES",
         "house": "THE HOUSE OF KIKS",
@@ -98,7 +98,7 @@ const resources = {
       "collection": {
         "not_found": "Collection Not Found",
         "mastery": "Quality in every note",
-        "open_vault": "Explore Collection",
+        "open_vault": "Explore",
         "anthology": "Collection List",
         "view_composition": "View Details"
       },

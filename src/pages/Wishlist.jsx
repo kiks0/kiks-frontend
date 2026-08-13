@@ -3,16 +3,18 @@ import { useNavigate, Link } from 'react-router-dom';
 import { toggleWishlistAndSync } from '../store/wishlistSlice';
 import { addToCart } from '../store/cartSlice';
 import { openAuthModal } from '../store/uiSlice';
-import { ShoppingBag, X, Heart, Check, ArrowLeft } from 'lucide-react';
+import { ShoppingBag, X, Heart, Check, ArrowLeft, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { getFullImageUrl } from '../utils/url';
 import { formatCurrency } from '../utils/currency';
 import { logClientActivity } from '../utils/clientLogger';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 const Wishlist = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const { activeCurrency, rates, symbols } = useSelector((state) => state.currency);
   const dispatch = useDispatch();
@@ -29,6 +31,7 @@ const Wishlist = () => {
 
   const [addedId, setAddedId] = useState(null);
   const [notification, setNotification] = useState({ show: false, message: '', type: 'success' });
+  const [waitlistStatus, setWaitlistStatus] = useState({});
 
   const showNotification = (message, type = 'success') => {
     setNotification({ show: true, message, type });
@@ -46,18 +49,63 @@ const Wishlist = () => {
     setTimeout(() => setAddedId(null), 2000);
   };
 
+  const handleNotifyMe = async (e, product) => {
+      e.stopPropagation();
+      e.preventDefault();
+      
+      if (!isAuthenticated || !user?.email) {
+          dispatch(openAuthModal());
+          return;
+      }
+
+      setWaitlistStatus(prev => ({ ...prev, [product.id]: 'loading' }));
+
+      try {
+          const res = await fetch(`${API_URL}/api/waitlist`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                  email: user.email,
+                  product_id: product.id,
+                  product_name: product.name,
+                  product_slug: product.slug || String(product.name).toLowerCase().replace(/\s+/g, '-')
+              })
+          });
+
+          if (res.ok) {
+              setWaitlistStatus(prev => ({ ...prev, [product.id]: 'success' }));
+              showNotification(`You'll be notified when ${product.name} is back in stock.`);
+              setTimeout(() => {
+                  setWaitlistStatus(prev => ({ ...prev, [product.id]: null }));
+              }, 3000);
+          } else {
+              setWaitlistStatus(prev => ({ ...prev, [product.id]: null }));
+              const data = await res.json();
+              showNotification(data.msg || 'Failed to join waitlist.', 'error');
+          }
+      } catch (err) {
+          setWaitlistStatus(prev => ({ ...prev, [product.id]: null }));
+          showNotification('Network error. Please try again.', 'error');
+      }
+  };
+
   return (
-    <div className="bg-white min-h-screen text-black font-sans pt-32 md:pt-40 pb-24">
+    <div className="bg-white min-h-screen text-black font-sans pt-20 md:pt-36 pb-24">
       <div className="container mx-auto px-6 md:px-12 lg:px-24 max-w-[1400px]">
-        
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-start mb-8 md:mb-12">
+          <Link to="/account" className="inline-flex items-center text-[10px] tracking-[0.4em] text-black/30 hover:text-black transition-colors uppercase group">
+            <ArrowLeft size={14} className="mr-3 group-hover:-translate-x-1 transition-transform" /> BACK TO ACCOUNT
+          </Link>
+        </motion.div>
+      </div>
+
+      <div className="container mx-auto px-6 md:px-12 lg:px-24 max-w-[1400px]">
+
         {/* Page Header */}
         <header className="mb-16 md:mb-24 flex flex-col items-center text-center">
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-            <Link to="/account" className="inline-flex items-center text-[10px] tracking-[0.4em] text-black/30 hover:text-black transition-colors uppercase mb-12 group">
-              <ArrowLeft size={14} className="mr-3 group-hover:-translate-x-1 transition-transform" /> BACK TO ACCOUNT
-            </Link>
+            <h1 className="text-3xl md:text-5xl font-serif tracking-[0.15em] uppercase text-black mb-8">Wishlist</h1>
           </motion.div>
-          <h1 className="text-3xl md:text-5xl font-serif tracking-[0.15em] uppercase text-black mb-8">Wishlist</h1>
         </header>
 
         <AnimatePresence mode="popLayout">
@@ -80,7 +128,12 @@ const Wishlist = () => {
             </motion.div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
-              {wishlistItems.map((product) => (
+              {wishlistItems.map((product) => {
+                const slugToUse = product.slug || product.productId || String(product.id).split('-')[0];
+                const variantQuery = product.variantName || product.size || product.volume || '';
+                const linkUrl = `/product/${slugToUse}${variantQuery ? `?variant=${encodeURIComponent(variantQuery)}` : ''}`;
+
+                return (
                 <motion.div 
                   key={product.id}
                   layout
@@ -100,7 +153,7 @@ const Wishlist = () => {
 
                   {/* Product Image Wrapper */}
                   <div className="relative aspect-[4/5] bg-neutral-50 overflow-hidden mb-8 border border-black/5 transition-colors group-hover:border-black/10 flex items-center justify-center p-8">
-                    <Link to={`/product/${product.slug}`} className="w-full h-full flex items-center justify-center cursor-pointer">
+                    <Link to={linkUrl} className="w-full h-full flex items-center justify-center cursor-pointer">
                       <img 
                         src={getFullImageUrl(product.image_url)} 
                         alt={product.name}
@@ -110,25 +163,45 @@ const Wishlist = () => {
                     
                     {/* Hover Overlay Actions (Desktop Only) - Re-engineered for Absolute Readability */}
                     <div className="hidden md:flex absolute inset-x-0 bottom-0 bg-white/90 backdrop-blur-md opacity-0 group-hover:opacity-100 translate-y-full group-hover:translate-y-0 transition-all duration-500 items-center justify-center pointer-events-none group-hover:pointer-events-auto p-4 border-t border-black/5 z-20">
-                        <button 
-                          onClick={() => handleAddToCart(product)}
-                          className={`w-full py-3 text-[10px] tracking-[0.2em] font-black uppercase transition-all duration-500 flex items-center justify-center gap-2 pointer-events-auto ${addedId === product.id ? 'bg-black/90 text-white border border-black/10' : 'bg-black text-white border border-black hover:bg-black/80'}`}
-                        >
-                           {addedId === product.id ? <><Check size={14} strokeWidth={3} /> ADDED</> : 'ADD TO BAG'}
-                        </button>
+                        {product.stock_count > 0 ? (
+                            <button 
+                              onClick={() => handleAddToCart(product)}
+                              className={`w-full py-3 text-[10px] tracking-[0.2em] font-black uppercase transition-all duration-500 flex items-center justify-center gap-2 pointer-events-auto ${addedId === product.id ? 'bg-black/90 text-white border border-black/10' : 'bg-black text-white border border-black hover:bg-black/80'}`}
+                            >
+                               {addedId === product.id ? <><Check size={14} strokeWidth={3} /> ADDED</> : 'ADD TO BAG'}
+                            </button>
+                        ) : (
+                            <div className="w-full bg-white/50 border border-black/5 p-4 text-center mt-2 pointer-events-auto">
+                                <span className="text-[10px] tracking-[0.4em] font-black text-black uppercase block mb-2">Coming Soon</span>
+                                <p className="text-[9px] text-black/50 tracking-widest leading-relaxed mb-4 italic">This fragrance is currently being prepared. Join the waitlist.</p>
+                                <button
+                                    onClick={(e) => handleNotifyMe(e, product)}
+                                    disabled={waitlistStatus[product.id] === 'loading' || waitlistStatus[product.id] === 'success'}
+                                    className="w-full h-10 bg-black text-white text-[9px] font-black tracking-[0.4em] uppercase hover:bg-black/90 transition-all flex items-center justify-center disabled:opacity-80 disabled:cursor-not-allowed"
+                                >
+                                    {waitlistStatus[product.id] === 'loading' ? (
+                                        <Loader2 size={14} className="animate-spin" />
+                                    ) : waitlistStatus[product.id] === 'success' ? (
+                                        <span className="flex items-center gap-2"><Check size={14} /> ADDED</span>
+                                    ) : (
+                                        'Notify Me'
+                                    )}
+                                </button>
+                            </div>
+                        )}
                     </div>
                   </div>
 
                   {/* Product Details */}
                   <div className="flex flex-col space-y-3">
-                    <p className="text-[9px] tracking-[0.3em] uppercase text-gold-600 font-bold">{product.category || 'EXCLUSIF'}</p>
-                    <Link to={`/product/${product.slug}`}>
+
+                    <Link to={linkUrl}>
                       <h3 className="text-lg md:text-xl font-serif tracking-[0.1em] uppercase text-black leading-tight group-hover:text-gold-600 transition-colors">
                         {product.name}
                       </h3>
                     </Link>
                     <p className="text-[11px] text-black/40 leading-relaxed font-medium uppercase tracking-widest">
-                       {product.volume || '100ML'} - EXTRAIT DE PARFUM
+                       {product.volume || product.size || '100ML'} - EXTRAIT DE PARFUM
                     </p>
                     <div className="pt-2 flex items-center justify-between mb-4">
                        <div className="flex flex-col">
@@ -141,19 +214,40 @@ const Wishlist = () => {
                                <span className="text-sm tracking-[0.1em] font-light">{formatCurrency(product.price, activeCurrency, rates, symbols)}</span>
                            )}
                        </div>
-                       <Link to={`/product/${product.slug}`} className="text-[9px] tracking-[0.2em] text-black/40 hover:text-black uppercase transition-colors underline underline-offset-4">Details</Link>
+                       <Link to={linkUrl} className="text-[9px] tracking-[0.2em] text-black/40 hover:text-black uppercase transition-colors underline underline-offset-4">Details</Link>
                     </div>
 
                     {/* Mobile Only Add to Bag Button */}
-                    <button 
-                      onClick={() => handleAddToCart(product)}
-                      className={`md:hidden w-full py-4 text-[10px] tracking-[0.2em] font-black uppercase flex items-center justify-center gap-2 transition-all duration-300 border border-black ${addedId === product.id ? 'bg-black/90 text-white' : 'bg-black text-white hover:bg-black/90'}`}
-                    >
-                        {addedId === product.id ? <><Check size={14} strokeWidth={3} /> ADDED TO BAG</> : <><ShoppingBag size={14} /> ADD TO BAG</>}
-                    </button>
+                    {product.stock_count > 0 ? (
+                        <button 
+                          onClick={() => handleAddToCart(product)}
+                          className={`md:hidden w-full py-4 text-[10px] tracking-[0.2em] font-black uppercase flex items-center justify-center gap-2 transition-all duration-300 border border-black ${addedId === product.id ? 'bg-black/90 text-white' : 'bg-black text-white hover:bg-black/90'}`}
+                        >
+                            {addedId === product.id ? <><Check size={14} strokeWidth={3} /> ADDED TO BAG</> : <><ShoppingBag size={14} /> ADD TO BAG</>}
+                        </button>
+                    ) : (
+                        <div className="md:hidden w-full bg-black/[0.02] border border-black/5 p-5 mt-2">
+                            <span className="text-[10px] tracking-[0.4em] font-black text-black uppercase block mb-3 text-center">Coming Soon</span>
+                            <p className="text-[9px] text-black/40 tracking-widest leading-relaxed mb-5 italic text-center">This fragrance is currently being prepared. Join the waitlist to be notified.</p>
+                            <button
+                                onClick={(e) => handleNotifyMe(e, product)}
+                                disabled={waitlistStatus[product.id] === 'loading' || waitlistStatus[product.id] === 'success'}
+                                className="w-full h-10 bg-black text-white text-[9px] font-black tracking-[0.4em] uppercase hover:bg-black/90 transition-all flex items-center justify-center disabled:opacity-80 disabled:cursor-not-allowed"
+                            >
+                                {waitlistStatus[product.id] === 'loading' ? (
+                                    <Loader2 size={14} className="animate-spin" />
+                                ) : waitlistStatus[product.id] === 'success' ? (
+                                    <span className="flex items-center gap-2"><Check size={14} /> ADDED</span>
+                                ) : (
+                                    'Notify Me'
+                                )}
+                            </button>
+                        </div>
+                    )}
                   </div>
                 </motion.div>
-              ))}
+              );
+            })}
             </div>
           )}
         </AnimatePresence>

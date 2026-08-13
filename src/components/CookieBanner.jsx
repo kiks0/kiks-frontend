@@ -30,38 +30,38 @@ const CookieBanner = () => {
                     transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
                     className="fixed bottom-0 left-0 right-0 md:bottom-6 md:left-auto md:right-6 md:max-w-md z-[1000]"
                 >
-                    <div className="bg-white border-t md:border border-black/10 p-6 md:p-10 shadow-[0_-20px_50px_rgba(0,0,0,0.05)] md:shadow-[0_40px_100px_rgba(0,0,0,0.1)] relative overflow-hidden w-full">
+                    <div className="bg-white border-t border-black/10 px-6 py-5 md:p-8 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] md:shadow-[0_40px_100px_rgba(0,0,0,0.1)] relative overflow-hidden w-full">
                         <button
                             onClick={() => setIsVisible(false)}
-                            className="absolute top-6 right-6 text-black hover:text-black/40 transition-all transform hover:rotate-90 duration-300 p-2 z-[30]"
+                            className="absolute top-4 right-4 md:top-6 md:right-6 text-black/60 hover:text-black transition-all transform hover:rotate-90 duration-300 p-2 z-[30]"
                         >
-                            <X size={20} strokeWidth={1.5} />
+                            <X size={18} strokeWidth={1.5} />
                         </button>
-                        <div className="flex flex-col md:flex-row items-center md:items-start text-center md:text-left space-y-6 md:space-y-0 md:space-x-8 relative z-10">
+                        <div className="flex flex-col md:flex-row items-start text-left space-y-3 md:space-y-0 md:space-x-6 relative z-10 pr-6 md:pr-0">
                             <div className="flex-shrink-0 hidden md:block">
-                                <div className="w-12 h-12 rounded-full border border-black/5 flex items-center justify-center bg-neutral-50 shadow-sm">
-                                    <ShieldCheck className="text-black" size={24} strokeWidth={1} />
+                                <div className="w-10 h-10 rounded-full border border-black/5 flex items-center justify-center bg-neutral-50 shadow-sm">
+                                    <ShieldCheck className="text-black" size={20} strokeWidth={1} />
                                 </div>
                             </div>
                             <div className="flex-grow w-full">
-                                <h4 className="text-[10px] md:text-[11px] tracking-[0.3em] md:tracking-[0.4em] uppercase font-black text-black mb-3">
+                                <h4 className="text-[11px] md:text-[12px] tracking-[0.25em] md:tracking-[0.3em] uppercase font-bold text-black mb-1.5">
                                     Cookie Consent & Privacy
                                 </h4>
-                                <p className="text-[9px] md:text-[10px] tracking-[0.1em] md:tracking-[0.2em] text-black/60 leading-relaxed uppercase font-light max-w-sm mx-auto md:mx-0">
+                                <p className="text-[10px] md:text-[11px] tracking-wider text-black/70 leading-relaxed font-light max-w-lg mb-4">
                                     Kiks utilizes refined artisanal cookies to enhance your digital odyssey and preserve your preferences within our vault.
                                 </p>
 
-                                <div className="mt-8 flex flex-col sm:flex-row items-center justify-center md:justify-start gap-6 sm:gap-10">
+                                <div className="flex flex-row items-center justify-start gap-6 pt-1">
                                     <button
                                         onClick={handleAccept}
-                                        className="w-full sm:w-auto bg-black text-white py-4 px-12 text-[10px] font-black tracking-[0.4em] uppercase hover:bg-white hover:text-black border border-black transition-all duration-500 shadow-xl"
+                                        className="bg-black text-white py-3 px-8 text-[10px] font-black tracking-[0.3em] uppercase hover:bg-white hover:text-black border border-black transition-all duration-500 shadow-lg shrink-0"
                                     >
                                         I Accept
                                     </button>
                                     <Link
                                         to="/privacy-policy"
                                         onClick={() => setIsVisible(false)}
-                                        className="text-[9px] tracking-[0.3em] uppercase text-black/40 hover:text-black border-b border-black/20 hover:border-white transition-all pb-1 whitespace-nowrap"
+                                        className="text-[10px] tracking-[0.2em] uppercase text-black/60 hover:text-black border-b border-black/30 hover:border-black transition-all pb-0.5 whitespace-nowrap font-medium"
                                     >
                                         Privacy Policy
                                     </Link>

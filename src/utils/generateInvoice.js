@@ -161,15 +161,6 @@ export const generateInvoice = async (orderInput) => {
             doc.setFontSize(8);
             doc.setTextColor(110);
             doc.text("This is a computer generated invoice and does not require a physical signature.", 14, finalY + 35);
-
-            if (order?.is_gift) {
-                doc.setFont("helvetica", "bold");
-                doc.text("GIFT WRAPPING INCLUDED", 14, finalY + 25);
-                if (order.gift_note) {
-                    doc.setFont("helvetica", "italic");
-                    doc.text(`Note: "${order.gift_note}"`, 14, finalY + 30);
-                }
-            }
         }
 
         // Trigger Download

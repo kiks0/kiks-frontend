@@ -1,9 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, HelpCircle, X, Check, ChevronDown } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateProfile } from '../store/authSlice';
+import AnimatedDropdown from '../components/AnimatedDropdown';
+
+const monthMap = {
+    '1': 'Jan', '2': 'Feb', '3': 'Mar', '4': 'Apr', '5': 'May', '6': 'Jun',
+    '7': 'Jul', '8': 'Aug', '9': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec',
+    'January': 'Jan', 'February': 'Feb', 'March': 'Mar', 'April': 'Apr', 'May': 'May', 'June': 'Jun',
+    'July': 'Jul', 'August': 'Aug', 'September': 'Sep', 'October': 'Oct', 'November': 'Nov', 'December': 'Dec'
+};
+const normalizeMonth = (m) => m ? (monthMap[m] || m) : '';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -65,7 +74,7 @@ const PersonalDetails = () => {
         firstName: user?.first_name || '',
         lastName: user?.last_name || '',
         dobDay: user?.dob_day?.toString() || '',
-        dobMonth: user?.dob_month?.toString() || '',
+        dobMonth: normalizeMonth(user?.dob_month?.toString() || ''),
         dobYear: user?.dob_year?.toString() || '',
         location: user?.location || localStorage.getItem('location_name') || 'India',
         telephone: user?.telephone || '',
@@ -92,6 +101,7 @@ const PersonalDetails = () => {
     }, [user]);
 
     const [tempPhone, setTempPhone] = useState({
+        type: 'MOBILE',
         code: user?.country_code || '+91 (IN)',
         number: user?.telephone || ''
     });
@@ -117,7 +127,7 @@ const PersonalDetails = () => {
                         firstName: data.first_name || '',
                         lastName: data.last_name || '',
                         dobDay: data.dob_day?.toString() || '',
-                        dobMonth: data.dob_month?.toString() || '',
+                        dobMonth: normalizeMonth(data.dob_month?.toString() || ''),
                         dobYear: data.dob_year?.toString() || '',
                         location: data.location || 'India',
                         telephone: data.telephone || '',
@@ -267,112 +277,133 @@ const PersonalDetails = () => {
     };
 
     return (
-        <div className="min-h-screen bg-white text-black font-sans pb-8 md:pb-32 pt-28 md:pt-40 relative">
+        <div className="bg-white min-h-screen text-black pt-20 md:pt-36 pb-16 md:pb-32 font-sans">
             
-            {/* Phone Edit Modal */}
-            {isPhoneModalOpen && (
-                <div className="fixed inset-0 z-[1000000] flex items-center justify-center p-3 sm:p-6">
-                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setIsPhoneModalOpen(false)}></div>
-                    <div className="bg-white border border-black/10 text-black w-[94%] max-w-md p-6 md:p-12 relative animate-in fade-in zoom-in duration-300 shadow-2xl max-h-[85vh] overflow-y-auto scrollbar-hide my-auto">
-                        <button 
+            {/* Smooth Phone Edit Modal */}
+            <AnimatePresence>
+                {isPhoneModalOpen && (
+                    <div className="fixed inset-0 z-[1000000] flex items-center justify-center p-3 sm:p-6">
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="absolute inset-0 bg-black/40 backdrop-blur-sm" 
                             onClick={() => setIsPhoneModalOpen(false)}
-                            className="absolute top-4 right-4 md:top-6 md:right-6 text-black/40 hover:text-black transition-colors z-10"
+                        />
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            transition={{ type: "spring", damping: 25, stiffness: 300, duration: 0.3 }}
+                            className="bg-white border border-black/10 text-black w-[94%] max-w-md p-6 md:p-12 relative shadow-2xl max-h-[85vh] overflow-y-auto z-10 scrollbar-hide my-auto"
                         >
-                            <X className="w-5 h-5 md:w-6 md:h-6" />
-                        </button>
+                            <button 
+                                type="button"
+                                onClick={() => setIsPhoneModalOpen(false)}
+                                className="absolute top-4 right-4 md:top-6 md:right-6 text-black/40 hover:text-black transition-colors z-10"
+                            >
+                                <X className="w-5 h-5 md:w-6 md:h-6" />
+                            </button>
 
-                        <div className="text-center mb-8 md:mb-12 pt-6 md:pt-0">
-                            <h2 className="text-[12px] md:text-2xl font-serif tracking-[0.2em] uppercase mb-2 md:mb-4 text-black leading-relaxed px-10">Edit Phone Number</h2>
-                        </div>
-
-                        <div className="space-y-6 md:space-y-8">
-                            <div className="space-y-2">
-                                <label className="text-[10px] text-black/30 uppercase tracking-widest font-bold">Phone Number Type</label>
-                                <select className="w-full border-b border-black/10 py-3 text-sm focus:border-gold-500 outline-none transition-colors bg-transparent cursor-pointer text-black appearance-none">
-                                    <option className="bg-white" value="MOBILE">MOBILE</option>
-                                    <option className="bg-white" value="LANDLINE">LANDLINE</option>
-                                </select>
+                            <div className="text-center mb-6 md:mb-12 pt-4 md:pt-0">
+                                <h2 className="text-base md:text-2xl font-serif tracking-[0.2em] uppercase mb-2 md:mb-4 text-black leading-relaxed px-4 md:px-10">Edit Phone Number</h2>
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="text-[10px] text-black/30 uppercase tracking-widest font-bold">Phone number</label>
-                                <div className="flex items-end border-b border-black/10 focus-within:border-gold-500 transition-all">
-                                    <div className="relative min-w-[100px]">
-                                        <select 
-                                            className="w-full bg-transparent py-3 text-sm focus:outline-none appearance-none cursor-pointer text-black"
-                                            value={tempPhone.code}
-                                            onChange={(e) => {
-                                                setTempPhone({...tempPhone, code: e.target.value});
-                                                setPhoneError('');
-                                            }}
-                                        >
-                                            {COUNTRIES.map(c => (
-                                                <option className="bg-white" key={c.code} value={c.code}>{c.code}</option>
-                                            ))}
-                                        </select>
-                                        <ChevronDown size={14} className="absolute right-1 bottom-4 text-black/30 pointer-events-none" />
-                                    </div>
-                                    <div className="w-px h-5 bg-black/10 mx-4 mb-3" />
-                                    <input 
-                                        type="tel"
-                                        className="w-full bg-transparent py-3 text-sm focus:outline-none text-black placeholder:text-black/10"
-                                        value={tempPhone.number}
-                                        maxLength={COUNTRIES.find(c => c.code === tempPhone.code)?.length || 15}
-                                        onChange={(e) => {
-                                            const val = e.target.value.replace(/\D/g, '');
-                                            setTempPhone({...tempPhone, number: val});
-                                            setPhoneError('');
-                                        }}
-                                        placeholder={`Enter ${COUNTRIES.find(c => c.code === tempPhone.code)?.length || ''} digits`}
+                            <div className="space-y-6 md:space-y-8">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] text-black/30 uppercase tracking-widest font-bold">Phone Number Type</label>
+                                    <AnimatedDropdown 
+                                        options={[
+                                            { label: 'MOBILE', value: 'MOBILE' },
+                                            { label: 'LANDLINE', value: 'LANDLINE' }
+                                        ]}
+                                        value={tempPhone.type || 'MOBILE'}
+                                        onChange={(val) => setTempPhone({...tempPhone, type: val})}
+                                        placeholder="MOBILE"
                                     />
                                 </div>
-                            </div>
 
-                            {phoneError && (
-                                <motion.div 
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    className="p-4 bg-red-600 text-white text-[10px] md:text-[11px] font-black tracking-[0.2em] uppercase text-center shadow-lg border-2 border-red-700"
-                                >
-                                    <div className="flex items-center justify-center space-x-3">
-                                        <X className="w-4 h-4 border-2 border-white rounded-full p-0.5" />
-                                        <span>{phoneError}</span>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] text-black/30 uppercase tracking-widest font-bold">Phone number</label>
+                                    <div className="flex flex-col sm:flex-row sm:items-center border border-black/10 bg-white/50 focus-within:border-gold-500 transition-all">
+                                        <div className="relative w-full sm:w-auto sm:min-w-[130px] border-b sm:border-b-0 sm:border-r border-black/10">
+                                            <AnimatedDropdown
+                                                options={COUNTRIES.map(c => ({ label: c.code, value: c.code }))}
+                                                value={tempPhone.code}
+                                                onChange={(val) => {
+                                                    setTempPhone({...tempPhone, code: val});
+                                                    setPhoneError('');
+                                                }}
+                                                placeholder="Code"
+                                                className="border-none text-xs sm:text-sm w-full"
+                                            />
+                                        </div>
+                                        <input 
+                                            type="tel"
+                                            className="w-full bg-transparent px-3 sm:px-4 py-3 text-xs sm:text-sm focus:outline-none text-black placeholder:text-black/20 font-light"
+                                            value={tempPhone.number}
+                                            maxLength={COUNTRIES.find(c => c.code === tempPhone.code)?.length || 15}
+                                            onChange={(e) => {
+                                                const val = e.target.value.replace(/\D/g, '');
+                                                setTempPhone({...tempPhone, number: val});
+                                                setPhoneError('');
+                                            }}
+                                            placeholder={`Enter ${COUNTRIES.find(c => c.code === tempPhone.code)?.length || ''} digits`}
+                                        />
                                     </div>
-                                </motion.div>
-                            )}
+                                </div>
 
-                             <p className="text-[11px] text-black/40 text-center leading-relaxed">
-                                Please note: Adding a new MOBILE phone number for this location will replace previously saved informations.
-                            </p>
+                                {phoneError && (
+                                    <motion.div 
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        className="p-4 bg-red-600 text-white text-[10px] md:text-[11px] font-black tracking-[0.2em] uppercase text-center shadow-lg border-2 border-red-700"
+                                    >
+                                        <div className="flex items-center justify-center space-x-3">
+                                            <X className="w-4 h-4 border-2 border-white rounded-full p-0.5" />
+                                            <span>{phoneError}</span>
+                                        </div>
+                                    </motion.div>
+                                )}
 
-                            <div className="space-y-6 pt-4">
-                                <button 
-                                    onClick={handlePhoneSave}
-                                    disabled={saving}
-                                    className="w-full py-5 bg-black text-white text-[13px] font-black tracking-[0.4em] uppercase hover:bg-gold-500 transition-colors disabled:opacity-50"
-                                >
-                                    {saving ? 'Verifying...' : 'Save Modifications'}
-                                </button>
-                                <button 
-                                    onClick={() => setIsPhoneModalOpen(false)}
-                                    className="w-full text-center text-[13px] font-black tracking-[0.4em] uppercase underline underline-offset-8 text-black/60 hover:text-black transition-colors"
-                                >
-                                    Cancel
-                                </button>
+                                 <p className="text-[11px] text-black/40 text-center leading-relaxed">
+                                    Please note: Adding a new MOBILE phone number for this location will replace previously saved informations.
+                                </p>
+
+                                <div className="space-y-6 pt-4">
+                                    <button 
+                                        type="button"
+                                        onClick={handlePhoneSave}
+                                        disabled={saving}
+                                        className="w-full py-5 bg-black text-white text-[13px] font-black tracking-[0.4em] uppercase hover:bg-gold-500 transition-colors disabled:opacity-50"
+                                    >
+                                        {saving ? 'Verifying...' : 'Save Modifications'}
+                                    </button>
+                                    <button 
+                                        type="button"
+                                        onClick={() => setIsPhoneModalOpen(false)}
+                                        className="w-full text-center text-[13px] font-black tracking-[0.4em] uppercase underline underline-offset-8 text-black/60 hover:text-black transition-colors"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
-                </div>
-            )}
+                )}
+            </AnimatePresence>
 
-            <div className="max-w-3xl mx-auto px-6">
-                
+            <div className="container mx-auto px-6 md:px-12 lg:px-24 max-w-[1400px]">
                 {/* Back Link */}
-                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-center mb-12">
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-start mb-8 md:mb-12">
                     <Link to="/account" className="inline-flex items-center text-[10px] tracking-[0.4em] text-black/30 hover:text-black transition-colors uppercase group">
                         <ArrowLeft size={14} className="mr-3 group-hover:-translate-x-1 transition-transform" /> BACK TO ACCOUNT
                     </Link>
                 </motion.div>
+            </div>
+
+            <div className="max-w-3xl mx-auto px-6">
 
                 <div className="text-center mb-6 md:mb-12">
                     <h1 className="text-2xl md:text-4xl font-serif tracking-[0.2em] uppercase mb-4 md:mb-8 text-black">Personal Details</h1>
@@ -391,20 +422,21 @@ const PersonalDetails = () => {
                             {/* Title Dropdown */}
                             <div className="space-y-2">
                                 <label className={`text-[11px] uppercase tracking-widest font-bold ${fieldErrors.title ? 'text-red-500' : 'text-black/50'}`}>Title <span className={formData.title ? 'text-green-600' : 'text-red-500'}>*</span></label>
-                                <select 
-                                    className={`w-full border-b py-3 text-[15px] focus:border-gold-500 outline-none transition-colors bg-transparent cursor-pointer text-black appearance-none ${fieldErrors.title ? 'border-red-500' : 'border-black/10'}`}
+                                <AnimatedDropdown
+                                    options={[
+                                        { label: 'Mr', value: 'Mr' },
+                                        { label: 'Ms', value: 'Ms' },
+                                        { label: 'Mrs', value: 'Mrs' },
+                                        { label: 'Mx', value: 'Mx' }
+                                    ]}
                                     value={formData.title}
-                                    onChange={(e) => {
-                                        setFormData({...formData, title: e.target.value});
+                                    onChange={(val) => {
+                                        setFormData({...formData, title: val});
                                         if (fieldErrors.title) setFieldErrors(prev => { const n = {...prev}; delete n.title; return n; });
                                     }}
-                                >
-                                    <option className="bg-white" value="">Select Title</option>
-                                    <option className="bg-white" value="Mr">Mr</option>
-                                    <option className="bg-white" value="Ms">Ms</option>
-                                    <option className="bg-white" value="Mrs">Mrs</option>
-                                    <option className="bg-white" value="Mx">Mx</option>
-                                </select>
+                                    placeholder="Select Title"
+                                    hasError={!!fieldErrors.title}
+                                />
                             </div>
 
                             <div className="hidden md:block"></div>
@@ -447,45 +479,33 @@ const PersonalDetails = () => {
                                     <label className="text-[11px] text-black/50 uppercase tracking-widest font-bold">Date of birth (optional)</label>
                                     <HelpCircle size={14} className="ml-2 text-black/10 cursor-help" />
                                 </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                                    <div className="sm:col-span-1">
+                                <div className="grid grid-cols-3 gap-3 md:gap-6">
+                                    <div>
                                         <label className="text-[9px] text-black/20 uppercase tracking-widest block mb-1">Day</label>
-                                        <select 
-                                            className="w-full border-b border-black/10 py-3 text-sm focus:border-gold-500 outline-none transition-colors bg-transparent text-black appearance-none"
-                                            value={formData.dobDay}
-                                            onChange={(e) => setFormData({...formData, dobDay: e.target.value})}
-                                        >
-                                            <option className="bg-white" value="">Day</option>
-                                            {[...Array(31)].map((_, i) => (
-                                                <option className="bg-white" key={i+1} value={i+1}>{i+1}</option>
-                                            ))}
-                                        </select>
+                                        <AnimatedDropdown 
+                                            options={[...Array(31)].map((_, i) => ({ label: String(i + 1), value: String(i + 1) }))}
+                                            value={String(formData.dobDay || '')}
+                                            onChange={(val) => setFormData({...formData, dobDay: val})}
+                                            placeholder="Day"
+                                        />
                                     </div>
                                     <div>
                                         <label className="text-[9px] text-black/20 uppercase tracking-widest block mb-1">Month</label>
-                                        <select 
-                                            className="w-full border-b border-black/10 py-3 text-sm focus:border-gold-500 outline-none transition-colors bg-transparent text-black"
-                                            value={formData.dobMonth}
-                                            onChange={(e) => setFormData({...formData, dobMonth: e.target.value})}
-                                        >
-                                            <option className="bg-white" value="">Month</option>
-                                            {['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((m, i) => (
-                                                <option className="bg-white" key={i+1} value={i+1}>{m}</option>
-                                            ))}
-                                        </select>
+                                        <AnimatedDropdown 
+                                            options={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(m => ({ label: m, value: m }))}
+                                            value={formData.dobMonth || ''}
+                                            onChange={(val) => setFormData({...formData, dobMonth: val})}
+                                            placeholder="Month"
+                                        />
                                     </div>
                                     <div>
                                         <label className="text-[9px] text-black/20 uppercase tracking-widest block mb-1">Year</label>
-                                        <select 
-                                            className="w-full border-b border-black/10 py-3 text-sm focus:border-gold-500 outline-none transition-colors bg-transparent text-black"
-                                            value={formData.dobYear}
-                                            onChange={(e) => setFormData({...formData, dobYear: e.target.value})}
-                                        >
-                                            <option className="bg-white" value="">Year</option>
-                                            {[...Array(100)].map((_, i) => (
-                                                <option className="bg-white" key={2026-i} value={2026-i}>{2026-i}</option>
-                                            ))}
-                                        </select>
+                                        <AnimatedDropdown 
+                                            options={[...Array(100)].map((_, i) => ({ label: String(2026 - i), value: String(2026 - i) }))}
+                                            value={String(formData.dobYear || '')}
+                                            onChange={(val) => setFormData({...formData, dobYear: val})}
+                                            placeholder="Year"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -493,11 +513,10 @@ const PersonalDetails = () => {
                              {/* Location */}
                             <div className="space-y-2 md:col-span-2">
                                 <label className="text-[11px] text-black/50 uppercase tracking-widest font-bold">Location of residence</label>
-                                <select 
-                                    className="w-full border-b border-black/10 py-3 text-[15px] focus:border-gold-500 outline-none transition-colors bg-transparent cursor-pointer text-black appearance-none"
+                                <AnimatedDropdown 
+                                    options={COUNTRIES.map(c => ({ label: c.name, value: c.name }))}
                                     value={formData.location}
-                                    onChange={(e) => {
-                                        const selectedName = e.target.value;
+                                    onChange={(selectedName) => {
                                         const country = COUNTRIES.find(c => c.name === selectedName);
                                         setFormData({
                                             ...formData, 
@@ -505,11 +524,8 @@ const PersonalDetails = () => {
                                             countryCode: country ? country.code : formData.countryCode
                                         });
                                     }}
-                                >
-                                    {COUNTRIES.map(c => (
-                                        <option className="bg-white text-black" key={c.name} value={c.name}>{c.name}</option>
-                                    ))}
-                                </select>
+                                    placeholder="Select Location"
+                                />
                             </div>
                         </div>
                     </section>
@@ -528,7 +544,7 @@ const PersonalDetails = () => {
                                     <button 
                                         type="button"
                                         onClick={() => {
-                                            setTempPhone({ code: formData.countryCode, number: formData.telephone });
+                                            setTempPhone({ type: 'MOBILE', code: formData.countryCode, number: formData.telephone });
                                             setIsPhoneModalOpen(true);
                                         }}
                                         className="text-[10px] font-black tracking-[0.2em] uppercase underline underline-offset-4 hover:text-gold-500 transition-colors"
@@ -538,7 +554,7 @@ const PersonalDetails = () => {
                                 </div>
                                 <p className="text-[11px] text-black/40 mb-8 max-w-md">Your default phone number will be pre-filled in the checkout and will be used to receive SMS notifications.</p>
                                 
-                                <div className="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-6 md:gap-10">
+                                <div className="grid grid-cols-[100px_1fr] sm:grid-cols-[120px_1fr] gap-4 md:gap-10">
                                     <div className="space-y-2">
                                         <p className="text-[9px] text-black/20 uppercase tracking-widest font-bold">Location code</p>
                                         <p className="text-xs text-black/80 py-2 border-b border-black/5">{formData.countryCode}</p>

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { X } from 'lucide-react';
+import { X, Search } from 'lucide-react';
 import { setCurrency } from '../store/currencySlice';
 import { COUNTRY_MAPPING, applyLocationSettings } from '../utils/i18nUtils';
 
@@ -15,6 +15,7 @@ const Footer = () => {
   const dispatch = useDispatch();
   const [isHighContrast, setIsHighContrast] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [regionSearch, setRegionSearch] = useState('');
   const [selectedLocation, setSelectedLocation] = useState(localStorage.getItem('location_name') || 'India');
   const [isNewsletterModalOpen, setIsNewsletterModalOpen] = useState(false);
   const [newsletterEmail, setNewsletterEmail] = useState('');
@@ -44,6 +45,18 @@ const Footer = () => {
       document.body.classList.remove('high-contrast');
     }
   }, [isHighContrast]);
+
+  // Lock background smooth scrolling when modals are open
+  useEffect(() => {
+    if (isLocationModalOpen || isNewsletterModalOpen) {
+      if (window.lenis) window.lenis.stop();
+    } else {
+      if (window.lenis) window.lenis.start();
+    }
+    return () => {
+      if (window.lenis) window.lenis.start();
+    };
+  }, [isLocationModalOpen, isNewsletterModalOpen]);
 
   const toggleSection = (section) => {
     if (window.innerWidth < 768) {
@@ -164,28 +177,43 @@ const Footer = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[1000000] overflow-y-auto flex items-start justify-center py-10 md:py-20"
+            className="fixed inset-0 z-[1000000] flex items-center justify-center p-4 sm:p-10"
           >
-            <div className="fixed inset-0 bg-white/98 backdrop-blur-sm -z-10" onClick={() => setIsLocationModalOpen(false)}></div>
+            <div className="absolute inset-0 bg-white/98 backdrop-blur-sm" onClick={() => setIsLocationModalOpen(false)}></div>
             <motion.div 
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 30, opacity: 0 }}
-              className="bg-white text-black w-full h-auto md:max-w-[1100px] pt-24 pb-12 px-6 md:p-20 relative z-10 border border-black/5 shadow-2xl"
+              className="bg-white text-black w-full max-h-[85vh] overflow-y-auto overscroll-contain md:max-w-[1100px] pt-20 pb-12 px-6 md:p-16 relative z-10 border border-black/5 shadow-2xl custom-scrollbar"
+              data-lenis-prevent="true"
             >
-              <button onClick={() => setIsLocationModalOpen(false)} className="absolute top-4 right-4 md:top-10 md:right-10 text-black/40 hover:text-black transition-all group p-2 z-50">
+              <button onClick={() => setIsLocationModalOpen(false)} className="absolute top-4 right-4 md:top-10 md:right-10 text-black/40 hover:text-black transition-all group p-2 z-50 flex items-center">
                 <span className="hidden md:inline text-[9px] uppercase tracking-[0.4em] mr-4 opacity-0 group-hover:opacity-100 transition-all font-bold">Dismiss</span>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
               </button>
 
-              <div className="text-center mb-16 md:mb-24 px-4">
+              <div className="text-center mb-10 md:mb-16 px-4">
                 <h2 className="text-2xl md:text-5xl font-serif tracking-[0.2em] uppercase mb-8 text-black font-black leading-tight">Select Your Region</h2>
-                <div className="w-20 h-[2px] bg-black mx-auto"></div>
+                <div className="w-20 h-[2px] bg-black mx-auto mb-10"></div>
+                <div className="max-w-md mx-auto relative group">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-black/40 group-focus-within:text-black transition-colors" size={16} />
+                  <input 
+                    type="text" 
+                    placeholder="Search location or language..." 
+                    value={regionSearch}
+                    onChange={(e) => setRegionSearch(e.target.value)}
+                    className="w-full bg-black/5 border-none rounded-none py-4 pl-12 pr-4 text-xs tracking-widest uppercase font-bold text-black placeholder:text-black/40 focus:ring-1 focus:ring-black transition-all"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 md:gap-x-16 gap-y-12 md:gap-y-16">
                 {['Americas', 'Europe', 'Asia-Pacific', 'Middle East', 'Africa', 'Global'].map(region => {
-                  const filteredLocations = locations.filter(l => l.region === region);
+                  const filteredLocations = locations.filter(l => 
+                    l.region === region && 
+                    (l.name.toLowerCase().includes(regionSearch.toLowerCase()) || 
+                     l.langName.toLowerCase().includes(regionSearch.toLowerCase()))
+                  );
                   if (filteredLocations.length === 0) return null;
                   
                   return (
@@ -204,7 +232,7 @@ const Footer = () => {
                                 const applied = applyLocationSettings(loc.name, i18n, dispatch, setCurrency);
                                 if (applied) window.location.reload();
                               }}
-                              className={`text-[12px] md:text-[13px] uppercase tracking-[0.2em] transition-all text-center md:text-left w-full hover:text-black flex flex-col md:flex-row items-center md:items-center justify-between group py-2 ${selectedLocation === loc.name ? 'text-black font-black border-b md:border-b-0 md:border-l-4 border-black pl-0 md:pl-6' : 'text-black/60 font-bold hover:md:pl-4'}`}
+                              className={`text-[12px] md:text-[13px] uppercase tracking-[0.2em] transition-all text-center md:text-left w-full hover:text-black flex flex-col md:flex-row items-center justify-between group py-2 md:pl-4 md:border-l-4 border-b-2 md:border-b-0 ${selectedLocation === loc.name ? 'text-black font-black md:border-black border-black' : 'text-black/60 font-bold border-transparent hover:border-black/20'}`}
                             >
                               <span className="flex-grow">{loc.name}</span>
                               <span className="text-[8px] opacity-0 group-hover:opacity-40 transition-all font-medium">
