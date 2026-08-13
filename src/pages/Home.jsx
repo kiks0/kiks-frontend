@@ -948,7 +948,7 @@ const Home = () => {
                     </div>
 
                     {/* Floating Secondary Image (Muse) */}
-                    <Link to="/collection/The%20Arambh" className="floating-muse absolute right-[10%] top-[20%] w-32 md:w-48 aspect-[3/4] z-30 hidden md:block border border-black/10 shadow-2xl overflow-hidden group">
+                    <Link to="/collection/arambh" className="floating-muse absolute right-[10%] top-[20%] w-32 md:w-48 aspect-[3/4] z-30 hidden md:block border border-black/10 shadow-2xl overflow-hidden group">
                         <img
                             src="https://res.cloudinary.com/dprxiz6os/image/upload/v1779191418/Gemini_Generated_Image_6kx4eu6kx4eu6kx4_xsm3qk.webp"
                             loading="lazy"
