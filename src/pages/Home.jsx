@@ -1046,7 +1046,7 @@ const Home = () => {
                             viewport={{ once: true, amount: 0.2 }}
                             className="pt-2 md:pt-4 flex justify-center lg:justify-start w-full"
                         >
-                            <Link to="/collection/The%20Arambh" className="inline-block group/link">
+                            <Link to="/collection/arambh" className="inline-block group/link">
                                 <span className="text-[10px] tracking-[0.3em] text-black uppercase font-black border-b border-black/20 pb-1 group-hover/link:border-black transition-all duration-500">
                                     {t('home.explore_collection')}
                                 </span>
