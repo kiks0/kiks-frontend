@@ -1415,7 +1415,7 @@ const ProductDetail = () => {
             </div>
 
             {/* DYNAMIC STORYTELLING SECTION (Independent Editorial Experience) */}
-            <div className="bg-white pt-10 pb-2 md:pb-20 px-6">
+            <div className="bg-white pt-10 pb-2 md:pb-12 px-6">
                 <div className="container mx-auto max-w-6xl">
 
 
@@ -1491,7 +1491,7 @@ const ProductDetail = () => {
                             </div>
 
                             {/* DESKTOP: Minimalist 3-Column Studio Grid */}
-                            <div className="hidden md:block mb-24 border-b border-black/5 pb-20">
+                            <div className="hidden md:block mb-8 md:mb-12 border-b border-black/5 pb-10">
                                 <h3 className="text-center text-[13px] font-black tracking-[0.5em] uppercase mb-14 text-black opacity-80">
                                     YOU MAY ALSO LIKE
                                 </h3>
@@ -1551,7 +1551,7 @@ const ProductDetail = () => {
                     )}
 
                     {/* 3. ABOUT THE HOUSE SECTION */}
-                    <div className="mb-4 md:mb-24 grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-center bg-white p-6 md:p-12 border border-black/5">
+                    <div className="mb-4 md:mb-8 grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-center bg-white p-6 md:p-12 border border-black/5">
                         <div className="flex justify-center lg:justify-start">
                             <img
                                 src="/logo-kiks.png"

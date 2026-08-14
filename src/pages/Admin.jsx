@@ -316,6 +316,7 @@ const Admin = () => {
   const [downloadedHistory, setDownloadedHistory] = useState({ invoices: [], labels: [] });
   const [carts, setCarts] = useState([]);
   const [selectedCarts, setSelectedCarts] = useState([]);
+  const [selectedWishlists, setSelectedWishlists] = useState([]);
   const [selectedTrash, setSelectedTrash] = useState([]);
   const [logs, setLogs] = useState([]);
   const [logsSearch, setLogsSearch] = useState('');
@@ -860,8 +861,31 @@ const Admin = () => {
       } else {
         showErrorToast(data.msg || 'Bulk recovery failed.');
       }
-    } catch (e) {
-      showErrorToast('Network error during bulk recovery.');
+    } catch (err) {
+      showErrorToast('Failed to connect to server.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleBulkWishlistRecover = async () => {
+    if (!selectedWishlists.length) return;
+    setIsProcessing(true);
+    try {
+      const res = await fetch(`${API_URL}/api/users/bulk-wishlist-reminder`, {
+        method: 'POST',
+        headers: { ...getAdminHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: selectedWishlists })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        showSuccessToast(data.msg || `${selectedWishlists.length} wishlist reminders dispatched.`);
+        setSelectedWishlists([]);
+      } else {
+        showErrorToast(data.msg || 'Bulk reminder failed.');
+      }
+    } catch (err) {
+      showErrorToast('Failed to connect to server.');
     } finally {
       setIsProcessing(false);
     }
@@ -3889,6 +3913,47 @@ const Admin = () => {
                   />
                 </div>
 
+                {/* Bulk Actions Toolbar for Wishlists */}
+                <div className="flex flex-wrap items-center justify-between gap-4 p-4 border border-black/10 bg-neutral-50 mb-4">
+                  <label className="flex items-center gap-3 cursor-pointer group">
+                    {(() => {
+                      const allWishlistUsers = [...users, ...admins].filter(u => {
+                        const w = typeof u.wishlist === 'string' ? JSON.parse(u.wishlist || '[]') : (u.wishlist || []);
+                        return Array.isArray(w) && w.length > 0;
+                      });
+                      return (
+                        <input 
+                          type="checkbox" 
+                          className="w-5 h-5 accent-black cursor-pointer"
+                          checked={allWishlistUsers.length > 0 && allWishlistUsers.every(u => selectedWishlists.includes(u.id))}
+                          onChange={(e) => {
+                            if (e.target.checked) setSelectedWishlists(allWishlistUsers.map(u => u.id));
+                            else setSelectedWishlists([]);
+                          }}
+                        />
+                      );
+                    })()}
+                    <span className="text-[10px] tracking-[0.2em] font-bold uppercase text-black/60 group-hover:text-black transition-colors">Select All Wishlists</span>
+                  </label>
+                  
+                  {selectedWishlists.length > 0 && (
+                    <div className="flex items-center gap-3">
+                      <button 
+                        onClick={handleBulkWishlistRecover}
+                        className="flex items-center gap-2 px-5 py-3 bg-black text-white text-[10px] uppercase tracking-[0.2em] font-bold hover:bg-zinc-800 transition-all border border-black"
+                      >
+                        <Mail size={12} /> Send Mail ({selectedWishlists.length})
+                      </button>
+                      <button 
+                        onClick={() => setSelectedWishlists([])}
+                        className="flex items-center gap-2 px-5 py-3 bg-transparent text-black border border-black/20 text-[10px] uppercase tracking-[0.2em] font-bold hover:border-black transition-all"
+                      >
+                        <Trash2 size={12} /> Deselect
+                      </button>
+                    </div>
+                  )}
+                </div>
+
                 {/* Wishlist Cards Grid */}
                 <div className="grid grid-cols-1 gap-6">
                   {(() => {
@@ -3917,11 +3982,12 @@ const Admin = () => {
                       const totalValue = userWishlist.reduce((acc, item) => acc + Number(item.price || item.sale_price || 0), 0);
 
                       return (
-                        <div key={user.id} className="bg-white border border-black/5 hover:border-black/20 transition-all group relative">
+                        <div key={user.id} className={`bg-white border transition-all group relative ${selectedWishlists.includes(user.id) ? 'border-black/50 shadow-sm' : 'border-black/5 hover:border-black/20'}`}>
                           <div className="flex flex-col xl:flex-row justify-between gap-6 sm:gap-8 p-5 sm:p-6 md:p-10">
                             <div className="flex-grow space-y-6 sm:space-y-8 min-w-0">
                               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 border-b border-black/5 pb-5 sm:pb-6">
                                 <div className="flex items-start sm:items-center gap-4 sm:gap-5 min-w-0">
+                                  <input type="checkbox" className="w-5 h-5 accent-black cursor-pointer mt-3 sm:mt-0" checked={selectedWishlists.includes(user.id)} onChange={(e) => { if (e.target.checked) setSelectedWishlists([...selectedWishlists, user.id]); else setSelectedWishlists(selectedWishlists.filter(id => id !== user.id)); }} />
                                   <div className="w-11 h-11 sm:w-14 sm:h-14 bg-black text-white flex items-center justify-center font-serif text-base sm:text-xl flex-shrink-0 shadow-md">
                                     {(user.email || 'U')[0].toUpperCase()}
                                   </div>
@@ -3992,7 +4058,7 @@ const Admin = () => {
                                   onClick={() => handleWishlistExcelExport([user])}
                                   className="w-full bg-neutral-900 hover:bg-black text-white px-4 py-3 sm:py-3.5 text-[9px] uppercase tracking-widest font-bold transition-all flex items-center justify-center gap-2 shadow-sm"
                                 >
-                                  <FileSpreadsheet size={13} flex-shrink-0 /> Export Customer Sheet
+                                  <FileSpreadsheet size={13} className="flex-shrink-0" /> Export Customer Sheet
                                 </button>
                               </div>
                             </div>
