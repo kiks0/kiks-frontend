@@ -874,12 +874,7 @@ const ProductDetail = () => {
 
                             <p className="text-[9px] tracking-[0.2em] uppercase text-black/50 font-black mb-4">{product.product_type || 'EXTRAIT DE PARFUM SPRAY'}</p>
 
-                            <button
-                                onClick={handleMoreDetails}
-                                className="text-[9px] tracking-[0.1em] uppercase text-black/40 bg-white/0 border-b border-black/10 hover:text-black hover:border-black transition-all mb-2 pb-0.5 w-fit"
-                            >
-                                More details
-                            </button>
+
 
 
                         </div>
