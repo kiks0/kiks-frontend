@@ -1,73 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
     <loc>https://www.kiksultraluxury.com/</loc>
-    <lastmod>2026-05-26</lastmod>
-    <priority>1.00</priority>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.kiksultraluxury.com/collection/arambh</loc>
-    <lastmod>2026-05-26</lastmod>
-    <priority>0.90</priority>
-  </url>
-  <url>
-    <loc>https://www.kiksultraluxury.com/collection/arambh/el-rey</loc>
-    <lastmod>2026-05-26</lastmod>
-    <priority>0.90</priority>
-  </url>
-  <url>
-    <loc>https://www.kiksultraluxury.com/collection/arambh/la-reina</loc>
-    <lastmod>2026-05-26</lastmod>
-    <priority>0.90</priority>
-  </url>
-  <url>
-    <loc>https://www.kiksultraluxury.com/collection/arambh/elite</loc>
-    <lastmod>2026-05-26</lastmod>
-    <priority>0.90</priority>
+    <loc>https://www.kiksultraluxury.com/fragrance</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.kiksultraluxury.com/blog</loc>
-    <lastmod>2026-05-26</lastmod>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://www.kiksultraluxury.com/about</loc>
-    <lastmod>2026-05-26</lastmod>
-    <priority>0.70</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.kiksultraluxury.com/contact</loc>
-    <lastmod>2026-05-26</lastmod>
-    <priority>0.70</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.kiksultraluxury.com/login</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.kiksultraluxury.com/register</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.kiksultraluxury.com/about</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.kiksultraluxury.com/privacy-policy</loc>
-    <lastmod>2026-05-26</lastmod>
-    <priority>0.40</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.kiksultraluxury.com/terms-conditions</loc>
-    <lastmod>2026-05-26</lastmod>
-    <priority>0.40</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.kiksultraluxury.com/return-policy</loc>
-    <lastmod>2026-05-26</lastmod>
-    <priority>0.40</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.kiksultraluxury.com/refund-policy</loc>
-    <lastmod>2026-05-26</lastmod>
-    <priority>0.40</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.kiksultraluxury.com/cancellation-policy</loc>
-    <lastmod>2026-05-26</lastmod>
-    <priority>0.40</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.kiksultraluxury.com/disclaimer</loc>
-    <lastmod>2026-05-26</lastmod>
-    <priority>0.40</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.kiksultraluxury.com/product/elite</loc>
+    <lastmod>2026-07-28T01:24:56.652Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.kiksultraluxury.com/product/la-reina</loc>
+    <lastmod>2026-07-28T00:45:42.992Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.kiksultraluxury.com/product/el-rey</loc>
+    <lastmod>2026-07-28T06:14:02.337Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.kiksultraluxury.com/collection/The Arambh</loc>
+    <lastmod>2026-08-15T04:43:20.971Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.kiksultraluxury.com/collection/arambh</loc>
+    <lastmod>2026-08-15T04:43:20.971Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.kiksultraluxury.com/collection/ssdcsdcs</loc>
+    <lastmod>2026-08-15T04:43:20.971Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>
