@@ -309,7 +309,8 @@ const Collection = () => {
 
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-16 md:gap-y-24 gap-x-6 md:gap-x-20">
+                        {/* Mobile & Tablet Grid Layout (Preserved) */}
+                        <div className="grid md:hidden grid-cols-1 sm:grid-cols-2 gap-y-16 gap-x-6">
                             {products.map((product, idx) => (
                                 <div 
                                     key={product.id}
@@ -328,22 +329,14 @@ const Collection = () => {
                                             </div>
                                         )}
                                         
-                                        {/* Floating Actions - Wishlist everywhere, Shopping Bag on Desktop only */}
-                                        <div className="absolute top-2 right-2 md:top-6 md:right-6 flex flex-col space-y-2 md:space-y-4 md:opacity-0 md:group-hover:opacity-100 transition-all duration-500 md:translate-x-4 md:group-hover:translate-x-0">
+                                        {/* Floating Actions */}
+                                        <div className="absolute top-2 right-2 flex flex-col space-y-2">
                                             <button
                                                 onClick={(e) => handleWishlistToggle(e, product)}
-                                                className={`p-1.5 md:p-3 rounded-full backdrop-blur-md border border-black/10 shadow-lg hover:shadow-xl hover:scale-110 transition-all ${wishlistItems.some(i => String(i.id) === String(product.id)) ? 'bg-black text-white' : 'bg-white/80 text-black'}`}
+                                                className={`p-1.5 rounded-full backdrop-blur-md border border-black/10 shadow-lg hover:shadow-xl hover:scale-110 transition-all ${wishlistItems.some(i => String(i.id) === String(product.id)) ? 'bg-black text-white' : 'bg-white/80 text-black'}`}
                                             >
                                                 <Heart size={12} fill={wishlistItems.some(i => String(i.id) === String(product.id)) ? "currentColor" : "none"} />
                                             </button>
-                                            {product.stock_count > 0 && (
-                                                <button 
-                                                    onClick={(e) => handleAddToCart(e, product)}
-                                                    className={`hidden md:inline-flex p-1.5 md:p-3 rounded-full backdrop-blur-md border border-white/10 shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 ${cartFlashId === product.id ? 'bg-white text-black' : 'bg-black/60 text-white hover:bg-white hover:text-black'}`}
-                                                >
-                                                    <ShoppingBag size={12} />
-                                                </button>
-                                            )}
                                         </div>
                                     </Link>
                                     
@@ -370,7 +363,7 @@ const Collection = () => {
                                             </span>
                                         )}
                                         
-                                        {/* Mobile-Only Stacked Action Buttons (Matched EXACTLY to Fragrance Page) */}
+                                        {/* Mobile-Only Stacked Action Buttons */}
                                         <div className="w-[210px] sm:w-[250px] flex flex-col gap-2 mx-auto mt-4 md:hidden">
                                             {product.stock_count > 0 ? (
                                                 <>
@@ -419,6 +412,138 @@ const Collection = () => {
                                     </div>
                                 </div>
                             ))}
+                        </div>
+
+                        {/* Desktop Alternating (Zigzag) Layout (from Fragrance.jsx) */}
+                        <div className="hidden md:flex flex-col relative w-full gap-24">
+                            {products.map((product, idx) => {
+                                const isEven = idx % 2 === 0;
+                                const targetUrl = `/collection/${category}/${product.slug || String(product.name).toLowerCase().replace(/\s+/g, '-')}`;
+
+                                return (
+                                    <section
+                                        key={`desktop-${product.id || idx}`}
+                                        className={`w-full py-4 lg:px-4 flex items-center justify-center bg-transparent transition-opacity duration-500`}
+                                    >
+                                        <div className={`max-w-6xl w-full mx-auto grid grid-cols-2 gap-16 lg:gap-24 items-center justify-center ${isEven ? '' : 'grid-flow-dense'}`}>
+                                            
+                                            {/* Product Image */}
+                                            <div className={`relative group w-[400px] lg:w-[480px] aspect-[3/4] shrink-0 mx-auto overflow-hidden bg-neutral-100 border border-black/5 shadow-xl transition-all duration-700 hover:shadow-2xl ${isEven ? 'col-start-1' : 'col-start-2'}`}>
+                                                <Link to={targetUrl} className="block w-full h-full relative">
+                                                    <img
+                                                        src={getFullImageUrl(product.image_url)}
+                                                        alt={product.name}
+                                                        className="w-full h-full object-cover object-center transition-transform duration-1000 group-hover:scale-105"
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                    />
+                                                    {product.sale_price && (
+                                                        <div className="absolute top-3 left-3 bg-black text-white text-[9px] font-bold px-2 py-1 tracking-widest uppercase z-10 shadow-sm">
+                                                            -{Math.round(((Number(product.price) - Number(product.sale_price)) / Number(product.price)) * 100)}%
+                                                        </div>
+                                                    )}
+                                                    <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none flex items-center justify-center">
+                                                        <span className="bg-white/95 text-black px-6 py-2.5 text-[10px] tracking-[0.3em] uppercase font-bold shadow-lg transform -translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                                                            Explore
+                                                        </span>
+                                                    </div>
+                                                </Link>
+
+                                                <button
+                                                    onClick={(e) => handleWishlistToggle(e, product)}
+                                                    aria-label="Wishlist"
+                                                    className={`absolute top-3 right-3 z-10 p-2 rounded-full backdrop-blur-md border border-black/10 shadow-md transition-all transform hover:scale-110 ${wishlistItems.some(i => String(i.id) === String(product.id)) ? 'bg-black text-white' : 'bg-white/85 text-black hover:bg-black hover:text-white'}`}
+                                                >
+                                                    <Heart size={14} fill={wishlistItems.some(i => String(i.id) === String(product.id)) ? "currentColor" : "none"} />
+                                                </button>
+                                            </div>
+
+                                            {/* Product Details */}
+                                            <div className={`w-full max-w-md mx-auto flex flex-col items-start text-left shrink-0 ${isEven ? 'col-start-2' : 'col-start-1'}`}>
+                                                <div className="flex items-center space-x-3 mb-3">
+                                                    <span className="text-[10px] font-bold tracking-[0.3em] text-black/50 uppercase">
+                                                        {product.category || product.fragrance_family || "PARFUM EXTRAIT"}
+                                                    </span>
+                                                    <span className="h-1.5 w-1.5 rounded-full bg-gold-500/60" />
+                                                    <span className="text-[10px] font-semibold tracking-[0.25em] text-black/40 uppercase">
+                                                        {product.size || "100 ML"}
+                                                    </span>
+                                                </div>
+
+                                                <Link to={targetUrl} className="block mb-4">
+                                                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-light tracking-[0.14em] uppercase hover:text-black/70 transition-colors line-clamp-1">
+                                                        {product.name}
+                                                    </h2>
+                                                </Link>
+
+                                                <div className="mb-8 flex items-center justify-start space-x-3">
+                                                    {product.sale_price ? (
+                                                        <div className="flex items-center space-x-3">
+                                                            <span className="text-3xl lg:text-4xl font-bold tracking-[0.2em] uppercase text-black">
+                                                                {formatCurrency(product.sale_price, activeCurrency, rates, symbols)}
+                                                            </span>
+                                                            <span className="text-base lg:text-lg line-through text-black/35 tracking-widest">
+                                                                {formatCurrency(product.price, activeCurrency, rates, symbols)}
+                                                            </span>
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-3xl lg:text-4xl font-bold tracking-[0.2em] uppercase text-black">
+                                                            {formatCurrency(product.price, activeCurrency, rates, symbols)}
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                <div className="w-full flex flex-row gap-3">
+                                                    {product.stock_count > 0 ? (
+                                                        <>
+                                                            <button
+                                                                onClick={(e) => handleAddToCart(e, product)}
+                                                                className="flex-1 py-3 bg-black text-white border border-black text-[11px] tracking-[0.25em] uppercase font-bold hover:bg-white hover:text-black transition-all duration-300 flex items-center justify-center shadow-md active:scale-95"
+                                                            >
+                                                                <ShoppingBag size={13} className="mr-3 shrink-0" />
+                                                                Add To Bag
+                                                            </button>
+
+                                                            <button
+                                                                onClick={(e) => handleBuyNow(e, product)}
+                                                                className="flex-1 py-3 bg-white text-black border border-black/80 text-[11px] tracking-[0.25em] uppercase font-bold hover:bg-black hover:text-white transition-all duration-300 flex items-center justify-center shadow-sm active:scale-95"
+                                                            >
+                                                                Buy Now
+                                                            </button>
+                                                        </>
+                                                    ) : (
+                                                        <div className="w-full bg-black/[0.02] border border-black/5 p-6 mt-2">
+                                                            <span className="text-[10px] tracking-[0.4em] font-black text-black uppercase block mb-4">Coming Soon</span>
+                                                            <p className="text-[10px] text-black/40 tracking-widest leading-loose mb-6 italic">This fragrance is currently being prepared. Join the waitlist to be notified when it's available.</p>
+                                                            <button
+                                                                onClick={(e) => handleNotifyMe(e, product)}
+                                                                disabled={waitlistStatus[product.id] === 'loading' || waitlistStatus[product.id] === 'success'}
+                                                                className="w-full h-12 bg-black text-white text-[10px] font-black tracking-[0.4em] uppercase hover:bg-black/90 transition-all flex items-center justify-center disabled:opacity-80 disabled:cursor-not-allowed"
+                                                            >
+                                                                {waitlistStatus[product.id] === 'loading' ? (
+                                                                    <Loader2 size={16} className="animate-spin" />
+                                                                ) : waitlistStatus[product.id] === 'success' ? (
+                                                                    <span className="flex items-center gap-2"><Check size={16} /> ADDED</span>
+                                                                ) : (
+                                                                    'Notify Me'
+                                                                )}
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                <Link
+                                                    to={targetUrl}
+                                                    className="inline-flex items-center text-[9px] tracking-[0.25em] font-bold uppercase text-black/50 hover:text-black transition-colors group mt-5"
+                                                >
+                                                    Explore Product
+                                                    <ArrowRight size={12} className="ml-1.5 transition-transform group-hover:translate-x-1" />
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </section>
+                                );
+                            })}
                         </div>
                     </motion.section>
                 )}
