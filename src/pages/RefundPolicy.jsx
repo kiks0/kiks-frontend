@@ -4,29 +4,29 @@ import { RefreshCcw, ShieldCheck, Clock, CheckCircle, Package } from 'lucide-rea
 const RefundPolicy = () => {
     const sections = [
         {
-            title: "1. Eligibility for Refund",
-            icon: <RefreshCcw size={18} />,
-            content: "Refunds are only issued for products that are returned in their original, unopened, and unused condition within 7 days of delivery. Due to hygiene and safety standards, opened or used perfumes cannot be refunded."
-        },
-        {
-            title: "2. Processing Time",
-            icon: <Clock size={18} />,
-            content: "Once we receive and inspect your return, we will notify you of the approval or rejection of your refund. Approved refunds will be processed within 5-7 business days."
-        },
-        {
-            title: "3. Refund Method",
+            title: "1. No Refunds Policy",
             icon: <ShieldCheck size={18} />,
-            content: "Refunds will be credited back to the original payment method used during the purchase. Please note that banks may take additional time to reflect the credit in your account."
+            content: "To maintain our rigorous hygiene and quality standards, all purchases made at KIKS Ultra Luxury are final. We do not offer refunds to original payment methods under any circumstances."
         },
         {
-            title: "4. Shipping Costs",
+            title: "2. Defective Replacements",
+            icon: <RefreshCcw size={18} />,
+            content: "While we do not offer refunds, we fully stand by the quality of our products. If you receive a damaged or defective bottle, we will replace it entirely at our own expense."
+        },
+        {
+            title: "3. Claims Window",
+            icon: <Clock size={18} />,
+            content: "You must report any damages or defects within 24 hours of receiving your delivery. Claims made after this strict 24-hour window will not be eligible for replacement."
+        },
+        {
+            title: "4. Replacement Timeline",
             icon: <Package size={18} />,
-            content: "Original shipping costs are non-refundable. If you receive a refund, the cost of return shipping will be deducted from your total refund amount unless the return is due to our error."
+            content: "After your claim is approved, a replacement will be processed and shipped. Please expect your replacement delivery to arrive within 4-5 business days."
         },
         {
-            title: "5. Damaged Goods",
+            title: "5. Shipping Costs",
             icon: <CheckCircle size={18} />,
-            content: "If you receive a damaged or defective product, please contact us within 24 hours of delivery with photographic evidence. We will provide a full refund or a replacement at no extra cost."
+            content: "For approved defective replacements, KIKS covers all shipping costs. You will never have to pay extra to receive a pristine version of your luxury fragrance."
         }
     ];
 

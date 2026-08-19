@@ -4,29 +4,29 @@ import { RotateCcw, Shield, Box, HelpCircle, CheckCircle } from 'lucide-react';
 const Returns = () => {
     const sections = [
         {
-            title: "1. Return Window",
-            icon: <RotateCcw size={18} />,
-            content: "You have 7 days from the date of delivery to initiate a return. Requests made after this period will not be accepted. We recommend inspecting your order immediately upon arrival."
-        },
-        {
-            title: "2. Condition of Item",
-            icon: <Box size={18} />,
-            content: "To be eligible for a return, the perfume must be in its original packaging, unopened, and unused. Items that show signs of usage or tampering are strictly non-returnable due to hygiene reasons."
-        },
-        {
-            title: "3. Proof of Purchase",
+            title: "1. All Sales Are Final",
             icon: <Shield size={18} />,
-            content: "All returns must be accompanied by an original invoice or order confirmation. We cannot process returns without valid proof of purchase from our official boutique."
+            content: "Due to the luxury and hygienic nature of our fragrances, all sales are final. We do not accept returns, refunds, or exchanges for change of mind or simply not liking the scent."
         },
         {
-            title: "4. Return Process",
+            title: "2. Damaged or Defective Items",
+            icon: <Box size={18} />,
+            content: "We take immense pride in our quality control, but if your product arrives damaged, leaking, or factory defective, we are fully committed to making it right."
+        },
+        {
+            title: "3. Reporting an Issue",
             icon: <HelpCircle size={18} />,
-            content: "To start a return, contact our concierge at kiksultraluxury@gmail.com. If your return is accepted, we will send you instructions on how and where to send your package."
+            content: "If you receive a defective item, please contact our concierge at kiksultraluxury@gmail.com within 24 hours of delivery. You must include clear unboxing videos and photographic evidence."
         },
         {
-            title: "5. Inspection",
+            title: "4. Replacement Process",
+            icon: <RotateCcw size={18} />,
+            content: "Once our team reviews and approves your claim, we will dispatch a brand new replacement. Please allow 4-5 business days for the replacement package to be delivered."
+        },
+        {
+            title: "5. Inspection & Verification",
             icon: <CheckCircle size={18} />,
-            content: "Once we receive your returned item, it will undergo a quality check. We reserve the right to deny a return if the item does not meet our required standards."
+            content: "We reserve the right to deny claims if the damage appears intentional, if it is reported after the 24-hour window, or if sufficient proof is not provided."
         }
     ];
 
