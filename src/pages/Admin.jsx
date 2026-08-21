@@ -3473,7 +3473,12 @@ const Admin = () => {
                     return (
                       <div key={log.id} className="border-b border-white/5 pb-3 last:border-b-0 hover:bg-white/5 p-2 transition-all">
                         <div className="flex flex-wrap items-center gap-3">
-                          <span className="text-white/40">[{new Date(log.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}]</span>
+                          <span className="text-white/40">
+                            [{(() => {
+                              const d = new Date(log.created_at);
+                              return `${d.getUTCDate()}/${d.getUTCMonth() + 1}/${d.getUTCFullYear()}, ${d.getUTCHours() % 12 || 12}:${d.getUTCMinutes().toString().padStart(2, '0')}:${d.getUTCSeconds().toString().padStart(2, '0')} ${d.getUTCHours() >= 12 ? 'pm' : 'am'}`;
+                            })()}]
+                          </span>
                           <span className={`${levelColor} uppercase tracking-wider`}>{log.level}</span>
                           <span className="text-white select-all font-bold">{log.message}</span>
                         </div>
