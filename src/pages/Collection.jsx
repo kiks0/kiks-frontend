@@ -265,16 +265,20 @@ const Collection = () => {
                                 <div className="mb-7 md:mb-9 px-4">
                                     <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-[5rem] font-serif font-light tracking-[0.15em] md:tracking-[0.2em] text-white/85 uppercase leading-tight drop-shadow-[0_2px_15px_rgba(255,255,255,0.25)]">
                                         {collection?.name} <br className="md:hidden" />
-                                        <span className="text-[10px] sm:text-xs md:text-sm block mt-3 md:mt-4 tracking-[0.4em] md:tracking-[0.5em] text-white/80 font-sans uppercase font-semibold">Collection</span>
+                                        <span className="text-[10px] sm:text-xs md:text-sm block mt-3 md:mt-4 tracking-[0.4em] md:tracking-[0.5em] text-white/80 font-sans uppercase font-semibold">
+                                            {collection?.subtitle !== undefined && collection?.subtitle !== null ? collection.subtitle : 'Collection'}
+                                        </span>
                                     </h1>
                                 </div>
 
-                                <button 
-                                    onClick={handleOpenProducts}
-                                    className="backdrop-blur-md bg-white/10 border border-white/20 text-white px-10 md:px-14 py-3.5 md:py-4 text-[11px] tracking-[0.3em] uppercase font-bold hover:bg-white hover:text-black active:scale-95 transition-all duration-500 shadow-xl block mx-auto"
-                                >
-                                    {t('collection.open_vault')}
-                                </button>
+                                {(collection?.button_text !== undefined && collection?.button_text !== null ? collection.button_text : t('collection.open_vault')) && (
+                                    <button 
+                                        onClick={handleOpenProducts}
+                                        className="backdrop-blur-md bg-white/10 border border-white/20 text-white px-10 md:px-14 py-3.5 md:py-4 text-[11px] tracking-[0.3em] uppercase font-bold hover:bg-white hover:text-black active:scale-95 transition-all duration-500 shadow-xl block mx-auto"
+                                    >
+                                        {collection?.button_text !== undefined && collection?.button_text !== null ? collection.button_text : t('collection.open_vault')}
+                                    </button>
+                                )}
                             </motion.div>
                         </div>
                     </motion.section>

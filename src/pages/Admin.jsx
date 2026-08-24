@@ -354,7 +354,7 @@ const Admin = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState(null); // Tracks if we are editing an existing item
 
-  const [colFormData, setColFormData] = useState({ name: '', slug: '', banner_url: '', mobile_banner_url: '', description: '', video_url: '' });
+  const [colFormData, setColFormData] = useState({ name: '', slug: '', banner_url: '', mobile_banner_url: '', description: '', video_url: '', subtitle: 'Collection', button_text: 'Explore' });
   const [uploadingColMobile, setUploadingColMobile] = useState(false);
   const [mediaSourceTab, setMediaSourceTab] = useState('upload'); // 'upload' or 'link'
   const [prodFormData, setProdFormData] = useState({
@@ -1715,7 +1715,7 @@ const Admin = () => {
         showSuccessToast(`Collection ${editingId ? 'Updated' : 'Registered'} Successfully.`);
         setIsAdding(false);
         setEditingId(null);
-        setColFormData({ name: '', slug: '', banner_url: '', mobile_banner_url: '', description: '', video_url: '' });
+        setColFormData({ name: '', slug: '', banner_url: '', mobile_banner_url: '', description: '', video_url: '', subtitle: 'Collection', button_text: 'Explore' });
         fetchData();
       } else {
         showErrorToast(data.msg || 'Registry update failed.');
@@ -2149,7 +2149,9 @@ const Admin = () => {
         banner_url: item.banner_url,
         mobile_banner_url: item.mobile_banner_url || '',
         video_url: item.video_url || '',
-        description: item.description
+        description: item.description,
+        subtitle: item.subtitle !== undefined && item.subtitle !== null ? item.subtitle : 'Collection',
+        button_text: item.button_text !== undefined && item.button_text !== null ? item.button_text : 'Explore'
       });
     } else if (type === 'products') {
       setProdFormData({
@@ -5145,7 +5147,7 @@ const Admin = () => {
                   setIsAdding(!isAdding);
                   setEditingId(null);
                   setProductFormTab('general');
-                  setColFormData({ name: '', slug: '', banner_url: '', mobile_banner_url: '', description: '', video_url: '' });
+                  setColFormData({ name: '', slug: '', banner_url: '', mobile_banner_url: '', description: '', video_url: '', subtitle: 'Collection', button_text: 'Explore' });
                   setProdFormData({ collection_id: '', name: '', slug: '', price: '', image_url: '', gallery_urls: [], description: '', top_notes: '', heart_notes: '', base_notes: '', stock_count: 50, size: '100ml', product_type: 'EXTRAIT DE PARFUM SPRAY', additional_info: '', gender: '', fragrance_family: '', intensity: '', scent_characteristics: [], occasions: [], seasons: [], top_notes_array: [], heart_notes_array: [], base_notes_array: [] });
                   setBlogFormData({ title: '', slug: '', content: '', image_url: '', keywords: '', author: 'Kiks Artisan', related_link: '', showcase_images: [] });
                   setPromoFormData({ code: '', discount_type: 'percentage', discount_value: '', min_order_amount: '', max_discount: '', expiry_date: '', usage_limit: '' });
@@ -5284,6 +5286,8 @@ const Admin = () => {
                       <>
                         <div><label className={labelClasses}>Collection Name</label><input required className={inputClasses} value={colFormData.name} onChange={e => setColFormData({ ...colFormData, name: e.target.value })} /></div>
                         <div><label className={labelClasses}>Slug (URL part)</label><input required className={inputClasses} value={colFormData.slug} onChange={e => setColFormData({ ...colFormData, slug: e.target.value })} /></div>
+                        <div><label className={labelClasses}>Subtitle (Optional)</label><input className={inputClasses} value={colFormData.subtitle} onChange={e => setColFormData({ ...colFormData, subtitle: e.target.value })} placeholder="e.g. Collection" /></div>
+                        <div><label className={labelClasses}>Button Text (Optional)</label><input className={inputClasses} value={colFormData.button_text} onChange={e => setColFormData({ ...colFormData, button_text: e.target.value })} placeholder="Leave blank to hide button" /></div>
                         <div className="md:col-span-2 mt-4 pt-4 border-t border-black/5">
                           <label className={labelClasses}>Separate Mobile Banner (Optional)</label>
                           <p className="text-[10px] text-black/50 uppercase tracking-widest mb-4 font-bold">If provided, this banner will display exclusively on mobile devices while the main banner displays on desktop.</p>
