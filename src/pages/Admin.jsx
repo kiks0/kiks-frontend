@@ -6109,7 +6109,7 @@ const Admin = () => {
                                     <div className="min-w-0 pr-10">
                                       <p className="text-xs uppercase truncate text-black font-medium leading-tight mb-2">{item.name || item.product_name}</p>
                                       <p className="text-[10px] text-black/50 uppercase tracking-widest font-bold">{item.quantity} Unit(s)</p>
-                                      <p className="text-[10px] text-black/30 mt-1">{formatCurrency(item.price, activeCurrency, rates, symbols)} / unit</p>
+                                      <p className="text-[10px] text-black/30 mt-1">{formatCurrency(parseInt((item.sale_price || item.price || 0).toString().replace(/[^0-9]/g, '')) || 0, activeCurrency, rates, symbols)} / unit</p>
                                     </div>
                                     <button onClick={() => handleRemoveCartItem(cart.id, item.id || item.product_id)} className="absolute right-3 top-1/2 -translate-y-1/2 text-red-600/30 hover:text-red-600 transition-all p-2 opacity-0 group-hover/item:opacity-100"><Trash2 size={14} /></button>
                                   </div>
@@ -6132,7 +6132,7 @@ const Admin = () => {
                               <div>
                                 <p className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2 font-bold">Total Valuation</p>
                                 <p className="text-2xl md:text-3xl font-serif text-black leading-none">
-                                  {formatCurrency(cart.items?.reduce((acc, item) => acc + (item.price * item.quantity), 0) || 0, activeCurrency, rates, symbols)}
+                                  {formatCurrency(cart.items?.reduce((acc, item) => acc + ((parseInt((item.sale_price || item.price || 0).toString().replace(/[^0-9]/g, '')) || 0) * item.quantity), 0) || 0, activeCurrency, rates, symbols)}
                                 </p>
                               </div>
                               <div className="space-y-2">
