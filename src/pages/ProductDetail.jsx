@@ -1429,7 +1429,7 @@ const ProductDetail = () => {
                                     style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x pan-y', transform: 'translateZ(0)' }}
                                     data-lenis-prevent-touch="true"
                                 >
-                                    {suggestedProducts.map((item) => (
+                                    {suggestedProducts.slice(0, 3).map((item) => (
                                         <div 
                                             key={item.id} 
                                             className={`${
@@ -1490,8 +1490,8 @@ const ProductDetail = () => {
                                 <h3 className="text-center text-[13px] font-black tracking-[0.5em] uppercase mb-14 text-black opacity-80">
                                     YOU MAY ALSO LIKE
                                 </h3>
-                                <div className="flex flex-wrap items-stretch justify-center gap-10 md:gap-12 lg:gap-16 max-w-5xl mx-auto">
-                                    {suggestedProducts.map((item) => (
+                                <div className="flex flex-wrap items-stretch justify-center gap-10 md:gap-12 lg:gap-16 max-w-6xl mx-auto">
+                                    {suggestedProducts.slice(0, 3).map((item) => (
                                         <div 
                                             key={item.id} 
                                             className="w-full md:w-[280px] lg:w-[310px] flex flex-col group text-center"
