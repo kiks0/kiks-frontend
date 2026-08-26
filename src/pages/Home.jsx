@@ -667,8 +667,8 @@ const Home = () => {
                         <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-12 lg:gap-24">
 
                             {/* Mobile Header: Name on Top */}
-                            <div className="md:hidden text-center mb-6">
-                                <h2 className="text-5xl font-serif font-light tracking-[0.15em] leading-none text-black uppercase">
+                            <div className="md:hidden text-center mb-6 w-full px-4">
+                                <h2 className="text-4xl sm:text-5xl font-serif font-light tracking-[0.1em] leading-tight text-black uppercase break-words">
                                     {signatureProduct.name}
                                 </h2>
                             </div>
@@ -719,14 +719,14 @@ const Home = () => {
                                 className="w-full md:w-[45%] flex flex-col items-center md:items-start justify-center text-center md:text-left relative"
                             >
                                 {/* Large Background Ghost Text (Desktop Only) */}
-                                <div className="absolute -top-20 -left-10 text-[12rem] font-serif font-black text-black/[0.02] pointer-events-none select-none hidden lg:block uppercase tracking-tighter leading-none">
+                                <div className="absolute -top-20 -left-10 text-[8rem] lg:text-[10rem] xl:text-[12rem] font-serif font-black text-black/[0.02] pointer-events-none select-none hidden lg:block uppercase tracking-tighter leading-none whitespace-nowrap">
                                     {signatureProduct.name}
                                 </div>
 
                                 <div className="relative z-10 space-y-4 md:space-y-6 w-full mt-4 md:mt-0">
                                     {/* Header (Desktop Only) */}
-                                    <div className="hidden md:block space-y-4">
-                                        <h2 className="text-5xl md:text-[5.5rem] font-serif font-light tracking-[0.15em] leading-none text-black uppercase">
+                                    <div className="hidden md:block space-y-4 w-full">
+                                        <h2 className="text-4xl lg:text-6xl xl:text-[5.5rem] font-serif font-light tracking-[0.1em] xl:tracking-[0.15em] leading-tight text-black uppercase break-words">
                                             {signatureProduct.name}
                                         </h2>
                                     </div>
