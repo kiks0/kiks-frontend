@@ -320,7 +320,7 @@ const Collection = () => {
                                     key={product.id}
                                     className="group relative"
                                 >
-                                    <Link to={`/collection/${category}/${product.slug}`} className="block relative w-[220px] sm:w-full mx-auto aspect-square mb-4 md:mb-8 overflow-hidden bg-neutral-100 md:bg-zinc-900 border border-black/5 md:border-white/5 group-hover:border-gold-500/30 transition-colors shadow-xl md:shadow-none">
+                                    <Link to={`/collection/${category}/${product.slug}`} className="block relative w-[220px] sm:w-full mx-auto aspect-[3/4] md:aspect-[4/5] mb-4 md:mb-8 overflow-hidden bg-neutral-100 md:bg-zinc-900 border border-black/5 md:border-white/5 group-hover:border-gold-500/30 transition-colors shadow-xl md:shadow-none">
                                         <img 
                                             src={getFullImageUrl(product.image_url)} 
                                             alt={product.name} 
@@ -432,7 +432,7 @@ const Collection = () => {
                                         <div className={`max-w-6xl w-full mx-auto grid grid-cols-2 gap-16 lg:gap-24 items-center justify-center ${isEven ? '' : 'grid-flow-dense'}`}>
                                             
                                             {/* Product Image */}
-                                            <div className={`relative group w-[400px] lg:w-[480px] aspect-square shrink-0 mx-auto overflow-hidden bg-neutral-100 border border-black/5 shadow-xl transition-all duration-700 hover:shadow-2xl ${isEven ? 'col-start-1' : 'col-start-2'}`}>
+                                            <div className={`relative group w-[400px] lg:w-[480px] aspect-[3/4] shrink-0 mx-auto overflow-hidden bg-neutral-100 border border-black/5 shadow-xl transition-all duration-700 hover:shadow-2xl ${isEven ? 'col-start-1' : 'col-start-2'}`}>
                                                 <Link to={targetUrl} className="block w-full h-full relative">
                                                     <img
                                                         src={getFullImageUrl(product.image_url)}
