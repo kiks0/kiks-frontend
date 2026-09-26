@@ -529,7 +529,7 @@ const Fragrance = () => {
                                         <div className={`max-w-6xl w-full mx-auto flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-16 lg:gap-24 items-center justify-center ${isEven ? '' : 'md:grid-flow-dense'}`}>
                                             
                                             {/* Product Image */}
-                                            <div className={`relative group w-[220px] sm:w-[280px] md:w-[400px] lg:w-[480px] aspect-[3/4] shrink-0 mx-auto overflow-hidden bg-neutral-100 border border-black/5 shadow-xl transition-all duration-700 hover:shadow-2xl ${isEven ? 'md:col-start-1' : 'md:col-start-2'}`}>
+                                            <div className={`relative group w-[220px] sm:w-[280px] md:w-[400px] lg:w-[480px] aspect-square shrink-0 mx-auto overflow-hidden bg-neutral-100 border border-black/5 shadow-xl transition-all duration-700 hover:shadow-2xl ${isEven ? 'md:col-start-1' : 'md:col-start-2'}`}>
                                                 <Link to={targetUrl} className="block w-full h-full relative">
                                                     <img
                                                         src={getFullImageUrl(product.image_url)}

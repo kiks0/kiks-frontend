@@ -715,7 +715,7 @@ const ProductDetail = () => {
                             willChange: 'transform',
                             WebkitTapHighlightColor: 'transparent',
                         }}
-                        className="relative w-full max-w-[360px] lg:sticky lg:top-40 aspect-[3/4] overflow-hidden bg-[#f9f9f9] border border-black/5 shadow-2xl group cursor-grab active:cursor-grabbing"
+                        className="relative w-full max-w-[360px] lg:sticky lg:top-40 aspect-square overflow-hidden bg-[#f9f9f9] border border-black/5 shadow-2xl group cursor-grab active:cursor-grabbing"
                     >
                         {displaySalePrice && (
                             <div className="absolute top-4 left-4 bg-black text-white text-[10px] md:text-[11px] font-bold px-3 py-1.5 tracking-widest uppercase z-20 shadow-md pointer-events-none">
@@ -1438,7 +1438,7 @@ const ProductDetail = () => {
                                         >
                                             <Link 
                                                 to={`/product/${item.slug || item.id}`} 
-                                                className="block relative aspect-[4/5] bg-[#f9f9f9] overflow-hidden mb-4 flex items-center justify-center p-5 rounded-none"
+                                                className="block relative aspect-square bg-[#f9f9f9] overflow-hidden mb-4 flex items-center justify-center p-5 rounded-none"
                                                 draggable={false}
                                             >
                                                 <img
@@ -1498,7 +1498,7 @@ const ProductDetail = () => {
                                         >
                                             <Link 
                                                 to={`/product/${item.slug || item.id}`} 
-                                                className="block relative aspect-[4/5] bg-[#f9f9f9] overflow-hidden mb-6 flex items-center justify-center p-8 transition-colors duration-500 hover:bg-[#f2f2f2]"
+                                                className="block relative aspect-square bg-[#f9f9f9] overflow-hidden mb-6 flex items-center justify-center p-8 transition-colors duration-500 hover:bg-[#f2f2f2]"
                                             >
                                                 <img
                                                     src={getFullImageUrl(item.image_url)}
