@@ -715,7 +715,7 @@ const ProductDetail = () => {
                             willChange: 'transform',
                             WebkitTapHighlightColor: 'transparent',
                         }}
-                        className="relative w-full max-w-[360px] lg:sticky lg:top-40 aspect-[3/4] overflow-hidden bg-[#f9f9f9] border border-black/5 shadow-2xl group cursor-grab active:cursor-grabbing"
+                        className="relative w-full max-w-[360px] lg:sticky lg:top-40 aspect-square overflow-hidden bg-[#f9f9f9] border border-black/5 shadow-2xl group cursor-grab active:cursor-grabbing"
                     >
                         {displaySalePrice && (
                             <div className="absolute top-4 left-4 bg-black text-white text-[10px] md:text-[11px] font-bold px-3 py-1.5 tracking-widest uppercase z-20 shadow-md pointer-events-none">
@@ -788,7 +788,7 @@ const ProductDetail = () => {
                                 {activeImage?.toLowerCase().match(/\.(mp4|webm|mov|ogg)$/) ? (
                                     <video
                                         src={getFullImageUrl(activeImage)}
-                                        className="w-full h-full object-contain opacity-90 absolute inset-0 pointer-events-none"
+                                        className="w-full h-full object-cover opacity-90 absolute inset-0 pointer-events-none"
                                         autoPlay
                                         muted
                                         loop
@@ -802,7 +802,7 @@ const ProductDetail = () => {
                                         loading="eager"
                                         fetchPriority="high"
                                         style={{ contain: 'paint', transform: 'translateZ(0)' }}
-                                        className="w-full h-full object-contain opacity-90 absolute inset-0 pointer-events-none select-none"
+                                        className="w-full h-full object-cover opacity-90 absolute inset-0 pointer-events-none select-none"
                                     />
                                 )}
                             </motion.div>
@@ -837,7 +837,7 @@ const ProductDetail = () => {
                             >
                                 {img?.toLowerCase().match(/\.(mp4|webm|mov|ogg)$/) ? (
                                     <div className="w-full h-full bg-zinc-800 flex items-center justify-center relative">
-                                        <video src={getFullImageUrl(img)} className="w-full h-full object-contain opacity-40" muted />
+                                        <video src={getFullImageUrl(img)} className="w-full h-full object-cover opacity-40" muted />
                                         <div className="absolute inset-0 flex items-center justify-center">
                                             <Zap size={14} className="text-gold-500 opacity-80" />
                                         </div>
@@ -849,7 +849,7 @@ const ProductDetail = () => {
                                         decoding="async"
                                         loading="eager"
                                         style={{ contain: 'paint' }}
-                                        className="w-full h-full object-contain"
+                                        className="w-full h-full object-cover"
                                     />
                                 )}
                             </button>
@@ -1438,7 +1438,7 @@ const ProductDetail = () => {
                                         >
                                             <Link 
                                                 to={`/product/${item.slug || item.id}`} 
-                                                className="block relative aspect-[4/5] bg-[#f9f9f9] overflow-hidden mb-4 flex items-center justify-center p-5 rounded-none"
+                                                className="block relative aspect-square bg-[#f9f9f9] overflow-hidden mb-4 flex items-center justify-center p-5 rounded-none"
                                                 draggable={false}
                                             >
                                                 <img
@@ -1498,7 +1498,7 @@ const ProductDetail = () => {
                                         >
                                             <Link 
                                                 to={`/product/${item.slug || item.id}`} 
-                                                className="block relative aspect-[4/5] bg-[#f9f9f9] overflow-hidden mb-6 flex items-center justify-center p-8 transition-colors duration-500 hover:bg-[#f2f2f2]"
+                                                className="block relative aspect-square bg-[#f9f9f9] overflow-hidden mb-6 flex items-center justify-center p-8 transition-colors duration-500 hover:bg-[#f2f2f2]"
                                             >
                                                 <img
                                                     src={getFullImageUrl(item.image_url)}
