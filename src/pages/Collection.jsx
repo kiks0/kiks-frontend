@@ -325,7 +325,7 @@ const Collection = () => {
                                             src={getFullImageUrl(product.image_url)} 
                                             alt={product.name} 
                                             loading="lazy"
-                                            className="w-full h-full object-cover opacity-90 group-hover:scale-105 group-hover:opacity-100 transition-transform duration-700"
+                                            className="w-full h-full object-contain opacity-90 group-hover:scale-105 group-hover:opacity-100 transition-transform duration-700"
                                         />
                                         {product.sale_price && (
                                             <div className="absolute top-2 left-2 md:top-3 md:left-3 bg-black text-white text-[8px] md:text-[9px] font-bold px-2 py-1 tracking-widest uppercase z-10 shadow-sm">
@@ -437,7 +437,7 @@ const Collection = () => {
                                                     <img
                                                         src={getFullImageUrl(product.image_url)}
                                                         alt={product.name}
-                                                        className="w-full h-full object-cover object-center transition-transform duration-1000 group-hover:scale-105"
+                                                        className="w-full h-full object-contain object-center transition-transform duration-1000 group-hover:scale-105"
                                                         loading="lazy"
                                                         decoding="async"
                                                     />

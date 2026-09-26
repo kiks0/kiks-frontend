@@ -534,7 +534,7 @@ const Fragrance = () => {
                                                     <img
                                                         src={getFullImageUrl(product.image_url)}
                                                         alt={product.name}
-                                                        className="w-full h-full object-cover object-center transition-transform duration-1000 group-hover:scale-105"
+                                                        className="w-full h-full object-contain object-center transition-transform duration-1000 group-hover:scale-105"
                                                         loading="lazy"
                                                         decoding="async"
                                                     />

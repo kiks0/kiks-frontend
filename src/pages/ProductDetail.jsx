@@ -788,7 +788,7 @@ const ProductDetail = () => {
                                 {activeImage?.toLowerCase().match(/\.(mp4|webm|mov|ogg)$/) ? (
                                     <video
                                         src={getFullImageUrl(activeImage)}
-                                        className="w-full h-full object-cover opacity-90 absolute inset-0 pointer-events-none"
+                                        className="w-full h-full object-contain opacity-90 absolute inset-0 pointer-events-none"
                                         autoPlay
                                         muted
                                         loop
@@ -802,7 +802,7 @@ const ProductDetail = () => {
                                         loading="eager"
                                         fetchPriority="high"
                                         style={{ contain: 'paint', transform: 'translateZ(0)' }}
-                                        className="w-full h-full object-cover opacity-90 absolute inset-0 pointer-events-none select-none"
+                                        className="w-full h-full object-contain opacity-90 absolute inset-0 pointer-events-none select-none"
                                     />
                                 )}
                             </motion.div>
@@ -837,7 +837,7 @@ const ProductDetail = () => {
                             >
                                 {img?.toLowerCase().match(/\.(mp4|webm|mov|ogg)$/) ? (
                                     <div className="w-full h-full bg-zinc-800 flex items-center justify-center relative">
-                                        <video src={getFullImageUrl(img)} className="w-full h-full object-cover opacity-40" muted />
+                                        <video src={getFullImageUrl(img)} className="w-full h-full object-contain opacity-40" muted />
                                         <div className="absolute inset-0 flex items-center justify-center">
                                             <Zap size={14} className="text-gold-500 opacity-80" />
                                         </div>
@@ -849,7 +849,7 @@ const ProductDetail = () => {
                                         decoding="async"
                                         loading="eager"
                                         style={{ contain: 'paint' }}
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-contain"
                                     />
                                 )}
                             </button>
