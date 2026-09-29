@@ -182,7 +182,7 @@
 
   /* Headings H1, H2 - Chanel Corpo Light */
   h1, h2 {
-    color: #000000 !important;
+    color: #000000;
     font-weight: 300 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.25em !important;
@@ -191,7 +191,7 @@
 
   /* Headings H3-H6 - Chanel Corpo Regular */
   h3, h4, h5, h6 {
-    color: #000000 !important;
+    color: #000000;
     font-weight: 400 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.15em !important;

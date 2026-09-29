@@ -255,17 +255,17 @@ const Collection = () => {
                         </div>
 
                         {/* Bottom Minimalist Content */}
-                        <div className="absolute inset-0 z-10 flex flex-col items-center justify-end text-center px-4 pb-32 sm:pb-36 md:pb-40 lg:pb-48 pointer-events-none">
+                        <div className="absolute inset-0 z-10 flex flex-col items-center justify-end text-center px-4 pb-36 sm:pb-40 md:pb-24 lg:pb-24 pointer-events-none">
                             <motion.div
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 1.2, ease: "easeOut" }}
                                 className="flex flex-col items-center pointer-events-auto max-w-6xl mx-auto"
                             >
-                                <div className="mb-7 md:mb-9 px-4">
-                                    <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-[5rem] font-serif font-light tracking-[0.15em] md:tracking-[0.2em] text-white/85 uppercase leading-tight drop-shadow-[0_2px_15px_rgba(255,255,255,0.25)]">
-                                        {collection?.name} <br className="md:hidden" />
-                                        <span className="text-[10px] sm:text-xs md:text-sm block mt-3 md:mt-4 tracking-[0.4em] md:tracking-[0.5em] text-white/80 font-sans uppercase font-semibold">
+                                <div className="mb-6 md:mb-9 px-2 w-full max-w-[95vw] overflow-hidden">
+                                    <h1 className="text-[1.75rem] sm:text-3xl md:text-5xl lg:text-[4.5rem] font-serif font-light tracking-[0.08em] sm:tracking-[0.1em] md:tracking-[0.15em] text-white uppercase leading-tight drop-shadow-[0_2px_15px_rgba(0,0,0,0.5)] break-words w-full">
+                                        {collection?.name}
+                                        <span className="text-[9px] sm:text-[10px] md:text-xs block mt-2 sm:mt-3 md:mt-4 tracking-[0.2em] sm:tracking-[0.3em] md:tracking-[0.4em] text-white opacity-90 font-sans uppercase font-semibold drop-shadow-[0_1px_5px_rgba(0,0,0,0.5)]">
                                             {collection?.subtitle !== undefined && collection?.subtitle !== null ? collection.subtitle : 'Collection'}
                                         </span>
                                     </h1>
@@ -274,7 +274,7 @@ const Collection = () => {
                                 {(collection?.button_text !== undefined && collection?.button_text !== null ? collection.button_text : t('collection.open_vault')) && (
                                     <button 
                                         onClick={handleOpenProducts}
-                                        className="backdrop-blur-md bg-white/10 border border-white/20 text-white px-10 md:px-14 py-3.5 md:py-4 text-[11px] tracking-[0.3em] uppercase font-bold hover:bg-white hover:text-black active:scale-95 transition-all duration-500 shadow-xl block mx-auto"
+                                        className="backdrop-blur-md bg-white/10 border border-white/30 text-white px-7 sm:px-10 md:px-14 py-3 md:py-4 text-[10px] sm:text-[11px] md:text-xs tracking-[0.2em] md:tracking-[0.3em] uppercase font-bold hover:bg-white hover:text-black active:scale-95 transition-all duration-500 shadow-[0_4px_20px_rgba(0,0,0,0.3)] block mx-auto max-w-[90vw] break-words"
                                     >
                                         {collection?.button_text !== undefined && collection?.button_text !== null ? collection.button_text : t('collection.open_vault')}
                                     </button>
