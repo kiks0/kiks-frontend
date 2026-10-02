@@ -116,7 +116,7 @@ function App() {
   return (
     <Router>
       <ScrollToTopReset />
-      <div className="flex flex-col min-h-screen bg-white overflow-x-hidden">
+      <div className="flex flex-col min-h-screen bg-white overflow-x-clip">
         <Loader />
         <CookieBanner />
         <PromoPopup />

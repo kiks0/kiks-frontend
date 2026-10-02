@@ -107,6 +107,26 @@ const Fragrance = () => {
     const [noteSearchQuery, setNoteSearchQuery] = useState('');
     const [notesExpanded, setNotesExpanded] = useState(false);
 
+    // Track scroll direction to sync sticky bar position with Navbar height changes
+    const [isScrolledDown, setIsScrolledDown] = useState(false);
+    const lastScrollY = React.useRef(0);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+            if (currentScrollY < 50) {
+                setIsScrolledDown(false);
+            } else if (currentScrollY > lastScrollY.current) {
+                setIsScrolledDown(true); // Scrolling down -> Navbar shrinks
+            } else {
+                setIsScrolledDown(false); // Scrolling up -> Navbar expands
+            }
+            lastScrollY.current = currentScrollY;
+        };
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     const FILTER_OPTIONS = {
         gender: ['Men', 'Women', 'Unisex'],
         family: ['Woody', 'Floral', 'Amber', 'Fresh', 'Citrus', 'Gourmand', 'Aquatic'],
@@ -452,6 +472,26 @@ const Fragrance = () => {
 
     const sidebarContentJsx = (
         <>
+            <div className="border-b border-black/10 py-5">
+                <div className="w-full flex items-center justify-between mb-4">
+                    <span className="text-[11px] tracking-[0.2em] font-bold uppercase text-black">
+                        Sort By
+                    </span>
+                </div>
+                <select
+                    value={searchParams.get('sort') || 'new-arrivals'}
+                    onChange={(e) => {
+                        const newParams = new URLSearchParams(searchParams);
+                        newParams.set('sort', e.target.value);
+                        setSearchParams(newParams);
+                    }}
+                    className="w-full p-3 text-[10px] tracking-[0.1em] border border-black/10 focus:outline-none focus:border-black/40 bg-neutral-50 uppercase font-bold text-black/80 cursor-pointer"
+                >
+                    <option value="new-arrivals">New Arrivals</option>
+                    <option value="price-low-to-high">Price: Low to High</option>
+                    <option value="price-high-to-low">Price: High to Low</option>
+                </select>
+            </div>
             <PriceFilter searchParams={searchParams} setSearchParams={setSearchParams} />
             {renderFilterGroup('Gender', 'gender')}
             {renderFilterGroup('Fragrance Family', 'family')}
@@ -466,7 +506,7 @@ const Fragrance = () => {
     return (
         <div className="min-h-screen bg-[#faf8f9] text-black pt-[80px] md:pt-[140px] pb-12">
             {/* Top Navigation & Status Bar */}
-            <div className="max-w-[1600px] mx-auto px-4 md:px-8 pt-4 pb-4 flex justify-between items-center sticky top-[56px] md:top-[60px] bg-[#faf8f9]/90 backdrop-blur-md z-40 transition-all">
+            <div className={`max-w-[1600px] mx-auto px-4 md:px-8 pt-4 pb-4 flex justify-between items-center sticky bg-[#faf8f9]/90 backdrop-blur-md z-40 transition-all duration-500 ease-in-out top-[56px] ${isScrolledDown ? 'md:top-[60px]' : 'md:top-[120px]'}`}>
                 <Link
                     to="/"
                     className="inline-flex items-center text-[10px] sm:text-xs tracking-[0.25em] uppercase font-bold text-black/60 hover:text-black transition-colors"
@@ -476,9 +516,27 @@ const Fragrance = () => {
                     <span className="sm:hidden">Home</span>
                 </Link>
                 <div className="flex items-center space-x-4 sm:space-x-8">
-                    <span className="text-[9px] sm:text-[10px] tracking-[0.2em] uppercase font-bold text-black/60">
+                    <span className="text-[9px] sm:text-[10px] tracking-[0.2em] uppercase font-bold text-black/60 hidden md:inline">
                         {loading ? 'Updating...' : `${totalResults} Fragrance${totalResults !== 1 ? 's' : ''}`}
                     </span>
+                    
+                    <div className="hidden sm:flex items-center space-x-0">
+                        <span className="text-[9px] sm:text-[10px] tracking-[0.2em] uppercase font-bold text-black/40">Sort By:</span>
+                        <select
+                            value={searchParams.get('sort') || 'new-arrivals'}
+                            onChange={(e) => {
+                                const newParams = new URLSearchParams(searchParams);
+                                newParams.set('sort', e.target.value);
+                                setSearchParams(newParams);
+                            }}
+                            className="text-[9px] sm:text-[10px] tracking-[0.2em] uppercase font-bold text-black bg-transparent border-none focus:outline-none cursor-pointer"
+                        >
+                            <option value="new-arrivals">New Arrivals</option>
+                            <option value="price-low-to-high">Price: Low to High</option>
+                            <option value="price-high-to-low">Price: High to Low</option>
+                        </select>
+                    </div>
+
                     <button 
                         onClick={() => setIsFilterDrawerOpen(true)} 
                         className="flex items-center text-[10px] tracking-[0.2em] uppercase font-bold text-black border border-black/20 px-4 py-1.5 hover:bg-black hover:text-white transition-colors"
@@ -572,7 +630,7 @@ const Fragrance = () => {
                                                 </div>
 
                                                 <Link to={targetUrl} className="block mb-2 md:mb-4">
-                                                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-light tracking-[0.14em] uppercase hover:text-black/70 transition-colors line-clamp-1">
+                                                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-light tracking-[0.14em] uppercase hover:text-black/70 transition-colors">
                                                         {product.name}
                                                     </h2>
                                                 </Link>
