@@ -376,7 +376,8 @@ const Admin = () => {
     seasons: [],
     top_notes_array: [],
     heart_notes_array: [],
-    base_notes_array: []
+    base_notes_array: [],
+    is_active: true
   });
   const [blogFormData, setBlogFormData] = useState({ title: '', slug: '', content: '', image_url: '', keywords: '', author: 'Kiks Artisan', related_link: '', showcase_images: [] });
   const [promoFormData, setPromoFormData] = useState({
@@ -598,7 +599,7 @@ const Admin = () => {
     try {
       const [colRes, prodRes] = await Promise.all([
         fetch(`${API_URL}/api/collections`),
-        fetch(`${API_URL}/api/products`)
+        fetch(`${API_URL}/api/products?admin=true`)
       ]);
       if (colRes.ok) setCollections(await colRes.json());
       if (prodRes.ok) setProducts(await prodRes.json());
@@ -614,7 +615,7 @@ const Admin = () => {
     try {
       const [anRes, prodRes] = await Promise.all([
         fetch(`${API_URL}/api/orders/analytics`, { headers: getAdminHeaders() }),
-        fetch(`${API_URL}/api/products`)
+        fetch(`${API_URL}/api/products?admin=true`)
       ]);
       if (anRes.ok) setAnalytics(await anRes.json());
       if (prodRes.ok) setProducts(await prodRes.json());
@@ -693,7 +694,7 @@ const Admin = () => {
   const fetchProductsData = async () => {
     setTabLoading('products', true);
     try {
-      const res = await fetch(`${API_URL}/api/products`);
+      const res = await fetch(`${API_URL}/api/products?admin=true`);
       if (res.ok) setProducts(await res.json());
     } catch (e) { console.error("Products fetch failed", e); }
     finally { setTabLoading('products', false); }
@@ -2187,7 +2188,8 @@ const Admin = () => {
         seasons: typeof item.seasons === 'string' ? JSON.parse(item.seasons) : (item.seasons || []),
         top_notes_array: typeof item.top_notes_array === 'string' ? JSON.parse(item.top_notes_array) : (item.top_notes_array || []),
         heart_notes_array: typeof item.heart_notes_array === 'string' ? JSON.parse(item.heart_notes_array) : (item.heart_notes_array || []),
-        base_notes_array: typeof item.base_notes_array === 'string' ? JSON.parse(item.base_notes_array) : (item.base_notes_array || [])
+        base_notes_array: typeof item.base_notes_array === 'string' ? JSON.parse(item.base_notes_array) : (item.base_notes_array || []),
+        is_active: item.is_active !== false
       });
     } else if (type === 'blogs') {
       setBlogFormData({
@@ -2234,6 +2236,25 @@ const Admin = () => {
       showErrorToast('Deletion failed.');
     }
   };
+
+  const handleToggleProductActive = async (id, currentActiveState) => {
+    try {
+      const res = await fetch(`${API_URL}/api/products/${id}/toggle-active`, {
+        method: 'PATCH',
+        headers: getAdminHeaders(),
+        body: JSON.stringify({ is_active: !currentActiveState })
+      });
+      if (res.ok) {
+        showSuccessToast('Product visibility updated.');
+        fetchData();
+      } else {
+        showErrorToast('Failed to update product visibility.');
+      }
+    } catch (error) {
+      showErrorToast('Network error.');
+    }
+  };
+
 
   const handleUpdateVariantStock = async (product, variantIndex, newStock) => {
     if (isNaN(newStock)) return;
@@ -5611,6 +5632,20 @@ const Admin = () => {
                           <input required className={inputClasses} value={prodFormData.slug} onChange={e => setProdFormData({ ...prodFormData, slug: e.target.value })} />
                         </div>
                         <div className="md:col-span-2">
+                          <label className="flex items-center gap-3 cursor-pointer p-4 border border-black/10 bg-neutral-50 hover:bg-neutral-100 transition-colors">
+                            <input 
+                              type="checkbox" 
+                              checked={prodFormData.is_active} 
+                              onChange={e => setProdFormData({ ...prodFormData, is_active: e.target.checked })}
+                              className="w-4 h-4 accent-black" 
+                            />
+                            <div>
+                              <span className="text-[10px] font-black uppercase tracking-widest block text-black">Product is Active</span>
+                              <span className="text-[9px] uppercase tracking-widest text-black/40">If unchecked, the product will be hidden from the storefront (Draft Mode).</span>
+                            </div>
+                          </label>
+                        </div>
+                        <div className="md:col-span-2">
                           <label className={labelClasses}>Narrative Description</label>
                           <textarea required data-lenis-prevent="true" className={`${inputClasses} h-32 text-xs md:text-sm p-4`} value={prodFormData.description} onChange={e => setProdFormData({ ...prodFormData, description: e.target.value })} />
                         </div>
@@ -6001,6 +6036,12 @@ const Admin = () => {
                                 </div>
                               </div>
                               <div className="flex items-center gap-4 w-full sm:w-auto pt-4 sm:pt-0 border-t border-black/5 sm:border-none">
+                                {activeTab === 'products' && (
+                                  <button onClick={() => handleToggleProductActive(item.id, item.is_active !== false)} className={`flex-1 sm:flex-none border px-5 py-3 text-[9px] uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${item.is_active === false ? 'bg-black text-white hover:bg-neutral-800' : 'bg-neutral-50 border-black/10 text-black hover:bg-neutral-200'}`}>
+                                    {item.is_active === false ? <CheckCircle size={14} /> : <EyeOff size={14} />}
+                                    {item.is_active === false ? 'Activate' : 'Deactivate'}
+                                  </button>
+                                )}
                                 <button onClick={() => handleEdit(activeTab, item)} className="flex-1 sm:flex-none bg-neutral-50 border border-black/10 px-5 py-3 text-[9px] uppercase tracking-widest text-black hover:bg-black hover:text-white transition-all flex items-center justify-center gap-2">
                                   <Edit3 size={14} /> Edit
                                 </button>
