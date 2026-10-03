@@ -388,7 +388,8 @@ const Checkout = () => {
                                 product_id: i.id,
                                 product_name: i.name,
                                 quantity: i.quantity,
-                                price: i.sale_price || i.price,
+                                price: i.price,
+                                sale_price: i.sale_price,
                                 image_url: i.image_url
                             }))
                         })
@@ -1033,10 +1034,21 @@ const Checkout = () => {
                                             <img src={getFullImageUrl(item.image_url)} alt={item.name} className="w-full h-full object-cover" />
                                         </div>
                                         <div className="flex-grow flex flex-col justify-center">
-                                            <h4 className="text-[12px] font-serif tracking-widest uppercase text-black mb-2 font-medium">{item.name}</h4>
+                                            <h4 className="text-[12px] font-serif tracking-widest uppercase text-black mb-2 font-medium">
+                                                {item.name} {item.size ? `- ${item.size}` : '- 100ML'}
+                                            </h4>
                                             <p className="text-[9px] tracking-[0.4em] text-black uppercase font-semibold">Qty {item.quantity}</p>
                                             <div className="flex items-center justify-between mt-2">
-                                                <span className="text-[11px] font-semibold tracking-widest text-black font-sans">{item.price}</span>
+                                                <span className="text-[11px] font-semibold tracking-widest text-black font-sans flex items-center gap-2">
+                                                    {item.sale_price ? (
+                                                        <>
+                                                            <span className="line-through text-black/40">{formatCurrency(parseInt((item.price || "0").toString().replace(/[^0-9]/g, '')) || 0, activeCurrency, rates, symbols)}</span>
+                                                            <span>{formatCurrency(parseInt((item.sale_price || item.price || "0").toString().replace(/[^0-9]/g, '')) || 0, activeCurrency, rates, symbols)}</span>
+                                                        </>
+                                                    ) : (
+                                                        <span>{formatCurrency(parseInt((item.price || "0").toString().replace(/[^0-9]/g, '')) || 0, activeCurrency, rates, symbols)}</span>
+                                                    )}
+                                                </span>
                                                 {item.isOOS && (
                                                     <span className="text-[8px] text-red-500 font-black tracking-widest animate-pulse">UNAVAILABLE</span>
                                                 )}
@@ -1098,6 +1110,24 @@ const Checkout = () => {
                             </div>
 
                             <div className="space-y-6 pt-10">
+                                {(() => {
+                                    const mrpTotal = items.reduce((acc, item) => acc + ((parseInt((item?.price || "0").toString().replace(/[^0-9]/g, '')) || 0) * (item.quantity || 1)), 0);
+                                    const itemDiscount = mrpTotal - subtotal;
+                                    return (
+                                        <>
+                                            <div className="flex justify-between items-center text-black/60">
+                                                <span className="text-[10px] tracking-[0.3em] uppercase">MRP Total</span>
+                                                <span className="text-[11px] font-semibold tracking-widest">{formatCurrency(mrpTotal, activeCurrency, rates, symbols)}</span>
+                                            </div>
+                                            {itemDiscount > 0 && (
+                                                <div className="flex justify-between items-center text-black">
+                                                    <span className="text-[10px] tracking-[0.3em] uppercase">Discount</span>
+                                                    <span className="text-[11px] font-semibold tracking-widest text-green-600">-{formatCurrency(itemDiscount, activeCurrency, rates, symbols)}</span>
+                                                </div>
+                                            )}
+                                        </>
+                                    );
+                                })()}
                                 <div className="flex justify-between items-center text-black">
                                     <span className="text-[10px] tracking-[0.3em] uppercase">Order Subtotal</span>
                                     <span className="text-[12px] font-semibold tracking-widest">{formatCurrency(subtotal, activeCurrency, rates, symbols)}</span>

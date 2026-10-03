@@ -84,6 +84,7 @@ const Navbar = () => {
             product_name: i.name,
             quantity: i.quantity,
             price: i.price,
+            sale_price: i.sale_price,
             image_url: i.image_url,
             size: i.size
           }))
