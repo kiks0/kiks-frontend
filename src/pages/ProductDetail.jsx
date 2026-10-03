@@ -702,7 +702,7 @@ const ProductDetail = () => {
             <div className="container mx-auto flex flex-col lg:flex-row justify-center gap-10 md:gap-16 lg:gap-24 items-start max-w-5xl">
 
                 {/* Product Image Gallery */}
-                <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-end lg:pr-10">
+                <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-end lg:pr-10 lg:sticky lg:top-32 self-start">
 
                     {/* Main Image with Swipe Support - 60 FPS Native Touch Optimized */}
                     <motion.div
@@ -715,7 +715,7 @@ const ProductDetail = () => {
                             willChange: 'transform',
                             WebkitTapHighlightColor: 'transparent',
                         }}
-                        className="relative w-full max-w-[360px] lg:sticky lg:top-40 aspect-square overflow-hidden bg-[#f9f9f9] border border-black/5 shadow-2xl group cursor-grab active:cursor-grabbing"
+                        className="relative w-full max-w-[360px] aspect-square overflow-hidden bg-[#f9f9f9] border border-black/5 shadow-2xl group cursor-grab active:cursor-grabbing"
                     >
                         {displaySalePrice && (
                             <div className="absolute top-4 left-4 bg-black text-white text-[10px] md:text-[11px] font-bold px-3 py-1.5 tracking-widest uppercase z-20 shadow-md pointer-events-none">
@@ -826,7 +826,7 @@ const ProductDetail = () => {
                             touchAction: 'pan-x pan-y',
                             transform: 'translateZ(0)',
                         }}
-                        className="flex mt-6 space-x-4 overflow-x-auto hide-scrollbar w-full max-w-[360px] lg:sticky lg:top-[calc(10rem+480px)]"
+                        className="flex mt-6 space-x-4 overflow-x-auto hide-scrollbar w-full max-w-[360px]"
                     >
                         {images.map((img, idx) => (
                             <button
