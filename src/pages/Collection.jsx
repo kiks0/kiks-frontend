@@ -346,7 +346,7 @@ const Collection = () => {
                                     
                                     <div className="flex flex-col items-center px-2">
                                         <Link to={`/collection/${category}/${product.slug}`} className="block">
-                                            <h3 className="text-sm md:text-lg font-serif tracking-[0.1em] md:tracking-[0.2em] mb-3 md:mb-4 group-hover:text-gold-500 transition-colors uppercase text-center line-clamp-1">
+                                            <h3 className="text-sm md:text-lg font-serif tracking-[0.1em] md:tracking-[0.2em] mb-3 md:mb-4 group-hover:text-gold-500 transition-colors uppercase text-center">
                                                 {product.name}
                                             </h3>
                                         </Link>
@@ -475,7 +475,7 @@ const Collection = () => {
                                                 </div>
 
                                                 <Link to={targetUrl} className="block mb-4">
-                                                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-light tracking-[0.14em] uppercase hover:text-black/70 transition-colors line-clamp-1">
+                                                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-light tracking-[0.14em] uppercase hover:text-black/70 transition-colors">
                                                         {product.name}
                                                     </h2>
                                                 </Link>

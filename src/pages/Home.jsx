@@ -840,7 +840,7 @@ const Home = () => {
                     </div>
 
                     {/* Ultra-Smooth Gentle Horizontal Slider Track */}
-                    <div 
+                    <div
                         className="flex items-stretch overflow-x-auto gap-4 px-6 pb-2 hide-scrollbar w-full transform-gpu select-none"
                         style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x pan-y', transform: 'translateZ(0)' }}
                         data-lenis-prevent-touch="true"
@@ -906,11 +906,11 @@ const Home = () => {
                     {/* Elegant Luxury Progress Tracker */}
                     <div className="flex items-center justify-center mt-6 mb-2">
                         <div className="w-[120px] md:w-[200px] h-[1px] bg-black/10 relative overflow-hidden">
-                            <div 
-                                className="absolute top-0 left-0 h-full bg-black" 
-                                style={{ 
-                                    width: `${Math.max(10, mobileSliderProgress)}%`, 
-                                    transition: 'width 0.2s cubic-bezier(0.25, 1, 0.5, 1)' 
+                            <div
+                                className="absolute top-0 left-0 h-full bg-black"
+                                style={{
+                                    width: `${Math.max(10, mobileSliderProgress)}%`,
+                                    transition: 'width 0.2s cubic-bezier(0.25, 1, 0.5, 1)'
                                 }}
                             />
                         </div>
@@ -985,7 +985,7 @@ const Home = () => {
                             className="relative block aspect-[3/4] overflow-hidden border border-black/10 p-2 bg-black/[0.02]"
                         >
                             <img
-                                src="https://res.cloudinary.com/dprxiz6os/image/upload/v1779191419/araambh_1_mh8uqw.webp"
+                                src="https://res.cloudinary.com/dprxiz6os/image/upload/v1791258631/kiks_general/kiks-1791258628195-453497875_ltoizt.png"
                                 loading="lazy"
                                 width="600"
                                 height="800"
@@ -1046,7 +1046,7 @@ const Home = () => {
                             viewport={{ once: true, amount: 0.2 }}
                             className="pt-2 md:pt-4 flex justify-center lg:justify-start w-full"
                         >
-                            <Link to="/collection/arambh" className="inline-block group/link">
+                            <Link to="/collection/the-dynasty" className="inline-block group/link">
                                 <span className="text-[10px] tracking-[0.3em] text-black uppercase font-black border-b border-black/20 pb-1 group-hover/link:border-black transition-all duration-500">
                                     {t('home.explore_collection')}
                                 </span>
