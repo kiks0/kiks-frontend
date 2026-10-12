@@ -127,7 +127,7 @@ const AdminMultiSelect = ({ options, values = [], onChange, className = '', plac
     }
   };
 
-  const displaySelected = values.length > 0 
+  const displaySelected = values.length > 0
     ? values.join(', ')
     : placeholder;
 
@@ -163,9 +163,9 @@ const AdminMultiSelect = ({ options, values = [], onChange, className = '', plac
             className="absolute left-0 right-0 top-full mt-1 bg-white border border-black/10 shadow-2xl z-[200] flex flex-col text-left"
           >
             <div className="p-2 border-b border-black/10">
-              <input 
-                type="text" 
-                placeholder="Search or add new..." 
+              <input
+                type="text"
+                placeholder="Search or add new..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full bg-neutral-100 text-[10px] px-3 py-2 outline-none uppercase tracking-widest text-black"
@@ -221,7 +221,7 @@ const Admin = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-    const FILTER_OPTIONS = {
+  const FILTER_OPTIONS = {
     gender: [
       { value: 'Men', label: 'Men' },
       { value: 'Women', label: 'Women' },
@@ -442,6 +442,12 @@ const Admin = () => {
     subtext: 'Crafted in India, for the world.'
   });
 
+  // Prepaid UPI Discount Settings State
+  const [upiDiscountSettings, setUpiDiscountSettings] = useState({
+    enabled: true,
+    percent: 5
+  });
+
   useEffect(() => {
     const isAdmin = user && (
       user.email === 'kiksultraluxury@gmail.com' ||
@@ -481,9 +487,9 @@ const Admin = () => {
         fetchAdminsData();
         fetchDeletionRequests();
         break;
-      case 'wishlist': 
-        fetchUsersData(); 
-        fetchAdminsData(); 
+      case 'wishlist':
+        fetchUsersData();
+        fetchAdminsData();
         break;
       case 'waitlist': fetchWaitlistData(); break;
       case 'promo-codes': fetchPromoCodesData(); break;
@@ -932,14 +938,14 @@ const Admin = () => {
     if (!waitlistToDelete) return;
     try {
       const res = await fetch(`${API_URL}/api/waitlist/${waitlistToDelete.id}`, { method: 'DELETE', headers: getAdminHeaders() });
-      if (res.ok) { 
-        showSuccessToast('Prospect removed.'); 
-        fetchWaitlistData(); 
+      if (res.ok) {
+        showSuccessToast('Prospect removed.');
+        fetchWaitlistData();
       } else {
         showErrorToast('Failed to remove prospect.');
       }
-    } catch (e) { 
-      showErrorToast('Update failed.'); 
+    } catch (e) {
+      showErrorToast('Update failed.');
     }
     setWaitlistToDelete(null);
   };
@@ -993,7 +999,7 @@ const Admin = () => {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, type === 'selling' ? "Monthly Sales" : "Monthly Returns");
-    const monthName = new Date(targetYear, targetMonth).toLocaleString('en-IN', {  month: 'long' , timeZone: 'Asia/Kolkata' });
+    const monthName = new Date(targetYear, targetMonth).toLocaleString('en-IN', { month: 'long', timeZone: 'Asia/Kolkata' });
     const fileName = `KIKS_Monthly_${type === 'selling' ? 'Sales' : 'Returns'}_${monthName}_${targetYear}.xlsx`;
     XLSX.writeFile(wb, fileName);
     showSuccessToast(`${monthName} ${type === 'selling' ? 'Sales' : 'Returns'} Manifest exported to Excel.`);
@@ -1037,6 +1043,10 @@ const Admin = () => {
           text_1: data.interlude_text_1 || 'The Essence',
           text_2: data.interlude_text_2 || 'Uncompromising',
           subtext: data.interlude_subtext || 'Crafted in India, for the world.'
+        });
+        setUpiDiscountSettings({
+          enabled: data.upi_discount_enabled !== undefined ? Boolean(data.upi_discount_enabled) : true,
+          percent: data.upi_discount_percent !== undefined ? Number(data.upi_discount_percent) : 5
         });
       }
       if (showcaseRes.ok) setShowcaseProducts(await showcaseRes.json());
@@ -1154,7 +1164,9 @@ const Admin = () => {
           signature_product_link: signatureProduct.link,
           interlude_text_1: interludeTexts.text_1,
           interlude_text_2: interludeTexts.text_2,
-          interlude_subtext: interludeTexts.subtext
+          interlude_subtext: interludeTexts.subtext,
+          upi_discount_enabled: upiDiscountSettings.enabled,
+          upi_discount_percent: Number(upiDiscountSettings.percent) || 0
         })
       });
       if (res.ok) {
@@ -1164,6 +1176,28 @@ const Admin = () => {
       } else {
         const errData = await res.json();
         showErrorToast(errData.error || 'Failed to update homepage settings.');
+      }
+    } catch (e) { showErrorToast('Network error.'); }
+    finally { setIsProcessing(false); }
+  };
+
+  const handleSaveUpiDiscount = async () => {
+    setIsProcessing(true);
+    try {
+      const res = await fetch(`${API_URL}/api/settings`, {
+        method: 'PUT',
+        headers: { ...getAdminHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          upi_discount_enabled: upiDiscountSettings.enabled,
+          upi_discount_percent: Number(upiDiscountSettings.percent) || 0
+        })
+      });
+      if (res.ok) {
+        showSuccessToast('Prepaid UPI discount settings updated.');
+        fetchHomepageData();
+      } else {
+        const errData = await res.json();
+        showErrorToast(errData.error || 'Failed to update prepaid discount settings.');
       }
     } catch (e) { showErrorToast('Network error.'); }
     finally { setIsProcessing(false); }
@@ -2637,7 +2671,7 @@ const Admin = () => {
                       <AdminSmoothDropdown
                         options={Array.from({ length: 12 }).map((_, i) => ({
                           value: i,
-                          label: new Date(2024, i).toLocaleString('en-IN', {  month: 'long' , timeZone: 'Asia/Kolkata' })
+                          label: new Date(2024, i).toLocaleString('en-IN', { month: 'long', timeZone: 'Asia/Kolkata' })
                         }))}
                         value={reportMonth}
                         onChange={(val) => setReportMonth(val)}
@@ -3619,7 +3653,7 @@ const Admin = () => {
                                   </td>
                                   <td className="p-6">
                                     <p className="text-[11px] text-black/80 uppercase tracking-widest font-bold font-black">
-                                      {new Date(u.created_at).toLocaleDateString('en-IN', {  month: 'short', day: 'numeric', year: 'numeric' , timeZone: 'Asia/Kolkata' })}
+                                      {new Date(u.created_at).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'Asia/Kolkata' })}
                                     </p>
                                   </td>
                                   <td className="p-6 text-right">
@@ -3924,8 +3958,8 @@ const Admin = () => {
                         return Array.isArray(w) && w.length > 0;
                       });
                       return (
-                        <input 
-                          type="checkbox" 
+                        <input
+                          type="checkbox"
                           className="w-5 h-5 accent-black cursor-pointer"
                           checked={allWishlistUsers.length > 0 && allWishlistUsers.every(u => selectedWishlists.includes(u.id))}
                           onChange={(e) => {
@@ -3937,16 +3971,16 @@ const Admin = () => {
                     })()}
                     <span className="text-[10px] tracking-[0.2em] font-bold uppercase text-black/60 group-hover:text-black transition-colors">Select All Wishlists</span>
                   </label>
-                  
+
                   {selectedWishlists.length > 0 && (
                     <div className="flex items-center gap-3">
-                      <button 
+                      <button
                         onClick={handleBulkWishlistRecover}
                         className="flex items-center gap-2 px-5 py-3 bg-black text-white text-[10px] uppercase tracking-[0.2em] font-bold hover:bg-zinc-800 transition-all border border-black"
                       >
                         <Mail size={12} /> Send Mail ({selectedWishlists.length})
                       </button>
-                      <button 
+                      <button
                         onClick={() => setSelectedWishlists([])}
                         className="flex items-center gap-2 px-5 py-3 bg-transparent text-black border border-black/20 text-[10px] uppercase tracking-[0.2em] font-bold hover:border-black transition-all"
                       >
@@ -4279,8 +4313,8 @@ const Admin = () => {
                                   </td>
                                   <td className="p-6">
                                     <p className="text-black font-bold uppercase tracking-widest font-black">
-                                        {entry.product_name || 'Restock Request'}
-                                        {entry.variant_size && <span className="text-black/50 ml-2 normal-case font-medium tracking-normal text-xs">({entry.variant_size})</span>}
+                                      {entry.product_name || 'Restock Request'}
+                                      {entry.variant_size && <span className="text-black/50 ml-2 normal-case font-medium tracking-normal text-xs">({entry.variant_size})</span>}
                                     </p>
                                     <p className="text-[9px] text-black/40 font-serif">{entry.product_slug}</p>
                                   </td>
@@ -4734,6 +4768,97 @@ const Admin = () => {
               </div>
             ) : (
               <>
+                {/* PREPAID UPI / WALLETS DISCOUNT SYSTEM */}
+                <section className="bg-white border border-black/10 p-5 sm:p-8 md:p-12 shadow-sm relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-36 h-36 bg-emerald-500/5 blur-[80px] rounded-full pointer-events-none" />
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 border-b border-black/5 pb-6">
+                    <div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-[10px] tracking-[0.3em] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 uppercase font-bold">
+                          Prepaid Incentive System
+                        </span>
+                        {upiDiscountSettings.enabled ? (
+                          <span className="text-[9px] tracking-widest uppercase font-bold text-emerald-600 bg-emerald-50/50 px-2.5 py-0.5 border border-emerald-100 flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Active ({upiDiscountSettings.percent}% Instant OFF)
+                          </span>
+                        ) : (
+                          <span className="text-[9px] tracking-widest uppercase font-bold text-neutral-400 bg-neutral-100 px-2.5 py-0.5 border border-neutral-200">
+                            Inactive (Disabled)
+                          </span>
+                        )}
+                      </div>
+                      <h2 className="text-base md:text-xl font-serif tracking-[0.15em] uppercase text-black mt-2">
+                        Prepaid UPI & QR Instant Discount
+                      </h2>
+                      <p className="text-xs text-neutral-500 mt-1 max-w-2xl leading-relaxed">
+                        Reward customers for choosing instant prepaid UPI, Wallets, or QR. Minimizes RTO return risk. Applied exclusively when the buyer selects <strong>UPI / Wallets / QR</strong> at checkout. Credit/Debit Card and Partial COD orders remain at standard price.
+                      </p>
+                    </div>
+
+                    {/* Quick Toggle Button */}
+                    <div className="flex items-center gap-3 bg-neutral-50 border border-black/10 p-2.5 px-4 flex-shrink-0">
+                      <span className="text-[10px] tracking-widest uppercase font-bold text-black/60">
+                        Status:
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setUpiDiscountSettings(prev => ({ ...prev, enabled: !prev.enabled }))}
+                        className={`px-4 py-2 text-[9px] tracking-[0.2em] uppercase font-black transition-all ${upiDiscountSettings.enabled
+                            ? 'bg-emerald-600 text-white shadow-sm'
+                            : 'bg-neutral-200 text-neutral-600 hover:bg-neutral-300'
+                          }`}
+                      >
+                        {upiDiscountSettings.enabled ? 'Enabled' : 'Disabled'}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
+                    <div className="space-y-3">
+                      <label className="text-[10px] tracking-[0.3em] uppercase text-black font-bold block">
+                        Discount Percentage (%)
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="number"
+                          min="0"
+                          max="50"
+                          step="0.5"
+                          value={upiDiscountSettings.percent}
+                          onChange={(e) => setUpiDiscountSettings(prev => ({ ...prev, percent: e.target.value }))}
+                          placeholder="5"
+                          className="w-full bg-neutral-50 border border-black/10 px-4 py-3.5 text-sm font-semibold tracking-wider text-black focus:border-black outline-none transition-all"
+                        />
+                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-black/40"></span>
+                      </div>
+                      <p className="text-[10px] text-neutral-400 tracking-wider">
+                        Applied strictly on Order Total (Selling Price). E.g. 5% on ₹4,199 discounts ₹210, customer pays ₹3,989.
+                      </p>
+                    </div>
+
+                    <div>
+                      <button
+                        type="button"
+                        onClick={handleSaveUpiDiscount}
+                        disabled={isProcessing}
+                        className="w-full py-4 px-6 bg-black text-white text-[10px] tracking-[0.3em] uppercase font-bold hover:bg-neutral-800 transition-all flex items-center justify-center gap-3 shadow-md disabled:bg-neutral-300"
+                      >
+                        {isProcessing ? (
+                          <>
+                            <Loader2 className="animate-spin" size={14} />
+                            <span>Saving Changes...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Save size={14} />
+                            <span>Save Discount Settings</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </section>
+
                 {/* HERO BANNERS CAROUSEL MANAGEMENT */}
                 <section className="space-y-8 bg-neutral-50 p-5 sm:p-8 md:p-12 border border-black/5 relative overflow-hidden group">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-black/5 blur-[80px] rounded-full pointer-events-none" />
@@ -5622,56 +5747,56 @@ const Admin = () => {
                         <div className="md:col-span-2 mt-8 border-t border-black/10 pt-8">
                           <h4 className="text-[11px] tracking-[0.3em] uppercase text-black font-black mb-1">Advanced Fragrance Filters</h4>
                           <p className="text-[10px] text-black/40 mb-6 font-medium">Categorize this fragrance across structured facets to power the e-commerce filtering engine.</p>
-                          
+
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-neutral-50/50 p-6 border border-black/5">
                             <div>
                               <label className={labelClasses}>Target Gender</label>
-                              <AdminSmoothDropdown 
-                                options={[{value: '', label: 'Select Target...'}, ...FILTER_OPTIONS.gender]} 
-                                value={prodFormData.gender} 
+                              <AdminSmoothDropdown
+                                options={[{ value: '', label: 'Select Target...' }, ...FILTER_OPTIONS.gender]}
+                                value={prodFormData.gender}
                                 onChange={v => setProdFormData({ ...prodFormData, gender: v })}
                               />
                             </div>
                             <div>
                               <label className={labelClasses}>Fragrance Family</label>
-                              <AdminSmoothDropdown 
-                                options={[{value: '', label: 'Select Family...'}, ...FILTER_OPTIONS.fragrance_family]} 
-                                value={prodFormData.fragrance_family} 
+                              <AdminSmoothDropdown
+                                options={[{ value: '', label: 'Select Family...' }, ...FILTER_OPTIONS.fragrance_family]}
+                                value={prodFormData.fragrance_family}
                                 onChange={v => setProdFormData({ ...prodFormData, fragrance_family: v })}
                               />
                             </div>
                             <div>
                               <label className={labelClasses}>Intensity</label>
-                              <AdminSmoothDropdown 
-                                options={[{value: '', label: 'Select Intensity...'}, ...FILTER_OPTIONS.intensity]} 
-                                value={prodFormData.intensity} 
+                              <AdminSmoothDropdown
+                                options={[{ value: '', label: 'Select Intensity...' }, ...FILTER_OPTIONS.intensity]}
+                                value={prodFormData.intensity}
                                 onChange={v => setProdFormData({ ...prodFormData, intensity: v })}
                               />
                             </div>
-                            
+
                             <div>
                               <label className={labelClasses}>Scent Characteristics</label>
-                              <AdminMultiSelect 
-                                options={FILTER_OPTIONS.scent_characteristics} 
-                                values={prodFormData.scent_characteristics || []} 
+                              <AdminMultiSelect
+                                options={FILTER_OPTIONS.scent_characteristics}
+                                values={prodFormData.scent_characteristics || []}
                                 onChange={v => setProdFormData({ ...prodFormData, scent_characteristics: v })}
                                 placeholder="Select Characteristics..."
                               />
                             </div>
                             <div>
                               <label className={labelClasses}>Ideal Occasions</label>
-                              <AdminMultiSelect 
-                                options={FILTER_OPTIONS.occasions} 
-                                values={prodFormData.occasions || []} 
+                              <AdminMultiSelect
+                                options={FILTER_OPTIONS.occasions}
+                                values={prodFormData.occasions || []}
                                 onChange={v => setProdFormData({ ...prodFormData, occasions: v })}
                                 placeholder="Select Occasions..."
                               />
                             </div>
                             <div>
                               <label className={labelClasses}>Best Seasons</label>
-                              <AdminMultiSelect 
-                                options={FILTER_OPTIONS.seasons} 
-                                values={prodFormData.seasons || []} 
+                              <AdminMultiSelect
+                                options={FILTER_OPTIONS.seasons}
+                                values={prodFormData.seasons || []}
                                 onChange={v => setProdFormData({ ...prodFormData, seasons: v })}
                                 placeholder="Select Seasons..."
                               />
@@ -5682,27 +5807,27 @@ const Admin = () => {
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div>
                                   <label className={labelClasses}>Top Notes</label>
-                                  <AdminMultiSelect 
-                                    options={FILTER_OPTIONS.notes} 
-                                    values={prodFormData.top_notes_array || []} 
+                                  <AdminMultiSelect
+                                    options={FILTER_OPTIONS.notes}
+                                    values={prodFormData.top_notes_array || []}
                                     onChange={v => setProdFormData({ ...prodFormData, top_notes_array: v })}
                                     placeholder="Select Top Notes..."
                                   />
                                 </div>
                                 <div>
                                   <label className={labelClasses}>Heart Notes</label>
-                                  <AdminMultiSelect 
-                                    options={FILTER_OPTIONS.notes} 
-                                    values={prodFormData.heart_notes_array || []} 
+                                  <AdminMultiSelect
+                                    options={FILTER_OPTIONS.notes}
+                                    values={prodFormData.heart_notes_array || []}
                                     onChange={v => setProdFormData({ ...prodFormData, heart_notes_array: v })}
                                     placeholder="Select Heart Notes..."
                                   />
                                 </div>
                                 <div>
                                   <label className={labelClasses}>Base Notes</label>
-                                  <AdminMultiSelect 
-                                    options={FILTER_OPTIONS.notes} 
-                                    values={prodFormData.base_notes_array || []} 
+                                  <AdminMultiSelect
+                                    options={FILTER_OPTIONS.notes}
+                                    values={prodFormData.base_notes_array || []}
                                     onChange={v => setProdFormData({ ...prodFormData, base_notes_array: v })}
                                     placeholder="Select Base Notes..."
                                   />
@@ -6126,7 +6251,7 @@ const Admin = () => {
                                   Active Session
                                 </span>
                               </div>
-                              <div className="flex justify-between lg:block"><p className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2 font-bold">Last Synchronized</p><p className="text-[11px] text-black/60 tracking-wider">{new Date(cart.last_sync).toLocaleString('en-IN', {  dateStyle: 'medium', timeStyle: 'short' , timeZone: 'Asia/Kolkata' })}</p></div>
+                              <div className="flex justify-between lg:block"><p className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2 font-bold">Last Synchronized</p><p className="text-[11px] text-black/60 tracking-wider">{new Date(cart.last_sync).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Kolkata' })}</p></div>
                             </div>
                             <div className="mt-10 md:mt-12 space-y-8 md:space-y-10">
                               <div>
@@ -6140,8 +6265,8 @@ const Admin = () => {
                                   onClick={() => handleSendRecoveryEmail(cart.id)}
                                   disabled={isProcessing}
                                   className={`w-full flex items-center justify-center gap-2 px-3 py-2.5 text-[8px] uppercase tracking-widest transition-all font-bold shadow-lg disabled:opacity-50 ${cart.recovery_sent_count > 0
-                                      ? 'bg-gold-500 hover:bg-gold-600 text-white'
-                                      : 'bg-black hover:bg-neutral-800 text-white'
+                                    ? 'bg-gold-500 hover:bg-gold-600 text-white'
+                                    : 'bg-black hover:bg-neutral-800 text-white'
                                     }`}
                                 >
                                   {cart.recovery_sent_count > 0 ? (
@@ -6709,7 +6834,7 @@ const Admin = () => {
                               <span className="absolute bottom-1 left-1 bg-black/80 text-white text-[8px] font-black px-1.5 py-0.5 rounded uppercase">#{index + 1}</span>
                             </div>
                           ))}
-                          
+
                           {uploadingVariantGallery ? (
                             <div className="w-24 h-24 border-2 border-dashed border-black flex flex-col items-center justify-center p-2 bg-neutral-100 animate-pulse rounded shrink-0">
                               <Loader2 size={20} className="animate-spin text-black mb-1.5" />

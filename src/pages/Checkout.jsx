@@ -87,6 +87,23 @@ const Checkout = () => {
     const [isApplying, setIsApplying] = useState(false);
     const [successToast, setSuccessToast] = useState('');
 
+    // Dynamic UPI / Wallets Prepaid Discount State
+    const [upiSettings, setUpiSettings] = useState({ enabled: true, percent: 5 });
+
+    useEffect(() => {
+        fetch(`${API_URL}/api/settings`)
+            .then(res => res.json())
+            .then(data => {
+                if (data) {
+                    setUpiSettings({
+                        enabled: data.upi_discount_enabled !== undefined ? Boolean(data.upi_discount_enabled) : true,
+                        percent: data.upi_discount_percent !== undefined ? Number(data.upi_discount_percent) : 5
+                    });
+                }
+            })
+            .catch(() => {});
+    }, []);
+
     useEffect(() => {
         if (!isAuthenticated) {
             navigate('/login');
@@ -453,7 +470,14 @@ const Checkout = () => {
 
     const subtotal = calculateSubtotal();
     const shipping = 0;
-    const finalTotal = subtotal + shipping - discountAmount;
+
+    // UPI Instant Discount Calculations (Calculated directly on Selling Price Order Total, keeping MRP untouched)
+    const isUpiSelected = formData.paymentMethod === 'UPI / Razorpay (Prepaid)';
+    const isUpiDiscountActive = isUpiSelected && upiSettings.enabled && Number(upiSettings.percent) > 0;
+    const baseAmountForPrepaid = Math.max(0, subtotal + shipping - discountAmount);
+    const upiDiscountAmount = isUpiDiscountActive ? Math.round(baseAmountForPrepaid * (Number(upiSettings.percent) / 100)) : 0;
+
+    const finalTotal = Math.max(0, baseAmountForPrepaid - upiDiscountAmount);
 
     // Partial COD Calculations (30% online, 70% cod)
     const isPartialSelected = formData.paymentMethod.toLowerCase().includes('partial');
@@ -527,6 +551,59 @@ const Checkout = () => {
 
             let isPaymentHandled = false;
 
+            // Restrict Razorpay modal payment instruments so users cannot bypass chosen method
+            const isUpi = formData.paymentMethod === 'UPI / Razorpay (Prepaid)';
+            const isCard = formData.paymentMethod === 'Credit/Debit Card (Prepaid)';
+
+            const paymentRestrictions = isUpi ? {
+                method: {
+                    upi: true,
+                    wallet: true,
+                    card: false,
+                    netbanking: false
+                },
+                config: {
+                    display: {
+                        blocks: {
+                            upi_block: {
+                                name: "UPI, Wallets & QR",
+                                instruments: [
+                                    { method: "upi" },
+                                    { method: "wallet" }
+                                ]
+                            }
+                        },
+                        sequence: ["block.upi_block"],
+                        preferences: {
+                            show_default_blocks: false
+                        }
+                    }
+                }
+            } : isCard ? {
+                method: {
+                    card: true,
+                    upi: false,
+                    wallet: false,
+                    netbanking: false
+                },
+                config: {
+                    display: {
+                        blocks: {
+                            card_block: {
+                                name: "Credit / Debit Cards",
+                                instruments: [
+                                    { method: "card" }
+                                ]
+                            }
+                        },
+                        sequence: ["block.card_block"],
+                        preferences: {
+                            show_default_blocks: false
+                        }
+                    }
+                }
+            } : {};
+
             const options = {
                 key: key,
                 amount: rzpOrder.amount,
@@ -540,6 +617,7 @@ const Checkout = () => {
                     email: formData.email,
                     contact: formData.phone
                 },
+                ...paymentRestrictions,
                 handler: async function (response) {
                     isPaymentHandled = true;
                     try {
@@ -614,6 +692,7 @@ const Checkout = () => {
                 customer_phone: formData.phone,
                 shipping_address: `${formData.houseNo}, ${formData.area}, ${formData.landmark}, ${formData.city}, ${formData.state}, ${formData.country} - ${formData.pincode}`,
                 total_amount: finalTotal,
+                prepaid_discount: upiDiscountAmount,
                 amount_paid: isPartialSelected ? amountOnline : finalTotal,
                 amount_pending: isPartialSelected ? amountCOD : 0,
                 payment_method: formData.paymentMethod.includes('online') ? 'Razorpay (Online)' : formData.paymentMethod,
@@ -908,7 +987,11 @@ const Checkout = () => {
                                                 <div className="space-y-3">
                                                     {[
                                                         { id: 'Credit/Debit Card (Prepaid)', label: 'CREDIT / DEBIT CARD' },
-                                                        { id: 'UPI / Razorpay (Prepaid)', label: 'UPI / WALLETS / QR' },
+                                                        { 
+                                                            id: 'UPI / Razorpay (Prepaid)', 
+                                                            label: 'UPI / WALLETS / QR', 
+                                                            badge: (upiSettings.enabled && Number(upiSettings.percent) > 0) ? `SAVE ${upiSettings.percent}% INSTANT` : null 
+                                                        },
                                                         { id: 'Partial COD (30% Prepaid)', label: 'PARTIAL COD (30% NOW / 70% ON DELIVERY)' }
                                                     ].map((method) => (
                                                         <button
@@ -921,14 +1004,21 @@ const Checkout = () => {
                                                                     setFormData({ ...formData, paymentMethod: method.id });
                                                                 }
                                                             }}
-                                                            className={`w-full flex items-center p-4 border transition-all ${formData.paymentMethod === method.id ? 'border-black/40 bg-white' : 'border-black/5 hover:bg-neutral-100/50'}`}
+                                                            className={`w-full flex items-center justify-between p-4 border transition-all ${formData.paymentMethod === method.id ? 'border-black/40 bg-white shadow-sm' : 'border-black/5 hover:bg-neutral-100/50'}`}
                                                         >
-                                                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center mr-4 flex-shrink-0 ${formData.paymentMethod === method.id ? 'border-black' : 'border-black/20'}`}>
-                                                                {formData.paymentMethod === method.id && <div className="w-2 h-2 rounded-full bg-black" />}
+                                                            <div className="flex items-center min-w-0 pr-2">
+                                                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center mr-4 flex-shrink-0 ${formData.paymentMethod === method.id ? 'border-black' : 'border-black/20'}`}>
+                                                                    {formData.paymentMethod === method.id && <div className="w-2 h-2 rounded-full bg-black" />}
+                                                                </div>
+                                                                <span className={`text-[10px] md:text-[11px] tracking-[0.2em] font-semibold uppercase text-left text-black truncate`}>
+                                                                    {method.label}
+                                                                </span>
                                                             </div>
-                                                            <span className={`text-[10px] md:text-[11px] tracking-[0.2em] font-semibold uppercase text-left text-black`}>
-                                                                {method.label}
-                                                            </span>
+                                                            {method.badge && (
+                                                                <span className="flex-shrink-0 px-2 py-0.5 bg-emerald-700 text-white text-[8px] md:text-[9px] font-black tracking-widest uppercase shadow-sm">
+                                                                    {method.badge}
+                                                                </span>
+                                                            )}
                                                         </button>
                                                     ))}
                                                 </div>
@@ -1136,6 +1226,14 @@ const Checkout = () => {
                                     <div className="flex justify-between items-center text-black">
                                         <span className="text-[10px] tracking-[0.3em] uppercase">Promo Manifest</span>
                                         <span className="text-[12px] font-semibold tracking-widest">-{formatCurrency(discountAmount, activeCurrency, rates, symbols)}</span>
+                                    </div>
+                                )}
+                                {upiDiscountAmount > 0 && (
+                                    <div className="flex justify-between items-center text-black">
+                                        <span className="text-[10px] tracking-[0.3em] uppercase text-emerald-700 font-bold flex items-center gap-1.5">
+                                            Prepaid Discount ({upiSettings.percent}%)
+                                        </span>
+                                        <span className="text-[12px] font-bold tracking-widest text-emerald-700">-{formatCurrency(upiDiscountAmount, activeCurrency, rates, symbols)}</span>
                                     </div>
                                 )}
                                 {isPartialSelected && (
