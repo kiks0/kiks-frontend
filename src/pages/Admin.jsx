@@ -2868,6 +2868,12 @@ const Admin = () => {
                                   {formatCurrency(order.total_amount, activeCurrency, rates, symbols)}
                                 </span>
                                 <span className="text-[10px] tracking-[0.2em] uppercase text-black/60 font-bold font-black">{order.payment_method}</span>
+                                {Number(order.prepaid_discount) > 0 && (
+                                  <div className="mt-1 flex items-center gap-1.5 text-[9px] uppercase tracking-wider text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 border border-emerald-200 w-fit">
+                                    <span>Prepaid Disc:</span>
+                                    <span>-{formatCurrency(order.prepaid_discount, activeCurrency, rates, symbols)}</span>
+                                  </div>
+                                )}
 
                                 {(order.payment_method?.toLowerCase().includes('partial') || order.status === 'CANCELLED - PARTIAL COD') && (
                                   <div className="mt-3 pt-2 border-t border-black/5 space-y-1">
@@ -3072,6 +3078,12 @@ const Admin = () => {
                             <span>Payment Method</span>
                             <span className="text-black/60">{order.payment_method}</span>
                           </div>
+                          {Number(order.prepaid_discount) > 0 && (
+                            <div className="mt-1 flex justify-between items-center text-[8.5px] tracking-wider uppercase text-emerald-700 font-bold bg-emerald-50/70 px-2 py-1 border border-emerald-200">
+                              <span>Prepaid Discount</span>
+                              <span>-{formatCurrency(order.prepaid_discount, activeCurrency, rates, symbols)}</span>
+                            </div>
+                          )}
                           {order.razorpay_payment_id && (
                             <div className="mt-2 pt-3 border-t border-black/5 flex justify-between items-center">
                               <span className="text-[8px] tracking-[0.2em] uppercase text-black/40 font-black">Razorpay ID</span>
@@ -4769,53 +4781,56 @@ const Admin = () => {
             ) : (
               <>
                 {/* PREPAID UPI / WALLETS DISCOUNT SYSTEM */}
-                <section className="bg-white border border-black/10 p-5 sm:p-8 md:p-12 shadow-sm relative overflow-hidden">
+                <section className="bg-white border border-black/10 p-4 sm:p-8 md:p-12 shadow-sm relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-36 h-36 bg-emerald-500/5 blur-[80px] rounded-full pointer-events-none" />
-                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 border-b border-black/5 pb-6">
-                    <div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-[10px] tracking-[0.3em] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 uppercase font-bold">
+                  
+                  {/* Header & Badges */}
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-6 mb-6 sm:mb-8 border-b border-black/5 pb-5 sm:pb-6">
+                    <div className="space-y-2 max-w-2xl">
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                        <span className="text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.3em] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 sm:px-2.5 py-1 uppercase font-bold">
                           Prepaid Incentive System
                         </span>
                         {upiDiscountSettings.enabled ? (
-                          <span className="text-[9px] tracking-widest uppercase font-bold text-emerald-600 bg-emerald-50/50 px-2.5 py-0.5 border border-emerald-100 flex items-center gap-1.5">
+                          <span className="text-[8.5px] sm:text-[9px] tracking-wider sm:tracking-widest uppercase font-bold text-emerald-600 bg-emerald-50/50 px-2 sm:px-2.5 py-0.5 border border-emerald-100 flex items-center gap-1.5">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Active ({upiDiscountSettings.percent}% Instant OFF)
                           </span>
                         ) : (
-                          <span className="text-[9px] tracking-widest uppercase font-bold text-neutral-400 bg-neutral-100 px-2.5 py-0.5 border border-neutral-200">
+                          <span className="text-[8.5px] sm:text-[9px] tracking-wider sm:tracking-widest uppercase font-bold text-neutral-400 bg-neutral-100 px-2 sm:px-2.5 py-0.5 border border-neutral-200">
                             Inactive (Disabled)
                           </span>
                         )}
                       </div>
-                      <h2 className="text-base md:text-xl font-serif tracking-[0.15em] uppercase text-black mt-2">
+                      <h2 className="text-sm sm:text-base md:text-xl font-serif tracking-[0.1em] sm:tracking-[0.15em] uppercase text-black mt-2">
                         Prepaid UPI & QR Instant Discount
                       </h2>
-                      <p className="text-xs text-neutral-500 mt-1 max-w-2xl leading-relaxed">
+                      <p className="text-[11px] sm:text-xs text-neutral-500 leading-relaxed">
                         Reward customers for choosing instant prepaid UPI, Wallets, or QR. Minimizes RTO return risk. Applied exclusively when the buyer selects <strong>UPI / Wallets / QR</strong> at checkout. Credit/Debit Card and Partial COD orders remain at standard price.
                       </p>
                     </div>
 
                     {/* Quick Toggle Button */}
-                    <div className="flex items-center gap-3 bg-neutral-50 border border-black/10 p-2.5 px-4 flex-shrink-0">
-                      <span className="text-[10px] tracking-widest uppercase font-bold text-black/60">
+                    <div className="w-full sm:w-auto flex items-center justify-between sm:justify-start gap-3 bg-neutral-50 border border-black/10 p-2 sm:p-2.5 px-3.5 sm:px-4 flex-shrink-0">
+                      <span className="text-[9px] sm:text-[10px] tracking-widest uppercase font-bold text-black/60">
                         Status:
                       </span>
                       <button
                         type="button"
                         onClick={() => setUpiDiscountSettings(prev => ({ ...prev, enabled: !prev.enabled }))}
-                        className={`px-4 py-2 text-[9px] tracking-[0.2em] uppercase font-black transition-all ${upiDiscountSettings.enabled
+                        className={`px-3.5 sm:px-4 py-1.5 sm:py-2 text-[8.5px] sm:text-[9px] tracking-[0.15em] sm:tracking-[0.2em] uppercase font-black transition-all ${
+                          upiDiscountSettings.enabled
                             ? 'bg-emerald-600 text-white shadow-sm'
                             : 'bg-neutral-200 text-neutral-600 hover:bg-neutral-300'
-                          }`}
+                        }`}
                       >
                         {upiDiscountSettings.enabled ? 'Enabled' : 'Disabled'}
                       </button>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
-                    <div className="space-y-3">
-                      <label className="text-[10px] tracking-[0.3em] uppercase text-black font-bold block">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-8 items-end">
+                    <div className="space-y-2 sm:space-y-3">
+                      <label className="text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.3em] uppercase text-black font-bold block">
                         Discount Percentage (%)
                       </label>
                       <div className="relative">
@@ -4827,11 +4842,11 @@ const Admin = () => {
                           value={upiDiscountSettings.percent}
                           onChange={(e) => setUpiDiscountSettings(prev => ({ ...prev, percent: e.target.value }))}
                           placeholder="5"
-                          className="w-full bg-neutral-50 border border-black/10 px-4 py-3.5 text-sm font-semibold tracking-wider text-black focus:border-black outline-none transition-all"
+                          className="w-full bg-neutral-50 border border-black/10 px-3.5 sm:px-4 py-3 sm:py-3.5 text-base sm:text-sm font-semibold tracking-wider text-black focus:border-black outline-none transition-all pr-8"
                         />
-                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-black/40"></span>
+                        <span className="absolute right-3.5 sm:right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-black/40">%</span>
                       </div>
-                      <p className="text-[10px] text-neutral-400 tracking-wider">
+                      <p className="text-[9px] sm:text-[10px] text-neutral-400 tracking-wide sm:tracking-wider leading-relaxed">
                         Applied strictly on Order Total (Selling Price). E.g. 5% on ₹4,199 discounts ₹210, customer pays ₹3,989.
                       </p>
                     </div>
@@ -4841,7 +4856,7 @@ const Admin = () => {
                         type="button"
                         onClick={handleSaveUpiDiscount}
                         disabled={isProcessing}
-                        className="w-full py-4 px-6 bg-black text-white text-[10px] tracking-[0.3em] uppercase font-bold hover:bg-neutral-800 transition-all flex items-center justify-center gap-3 shadow-md disabled:bg-neutral-300"
+                        className="w-full py-3.5 sm:py-4 px-4 sm:px-6 bg-black text-white text-[10px] tracking-[0.2em] sm:tracking-[0.3em] uppercase font-bold hover:bg-neutral-800 transition-all flex items-center justify-center gap-2.5 sm:gap-3 shadow-md disabled:bg-neutral-300 min-h-[46px]"
                       >
                         {isProcessing ? (
                           <>

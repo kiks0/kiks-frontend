@@ -134,15 +134,28 @@ export const generateInvoice = async (orderInput) => {
 
             // Verify grand total against order total_amount
             const grandTotalNum = parseCurrency(order?.total_amount);
+            const prepaidDiscountNum = parseCurrency(order?.prepaid_discount);
+
+            const invoiceFoot = [
+                [{ content: 'Shipping & Insurance:', colSpan: 5, styles: { halign: 'right' } }, '0.00']
+            ];
+
+            if (prepaidDiscountNum > 0) {
+                invoiceFoot.push([
+                    { content: 'Prepaid Instant Discount:', colSpan: 5, styles: { halign: 'right', textColor: [16, 120, 60], fontStyle: 'bold' } },
+                    { content: `-${prepaidDiscountNum.toFixed(2)}`, styles: { textColor: [16, 120, 60], fontStyle: 'bold' } }
+                ]);
+            }
+
+            invoiceFoot.push([
+                [{ content: 'Grand Total:', colSpan: 5, styles: { halign: 'right', fillColor: [5, 5, 5], textColor: 255 } }, { content: grandTotalNum.toFixed(2), styles: { fillColor: [5, 5, 5], textColor: 255, fontStyle: 'bold' } }]
+            ]);
 
             autoTable(doc, {
                 startY: 100,
                 head: [tableColumn],
                 body: tableRows,
-                foot: [
-                    [{ content: 'Shipping & Insurance:', colSpan: 5, styles: { halign: 'right' } }, '0.00'],
-                    [{ content: 'Grand Total:', colSpan: 5, styles: { halign: 'right', fillColor: [5, 5, 5], textColor: 255 } }, { content: grandTotalNum.toFixed(2), styles: { fillColor: [5, 5, 5], textColor: 255, fontStyle: 'bold' } }]
-                ],
+                foot: invoiceFoot,
                 theme: 'grid',
                 headStyles: { fillColor: [5, 5, 5], textColor: [255, 255, 255], fontStyle: 'bold' },
                 styles: { fontSize: 9, cellPadding: 4, textColor: [40, 40, 40] },

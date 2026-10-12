@@ -982,9 +982,9 @@ const Checkout = () => {
                                     <h2 className="text-[10px] md:text-[11px] tracking-[0.6em] uppercase font-bold text-black mb-8 md:mb-16 border-b border-black/5 pb-6">Secure Payment</h2>
                                         <div className="bg-neutral-50/50 border border-black/5 overflow-hidden">
                                             {/* Payment Options Header */}
-                                            <div className="p-6 md:p-8 border-b border-black/5">
-                                                <p className="text-[9px] tracking-[0.4em] font-bold uppercase text-black mb-4">Select Payment Method</p>
-                                                <div className="space-y-3">
+                                            <div className="p-4 sm:p-6 md:p-8 border-b border-black/5">
+                                                <p className="text-[9px] tracking-[0.3em] sm:tracking-[0.4em] font-bold uppercase text-black mb-3 sm:mb-4">Select Payment Method</p>
+                                                <div className="space-y-2.5 sm:space-y-3">
                                                     {[
                                                         { id: 'Credit/Debit Card (Prepaid)', label: 'CREDIT / DEBIT CARD' },
                                                         { 
@@ -1004,28 +1004,37 @@ const Checkout = () => {
                                                                     setFormData({ ...formData, paymentMethod: method.id });
                                                                 }
                                                             }}
-                                                            className={`w-full flex items-center justify-between p-4 border transition-all ${formData.paymentMethod === method.id ? 'border-black/40 bg-white shadow-sm' : 'border-black/5 hover:bg-neutral-100/50'}`}
+                                                            className={`w-full flex items-start sm:items-center justify-between gap-3 p-3.5 sm:p-4 border transition-all text-left ${formData.paymentMethod === method.id ? 'border-black bg-white shadow-sm ring-1 ring-black/10' : 'border-black/10 hover:bg-neutral-100/50 bg-white/60'}`}
                                                         >
-                                                            <div className="flex items-center min-w-0 pr-2">
-                                                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center mr-4 flex-shrink-0 ${formData.paymentMethod === method.id ? 'border-black' : 'border-black/20'}`}>
+                                                            <div className="flex items-start sm:items-center min-w-0 flex-1 gap-3">
+                                                                <div className={`mt-0.5 sm:mt-0 w-4 h-4 rounded-full border flex items-center justify-center flex-shrink-0 ${formData.paymentMethod === method.id ? 'border-black' : 'border-black/25'}`}>
                                                                     {formData.paymentMethod === method.id && <div className="w-2 h-2 rounded-full bg-black" />}
                                                                 </div>
-                                                                <span className={`text-[10px] md:text-[11px] tracking-[0.2em] font-semibold uppercase text-left text-black truncate`}>
-                                                                    {method.label}
-                                                                </span>
+                                                                <div className="min-w-0 flex-1">
+                                                                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                                                                        <span className="text-[10px] sm:text-[11px] tracking-[0.14em] sm:tracking-[0.2em] font-semibold uppercase text-black leading-snug break-words">
+                                                                            {method.label}
+                                                                        </span>
+                                                                        {method.badge && (
+                                                                            <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 bg-emerald-700 text-white text-[7.5px] sm:text-[8.5px] font-black tracking-widest uppercase shadow-sm flex-shrink-0">
+                                                                                {method.badge}
+                                                                            </span>
+                                                                        )}
+                                                                    </div>
+                                                                    {method.id === 'UPI / Razorpay (Prepaid)' && upiSettings.enabled && Number(upiSettings.percent) > 0 && (
+                                                                        <p className="text-[8.5px] sm:text-[9px] text-emerald-800/80 tracking-wider font-medium mt-1 leading-normal">
+                                                                            Direct instant discount applied automatically to your order total.
+                                                                        </p>
+                                                                    )}
+                                                                </div>
                                                             </div>
-                                                            {method.badge && (
-                                                                <span className="flex-shrink-0 px-2 py-0.5 bg-emerald-700 text-white text-[8px] md:text-[9px] font-black tracking-widest uppercase shadow-sm">
-                                                                    {method.badge}
-                                                                </span>
-                                                            )}
                                                         </button>
                                                     ))}
                                                 </div>
                                             </div>
 
                                             {/* Summary & Action Area */}
-                                            <div className="p-6 md:p-8 space-y-8 bg-neutral-50/30">
+                                            <div className="p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8 bg-neutral-50/30">
                                                 <div className="flex items-start justify-between">
                                                     <div className="space-y-2">
                                                         <p className="text-[10px] tracking-[0.3em] font-bold uppercase text-black">Delivery summary</p>
@@ -1229,11 +1238,12 @@ const Checkout = () => {
                                     </div>
                                 )}
                                 {upiDiscountAmount > 0 && (
-                                    <div className="flex justify-between items-center text-black">
-                                        <span className="text-[10px] tracking-[0.3em] uppercase text-emerald-700 font-bold flex items-center gap-1.5">
+                                    <div className="flex justify-between items-center text-black py-1">
+                                        <span className="text-[9px] sm:text-[10px] tracking-[0.12em] sm:tracking-[0.3em] uppercase text-emerald-700 font-bold flex items-center gap-1.5">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse flex-shrink-0" />
                                             Prepaid Discount ({upiSettings.percent}%)
                                         </span>
-                                        <span className="text-[12px] font-bold tracking-widest text-emerald-700">-{formatCurrency(upiDiscountAmount, activeCurrency, rates, symbols)}</span>
+                                        <span className="text-[11px] sm:text-[12px] font-bold tracking-widest text-emerald-700">-{formatCurrency(upiDiscountAmount, activeCurrency, rates, symbols)}</span>
                                     </div>
                                 )}
                                 {isPartialSelected && (
@@ -1248,10 +1258,17 @@ const Checkout = () => {
                                         </div>
                                     </div>
                                 )}
-                                <div className="flex justify-between items-center pt-8 border-t border-black/20">
-                                    <span className="text-[11px] tracking-[0.5em] font-bold uppercase text-black">Total Order</span>
-                                    <span className="text-2xl font-serif tracking-[0.1em] text-black">{formatCurrency(finalTotal, activeCurrency, rates, symbols)}</span>
+                                <div className="flex justify-between items-center pt-6 sm:pt-8 border-t border-black/20">
+                                    <span className="text-[10px] sm:text-[11px] tracking-[0.3em] sm:tracking-[0.5em] font-bold uppercase text-black">Total Order</span>
+                                    <span className="text-xl sm:text-2xl font-serif tracking-[0.1em] text-black">{formatCurrency(finalTotal, activeCurrency, rates, symbols)}</span>
                                 </div>
+                                {upiDiscountAmount > 0 && (
+                                    <div className="text-right pt-1">
+                                        <span className="text-[8px] sm:text-[8.5px] tracking-wider uppercase text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 border border-emerald-200 inline-block">
+                                            You save {formatCurrency(upiDiscountAmount, activeCurrency, rates, symbols)} with Prepaid UPI
+                                        </span>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
