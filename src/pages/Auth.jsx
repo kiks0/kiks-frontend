@@ -13,6 +13,7 @@ import { applyLocationSettings } from '../utils/i18nUtils';
 
 import PageLoader from '../components/PageLoader';
 import AnimatedDropdown from '../components/AnimatedDropdown';
+import SEO from '../components/SEO';
 
 // Comprehensive Country data (Synchronized with PersonalDetails)
 const countryList = [
@@ -595,7 +596,7 @@ Marketing Consent: Granted
 
     return (
         <div className="bg-white min-h-screen text-black pt-16 md:pt-40 pb-12 md:pb-20 font-sans selection:bg-black/10 selection:text-black relative z-0">
-
+            <SEO title={isRegister ? "Create Account" : "Sign In"} noindex />
             {/* Ambient Background */}
             <div className="absolute top-[20%] right-[-10%] w-[800px] h-[800px] bg-black/5 blur-[150px] rounded-full pointer-events-none" />
             {/* Full Screen Branded Loader Gateway */}

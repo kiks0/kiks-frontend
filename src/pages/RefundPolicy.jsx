@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { RefreshCcw, ShieldCheck, Clock, CheckCircle, Package } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const RefundPolicy = () => {
     const sections = [
@@ -32,6 +33,11 @@ const RefundPolicy = () => {
 
     return (
         <div className="bg-white min-h-screen text-black pt-28 md:pt-48 pb-20 md:pb-32 px-5 md:px-12 font-sans selection:bg-black/10">
+            <SEO
+                title="Refund Policy"
+                description="KIKS Ultra Luxury refund and exchange policy. Clarifications on hygiene standards and defection replacement protocol."
+                keywords="Refund Policy, KIKS Fragrance Refunds, Perfume Store Policy"
+            />
             <div className="container mx-auto max-w-5xl">
                 <header className="text-center mb-16 md:mb-24 px-4">
                     <motion.div

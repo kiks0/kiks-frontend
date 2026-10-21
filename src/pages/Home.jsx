@@ -415,9 +415,10 @@ const Home = () => {
         <div className="bg-white min-h-screen text-black relative">
             <SEO
                 title="Premium Perfumes & Fragrances"
-                description="High quality perfumes handcrafted with rare ingredients. Explore our exclusive collection of Extrait de Parfum."
-                keywords="Luxury Perfume, Extrait de Parfum, KIKS, Premium Fragrance, Elite Collection"
+                description="Experience the essence of elegance with KIKS Ultra Luxury. Explore our exclusive collection of premium perfumes and fragrances."
+                keywords="Luxury Perfume, Premium Perfumes, KIKS Ultra Luxury, Premium Fragrance, Luxury Scents"
             />
+            <h1 className="sr-only">KIKS Ultra Luxury — Premium Perfumes & Fragrances</h1>
 
 
             {/* Desktop Hero Section (Only shown on Desktop - uses landscape photo/video) */}

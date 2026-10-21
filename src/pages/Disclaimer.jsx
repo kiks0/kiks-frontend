@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { AlertCircle, Shield, Info, Scale, CheckCircle } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const Disclaimer = () => {
     const sections = [
@@ -32,6 +33,11 @@ const Disclaimer = () => {
 
     return (
         <div className="bg-white min-h-screen text-black pt-28 md:pt-48 pb-20 md:pb-32 px-5 md:px-12 font-sans selection:bg-black/10">
+            <SEO
+                title="Disclaimer"
+                description="Legal disclaimer regarding product descriptions, color representation, and ingredient sensitivity for KIKS Ultra Luxury."
+                keywords="Disclaimer, KIKS Fragrance Legal, Product Accuracy"
+            />
             <div className="container mx-auto max-w-5xl">
                 <header className="text-center mb-16 md:mb-24 px-4">
                     <motion.div

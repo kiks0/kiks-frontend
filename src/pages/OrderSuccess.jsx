@@ -2,6 +2,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Globe, Mail, Sparkles as SparklesIcon, Diamond } from 'lucide-react';
 import { useEffect } from 'react';
+import SEO from '../components/SEO';
 
 const OrderSuccess = () => {
     const { orderId } = useParams();
@@ -18,6 +19,7 @@ const OrderSuccess = () => {
 
     return (
         <div className="bg-white min-h-screen text-black pt-48 md:pt-64 pb-40 px-6 font-sans relative overflow-hidden">
+            <SEO title="Order Confirmed" noindex />
             
             {/* Cinematic Golden Background Elements */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none overflow-hidden">

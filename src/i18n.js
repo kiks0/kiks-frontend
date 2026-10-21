@@ -73,7 +73,7 @@ const resources = {
         "teal_glass": "Encased in cool teal glass",
         "art_creation": "The Art of Fragrance",
         "symphony_notes": "A Symphony of Rare Notes.",
-        "creation_desc": "Distilled from the most precious ingredients on earth, every KIKS Ultra Luxury fragrance is meticulously curated to awaken the senses and capture raw emotion in a crystalline bottle.",
+        "creation_desc": "Discover KIKS Ultra Luxury perfumes, crafted for those who appreciate premium fragrances, long-lasting scents, and everyday elegance. Explore distinctive men’s, women’s, and unisex perfumes for every occasion.",
         "chapter_v": "Chapter V",
         "alchemy_scent": "The Alchemy of Scent",
         "tradition_modernity": "Where Tradition Meets Modernity.",

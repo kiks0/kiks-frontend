@@ -7,6 +7,7 @@ import PageLoader from '../components/PageLoader';
 import ActionLoader from '../components/ActionLoader';
 import { generateInvoice } from '../utils/generateInvoice';
 import { formatCurrency } from '../utils/currency';
+import SEO from '../components/SEO';
 
 const Orders = () => {
     const navigate = useNavigate();
@@ -90,6 +91,7 @@ const Orders = () => {
 
     return (
         <div className="bg-white min-h-screen text-black pt-20 md:pt-36 pb-10 md:pb-40 font-sans">
+            <SEO title="Your Orders" noindex />
             <ActionLoader isLoading={!!cancellingId} message="Preparing the Cancellation" />
             
             <div className="container mx-auto px-6 md:px-12 lg:px-24 max-w-[1400px]">

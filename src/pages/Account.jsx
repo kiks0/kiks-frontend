@@ -10,6 +10,7 @@ import { clearWishlist } from '../store/wishlistSlice';
 import { clearCart } from '../store/cartSlice';
 import { logClientActivity } from '../utils/clientLogger';
 import AnimatedDropdown from '../components/AnimatedDropdown';
+import SEO from '../components/SEO';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -178,7 +179,7 @@ const Account = () => {
   
   return (
     <div className="min-h-screen font-sans">
-      
+      <SEO title="My Account" noindex />
       {/* SECTION 1: DRAMATIC WELCOME (TAG BYPASS STRATEGY) */}
       <section className="bg-black pt-[180px] md:pt-[220px] pb-[100px] md:pb-[80px] flex flex-col items-center justify-center text-center px-6 w-full">
         <div className="flex flex-col items-center justify-center w-full">

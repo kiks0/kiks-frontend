@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { getFullImageUrl } from '../utils/url';
 import { formatCurrency } from '../utils/currency';
 import { logClientActivity } from '../utils/clientLogger';
+import SEO from '../components/SEO';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -91,6 +92,7 @@ const Wishlist = () => {
 
   return (
     <div className="bg-white min-h-screen text-black font-sans pt-20 md:pt-36 pb-24">
+      <SEO title="My Wishlist" noindex />
       <div className="container mx-auto px-6 md:px-12 lg:px-24 max-w-[1400px]">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-start mb-8 md:mb-12">
           <Link to="/account" className="inline-flex items-center text-[10px] tracking-[0.4em] text-black/30 hover:text-black transition-colors uppercase group">

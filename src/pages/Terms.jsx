@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Scale, BookOpen, ShieldCheck, CreditCard, Truck, RefreshCcw, AlertTriangle, Gavel, Mail } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const Terms = () => {
     const sections = [
@@ -52,6 +53,11 @@ const Terms = () => {
 
     return (
         <div className="bg-white min-h-screen text-black pt-28 md:pt-48 pb-20 md:pb-32 px-5 md:px-12 font-sans selection:bg-black/10">
+            <SEO
+                title="Terms & Conditions"
+                description="Terms & Conditions for purchasing luxury fragrances from KIKS Ultra Luxury. Learn about orders, shipping, payment security, and policies."
+                keywords="Terms and Conditions, KIKS Luxury Perfumes, Purchase Agreement"
+            />
             <div className="container mx-auto max-w-5xl">
                 
                 <header className="text-center mb-16 md:mb-24 px-4">

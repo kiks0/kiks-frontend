@@ -28,6 +28,7 @@ import {
     AlertCircle
 } from 'lucide-react';
 import { getFullImageUrl } from '../utils/url';
+import SEO from '../components/SEO';
 import { clearCart, setCart } from '../store/cartSlice';
 import { formatCurrency } from '../utils/currency';
 import ActionLoader from '../components/ActionLoader';
@@ -785,6 +786,7 @@ const Checkout = () => {
 
     return (
         <div className="bg-white min-h-screen text-black pt-24 md:pt-40 pb-24 px-6 md:px-10 lg:px-20 font-sans">
+            <SEO title="Secure Checkout" noindex />
             <ActionLoader isLoading={isLoading} message={isValidating ? "Validating Selection" : "Processing with your order"} />
             <div className="container mx-auto max-w-7xl">
 

@@ -10,6 +10,7 @@ import { toggleWishlistAndSync } from '../store/wishlistSlice';
 import { getFullImageUrl } from '../utils/url';
 import { formatCurrency } from '../utils/currency';
 import PageLoader from '../components/PageLoader';
+import SEO from '../components/SEO';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -505,6 +506,12 @@ const Fragrance = () => {
 
     return (
         <div className="min-h-screen bg-[#faf8f9] text-black pt-[80px] md:pt-[140px] pb-12">
+            <SEO
+                title="The Fragrance Collection | Premium Perfumes"
+                description="Explore the KIKS Ultra Luxury collection of premium perfumes and fragrances. Discover rare, long-lasting luxury scents."
+                keywords="Fragrance Collection, Luxury Perfume, Premium Perfumes, KIKS Fragrances"
+            />
+            <h1 className="sr-only">KIKS Ultra Luxury — Premium Perfumes & Fragrance Collection</h1>
             {/* Top Navigation & Status Bar */}
             <div className={`max-w-[1600px] mx-auto px-4 md:px-8 pt-4 pb-4 flex justify-between items-center sticky bg-[#faf8f9]/90 backdrop-blur-md z-40 transition-all duration-500 ease-in-out top-[56px] ${isScrolledDown ? 'md:top-[60px]' : 'md:top-[120px]'}`}>
                 <Link

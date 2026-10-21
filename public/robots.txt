@@ -4,5 +4,12 @@ Disallow: /admin
 Disallow: /checkout
 Disallow: /order-success/
 Disallow: /payment-cancelled
+Disallow: /account
+Disallow: /account/*
+Disallow: /wishlist
+Disallow: /orders
+Disallow: /addresses
+Disallow: /login
+Disallow: /register
 
 Sitemap: https://www.kiksultraluxury.com/sitemap.xml

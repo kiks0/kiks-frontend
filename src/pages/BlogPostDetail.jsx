@@ -92,13 +92,40 @@ const BlogPostDetail = () => {
         ? (typeof post.showcase_images === 'string' ? JSON.parse(post.showcase_images) : post.showcase_images)
         : [];
 
+    const cleanExcerpt = post.content 
+        ? post.content.replace(/<[^>]*>?/gm, '').replace(/[#*_`~]/g, '').trim().substring(0, 160) 
+        : '';
+
+    const blogSchema = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": post.title,
+        "image": post.image_url ? [getFullImageUrl(post.image_url)] : undefined,
+        "datePublished": post.created_at || new Date().toISOString(),
+        "author": {
+            "@type": "Person",
+            "name": post.author || "Kiks Artisan"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "KIKS Ultra Luxury",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.kiksultraluxury.com/logo-kiks.png"
+            }
+        },
+        "description": cleanExcerpt
+    };
+
     return (
         <div className="bg-[#fcfaf8] min-h-screen text-black pt-20 md:pt-32 pb-0 font-sans selection:bg-black/10 selection:text-black overflow-hidden">
             <SEO
                 title={post.title}
-                description={post.content.substring(0, 160)}
-                keywords={post.keywords || "Luxury Perfume, Fragrance Blog"}
+                description={cleanExcerpt}
+                keywords={post.keywords || "Luxury Perfume, Fragrance Blog, KIKS Journal"}
                 image={post.image_url}
+                type="article"
+                schema={blogSchema}
             />
             
             {/* Navigation Back */}

@@ -48,7 +48,7 @@ const CookieBanner = () => {
                                     Cookie Consent & Privacy
                                 </h4>
                                 <p className="text-[10px] md:text-[11px] tracking-wider text-black/70 leading-relaxed font-light max-w-lg mb-4">
-                                    Kiks utilizes refined artisanal cookies to enhance your digital odyssey and preserve your preferences within our vault.
+                                    We use cookies to improve your experience and remember your preferences.
                                 </p>
 
                                 <div className="flex flex-row items-center justify-start gap-6 pt-1">

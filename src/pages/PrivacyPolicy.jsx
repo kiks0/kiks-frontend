@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { ShieldCheck, Eye, Lock, Database, UserCheck } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const PrivacyPolicy = () => {
     const sections = [
@@ -32,6 +33,11 @@ const PrivacyPolicy = () => {
 
     return (
         <div className="bg-white min-h-screen text-black pt-28 md:pt-48 pb-20 md:pb-32 px-5 md:px-12 font-sans selection:bg-black/10">
+            <SEO
+                title="Privacy Policy"
+                description="Read the Privacy Policy of KIKS Ultra Luxury. Understand how we collect, protect, and use your personal data securely."
+                keywords="Privacy Policy, KIKS Data Protection, Luxury Fragrance Store Privacy"
+            />
             <div className="container mx-auto max-w-5xl">
                 <header className="text-center mb-16 md:mb-24 px-4">
                     <motion.div

@@ -644,7 +644,7 @@ const ProductDetail = () => {
             },
             "offers": {
                 "@type": "Offer",
-                "url": window.location.href,
+                "url": typeof window !== 'undefined' ? `${window.location.origin}${window.location.pathname}` : 'https://www.kiksultraluxury.com',
                 "priceCurrency": activeCurrency || "INR",
                 "price": cleanPrice(product.sale_price || product.price),
                 "availability": product.stock_count > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
@@ -683,14 +683,13 @@ const ProductDetail = () => {
 
     return (
         <div className="bg-white min-h-screen text-black pt-20 md:pt-36 pb-12 md:pb-32 px-6 lg:px-20 font-sans selection:bg-black/10 selection:text-black">
-            <script type="application/ld+json">
-                {generateProductSchema()}
-            </script>
             <SEO
                 title={product.name}
                 description={product.description?.substring(0, 160)}
                 keywords={`${product.name}, ${product.collection_name || ''}, Luxury Perfume, Extrait de Parfum`}
                 image={product.image_url}
+                type="product"
+                schema={generateProductSchema()}
             />
             <button
                 onClick={() => product?.collection_slug ? navigate(`/collection/${product.collection_slug}`) : navigate(-1)}
