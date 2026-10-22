@@ -982,7 +982,7 @@ const Home = () => {
                     {/* Left Column: The Visual Muse */}
                     <div className="lg:col-span-5 relative group">
                         <Link
-                            to="/collection/arambh"
+                            to="/collection/the-dynasty"
                             className="relative block aspect-[3/4] overflow-hidden border border-black/10 p-2 bg-black/[0.02]"
                         >
                             <img
