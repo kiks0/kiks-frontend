@@ -558,14 +558,17 @@ Marketing Consent: Granted
                 const googleUser = await userInfoRes.json();
 
                 // Send to backend to login or create account
+                const givenName = googleUser.given_name || (googleUser.name ? googleUser.name.split(' ')[0] : '') || 'Patron';
+                const familyName = googleUser.family_name || (googleUser.name ? googleUser.name.split(' ').slice(1).join(' ') : '') || '';
+
                 const response = await fetch(`${API_URL}/api/auth/google`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         email: googleUser.email,
                         googleId: googleUser.sub,
-                        firstName: googleUser.given_name,
-                        lastName: googleUser.family_name,
+                        firstName: givenName,
+                        lastName: familyName,
                         image: googleUser.picture
                     })
                 });

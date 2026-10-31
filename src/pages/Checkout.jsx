@@ -90,6 +90,7 @@ const Checkout = () => {
 
     // Dynamic UPI / Wallets Prepaid Discount State
     const [upiSettings, setUpiSettings] = useState({ enabled: true, percent: 5 });
+    const [partialCodSettings, setPartialCodSettings] = useState({ enabled: true, percent: 30 });
 
     useEffect(() => {
         fetch(`${API_URL}/api/settings`)
@@ -100,10 +101,20 @@ const Checkout = () => {
                         enabled: data.upi_discount_enabled !== undefined ? Boolean(data.upi_discount_enabled) : true,
                         percent: data.upi_discount_percent !== undefined ? Number(data.upi_discount_percent) : 5
                     });
+                    setPartialCodSettings({
+                        enabled: data.partial_cod_enabled !== undefined ? Boolean(data.partial_cod_enabled) : true,
+                        percent: data.partial_cod_deposit_percent !== undefined ? Number(data.partial_cod_deposit_percent) : 30
+                    });
                 }
             })
             .catch(() => {});
     }, []);
+
+    useEffect(() => {
+        if (!partialCodSettings.enabled && formData.paymentMethod.toLowerCase().includes('partial')) {
+            setFormData(prev => ({ ...prev, paymentMethod: '' }));
+        }
+    }, [partialCodSettings.enabled, formData.paymentMethod]);
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -412,6 +423,10 @@ const Checkout = () => {
                             }))
                         })
                     });
+                    setPartialCodSettings({
+                        enabled: data.partial_cod_enabled !== undefined ? Boolean(data.partial_cod_enabled) : true,
+                        percent: data.partial_cod_deposit_percent !== undefined ? Number(data.partial_cod_deposit_percent) : 30
+                    });
                 } catch (err) {
                     console.error("Guest cart sync fault:", err);
                 }
@@ -480,9 +495,10 @@ const Checkout = () => {
 
     const finalTotal = Math.max(0, baseAmountForPrepaid - upiDiscountAmount);
 
-    // Partial COD Calculations (30% online, 70% cod)
-    const isPartialSelected = formData.paymentMethod.toLowerCase().includes('partial');
-    const amountOnline = isPartialSelected ? Math.round(finalTotal * 0.30) : finalTotal;
+    // Partial COD Calculations (dynamic % online, balance cod)
+    const isPartialSelected = formData.paymentMethod.toLowerCase().includes('partial') && partialCodSettings.enabled;
+    const partialDepositRate = (partialCodSettings.percent || 30) / 100;
+    const amountOnline = isPartialSelected ? Math.round(finalTotal * partialDepositRate) : finalTotal;
     const amountCOD = isPartialSelected ? (finalTotal - amountOnline) : 0;
 
     const handleSubmitOrder = async () => {
@@ -522,6 +538,10 @@ const Checkout = () => {
                             price: Number(String(item.sale_price || item.price).replace(/[^0-9.]/g, '')),
                             quantity: item.quantity
                         }))
+                    });
+                    setPartialCodSettings({
+                        enabled: data.partial_cod_enabled !== undefined ? Boolean(data.partial_cod_enabled) : true,
+                        percent: data.partial_cod_deposit_percent !== undefined ? Number(data.partial_cod_deposit_percent) : 30
                     });
                     dispatch(clearCart());
                     sessionStorage.setItem(`authorized_order_${freeOrderId}`, 'true');
@@ -631,6 +651,10 @@ const Checkout = () => {
                             },
                             body: JSON.stringify(response)
                         });
+                    setPartialCodSettings({
+                        enabled: data.partial_cod_enabled !== undefined ? Boolean(data.partial_cod_enabled) : true,
+                        percent: data.partial_cod_deposit_percent !== undefined ? Number(data.partial_cod_deposit_percent) : 30
+                    });
                         const confirmData = await confirmRes.json();
 
                         if (confirmData.success) {
@@ -645,6 +669,10 @@ const Checkout = () => {
                                     quantity: item.quantity
                                 }))
                             });
+                    setPartialCodSettings({
+                        enabled: data.partial_cod_enabled !== undefined ? Boolean(data.partial_cod_enabled) : true,
+                        percent: data.partial_cod_deposit_percent !== undefined ? Number(data.partial_cod_deposit_percent) : 30
+                    });
                             dispatch(clearCart());
                             sessionStorage.setItem(`authorized_order_${draftOrderId}`, 'true');
                             navigate(`/order-success/${draftOrderId}`);
@@ -994,13 +1022,16 @@ const Checkout = () => {
                                                             label: 'UPI / WALLETS / QR', 
                                                             badge: (upiSettings.enabled && Number(upiSettings.percent) > 0) ? `SAVE ${upiSettings.percent}% INSTANT` : null 
                                                         },
-                                                        { id: 'Partial COD (30% Prepaid)', label: 'PARTIAL COD (30% NOW / 70% ON DELIVERY)' }
+                                                        ...(partialCodSettings.enabled ? [{ 
+                                                            id: `Partial COD (${partialCodSettings.percent || 30}% Prepaid)`, 
+                                                            label: `PARTIAL COD (${partialCodSettings.percent || 30}% NOW / ${100 - (partialCodSettings.percent || 30)}% ON DELIVERY)` 
+                                                        }] : [])
                                                     ].map((method) => (
                                                         <button
                                                             key={method.id}
                                                             type="button"
                                                             onClick={() => {
-                                                                if (method.id === 'Partial COD (30% Prepaid)' && formData.paymentMethod !== method.id) {
+                                                                if (method.id.toLowerCase().includes('partial') && formData.paymentMethod !== method.id) {
                                                                     setShowPartialCodPopup(true);
                                                                 } else {
                                                                     setFormData({ ...formData, paymentMethod: method.id });
@@ -1303,7 +1334,7 @@ const Checkout = () => {
                                 <div>
                                     <h3 className="text-xl font-serif tracking-[0.1em] uppercase text-black mb-4">Partial COD Policy</h3>
                                     <p className="text-[11px] tracking-widest text-black uppercase leading-loose max-w-sm mx-auto font-sans">
-                                        To ensure the security of high-value orders, we require a <span className="text-black font-bold">30% secure payment</span> today. The remaining 70% will be collected at your doorstep.
+                                        To ensure the security of high-value orders, we require a <span className="text-black font-bold">${partialCodSettings.percent || 30}% secure payment</span> today. The remaining ${100 - (partialCodSettings.percent || 30)}% will be collected at your doorstep.
                                     </p>
                                 </div>
 
@@ -1312,7 +1343,7 @@ const Checkout = () => {
                                 <div className="space-y-4">
                                     <button 
                                         onClick={() => {
-                                            setFormData({ ...formData, paymentMethod: 'Partial COD (30% Prepaid)' });
+                                            setFormData({ ...formData, paymentMethod: `Partial COD (${partialCodSettings.percent || 30}% Prepaid)` });
                                             setShowPartialCodPopup(false);
                                         }}
                                         className="w-full h-16 bg-black text-white text-[11px] font-black tracking-[0.5em] uppercase border border-black hover:bg-black/90 transition-all shadow-xl"

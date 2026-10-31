@@ -448,6 +448,16 @@ const Admin = () => {
     percent: 5
   });
 
+  // Partial COD Settings State
+  const [partialCodSettings, setPartialCodSettings] = useState({
+    enabled: true,
+    percent: 30
+  });
+
+  // Dedicated Loading States for Checkout Tab Save Buttons
+  const [isSavingUpi, setIsSavingUpi] = useState(false);
+  const [isSavingPartialCod, setIsSavingPartialCod] = useState(false);
+
   useEffect(() => {
     const isAdmin = user && (
       user.email === 'kiksultraluxury@gmail.com' ||
@@ -494,6 +504,7 @@ const Admin = () => {
       case 'waitlist': fetchWaitlistData(); break;
       case 'promo-codes': fetchPromoCodesData(); break;
       case 'marketing': fetchMarketingData(); break;
+      case 'checkout': setTimeout(() => fetchHomepageData(true), 100); break;
       case 'homepage': setTimeout(() => fetchHomepageData(true), 1000); break;
       case 'carts': fetchCartsData(); break;
       case 'logs': fetchLogsData(); break;
@@ -1048,12 +1059,21 @@ const Admin = () => {
           enabled: data.upi_discount_enabled !== undefined ? Boolean(data.upi_discount_enabled) : true,
           percent: data.upi_discount_percent !== undefined ? Number(data.upi_discount_percent) : 5
         });
+        setPartialCodSettings({
+          enabled: data.partial_cod_enabled !== undefined ? Boolean(data.partial_cod_enabled) : true,
+          percent: data.partial_cod_deposit_percent !== undefined ? Number(data.partial_cod_deposit_percent) : 30
+        });
       }
       if (showcaseRes.ok) setShowcaseProducts(await showcaseRes.json());
       if (galleryRes.ok) setCommunityGallery(await galleryRes.json());
       if (heroRes && heroRes.ok) setHeroBanners(await heroRes.json());
     } catch (e) { console.error("Homepage fetch failed", e); }
-    finally { if (showLoadingSpinner) setTabLoading('homepage', false); }
+    finally { 
+      if (showLoadingSpinner) {
+        setTabLoading('homepage', false);
+        setTabLoading('checkout', false);
+      }
+    }
   };
 
   const handleOpenHeroModal = (banner = null) => {
@@ -1182,7 +1202,7 @@ const Admin = () => {
   };
 
   const handleSaveUpiDiscount = async () => {
-    setIsProcessing(true);
+    setIsSavingUpi(true);
     try {
       const res = await fetch(`${API_URL}/api/settings`, {
         method: 'PUT',
@@ -1193,14 +1213,44 @@ const Admin = () => {
         })
       });
       if (res.ok) {
+        const updated = await res.json();
+        setUpiDiscountSettings({
+          enabled: updated.upi_discount_enabled !== undefined ? Boolean(updated.upi_discount_enabled) : true,
+          percent: updated.upi_discount_percent !== undefined ? Number(updated.upi_discount_percent) : 5
+        });
         showSuccessToast('Prepaid UPI discount settings updated.');
-        fetchHomepageData();
       } else {
         const errData = await res.json();
         showErrorToast(errData.error || 'Failed to update prepaid discount settings.');
       }
     } catch (e) { showErrorToast('Network error.'); }
-    finally { setIsProcessing(false); }
+    finally { setIsSavingUpi(false); }
+  };
+
+  const handleSavePartialCod = async () => {
+    setIsSavingPartialCod(true);
+    try {
+      const res = await fetch(`${API_URL}/api/settings`, {
+        method: 'PUT',
+        headers: { ...getAdminHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          partial_cod_enabled: partialCodSettings.enabled,
+          partial_cod_deposit_percent: Number(partialCodSettings.percent) || 30
+        })
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        setPartialCodSettings({
+          enabled: updated.partial_cod_enabled !== undefined ? Boolean(updated.partial_cod_enabled) : true,
+          percent: updated.partial_cod_deposit_percent !== undefined ? Number(updated.partial_cod_deposit_percent) : 30
+        });
+        showSuccessToast('Partial COD settings updated successfully.');
+      } else {
+        const errData = await res.json();
+        showErrorToast(errData.error || 'Failed to update Partial COD settings.');
+      }
+    } catch (e) { showErrorToast('Network error.'); }
+    finally { setIsSavingPartialCod(false); }
   };
 
   const handleUpdatePopup = async (e) => {
@@ -2477,7 +2527,7 @@ const Admin = () => {
                   className="absolute top-full left-0 w-full bg-white border border-black/10 shadow-2xl z-[9999] flex flex-col mt-1 max-h-[300px] overflow-y-auto"
                   data-lenis-prevent="true"
                 >
-                  {['dashboard', 'orders', 'users', 'wishlist', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing', 'homepage', 'carts', 'logs', 'trash'].map(tab => {
+                  {['dashboard', 'orders', 'users', 'wishlist', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing', 'checkout', 'homepage', 'carts', 'logs', 'trash'].map(tab => {
                     const callbackCount = tab === 'waitlist' ? waitlist.filter(e => e.request_type === 'callback' && (e.status || 'Pending').toLowerCase() === 'pending').length : 0;
                     return (
                       <button
@@ -2500,7 +2550,7 @@ const Admin = () => {
 
           {/* Desktop Tab Links */}
           <div className="hidden md:flex flex-wrap gap-x-8 gap-y-6">
-            {['dashboard', 'orders', 'users', 'wishlist', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing', 'homepage', 'carts', 'logs', 'trash'].map(tab => {
+            {['dashboard', 'orders', 'users', 'wishlist', 'collections', 'products', 'blogs', 'reviews', 'waitlist', 'promo-codes', 'marketing', 'checkout', 'homepage', 'carts', 'logs', 'trash'].map(tab => {
               const callbackCount = tab === 'waitlist' ? waitlist.filter(e => e.request_type === 'callback' && (e.status || 'Pending').toLowerCase() === 'pending').length : 0;
               return (
                 <button
@@ -3626,14 +3676,14 @@ const Admin = () => {
                           </thead>
                           <tbody>
                             {users.filter(u =>
-                              u.email.toLowerCase().includes(userSearch.toLowerCase()) ||
-                              `${u.first_name} ${u.last_name}`.toLowerCase().includes(userSearch.toLowerCase())
+                              (u.email || '').toLowerCase().includes(userSearch.toLowerCase()) ||
+                              `${u.first_name || ''} ${u.last_name || ''}`.toLowerCase().includes(userSearch.toLowerCase())
                             ).length === 0 ? (
-                              <tr><td colSpan="6" className="p-12 text-center text-white/70 uppercase tracking-widest font-black">No matching users found</td></tr>
+                              <tr><td colSpan="7" className="p-12 text-center text-white/70 uppercase tracking-widest font-black">No matching users found</td></tr>
                             ) : (
                               users.filter(u =>
-                                u.email.toLowerCase().includes(userSearch.toLowerCase()) ||
-                                `${u.first_name} ${u.last_name}`.toLowerCase().includes(userSearch.toLowerCase())
+                                (u.email || '').toLowerCase().includes(userSearch.toLowerCase()) ||
+                                `${u.first_name || ''} ${u.last_name || ''}`.toLowerCase().includes(userSearch.toLowerCase())
                               ).map(u => (
                                 <tr key={u.id} className="border-b border-black/5 hover:bg-neutral-50">
                                   <td className="p-6">
@@ -3649,7 +3699,7 @@ const Admin = () => {
                                   </td>
                                   <td className="p-6 font-serif text-black text-sm">#{u.id.toString().padStart(4, '0')}</td>
                                   <td className="p-6">
-                                    <p className=" uppercase tracking-widest text-black text-sm font-black">{u.first_name} {u.last_name}</p>
+                                    <p className=" uppercase tracking-widest text-black text-sm font-black">{u.first_name || 'Customer'} {u.last_name || ''}</p>
                                     <p className="text-[11px] text-black/80 mt-1.5 flex items-center space-x-2 lowercase font-sans font-medium">
                                       <span>{u.email}</span>
                                     </p>
@@ -3661,7 +3711,12 @@ const Admin = () => {
                                     </p>
                                   </td>
                                   <td className="p-6">
-                                    <span className="px-3 py-1 bg-black/5 text-black/40 text-[8px] uppercase tracking-widest font-black">Customer</span>
+                                    <div className="flex items-center gap-2">
+                                      <span className="px-3 py-1 bg-black/5 text-black/40 text-[8px] uppercase tracking-widest font-black">Customer</span>
+                                      {u.is_google_user && (
+                                        <span className="px-2 py-0.5 bg-blue-50 text-blue-600 border border-blue-200 text-[8px] uppercase tracking-widest font-bold">Google</span>
+                                      )}
+                                    </div>
                                   </td>
                                   <td className="p-6">
                                     <p className="text-[11px] text-black/80 uppercase tracking-widest font-bold font-black">
@@ -3682,8 +3737,8 @@ const Admin = () => {
 
                       <div className="md:hidden space-y-4">
                         {users.filter(u =>
-                          u.email.toLowerCase().includes(userSearch.toLowerCase()) ||
-                          `${u.first_name} ${u.last_name}`.toLowerCase().includes(userSearch.toLowerCase())
+                          (u.email || '').toLowerCase().includes(userSearch.toLowerCase()) ||
+                          `${u.first_name || ''} ${u.last_name || ''}`.toLowerCase().includes(userSearch.toLowerCase())
                         ).map(u => (
                           <div key={u.id} className="bg-neutral-50 border border-black/5 p-6 space-y-6 relative group overflow-hidden">
                             <div className="flex justify-between items-start border-b border-black/5 pb-5">
@@ -3698,13 +3753,16 @@ const Admin = () => {
                                   }}
                                 />
                                 <div className="w-14 h-14 rounded bg-black text-white flex items-center justify-center font-serif text-2xl">
-                                  {u.first_name[0]}
+                                  {(u.first_name?.[0] || u.email?.[0] || 'U').toUpperCase()}
                                 </div>
                                 <div>
-                                  <p className=" uppercase tracking-[0.15em] text-black text-[14px] leading-tight mb-1 font-black">{u.first_name} {u.last_name}</p>
-                                  <div className="flex items-center gap-3">
+                                  <p className=" uppercase tracking-[0.15em] text-black text-[14px] leading-tight mb-1 font-black">{u.first_name || 'Customer'} {u.last_name || ''}</p>
+                                  <div className="flex items-center gap-2">
                                     <span className="font-serif text-black/40 text-[10px]">#{u.id.toString().padStart(4, '0')}</span>
                                     <span className="px-2 py-0.5 border border-black/10 text-black/40 text-[8px] uppercase tracking-widest font-black">Customer</span>
+                                    {u.is_google_user && (
+                                      <span className="px-2 py-0.5 bg-blue-50 text-blue-600 border border-blue-200 text-[8px] uppercase tracking-widest font-bold">Google</span>
+                                    )}
                                   </div>
                                 </div>
                               </div>
@@ -4772,9 +4830,10 @@ const Admin = () => {
           </motion.div>
         )}
 
-        {activeTab === 'homepage' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-16">
-            {tabsLoading.homepage ? (
+        {/* CHECKOUT & PAYMENT SETTINGS TAB */}
+        {activeTab === 'checkout' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-12">
+            {tabsLoading.checkout || tabsLoading.homepage ? (
               <div className="flex items-center justify-center py-20">
                 <Loader2 className="animate-spin text-black" size={32} />
               </div>
@@ -4855,10 +4914,10 @@ const Admin = () => {
                       <button
                         type="button"
                         onClick={handleSaveUpiDiscount}
-                        disabled={isProcessing}
+                        disabled={isSavingUpi}
                         className="w-full py-3.5 sm:py-4 px-4 sm:px-6 bg-black text-white text-[10px] tracking-[0.2em] sm:tracking-[0.3em] uppercase font-bold hover:bg-neutral-800 transition-all flex items-center justify-center gap-2.5 sm:gap-3 shadow-md disabled:bg-neutral-300 min-h-[46px]"
                       >
-                        {isProcessing ? (
+                        {isSavingUpi ? (
                           <>
                             <Loader2 className="animate-spin" size={14} />
                             <span>Saving Changes...</span>
@@ -4874,6 +4933,112 @@ const Admin = () => {
                   </div>
                 </section>
 
+                {/* PARTIAL CASH ON DELIVERY (ADVANCE DEPOSIT SYSTEM) */}
+                <section className="bg-white border border-black/10 p-4 sm:p-8 md:p-12 shadow-sm relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-36 h-36 bg-black/5 blur-[80px] rounded-full pointer-events-none" />
+                  
+                  {/* Header & Badges */}
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-6 mb-6 sm:mb-8 border-b border-black/5 pb-5 sm:pb-6">
+                    <div className="space-y-2 max-w-2xl">
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                        <span className="text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.3em] font-mono text-neutral-800 bg-neutral-100 border border-neutral-300 px-2 sm:px-2.5 py-1 uppercase font-bold">
+                          Cash On Delivery Policy
+                        </span>
+                        {partialCodSettings.enabled ? (
+                          <span className="text-[8.5px] sm:text-[9px] tracking-wider sm:tracking-widest uppercase font-bold text-emerald-600 bg-emerald-50/50 px-2 sm:px-2.5 py-0.5 border border-emerald-100 flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Active ({partialCodSettings.percent}% Advance Online)
+                          </span>
+                        ) : (
+                          <span className="text-[8.5px] sm:text-[9px] tracking-wider sm:tracking-widest uppercase font-bold text-neutral-400 bg-neutral-100 px-2 sm:px-2.5 py-0.5 border border-neutral-200">
+                            Inactive (Full Prepaid Only)
+                          </span>
+                        )}
+                      </div>
+                      <h2 className="text-sm sm:text-base md:text-xl font-serif tracking-[0.1em] sm:tracking-[0.15em] uppercase text-black mt-2">
+                        Partial Cash on Delivery (Advance Deposit)
+                      </h2>
+                      <p className="text-[11px] sm:text-xs text-neutral-500 leading-relaxed">
+                        Control whether buyers can choose Partial COD at checkout. When enabled, customers pay an upfront non-refundable online deposit (e.g. <strong>{partialCodSettings.percent}%</strong>) to confirm dispatch, and pay the remaining <strong>{100 - (Number(partialCodSettings.percent) || 30)}%</strong> upon delivery. When turned OFF, checkout only allows 100% upfront prepaid payments.
+                      </p>
+                    </div>
+
+                    {/* Quick Toggle Button */}
+                    <div className="w-full sm:w-auto flex items-center justify-between sm:justify-start gap-3 bg-neutral-50 border border-black/10 p-2 sm:p-2.5 px-3.5 sm:px-4 flex-shrink-0">
+                      <span className="text-[9px] sm:text-[10px] tracking-widest uppercase font-bold text-black/60">
+                        Status:
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setPartialCodSettings(prev => ({ ...prev, enabled: !prev.enabled }))}
+                        className={`px-3.5 sm:px-4 py-1.5 sm:py-2 text-[8.5px] sm:text-[9px] tracking-[0.15em] sm:tracking-[0.2em] uppercase font-black transition-all ${
+                          partialCodSettings.enabled
+                            ? 'bg-emerald-600 text-white shadow-sm'
+                            : 'bg-neutral-200 text-neutral-600 hover:bg-neutral-300'
+                        }`}
+                      >
+                        {partialCodSettings.enabled ? 'Enabled' : 'Disabled'}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-8 items-end">
+                    <div className="space-y-2 sm:space-y-3">
+                      <label className="text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.3em] uppercase text-black font-bold block">
+                        Advance Deposit Percentage (%)
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="number"
+                          min="10"
+                          max="90"
+                          step="1"
+                          value={partialCodSettings.percent}
+                          onChange={(e) => setPartialCodSettings(prev => ({ ...prev, percent: e.target.value }))}
+                          placeholder="30"
+                          className="w-full bg-neutral-50 border border-black/10 px-3.5 sm:px-4 py-3 sm:py-3.5 text-base sm:text-sm font-semibold tracking-wider text-black focus:border-black outline-none transition-all pr-8"
+                        />
+                        <span className="absolute right-3.5 sm:right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-black/40">%</span>
+                      </div>
+                      <p className="text-[9px] sm:text-[10px] text-neutral-400 tracking-wide sm:tracking-wider leading-relaxed">
+                        Collected online via Razorpay. Balance {100 - (Number(partialCodSettings.percent) || 30)}% collected on delivery. E.g. {partialCodSettings.percent}% on ₹4,199 is ₹{Math.round(4199 * ((Number(partialCodSettings.percent) || 30) / 100)).toLocaleString('en-IN')}.
+                      </p>
+                    </div>
+
+                    <div>
+                      <button
+                        type="button"
+                        onClick={handleSavePartialCod}
+                        disabled={isSavingPartialCod}
+                        className="w-full py-3.5 sm:py-4 px-4 sm:px-6 bg-black text-white text-[10px] tracking-[0.2em] sm:tracking-[0.3em] uppercase font-bold hover:bg-neutral-800 transition-all flex items-center justify-center gap-2.5 sm:gap-3 shadow-md disabled:bg-neutral-300 min-h-[46px]"
+                      >
+                        {isSavingPartialCod ? (
+                          <>
+                            <Loader2 className="animate-spin" size={14} />
+                            <span>Saving Changes...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Save size={14} />
+                            <span>Save Partial COD Settings</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </section>
+              </>
+            )}
+          </motion.div>
+        )}
+
+        {activeTab === 'homepage' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-16">
+            {tabsLoading.homepage ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="animate-spin text-black" size={32} />
+              </div>
+            ) : (
+              <>
                 {/* HERO BANNERS CAROUSEL MANAGEMENT */}
                 <section className="space-y-8 bg-neutral-50 p-5 sm:p-8 md:p-12 border border-black/5 relative overflow-hidden group">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-black/5 blur-[80px] rounded-full pointer-events-none" />
