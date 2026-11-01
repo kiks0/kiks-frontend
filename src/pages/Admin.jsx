@@ -1598,11 +1598,13 @@ const Admin = () => {
 
       let folder = targetField === 'popup' ? 'kiks_marketing' : (folderMap[activeTab] || 'kiks_general');
 
-      // Dynamic product-specific subfolder logic
+      // Dynamic product-specific subfolder logic with slug sanitization
       if (activeTab === 'products' && prodFormData.slug) {
-        folder = `kiks_products/${prodFormData.slug}`;
+        const cleanSlug = prodFormData.slug.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9_-]/g, '') || 'general';
+        folder = `kiks_products/${cleanSlug}`;
       } else if (activeTab === 'collections' && colFormData.slug) {
-        folder = `kiks_collections/${colFormData.slug}`;
+        const cleanSlug = colFormData.slug.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9_-]/g, '') || 'general';
+        folder = `kiks_collections/${cleanSlug}`;
       }
 
       formData.append('folder', folder);
@@ -5590,7 +5592,7 @@ const Admin = () => {
                     {activeTab === 'collections' ? (
                       <>
                         <div><label className={labelClasses}>Collection Name</label><input required className={inputClasses} value={colFormData.name} onChange={e => setColFormData({ ...colFormData, name: e.target.value })} /></div>
-                        <div><label className={labelClasses}>Slug (URL part)</label><input required className={inputClasses} value={colFormData.slug} onChange={e => setColFormData({ ...colFormData, slug: e.target.value })} /></div>
+                        <div><label className={labelClasses}>Slug (URL part)</label><input required className={inputClasses} value={colFormData.slug} onChange={e => setColFormData({ ...colFormData, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })} placeholder="e.g. arambh" /></div>
                         <div><label className={labelClasses}>Subtitle (Optional)</label><input className={inputClasses} value={colFormData.subtitle} onChange={e => setColFormData({ ...colFormData, subtitle: e.target.value })} placeholder="e.g. Collection" /></div>
                         <div><label className={labelClasses}>Button Text (Optional)</label><input className={inputClasses} value={colFormData.button_text} onChange={e => setColFormData({ ...colFormData, button_text: e.target.value })} placeholder="Leave blank to hide button" /></div>
                         <div className="md:col-span-2 mt-4 pt-4 border-t border-black/5">
@@ -5627,7 +5629,8 @@ const Admin = () => {
                                       setUploadingColMobile(true);
                                       const formData = new FormData();
                                       formData.append('image', file);
-                                      formData.append('folder', `kiks_collections/${colFormData.slug || 'general'}`);
+                                      const cleanSlug = (colFormData.slug || 'general').trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9_-]/g, '') || 'general';
+                                      formData.append('folder', `kiks_collections/${cleanSlug}`);
                                       try {
                                         const res = await fetch(`${API_URL}/api/upload`, {
                                           method: 'POST',
@@ -5677,7 +5680,8 @@ const Admin = () => {
                                   setUploadingColMobile(true);
                                   const formData = new FormData();
                                   formData.append('image', file);
-                                  formData.append('folder', `kiks_collections/${colFormData.slug || 'general'}`);
+                                  const cleanSlug = (colFormData.slug || 'general').trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9_-]/g, '') || 'general';
+                                  formData.append('folder', `kiks_collections/${cleanSlug}`);
                                   try {
                                     const res = await fetch(`${API_URL}/api/upload`, {
                                       method: 'POST',
