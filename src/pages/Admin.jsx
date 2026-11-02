@@ -2168,7 +2168,8 @@ const Admin = () => {
             'Mobile Number': u.telephone || 'N/A',
             'Product Name': item.name || 'Perfume Vault',
             'Perfume Size': item.size || item.volume || '100 ML',
-            'Price (INR)': Number(item.price || item.sale_price || 0),
+            'Sale Price (INR)': Number(item.sale_price || item.price || 0),
+            'MRP (INR)': Number(item.price || 0),
             'Registered Date': new Date(u.created_at || Date.now()).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })
           });
         });
@@ -4087,7 +4088,7 @@ const Admin = () => {
 
                     return wishlistUsers.map(user => {
                       const userWishlist = typeof user.wishlist === 'string' ? JSON.parse(user.wishlist || '[]') : (user.wishlist || []);
-                      const totalValue = userWishlist.reduce((acc, item) => acc + Number(item.price || item.sale_price || 0), 0);
+                      const totalValue = userWishlist.reduce((acc, item) => acc + Number(item.sale_price || item.price || 0), 0);
 
                       return (
                         <div key={user.id} className={`bg-white border transition-all group relative ${selectedWishlists.includes(user.id) ? 'border-black/50 shadow-sm' : 'border-black/5 hover:border-black/20'}`}>
@@ -4142,9 +4143,16 @@ const Admin = () => {
                                         <p className="text-[9px] sm:text-[10px] text-black/50 uppercase tracking-widest font-bold mb-1">
                                           Size: {item.size || item.volume || '100 ML'}
                                         </p>
-                                        <p className="text-[10px] sm:text-[11px] font-mono font-semibold text-black">
-                                          {formatCurrency(Number(item.price || item.sale_price || 0), activeCurrency, rates, symbols)}
-                                        </p>
+                                        <div className="flex items-center gap-2 flex-wrap">
+                                          <p className="text-[10px] sm:text-[11px] font-mono font-bold text-black">
+                                            {formatCurrency(Number(item.sale_price || item.price || 0), activeCurrency, rates, symbols)}
+                                          </p>
+                                          {item.sale_price && Number(item.sale_price) < Number(item.price) && (
+                                            <p className="text-[9px] sm:text-[10px] font-mono line-through text-black/40">
+                                              {formatCurrency(Number(item.price), activeCurrency, rates, symbols)}
+                                            </p>
+                                          )}
+                                        </div>
                                       </div>
                                     </div>
                                   ))}
@@ -6287,19 +6295,32 @@ const Admin = () => {
                                             `BY ${item.author || 'Artisan'}`}
                                     </p>
                                     <span className="w-1 h-1 rounded-full bg-black/10" />
-                                    <p className="text-[10px] tracking-[0.15em] text-black/40 uppercase font-black">
+                                    <div className="text-[10px] tracking-[0.15em] text-black/40 uppercase font-black flex items-center gap-1.5 flex-wrap">
                                       {activeTab === 'collections' ? (item.mobile_banner_url ? 'Primary Collection | 📱 Mobile Banner Attached' : 'Primary Collection') :
                                         activeTab === 'products' ? (
-                                          `₹${item.price} | Base Stock: ${item.stock_count || 0}` + (
-                                            (() => {
+                                          <>
+                                            {item.sale_price && Number(item.sale_price) < Number(item.price) ? (
+                                              <>
+                                                <span className="text-black font-bold">₹{item.sale_price}</span>
+                                                <span className="line-through text-black/40 font-normal">MRP: ₹{item.price}</span>
+                                              </>
+                                            ) : (
+                                              <span className="text-black font-bold">₹{item.price}</span>
+                                            )}
+                                            <span>| Base Stock: {item.stock_count || 0}</span>
+                                            {(() => {
                                               const parsedV = safeArrayParse(item.variants);
-                                              return parsedV.length > 0 ? ` | Variants: ${parsedV.map(v => `${v.size}: ${v.stock || 0}`).join(', ')}` : '';
-                                            })()
-                                          )
+                                              return parsedV.length > 0 ? (
+                                                <span>
+                                                  | Variants: {parsedV.map(v => `${v.size}: ${v.sale_price && Number(v.sale_price) < Number(v.price) ? `₹${v.sale_price} (MRP: ₹${v.price})` : `₹${v.price}`}`).join(', ')}
+                                                </span>
+                                              ) : null;
+                                            })()}
+                                          </>
                                         ) :
                                           activeTab === 'promo-codes' ? `${item.discount_type === 'percentage' ? item.discount_value + '%' : '₹' + item.discount_value} OFF | Used: ${item.usage_count}/${item.usage_limit || '∞'}` :
                                             `${new Date(item.created_at).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })}`}
-                                    </p>
+                                    </div>
                                   </div>
                                   {activeTab === 'promo-codes' && (
                                     <div className="flex gap-4 mt-3">
